@@ -13,7 +13,7 @@
       <v-card-text>
         <div class="pa-5">
           <p class="body-1 mb-0" v-html="message"></p>
-          <p class="subtitle-2 font-weight-light">You can't undo this action</p>
+          <p class="subtitle-2 font-weight-light" v-if="type != 'add'">You can't undo this action</p>
         </div>
       </v-card-text>
       <v-card-actions class="justify-end">
@@ -21,7 +21,7 @@
           cancel
         </v-btn>
         <v-btn text color="success"  @click.stop="agree">
-          confirm
+          yes confirm!
         </v-btn>
       </v-card-actions>
     </v-card>

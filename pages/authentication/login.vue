@@ -12,7 +12,7 @@
               <h1 class="display-1">Hello ! Welcome back.</h1>
               <p class="subtitle-1">Login with your admin account that you entered during registration.</p>
               <ValidationObserver  ref="form">
-              <v-form  @submit.prevent="login">
+              <v-form class="form-box" @submit.prevent="login">
                 <div>
                   <v-alert
                     dense
@@ -94,9 +94,7 @@ export default {
      login() {
         this.loading = true
         this.$refs.form.validate().then(result => {
-          if (!result) {
-            return
-          }
+          if (!result) return
           this.authenticateUser()
         })
      },

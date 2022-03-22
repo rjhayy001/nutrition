@@ -22,7 +22,7 @@
           router
           v-if="!item.submenus"
           exact
-          :class="['main-menu', $route.name == item.to ? 'active' : '']"
+          :class="['main-menu', $route.path.includes(item.to) ? 'active' : '']"
         >
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
@@ -34,6 +34,7 @@
         <v-list-group
           :key="i"
           v-else
+          no-action
           :prepend-icon="item.icon"
           append-icon="mdi-chevron-down"
         >
@@ -99,8 +100,8 @@ export default {
         },
          {
           icon: 'mdi-post-outline',
-          title: 'Blog',
-          to: 'blog'
+          title: 'Blogs',
+          to: 'blogs'
         },
         {
           icon: 'mdi-bell-badge-outline',
@@ -140,6 +141,10 @@ export default {
             {
               title:'Abonnements',
               to: 'settings-subscriptions'
+            },
+            {
+              title:'Address',
+              to: 'settings-address-countries'
             }
           ],
         },

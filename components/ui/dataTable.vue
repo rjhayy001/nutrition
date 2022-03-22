@@ -9,13 +9,14 @@
       <div class="mr-1" style="width: 400px;">
         <v-text-field
           auto-select-first
-          clearable
+          v-model="searchKeyword"
           filled
           rounded
           hide-details=""
-          placeholder="Search items by name, age ..."
+          :placeholder="`Search by ${searchPlaceholder} ...`"
           dense
           append-icon="mdi-magnify"
+          @keydown.enter="searchRecords(searchKeyword)"
         ></v-text-field>
       </div>
       <v-btn class="mr-1 success" small @click="addNewRecord">
@@ -26,7 +27,7 @@
         <v-icon>mdi-delete-outline</v-icon>
         DELETE
       </v-btn>
-      <v-btn class="mr-1 primary" small @click="toggleFilter">
+      <v-btn class="mr-1 primary" small @click="toggleFilter" v-if="headHasFilterable">
         <v-icon>mdi-filter-outline</v-icon>
         Filter
       </v-btn>
@@ -79,7 +80,7 @@
         </template>
         <template v-slot:item.action="{ item }">
           <div>
-            <v-btn icon color="primary" class="mr-1" small @click="deleteRecord(item)">
+            <v-btn icon color="primary" class="mr-1" small @click="editRecord(item)">
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
             <v-btn icon color="error" class="mr-1" small @click="deleteRecord(item)">
@@ -143,7 +144,8 @@
         loaded:0,
         isFiltered:false,
         filterStatusChanged:false,
-        items_per_page:50
+        items_per_page:50,
+        searchKeyword:''
       }
     },
     props: {
@@ -176,10 +178,15 @@
         default:() => {
           return {}
         }
+      },
+      searchPlaceholder: {
+        type:String,
+        default:() => 'name, age'
       }
     },
     mounted() {
       this.setFilterbyParamValue()
+      this.searchFieldValue()
     },
     methods: {
       setFilterbyParamValue() {
@@ -198,6 +205,10 @@
           });
         });
       },
+      searchFieldValue() {
+        if (!this.$route.query.find) return
+        this.searchKeyword = this.$route.query.find
+      },
       reloadTable() {
         this.goTo(this.$route.name)
         setTimeout(() => {
@@ -211,6 +222,9 @@
         if (item.length > 0 || item.id) {
           this.$emit('deleteRecord', item.length > 0 ? item : [item])
         }
+      },
+      editRecord(item) {
+        this.$emit('editRecord', item)
       },
       sortTable(head) {
         if (head.sortType == null) head.sortType = 1
@@ -236,6 +250,14 @@
       },
       changePagenumber($event) {
         this.$emit('updatePagenum', $event)
+      },
+      searchRecords(keyword) {
+        this.$emit('searchRecords', keyword)
+      }
+    },
+    computed: {
+      headHasFilterable() {
+        return this.headers.some((item) => item.filterable )
       }
     },
     watch: {

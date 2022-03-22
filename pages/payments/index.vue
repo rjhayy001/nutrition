@@ -1,21 +1,5 @@
-
 <template>
   <v-container>
-    <!-- <v-navigation-drawer
-      temporary
-      right
-      fixed
-      v-model="drawer1"
-      width="50%"
-    >
-      <p class="pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
-        Add new Client
-        <v-btn icon small @click="goTo('clients-create')">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </p>
-      <hr>
-    </v-navigation-drawer> -->
     <data-table
       :options="options"
       :title="title"
@@ -48,7 +32,7 @@ export default {
   data() {
     return {
       options: {},
-      title: "Subscriptions",
+      title: "Payments",
       headers: [
         {
           text: "#",

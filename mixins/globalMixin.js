@@ -7,11 +7,12 @@ Vue.mixin({
       })
       .join(",");
     },
-    successNotification(items=[], action='', suffixSingular='', suffixPlural='') {
+    successNotification(items=[], action='', suffixSingular='', suffixPlural='', key='') {
       if (items.length > 1) {
         this.$awn.success(`Successfully ${action} <strong>${items.length}</strong> ${suffixPlural}`)
       } else {
-        this.$awn.success(`Successfully ${action} ${suffixSingular} <strong>${items[0].first_name}</strong>.`)
+        let selectedItem = items.constructor === Array ? items[0] : items
+        this.$awn.success(`Successfully ${action} ${suffixSingular} <strong>${selectedItem[key]}</strong>.`)
       }
     },
     fullNotification(message) {

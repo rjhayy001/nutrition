@@ -50,6 +50,14 @@ export default {
       setTimeout(()=> {
         this.initalize()
       }, 100)
+    },
+    searchRecords(keyword) {
+      let queries = JSON.parse(JSON.stringify(this.$route.query));
+      queries.find = keyword
+      this.$router.replace({ query: queries });
+      setTimeout(()=> {
+        this.initalize()
+      }, 100)
     }
   }
 }

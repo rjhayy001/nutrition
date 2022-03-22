@@ -1,4 +1,3 @@
-
 <template>
   <v-container>
     <!-- <v-navigation-drawer
@@ -48,7 +47,7 @@ export default {
   data() {
     return {
       options: {},
-      title: "Subscriptions",
+      title: "Announcements",
       headers: [
         {
           text: "#",

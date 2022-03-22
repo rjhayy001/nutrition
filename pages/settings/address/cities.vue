@@ -1,40 +1,49 @@
-
 <template>
   <v-container>
-    <!-- <v-navigation-drawer
+    <v-navigation-drawer
       temporary
       right
       fixed
       v-model="drawer1"
-      width="50%"
+      width="40%"
     >
       <p class="pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
-        Add new Client
+        Add new Country
         <v-btn icon small @click="goTo('clients-create')">
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </p>
       <hr>
-    </v-navigation-drawer> -->
+    </v-navigation-drawer>
     <data-table
       :options="options"
       :title="title"
       :headers="headers"
       :data="data"
+      searchPlaceholder="Short name, Long name, Code"
       class="custom-table"
       @addRecord="addRecord"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initalize()"
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
+      @searchRecords="searchRecords($event)"
     >
-      <template v-slot:status="{item}">
+      <template v-slot:is_default="{item}">
         <v-switch
+          v-model="item.is_default"
           inset
           color="success"
           dense
           hide-details=""
+          @change="updateDefaultValue(item)"
         ></v-switch>
+      </template>
+      <template v-slot:created_at="{item}">
+        {{formatDate(item.created_at)}}
+      </template>
+      <template v-slot:updated_at="{item}">
+        {{formatDate(item.updated_at)}}
       </template>
     </data-table>
   </v-container>
@@ -42,62 +51,21 @@
 <script>
 import dataTable from "~/components/ui/dataTable.vue";
 import tableHelper from "~/mixins/tableHelper.vue";
+import dateHelper from "~/mixins/dateHelper.vue";
 export default {
   components: { dataTable },
-  mixins:[tableHelper],
+  mixins:[tableHelper, dateHelper],
   data() {
     return {
       options: {},
-      title: "Subscriptions",
+      title: "Cities",
       headers: [
-        {
-          text: "#",
-          value: "id",
-          width:'2%',
-        },
-        {
-          text: "First name",
-          value: "first_name",
-          filterable:true,
-          sortType:null,
-          filterValue:''
-        },
-        { 
-          text: "Last name", 
-          value: "last_name",
-          filterable:true,
-          sortType:null,
-          filterValue:''
-        },
-        { 
-          text: "Email", 
-          value: "email",
-          filterable:true,
-          sortType:null,
-          filterValue:'',
-        },
-        { 
-          text: "Status", 
-          value: "status",
-        },
-        { 
-          text: "Phone 1", 
-          value: "phone_1",
-          filterable:true,
-          sortType:null,
-          filterValue:''
-        },
-        { 
-          text: "Phone 2", 
-          value: "phone_1",
-          filterable:true,
-          sortType:null,
-          filterValue:''
-        },
-        { 
-          text: "Action", 
-          value: "action" 
-        },
+        { text: "#", value: "id", width:'2%'},
+        { text: "Name", value: "short_name"},
+        { text: "Zipcodes", value: "zipcodes" },
+        { text: "Created at", value: "created_at"},
+        { text: "Updated at", value: "updated_at"},
+        { text: "Action", value: "action"},
       ],
       data: [],
       drawer1:false
@@ -108,13 +76,13 @@ export default {
   },
   methods: {
     initalize() {
-      this.$axios.get(`clients?${this.urlQuery()}`).then(({data}) => {
+      this.$axios.get(`cities?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
       })
     },
     addRecord() {
-      this.goTo('clients-create')
+      this.drawer1 = !this.drawer1
       // this.$root.dialog(
       //   "Confirm Message!",
       //   "Are you sure you want to add this record ?",
@@ -124,17 +92,23 @@ export default {
     },
     deleteRecord(items) {
       this.$root.dialog(
-        "Confirm Action!",
+        "Confirm delete Action!",
         `Are you sure you want to delete ${items.length == 1 ? 'this record' : 'these records'} ?`,
         "delete"
       ).then(() => {
         let ids = this.getIds(items)
-        this.$axios.delete(`client/${ids}`).then(({data}) => {
-          this.successNotification(items, 'deleted', 'client', 'clients')
+        this.$axios.delete(`cities/${ids}`).then(({data}) => {
+          this.successNotification(items, 'deleted', 'city', 'cities', 'name')
           this.initalize()
         })
       });
     },
+    updateDefaultValue(item) {
+      let payload = {is_default:item.is_default}
+      this.$axios.put(`countries/${item.id}/default`, payload).then(({data}) => {
+        this.successNotification(item, 'set as default', 'country', 'countries', 'short_name')
+      })
+    }
   },
 };
 </script>

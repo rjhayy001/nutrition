@@ -34,6 +34,7 @@ export default {
   components: false,
   buildModules: [
     '@nuxtjs/vuetify',
+    '@nuxtjs/moment'
   ],
   modules: [
     '@nuxtjs/axios',
