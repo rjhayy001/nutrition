@@ -7,9 +7,10 @@
   </fragment>
 </template>
 <script>
+import { Fragment } from 'vue-frag'
 import subSidebar from '~/components/layout/subSidebar.vue'
 export default {
-  components: { subSidebar },
+  components: { subSidebar,Fragment },
   data() {
     return {
       submenus: [

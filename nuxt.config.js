@@ -27,7 +27,6 @@ export default {
   plugins: [
     { src: '~plugins/vee-validate', ssr: false },
     { src: '~plugins/i18n', ssr: false },
-    { src: '~plugins/components/vue-fragment', ssr: true },
     { src: '~plugins/components/vue-notification', ssr: true },
     { src: '~mixins/globalMixin', ssr: true },
   ],

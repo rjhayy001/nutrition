@@ -10,3 +10,14 @@
     </v-container>
   </fragment>
 </template>
+<script>
+import { Fragment } from "vue-frag";
+export default {
+  components: {
+    Fragment,
+  },
+  setup() {
+    
+  },
+}
+</script>
