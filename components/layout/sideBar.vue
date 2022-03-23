@@ -145,6 +145,10 @@ export default {
             {
               title:'Address',
               to: 'settings-address-countries'
+            },
+            {
+              title:'Others',
+              to: 'settings-others-tags'
             }
           ],
         },

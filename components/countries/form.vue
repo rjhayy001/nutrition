@@ -7,7 +7,7 @@
     width="40%"
   >
     <p class="form-title pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
-      Add new Country
+      {{countryPayload.id ? 'Add new' : 'Edit'}} Country
       <v-btn icon small @click="drawer = false">
         <v-icon>mdi-close</v-icon>
       </v-btn>
