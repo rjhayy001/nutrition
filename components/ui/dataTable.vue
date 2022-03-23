@@ -210,6 +210,7 @@
         this.searchKeyword = this.$route.query.find
       },
       reloadTable() {
+        this.searchKeyword = ''
         this.goTo(this.$route.name)
         setTimeout(() => {
           this.$emit('reloadtable')

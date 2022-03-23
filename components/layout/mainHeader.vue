@@ -8,7 +8,10 @@
     <template v-if="!$store.getters.sidebarStatus">
       <v-app-bar-nav-icon @click.stop="toggleSidebar" />
     </template>
-    <p class="title">NUTRITION ADMINISTRATION</p>
+    <p class="title">
+      <img src="/logo.svg" alt="" width="13%">
+      RUN YOUR LIFE ADMINISTRATION
+    </p>
     <!-- <v-btn
       icon
       @click.stop="toggleMiniVariant"
@@ -28,6 +31,9 @@
         append-icon="mdi-magnify"
       ></v-autocomplete>
     </div>
+     <v-btn icon>
+      <v-icon>mdi-account-switch-outline</v-icon>
+    </v-btn>
     <v-btn icon>
       <v-icon>mdi-bell-outline</v-icon>
     </v-btn>

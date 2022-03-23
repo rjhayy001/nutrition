@@ -20,6 +20,9 @@ Vue.mixin({
     },
     goTo(name, query={}) {
       this.$router.push({name:name, query:query})
+    },
+    cloneVariable(value) {
+      return JSON.parse(JSON.stringify(value))
     }
   },
 })

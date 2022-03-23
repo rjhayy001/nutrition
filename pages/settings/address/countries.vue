@@ -2,6 +2,7 @@
   <v-container>
     <form-drawer :drawerStatus="drawer" @closeDrawer="drawer = !drawer"
       @addRecord="addRecord($event)"
+      @updateRecord="updateRecord($event)"
       :selectedItem="selectedItem"
     >
     </form-drawer>
@@ -18,7 +19,7 @@
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
       @searchRecords="searchRecords($event)"
-      @edit="editRecord($event)"
+      @editRecord="editRecord($event)"
     >
       <template v-slot:is_default="{item}">
         <v-switch
@@ -100,7 +101,16 @@ export default {
         this.successNotification(item, 'set as default', 'country', 'countries', 'short_name')
       })
     },
-    
+    editRecord(item) {
+      this.drawer = !this.drawer
+      this.selectedItem = this.cloneVariable(item)
+    },
+    updateRecord(payload) {
+      this.$axios.put(`countries/${payload.id}`, payload).then(({data}) => {
+        this.successNotification(data, 'updated', 'country', 'countries', 'short_name')
+        this.initalize()
+      })
+    }
   },
 };
 </script>

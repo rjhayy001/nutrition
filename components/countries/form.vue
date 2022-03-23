@@ -6,9 +6,9 @@
     v-model="drawer"
     width="40%"
   >
-    <p class="pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
-      Add new Client
-      <v-btn icon small @click="goTo('clients-create')">
+    <p class="form-title pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
+      Add new Country
+      <v-btn icon small @click="drawer = false">
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </p>
@@ -93,7 +93,7 @@
             <v-flex xs12>
               <v-btn class="success mt-1" block type="submit">
                 <v-icon>mdi-content-save-outline</v-icon>
-                SAVE
+                {{countryPayload.id ? 'UPDATE' : 'SAVE'}}
               </v-btn>
             </v-flex>
           </v-layout>
@@ -110,13 +110,14 @@ export default {
       countryPayload: {
         short_name:'',
         long_name:'',
-        code:'',
+        country_numcode:'',
         is_default:0,
       },
       DefaultOptions:[
         {id:1, text:'Yes'},
         {id:0, text:'No'}
       ],
+      originalPayload:null
     }
   },
   props: {
@@ -138,10 +139,11 @@ export default {
           `Are you sure you want to add this record ?`,
           "add"
         ).then(() => {
-          this.$refs.form.validate().then(result => {
-            if (!result) return
+          if (this.countryPayload.id) {
+            this.$emit('updateRecord', this.countryPayload)
+          } else {
             this.$emit('addRecord', this.countryPayload)
-          })
+          }
         });
       })
     }
@@ -151,7 +153,22 @@ export default {
       if(val) this.drawer = val
     },
     drawer(val) {
-      if(!val) this.$emit('closeDrawer')
+      if(this.originalPayload) {
+        this.countryPayload = this.cloneVariable(this.originalPayload)
+      }
+
+      if(!val) {
+        this.$emit('closeDrawer')
+      }
+    },
+    selectedItem: {
+      handler(val) {
+        if (!this.originalPayload) {
+          this.originalPayload = this.cloneVariable(this.countryPayload)
+        }
+        this.countryPayload = this.cloneVariable(val)
+      },
+      deep:true
     }
   }
 }
