@@ -1,6 +1,5 @@
 <template>
    <v-app-bar
-    :clipped-left="clipped"
     fixed
     app
     :style="this.$store.getters.sidebarStatus ? 'left: 230px' : '0px'"
@@ -12,12 +11,6 @@
       <img src="/logo.svg" alt="" width="13%">
       RUN YOUR LIFE ADMINISTRATION
     </p>
-    <!-- <v-btn
-      icon
-      @click.stop="toggleMiniVariant"
-    >
-      <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-    </v-btn> -->
     <v-spacer />
     <div style="width: 400px;">
       <v-autocomplete
@@ -40,22 +33,30 @@
     <v-btn icon>
       <v-icon>mdi-translate</v-icon>
     </v-btn>
-    <v-btn icon>
-      <v-icon>mdi-account-circle-outline</v-icon>
-    </v-btn>
+    <custom-list :items="accountLinks">
+    </custom-list>
     <v-btn icon @click="$auth.logout()">
       <v-icon>mdi-logout-variant</v-icon>
     </v-btn>
   </v-app-bar>
 </template>
 <script>
+import customList from '~/components/ui/list.vue'
 export default {
   name: 'DefaultLayout',
+  components: {
+    customList
+  },
   data () {
     return {
       clipped: false,
-      drawer: false,
-      fixed: false,
+      accountLinks:[
+        { 
+          title: 'Profile',
+          icon:'mdi-account'
+        },
+        { title: 'Click Me' },
+      ],
       items: [
         {
           icon: 'mdi-apps',

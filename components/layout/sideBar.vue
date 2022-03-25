@@ -37,6 +37,7 @@
           no-action
           :prepend-icon="item.icon"
           append-icon="mdi-chevron-down"
+          v-model="item.showSubmenu"
         >
           <template v-slot:activator>
             <v-list-item-content>
@@ -48,7 +49,11 @@
             :key="i"
             link
             :to="{name:menu.to}"
+            :class="hasActiveSubmenu(menu.parent, item)"
           >
+            <!-- <v-list-item-title>
+              {{$route.name}}
+            </v-list-item-title> -->
             <v-list-item-title v-text="menu.title"></v-list-item-title>
             <!-- <v-list-item-icon>
               <v-icon v-text="icon"></v-icon>
@@ -81,17 +86,17 @@ export default {
         {
           icon: 'mdi-account-arrow-right-outline',
           title: 'Clients semaine',
-          to: 'new-clients'
+          to: 'new-client'
         },
         {
           icon: 'mdi-account-group-outline',
           title: 'Clients',
-          to: 'clients'
+          to: 'client'
         },
         {
           icon: 'mdi-account-reactivate-outline',
           title: 'Abonnements',
-          to: 'subscriptions'
+          to: 'subscription'
         },
         {
           icon: 'mdi-credit-card-settings-outline',
@@ -101,22 +106,23 @@ export default {
          {
           icon: 'mdi-post-outline',
           title: 'Blogs',
-          to: 'blogs'
+          to: 'blog'
         },
         {
           icon: 'mdi-bell-badge-outline',
           title: 'Pushs',
-          to: 'announcements'
+          to: 'announcement'
         },
         {
           icon: 'mdi-chart-bar-stacked',
           title: 'Statistiques',
-          to: 'statistics'
+          to: 'statistic'
         },
         {
           icon: 'mdi-cog-refresh-outline',
           title: 'Parameters',
           to: '/',
+          showSubmenu:false,
           submenus:[
             {
               title:'Document utiles',
@@ -144,7 +150,8 @@ export default {
             },
             {
               title:'Address',
-              to: 'settings-address-countries'
+              to: 'settings-address-countries',
+              parent:'settings-address'
             },
             {
               title:'Others',
@@ -160,6 +167,12 @@ export default {
       let sidebarstatus = this.$store.getters.sidebarStatus
       this.$store.commit('updateSidebarStatus', !sidebarstatus)
     },
+    hasActiveSubmenu(parent, menu) {
+      if(this.$route.name.includes(parent)) {
+        if (!menu.showSubmenu) menu.showSubmenu = true
+        return 'subactive'
+      } 
+    }
   },
   computed: {
     sidebarStatus: {

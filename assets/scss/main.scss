@@ -6,7 +6,6 @@
   --lightGray: #7c7a7a;
 }
 
-
 /*
 * GLOBAL CSS
 */
@@ -32,6 +31,19 @@ button {
 
 .v-input__control {
   min-height: 42px !important;
+}
+
+.left-sidebar .v-navigation-drawer__content{
+  &::-webkit-scrollbar {
+    width: 2px;
+    direction: rtl;
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px #cad6fa;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #c8cad1;
+  }
 }
 
 /*
@@ -207,6 +219,9 @@ button {
 
   .main-menu.active {
     background-color: #f9f9f9 !important;
+  }
+  .subactive {
+    background-color: #5975cb !important;
   }
 
   .v-list-item__action {

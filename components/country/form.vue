@@ -5,6 +5,7 @@
     fixed
     v-model="drawer"
     width="40%"
+    hide-overlay
   >
     <p class="form-title pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
       {{countryPayload.id ? 'Add new' : 'Edit'}} Country

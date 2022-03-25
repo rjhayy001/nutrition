@@ -44,7 +44,7 @@
 import dataTable from "~/components/ui/dataTable.vue";
 import tableHelper from "~/mixins/tableHelper.vue";
 import dateHelper from "~/mixins/dateHelper.vue";
-import formDrawer from "~/components/countries/form.vue";
+import formDrawer from "~/components/country/form.vue";
 export default {
   components: { dataTable, formDrawer},
   mixins:[tableHelper, dateHelper],
