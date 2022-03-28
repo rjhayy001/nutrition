@@ -3,7 +3,6 @@
     bottom left offset-y 
     tile
     min-width="200"
-    position-x="100"
     nudge-left="0" 
     nudge-top="-8"
   >

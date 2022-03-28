@@ -90,7 +90,7 @@ export default {
       ).then(() => {
         let ids = this.getIds(items)
         this.$axios.delete(`countries/${ids}`).then(({data}) => {
-          this.successNotification(items, 'deleted', 'country', 'countries', 'short_name')
+          this.successNotification(items, 'deleted', 'country', 'countries', 'name')
           this.initalize()
         })
       });

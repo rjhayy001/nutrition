@@ -23,6 +23,6 @@ Vue.mixin({
     },
     cloneVariable(value) {
       return JSON.parse(JSON.stringify(value))
-    }
+    },
   },
 })
