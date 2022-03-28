@@ -15,7 +15,7 @@
       class="custom-table"
       @addRecord="drawer = !drawer"
       @deleteRecord="deleteRecord($event)"
-      @reloadtable="initalize()"
+      @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
       @searchRecords="searchRecords($event)"
@@ -68,10 +68,10 @@ export default {
     };
   },
   mounted() {
-    this.initalize()
+    this.initialize()
   },
   methods: {
-    initalize() {
+    initialize() {
       this.$axios.get(`countries?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
@@ -90,8 +90,8 @@ export default {
       ).then(() => {
         let ids = this.getIds(items)
         this.$axios.delete(`countries/${ids}`).then(({data}) => {
-          this.successNotification(items, 'deleted', 'country', 'countries', 'name')
-          this.initalize()
+          this.successNotification(items, 'deleted', 'country', 'countries', 'short_name')
+          this.initialize()
         })
       });
     },
@@ -108,7 +108,7 @@ export default {
     updateRecord(payload) {
       this.$axios.put(`countries/${payload.id}`, payload).then(({data}) => {
         this.successNotification(data, 'updated', 'country', 'countries', 'short_name')
-        this.initalize()
+        this.initialize()
       })
     }
   },
