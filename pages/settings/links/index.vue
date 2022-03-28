@@ -1,11 +1,21 @@
 <template>
   <v-container>
-    <form-drawer :drawerStatus="drawer" @closeDrawer="drawer = !drawer"
-      @addRecord="addRecord($event)"
-      @updateRecord="updateRecord($event)"
-      :selectedItem="selectedItem"
+    <h1>TESTING</h1>
+    <v-navigation-drawer
+      temporary
+      right
+      fixed
+      v-model="drawer1"
+      width="40%"
     >
-    </form-drawer>
+      <p class="pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
+        Add new Client
+        <v-btn icon small @click="goTo('clients-create')">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </p>
+      <hr>
+    </v-navigation-drawer>
     <data-table
       :options="options"
       :title="title"
@@ -13,13 +23,12 @@
       :data="data"
       searchPlaceholder="Short name, Long name, Code"
       class="custom-table"
-      @addRecord="drawer = !drawer"
+      @addRecord="addRecord"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initalize()"
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
       @searchRecords="searchRecords($event)"
-      @editRecord="editRecord($event)"
     >
       <template v-slot:is_default="{item}">
         <v-switch
@@ -44,9 +53,8 @@
 import dataTable from "~/components/ui/dataTable.vue";
 import tableHelper from "~/mixins/tableHelper.vue";
 import dateHelper from "~/mixins/dateHelper.vue";
-import formDrawer from "~/components/country/form.vue";
 export default {
-  components: { dataTable, formDrawer},
+  components: { dataTable },
   mixins:[tableHelper, dateHelper],
   data() {
     return {
@@ -63,8 +71,7 @@ export default {
         { text: "Action", value: "action"},
       ],
       data: [],
-      drawer:false,
-      selectedItem:{}
+      drawer1:false
     };
   },
   mounted() {
@@ -77,10 +84,14 @@ export default {
         this.options = data.options
       })
     },
-    addRecord(payload) {
-      this.$axios.post(`countries`, payload).then(({data}) => {
-        this.successNotification(data, 'added', 'country', 'countries', 'short_name')
-      })
+    addRecord() {
+      this.drawer1 = !this.drawer1
+      // this.$root.dialog(
+      //   "Confirm Message!",
+      //   "Are you sure you want to add this record ?",
+      //   "c"
+      // )
+      //   .then(() => {});
     },
     deleteRecord(items) {
       this.$root.dialog(
@@ -99,16 +110,6 @@ export default {
       let payload = {is_default:item.is_default}
       this.$axios.put(`countries/${item.id}/default`, payload).then(({data}) => {
         this.successNotification(item, 'set as default', 'country', 'countries', 'short_name')
-      })
-    },
-    editRecord(item) {
-      this.drawer = !this.drawer
-      this.selectedItem = this.cloneVariable(item)
-    },
-    updateRecord(payload) {
-      this.$axios.put(`countries/${payload.id}`, payload).then(({data}) => {
-        this.successNotification(data, 'updated', 'country', 'countries', 'short_name')
-        this.initalize()
       })
     }
   },
