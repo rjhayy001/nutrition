@@ -25,6 +25,7 @@ export default {
     '~assets/scss/imports.scss',
   ],
   plugins: [
+    { src: '~mixins/globalHelper/index', ssr: false },
     { src: '~plugins/vee-validate', ssr: false },
     { src: '~plugins/i18n', ssr: false },
     { src: '~plugins/components/vue-notification', ssr: true },
@@ -113,6 +114,11 @@ export default {
         name: 'login',
         path: '/login',
         component: resolve(__dirname, 'pages/authentication/login.vue')
+      }),
+      routes.push({
+        name: 'coach-login',
+        path: '/coach/login',
+        component: resolve(__dirname, 'pages/authentication/coach_login.vue')
       })
     }
   },

@@ -18,11 +18,12 @@ Vue.mixin({
     fullNotification(message) {
       this.$awn.success(`${message}`)
     },
-    goTo(name, query={}) {
-      this.$router.push({name:name, query:query})
+    goTo(name, params={}) {
+      this.$router.push({name:name, params:params})
     },
     cloneVariable(value) {
+      if(typeof value != 'object') return
       return JSON.parse(JSON.stringify(value))
-    }
+    },
   },
 })
