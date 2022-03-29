@@ -3,7 +3,7 @@
     <v-container fluid>
       <v-tabs>
         <v-tab :to="{name:'settings-others-tags'}">Tags</v-tab>
-        <v-tab :to="{name:'settings-address-cities'}">Groups</v-tab>
+        <v-tab :to="{name:'settings-others-groups'}">Groups</v-tab>
         <v-tab :to="{name:'settings-address-zipcodes'}">Vats</v-tab>
       </v-tabs>
       <Nuxt />

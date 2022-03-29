@@ -8,7 +8,7 @@
     hide-overlay
   >
     <p class="form-title pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
-      {{tagPayload.id ? 'Add new' : 'Edit'}} Tags
+      {{groupPayload.id ? 'Add new' : 'Edit'}} Groups
       <v-btn icon small @click="drawer = false">
         <v-icon>mdi-close</v-icon>
       </v-btn>
@@ -29,43 +29,8 @@
                     Name
                   </p>
                   <v-text-field
-                    v-model="tagPayload.name"
-                    placeholder="Type tag name..."
-                    type="text"
-                    hide-details="auto"
-                    solo
-                    :error-messages="errors"
-                  ></v-text-field>
-                </div>
-              </ValidationProvider>
-            </v-flex>
-            <v-flex xs12 sm6>
-              <ValidationProvider slim name="color" rules="required|min:1|max:100" v-slot="{ errors }">
-                <div class="mb-1">
-                  <p class="subtitle-2 font-weight-regular mb-2">
-                    <span>*</span>
-                    Color
-                  </p>
-                  <v-text-field
-                    v-model="tagPayload.color"
-                    placeholder="Type color..."
-                    type="text"
-                    hide-details="auto"
-                    solo
-                    :error-messages="errors"
-                  ></v-text-field>
-                </div>
-              </ValidationProvider>
-            </v-flex>
-            <v-flex xs12 sm6>
-              <ValidationProvider slim name="description" rules="required|min:1|max:500" v-slot="{ errors }">
-                <div class="mb-1">
-                  <p class="subtitle-2 font-weight-regular mb-2">
-                    Description
-                  </p>
-                  <v-text-field
-                    v-model="tagPayload.description"
-                    placeholder="Type description..."
+                    v-model="groupPayload.name"
+                    placeholder="Type group name..."
                     type="text"
                     hide-details="auto"
                     solo
@@ -77,7 +42,7 @@
             <v-flex xs12>
               <v-btn class="success mt-1" block type="submit">
                 <v-icon>mdi-content-save-outline</v-icon>
-                {{tagPayload.id ? 'UPDATE' : 'SAVE'}}
+                {{groupPayload.id ? 'UPDATE' : 'SAVE'}}
               </v-btn>
             </v-flex>
           </v-layout>
@@ -91,10 +56,8 @@ export default {
   data() {
     return {
       drawer:false,
-      tagPayload: {
-        name:'',
-        color:'',
-        description:''
+      groupPayload: {
+        name:''
       },
       DefaultOptions:[
         {id:1, text:'Yes'},
@@ -122,10 +85,10 @@ export default {
           `Are you sure you want to add this record ?`,
           "add"
         ).then(() => {
-          if (this.tagPayload.id) {
-            this.$emit('updateRecord', this.tagPayload)
+          if (this.groupPayload.id) {
+            this.$emit('updateRecord', this.groupPayload)
           } else {
-            this.$emit('addRecord', this.tagPayload)
+            this.$emit('addRecord', this.groupPayload)
           }
         });
       })
@@ -137,7 +100,7 @@ export default {
     },
     drawer(val) {
       if(this.originalPayload) {
-        this.tagPayload = this.cloneVariable(this.originalPayload)
+        this.groupPayload = this.cloneVariable(this.originalPayload)
       }
 
       if(!val) {
@@ -147,9 +110,9 @@ export default {
     selectedItem: {
       handler(val) {
         if (!this.originalPayload) {
-          this.originalPayload = this.cloneVariable(this.tagPayload)
+          this.originalPayload = this.cloneVariable(this.groupPayload)
         }
-        this.tagPayload = this.cloneVariable(val)
+        this.groupPayload = this.cloneVariable(val)
       },
       deep:true
     }
