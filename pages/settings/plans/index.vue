@@ -15,7 +15,7 @@
       class="custom-table"
       @addRecord="drawer = !drawer"
       @deleteRecord="deleteRecord($event)"
-      @reloadtable="initalize()"
+      @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
       @searchRecords="searchRecords($event)"
@@ -31,9 +31,6 @@
           @change="updateDefaultValue(item)"
         ></v-switch>
       </template>
-      <template v-slot:country="{item}">
-        <v-chip small outlined label color="primary">{{item.name}}</v-chip>
-      </template>
       <template v-slot:created_at="{item}">
         {{formatDate(item.created_at)}}
       </template>
@@ -47,19 +44,20 @@
 import dataTable from "~/components/ui/dataTable.vue";
 import tableHelper from "~/mixins/tableHelper.vue";
 import dateHelper from "~/mixins/dateHelper.vue";
-import formDrawer from "~/components/city/form.vue";
+import formDrawer from "~/components/plan/form.vue";
 export default {
   components: { dataTable, formDrawer},
   mixins:[tableHelper, dateHelper],
   data() {
     return {
       options: {},
-      title: "Cities",
+      title: "Plans",
       headers: [
         { text: "#", value: "id", width:'2%'},
-        { text: "Name", value: "name"},
-        { text: "Country", value: "country" },
-        { text: "Zipcodes", value: "zipcodes" },
+        { text: "Short name", value: "short_name"},
+        { text: "Long name", value: "long_name" },
+        { text: "Code", value: "country_numcode" },
+        { text: "Default", value: "is_default" },
         { text: "Created at", value: "created_at"},
         { text: "Updated at", value: "updated_at"},
         { text: "Action", value: "action"},
@@ -70,30 +68,35 @@ export default {
     };
   },
   mounted() {
-    this.initalize()
+    this.initialize()
   },
   methods: {
-    initalize() {
-      this.$axios.get(`${this.$cities}?${this.urlQuery()}&relations=country`).then(({data}) => {
+    initialize() {
+      this.$axios.get(`${this.$plans}?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
       })
     },
     addRecord(payload) {
       this.create().then(() => {
-        this.$axios.post(`${this.$cities}`, payload).then(({data}) => {
-          this.successNotification(data, 'added', 'city', 'cities', 'name')
-          this.initalize()
+        this.$axios.post(`${this.$plans}`, payload).then(({data}) => {
+          this.successNotification(data, 'added', 'country', 'plans', 'name')
         })
       })
     },
     deleteRecord(items) {
       this.delete().then(() => {
         let ids = this.getIds(items)
-        this.$axios.delete(`${this.$cities}/${ids}`).then(({data}) => {
-          this.successNotification(data, 'deleted', 'city', 'cities', 'name')
-          this.initalize()
+        this.$axios.delete(`${this.$plans}/${ids}`).then(({data}) => {
+          this.successNotification(items, 'deleted', 'country', 'plans', 'short_name')
+          this.initialize()
         })
+      })
+    },
+    updateDefaultValue(item) {
+      let payload = {is_default:item.is_default}
+      this.$axios.put(`${this.$plans}/${item.id}/default`, payload).then(({data}) => {
+        this.successNotification(item, 'set as default', 'country', 'plans', 'short_name')
       })
     },
     editRecord(item) {
@@ -102,9 +105,9 @@ export default {
     },
     updateRecord(payload) {
       this.update().then(() => {
-        this.$axios.put(`${this.$cities}/${payload.id}`, payload).then(({data}) => {
-          this.successNotification(data, 'updated', 'city', 'cities', 'name')
-          this.initalize()
+        this.$axios.put(`${this.$plans}/${payload.id}`, payload).then(({data}) => {
+          this.successNotification(data, 'updated', 'country', 'plans', 'short_name')
+          this.initialize()
         })
       })
     }

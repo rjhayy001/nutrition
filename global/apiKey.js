@@ -1,0 +1,5 @@
+import Vue from 'vue'
+Vue.prototype.$countries = 'countries'
+Vue.prototype.$cities = 'cities'
+Vue.prototype.$zipcodes = 'zipcodes'
+Vue.prototype.$plans = 'plans'
