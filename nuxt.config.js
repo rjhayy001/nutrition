@@ -29,7 +29,8 @@ export default {
     { src: '~plugins/vee-validate', ssr: false },
     { src: '~plugins/i18n', ssr: false },
     { src: '~plugins/components/vue-notification', ssr: true },
-    { src: '~mixins/globalMixin', ssr: true },
+    { src: '~global/globalMixin', ssr: true },
+    { src: '~global/apiKey', ssr: true },
   ],
   components: false,
   buildModules: [

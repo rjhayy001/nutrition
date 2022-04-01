@@ -40,7 +40,7 @@ export default {
         this.goTo(this.$route.name)
       }
       setTimeout(()=> {
-        this.initalize()
+        this.initialize()
       }, 100)
     },
     updatePagenum(page_num) {
@@ -48,7 +48,7 @@ export default {
       queries.page = page_num
       this.$router.replace({ query: queries });
       setTimeout(()=> {
-        this.initalize()
+        this.initialize()
       }, 100)
     },
     searchRecords(keyword) {
@@ -56,7 +56,7 @@ export default {
       queries.find = keyword
       this.$router.replace({ query: queries });
       setTimeout(()=> {
-        this.initalize()
+        this.initialize()
       }, 100)
     }
   }

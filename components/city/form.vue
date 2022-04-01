@@ -128,18 +128,12 @@ export default {
     saveForm() {
       this.$refs.form.validate().then(result => {
         if (!result) return
-        this.$root.dialog(
-          "Confirm add Action!",
-          `Are you sure you want to add this record ?`,
-          "add"
-        ).then(() => {
-          this.payload.country_id = this.payload.country_id.id
-          if (this.payload.id) {
-            this.$emit('updateRecord', this.payload)
-          } else {
-            this.$emit('addRecord', this.payload)
-          }
-        });
+        this.payload.country_id = this.payload.country_id.id
+        if (this.payload.id) {
+          this.$emit('updateRecord', this.payload)
+        } else {
+          this.$emit('addRecord', this.payload)
+        }
       })
     },
     getAllCountries() {

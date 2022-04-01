@@ -78,38 +78,38 @@ export default {
   },
   methods: {
     initalize() {
-      this.$axios.get(`zipcodes?${this.urlQuery()}&relations=cities`).then(({data}) => {
+      this.$axios.get(`${this.$zipcodes}?${this.urlQuery()}&relations=cities`).then(({data}) => {
         this.data = data.data
         this.options = data.options
       })
     },
     addRecord(payload) {
-      this.$axios.post(`zipcodes`, payload).then(({data}) => {
-        this.successNotification(data, 'added', 'zipcode', 'zipcodes', 'code')
-        this.initalize()
+      this.create().then(() => {
+        this.$axios.post(`${this.$zipcodes}`, payload).then(({data}) => {
+          this.successNotification(data, 'added', 'zipcode', 'zipcodes', 'code')
+          this.initalize()
+        })
       })
     },
     deleteRecord(items) {
-      this.$root.dialog(
-        "Confirm delete Action!",
-        `Are you sure you want to delete ${items.length == 1 ? 'this record' : 'these records'} ?`,
-        "delete"
-      ).then(() => {
+      this.delete().then(() => {
         let ids = this.getIds(items)
-        this.$axios.delete(`zipcodes/${ids}`).then(({data}) => {
+        this.$axios.delete(`${this.$zipcodes}/${ids}`).then(({data}) => {
           this.successNotification(data, 'deleted', 'zipcode', 'zipcodes', 'code')
           this.initalize()
         })
-      });
+      })
     },
     editRecord(item) {
       this.drawer = !this.drawer
       this.selectedItem = this.cloneVariable(item)
     },
     updateRecord(payload) {
-      this.$axios.put(`zipcodes/${payload.id}`, payload).then(({data}) => {
-        this.successNotification(data, 'updated', 'zipcode', 'zipcodes', 'code')
-        this.initalize()
+      this.update().then(() => {
+        this.$axios.put(`${this.$zipcodes}/${payload.id}`, payload).then(({data}) => {
+          this.successNotification(data, 'updated', 'zipcode', 'zipcodes', 'code')
+          this.initalize()
+        })
       })
     }
   },

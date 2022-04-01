@@ -146,7 +146,7 @@ export default {
             },
             {
               title:'Abonnements',
-              to: 'settings-subscriptions'
+              to: 'settings-plans'
             },
             {
               title:'Address',

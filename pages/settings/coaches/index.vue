@@ -133,13 +133,7 @@ export default {
       this.$axios
         .put(`coaches/${payload.id}/updateStatus`, payload)
         .then(({ data }) => {
-          this.successNotification(
-            payload,
-            "updated",
-            "coach",
-            "coaches",
-            "first_name"
-          );
+          this.successNotification( payload, "updated", "coach", "coaches", "first_name");
           this.initalize();
         });
     },
@@ -147,27 +141,13 @@ export default {
       this.goTo("settings-coaches-edit-id", { id: item.id });
     },
     deleteRecord(items) {
-      this.$root
-        .dialog(
-          "Confirm Action!",
-          `Are you sure you want to delete ${
-            items.length == 1 ? "this record" : "these records"
-          } ?`,
-          "delete"
-        )
-        .then(() => {
-          let ids = this.getIds(items);
-          this.$axios.delete(`coaches/${ids}`).then(({ data }) => {
-            this.successNotification(
-              items,
-              "deleted",
-              "coach",
-              "coaches",
-              "first_name"
-            );
-            this.initalize();
-          });
+      this.delete().then(() => {
+        let ids = this.getIds(items);
+        this.$axios.delete(`coaches/${ids}`).then(({ data }) => {
+          this.successNotification( items, "deleted", "coach", "coaches", "first_name");
+          this.initalize();
         });
+      });
     },
   },
 };

@@ -122,17 +122,13 @@ export default {
       //   .then(() => {});
     },
     deleteRecord(items) {
-      this.$root.dialog(
-        "Confirm Action!",
-        `Are you sure you want to delete ${items.length == 1 ? 'this record' : 'these records'} ?`,
-        "delete"
-      ).then(() => {
+      this.delete().then(() => {
         let ids = this.getIds(items)
         this.$axios.delete(`client/${ids}`).then(({data}) => {
           this.successNotification(items, 'deleted', 'client', 'clients')
           this.initalize()
         })
-      });
+      })
     },
   },
 };

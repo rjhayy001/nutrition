@@ -72,32 +72,30 @@ export default {
   },
   methods: {
     initialize() {
-      this.$axios.get(`countries?${this.urlQuery()}`).then(({data}) => {
+      this.$axios.get(`${this.$countries}?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
       })
     },
     addRecord(payload) {
-      this.$axios.post(`countries`, payload).then(({data}) => {
-        this.successNotification(data, 'added', 'country', 'countries', 'short_name')
+      this.create().then(() => {
+        this.$axios.post(`${this.$countries}`, payload).then(({data}) => {
+          this.successNotification(data, 'added', 'country', 'countries', 'short_name')
+        })
       })
     },
     deleteRecord(items) {
-      this.$root.dialog(
-        "Confirm delete Action!",
-        `Are you sure you want to delete ${items.length == 1 ? 'this record' : 'these records'} ?`,
-        "delete"
-      ).then(() => {
+      this.delete().then(() => {
         let ids = this.getIds(items)
-        this.$axios.delete(`countries/${ids}`).then(({data}) => {
+        this.$axios.delete(`${this.$countries}/${ids}`).then(({data}) => {
           this.successNotification(items, 'deleted', 'country', 'countries', 'short_name')
           this.initialize()
         })
-      });
+      })
     },
     updateDefaultValue(item) {
       let payload = {is_default:item.is_default}
-      this.$axios.put(`countries/${item.id}/default`, payload).then(({data}) => {
+      this.$axios.put(`${this.$countries}/${item.id}/default`, payload).then(({data}) => {
         this.successNotification(item, 'set as default', 'country', 'countries', 'short_name')
       })
     },
@@ -106,9 +104,11 @@ export default {
       this.selectedItem = this.cloneVariable(item)
     },
     updateRecord(payload) {
-      this.$axios.put(`countries/${payload.id}`, payload).then(({data}) => {
-        this.successNotification(data, 'updated', 'country', 'countries', 'short_name')
-        this.initialize()
+      this.update().then(() => {
+        this.$axios.put(`${this.$countries}/${payload.id}`, payload).then(({data}) => {
+          this.successNotification(data, 'updated', 'country', 'countries', 'short_name')
+          this.initialize()
+        })
       })
     }
   },
