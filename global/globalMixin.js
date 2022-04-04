@@ -25,5 +25,9 @@ Vue.mixin({
       if(typeof value != 'object') return
       return JSON.parse(JSON.stringify(value))
     },
+    showPrice(price='') {
+      if (!price) price = 0
+      return `${price.toFixed(2)} €`
+    }
   },
 })
