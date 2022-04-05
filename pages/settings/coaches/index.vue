@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <data-table
       :options="options"
       :title="title"
@@ -122,7 +122,6 @@ export default {
     initalize() {
       this.$axios.get(`coaches?${this.urlQuery()}`).then(({ data }) => {
         this.data = data.data;
-        console.log(this.data, "data");
         this.options = data.options;
       });
     },

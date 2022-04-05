@@ -11,8 +11,8 @@ export default {
   },
   methods: {
     add(payload) {
+
       this.$axios.post(`coaches`, payload).then(({ data }) => {
-        console.log(data, "add");
       });
       this.goTo("settings-coaches");
       this.successNotification(

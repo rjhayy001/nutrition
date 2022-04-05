@@ -117,17 +117,11 @@ export default {
     saveForm() {
       this.$refs.form.validate().then(result => {
         if (!result) return
-        this.$root.dialog(
-          "Confirm add Action!",
-          `Are you sure you want to add this record ?`,
-          "add"
-        ).then(() => {
-          if (this.tagPayload.id) {
-            this.$emit('updateRecord', this.tagPayload)
-          } else {
-            this.$emit('addRecord', this.tagPayload)
-          }
-        });
+        if (this.tagPayload.id) {
+          this.$emit('updateRecord', this.tagPayload)
+        } else {
+          this.$emit('addRecord', this.tagPayload)
+        }
       })
     }
   },

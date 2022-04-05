@@ -27,8 +27,9 @@ export default {
           data.country_id = data.country;
           data.city_id = data.city;
           data.zipcode_id = data.zipcode;
+          data.tags = data.tags
+          data.groups = data.groups
           this.selectedItem = data;
-          console.log(this.selectedItem, "");
         });
     },
     update(payload) {

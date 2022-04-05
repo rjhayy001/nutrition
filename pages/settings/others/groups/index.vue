@@ -60,25 +60,22 @@ export default {
   methods: {
     initalize() {
 
-      this.$axios.get(`groups?${this.urlQuery()}`).then(({data}) => {
+      this.$axios.get(`${this.$groups}?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
       })
     },
     addRecord(payload) {
-      alert(payload)
-      this.$axios.post(`groups`, payload).then(({data}) => {
-        this.successNotification(data, 'added', 'name', 'color', 'description')
+      this.create().then(() => {
+        this.$axios.post(`${this.$groups}`, payload).then(({data}) => {
+          this.successNotification(data, 'added', 'name')
+        })
       })
     },
     deleteRecord(items) {
-      this.$root.dialog(
-        "Confirm delete Action!",
-        `Are you sure you want to delete ${items.length == 1 ? 'this record' : 'these records'} ?`,
-        "delete"
-      ).then(() => {
+       this.delete().then(() => {
         let ids = this.getIds(items)
-        this.$axios.delete(`groups/${ids}`).then(({data}) => {
+        this.$axios.delete(`${this.$groups}/${ids}`).then(({data}) => {
           this.successNotification(items, 'deleted', 'name', 'color', 'description')
           this.initalize()
         })
@@ -89,9 +86,12 @@ export default {
       this.selectedItem = this.cloneVariable(item)
     },
     updateRecord(payload) {
-      this.$axios.put(`groups/${payload.id}`, payload).then(({data}) => {
-        this.successNotification(data, 'updated', 'country', 'countries', 'short_name')
-        this.initalize()
+
+      this.update().then(() => {
+        this.$axios.put(`${this.$groups}/${payload.id}`, payload).then(({data}) => {
+          this.successNotification(data, 'updated', 'country', 'countries', 'short_name')
+          this.initalize()
+        })
       })
     }
   },

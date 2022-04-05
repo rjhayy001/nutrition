@@ -1,7 +1,19 @@
 <template>
   <ValidationObserver ref="form">
     <v-form class="form-box" @submit.prevent="saveForm">
-      <v-container grid-list-md>
+      <v-container grid-list-md fluid>
+        <tag-form-drawer :drawerStatus="tagDrawer"
+          @addRecord="addTagRecord($event)"
+          @updateRecord="updateRecord($event)"
+          :selectedItem="selectedItem"
+        >
+        </tag-form-drawer>
+        <group-form-drawer :drawerStatus="groupDrawer"
+          @addRecord="addGroupRecord($event)"
+          @updateRecord="updateRecord($event)"
+          :selectedItem="selectedItem"
+        >
+        </group-form-drawer>
         <v-layout row wrap>
           <v-flex xs12 class="mb-2">
             <div class="d-flex align-center py-2 data-table-cus">
@@ -327,10 +339,12 @@
               <v-flex xs12>
                 <ValidationProvider slim>
                   <div class="mb-1">
-                    <p class="subtitle-2 font-weight-regular mb-2">tags</p>
+                    <p class="subtitle-2 font-weight-regular mb-2">Tags</p>
                     <v-autocomplete
                       v-model="payload.tags"
                       :items="tagsOption"
+                      :selected="tagsOption.id == tagsSelected? selected:null"
+                      :value="tagsSelected"
                       dense
                       solo
                       chips
@@ -339,6 +353,9 @@
                       hide-details="auto"
                       multiple
                       prepend-inner-icon="mdi-plus"
+                      @click:prepend-inner.stop="tagDrawer = !tagDrawer"
+                      item-text="name"
+                      item-value="id"
                     ></v-autocomplete>
                   </div>
                 </ValidationProvider>
@@ -358,6 +375,9 @@
                       hide-details="auto"
                       multiple
                       prepend-inner-icon="mdi-plus"
+                      @click:prepend-inner.stop="groupDrawer = !groupDrawer"
+                      item-text="name"
+                      item-value="id"
                     ></v-autocomplete>
                   </div>
                 </ValidationProvider>
@@ -391,7 +411,11 @@
   </ValidationObserver>
 </template>
 <script>
+import tagFormDrawer from "~/components/tag/form.vue";
+import groupFormDrawer from "~/components/group/form.vue";
 export default {
+  components: {tagFormDrawer, groupFormDrawer},
+
   data() {
     return {
       payload: {
@@ -409,6 +433,8 @@ export default {
         zipcode_id: "",
         country_id: "",
         status: 1,
+        tags: [],
+        groups: []
       },
       modal: false,
       loading: false,
@@ -419,11 +445,14 @@ export default {
         { id: 1, name: "Active" },
         { id: 0, name: "Inactive" },
       ],
-      tagsOption: ["test11", "test22"],
-      groupsOption: ["test1", "test2"],
+      tagDrawer: false,
+      groupDrawer: false,
+      tagsOption: [],
+      groupsOption: [],
       countries: [],
       cities: [],
       zipcodes: [],
+      tagsSelected: [],
     };
   },
   props: {
@@ -453,11 +482,18 @@ export default {
       deep: true,
       immediate: true,
     },
+    tagsSelected: {
+      handler(val) {
+        this.tagsSelected = val;
+      }
+    }
   },
   mounted() {
     this.getAllCountries();
     this.getAllZipcodes();
     this.getAllCities();
+    this.getAllTags();
+    this.getAllGroups();
   },
   methods: {
     saveForm() {
@@ -511,6 +547,32 @@ export default {
       this.$store.dispatch("address/FETCH_CITIES").then(({ data }) => {
         this.cities = data;
       });
+    },
+    getAllTags() {
+      this.$axios.get(`${this.$tags}?no-paginate=''`).then(({data}) => {
+        this.tagsOption = data.data
+      })
+    },
+    getAllGroups() {
+      this.$axios.get(`${this.$groups}?no-paginate=''`).then(({data}) => {
+        this.groupsOption = data.data
+      })
+    },
+    addTagRecord(payload) {
+      this.create().then(() => {
+        this.$axios.post(`${this.$tags}`, payload).then(({data}) => {
+          this.successNotification(data, 'added', '', '', 'name')
+          this.getAllTags()
+        })
+      })
+    },
+    addGroupRecord(payload) {
+      this.create().then(() => {
+        this.$axios.post(`${this.$groups}`, payload).then(({data}) => {
+          this.successNotification(data, 'added', '','', 'name')
+          this.getAllGroups()
+        })
+      })
     },
   },
 };
