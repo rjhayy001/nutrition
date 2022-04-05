@@ -6,6 +6,7 @@
     v-model="drawer"
     width="40%"
     hide-overlay
+    stateless
   >
     <p
       class="form-title pa-2 title font-weight-regular text-uppercase d-flex justify-space-between"
@@ -43,6 +44,7 @@
                     type="text"
                     hide-details="auto"
                     solo
+                    :error-messages="errors"
                   ></v-text-field>
                 </div>
               </ValidationProvider>
@@ -247,12 +249,11 @@ export default {
     saveForm() {
       this.$refs.form.validate().then((result) => {
         if (!result) return;
-          if (this.payload.id) {
-            this.
-            this.$emit("updateRecord", this.payload);
-          } else {
-            this.$emit("addRecord", this.payload);
-          }
+        if (this.payload.id) {
+          this.$emit("updateRecord", this.payload);
+        } else {
+          this.$emit("addRecord", this.payload);
+        }
       });
     },
     getPriceTitle(price) {
@@ -278,6 +279,15 @@ export default {
     },
     selectedItem: {
       handler(val) {
+        if (!val.prices.length) {
+          val.prices.push({
+            price: 0,
+            is_recurring: 1,
+            billing_period: 3,
+            recycle_count: 2,
+            recycle_type: 3,
+          })
+        }
         if (!this.originalPayload) {
           this.originalPayload = this.cloneVariable(this.payload);
         }

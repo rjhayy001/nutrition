@@ -6,6 +6,7 @@
     v-model="drawer"
     width="40%"
     hide-overlay
+    stateless
   >
     <p class="form-title pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
       {{payload.id ? 'Add new' : 'Edit'}} City
