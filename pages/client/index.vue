@@ -23,7 +23,7 @@
       class="custom-table"
       @addRecord="addRecord"
       @deleteRecord="deleteRecord($event)"
-      @reloadtable="initalize()"
+      @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
     >
@@ -103,10 +103,10 @@ export default {
     };
   },
   mounted() {
-    this.initalize()
+    this.initialize()
   },
   methods: {
-    initalize() {
+    initialize() {
       this.$axios.get(`clients?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
@@ -130,7 +130,7 @@ export default {
         let ids = this.getIds(items)
         this.$axios.delete(`client/${ids}`).then(({data}) => {
           this.successNotification(items, 'deleted', 'client', 'clients')
-          this.initalize()
+          this.initialize()
         })
       });
     },

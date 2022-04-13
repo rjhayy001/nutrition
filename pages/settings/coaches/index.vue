@@ -1,5 +1,10 @@
 <template>
   <v-container fluid>
+    <statistics-component
+     :statistics="formattedStatistics"
+     :title="title"
+    />
+
     <data-table
       :options="options"
       :title="title"
@@ -9,12 +14,23 @@
       class="custom-table"
       @addRecord="addRecord"
       @deleteRecord="deleteRecord($event)"
-      @reloadtable="initalize()"
+      @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
       @searchRecords="searchRecords($event)"
       @editRecord="editRecord($event)"
     >
+      <!-- full_name -->
+      <template v-slot:full_name="{ item }">
+        <v-avatar size="36px">
+          <img
+            :alt="item.image"
+            :src="item.logo ? item.logo : default_profile"
+          />
+        </v-avatar>
+        <span class="pa-2"> {{ item.full_name }} </span>
+      </template>
+      <!-- status -->
       <template v-slot:status="{ item }">
         <v-switch
           @click="changeStatus(item)"
@@ -25,9 +41,45 @@
           hide-details=""
         ></v-switch>
       </template>
+      <!-- complete_phone -->
+      <template v-slot:phone="{ item }">
+        <template v-if="item.complete_phone == null"> ... </template>
+        {{ item.complete_phone }}
+      </template>
+      <!-- complete_address -->
+      <template v-slot:address="{ item }">
+        <template v-if="item.address_1 == null && item.address_2 == null && item.zipcode == null && item.city == null && item.country == null"> ... </template>
+        {{ getCompleteAddress(item) }}
+      </template>
+      <!-- birthday -->
+      <template v-slot:birthday="{ item }">
+        {{ item.birthday ? formatDate(item.birthday) : "..." }}
+      </template>
+      <!-- taggable -->
+      <template v-slot:taggable="{ item }">
+        <template v-if="!item.taggable.length"> ... </template>
+        <common-dialog
+          v-else
+          :datas="item.taggable"
+          :default_limit="default_limit"
+          @delete="deleteTaggable"
+        />
+      </template>
+      <!-- groupable -->
+      <template v-slot:groupable="{ item }">
+        <template v-if="!item.groupable.length"> ... </template>
+        <common-dialog
+          v-else
+          :datas="item.groupable"
+          :default_limit="default_limit"
+          @delete="deleteGroupable"
+        />
+      </template>
+      <!-- create_at -->
       <template v-slot:created_at="{ item }">
         {{ formatDate(item.created_at) }}
       </template>
+      <!-- updated_at -->
       <template v-slot:updated_at="{ item }">
         {{ formatDate(item.updated_at) }}
       </template>
@@ -35,36 +87,45 @@
   </v-container>
 </template>
 <script>
-import dataTable from "~/components/ui/dataTable.vue";
-import tableHelper from "~/mixins/tableHelper.vue";
-import dateHelper from "~/mixins/dateHelper.vue";
-import formCoach from "~/components/coaches/form.vue";
+import dataTable from "@/components/ui/dataTable.vue";
+import tableHelper from "@/mixins/tableHelper.vue";
+import addressHelper from "@/mixins/addressHelper.vue";
+import dateHelper from "@/mixins/dateHelper.vue";
+import formCoach from "@/components/coaches/form.vue";
+import default_profile from "@/static/images/empty_person.png";
+import commonDialog from "@/components/common/commonDialog.vue";
+import statisticsComponent from "@/components/common/statisticComponent.vue";
 export default {
-  components: { dataTable, formCoach },
-  mixins: [tableHelper, dateHelper],
+  name: "index",
+  components: { dataTable, formCoach, commonDialog, statisticsComponent },
+  mixins: [tableHelper, dateHelper, addressHelper],
   data() {
     return {
+      default_profile,
+      default_limit: 2,
       options: {},
       title: "Coaches",
       headers: [
         {
           text: "#",
           value: "id",
-          width: "2%",
+          width: "1%",
         },
         {
-          text: "First name",
-          value: "first_name",
+          text: "Full Name",
+          value: "full_name",
           filterable: true,
           sortType: null,
           filterValue: "",
+          width: "20%",
         },
         {
-          text: "Last name",
-          value: "last_name",
+          text: "Birthday",
+          value: "birthday",
           filterable: true,
           sortType: null,
           filterValue: "",
+          width: "10%",
         },
         {
           text: "Email",
@@ -72,24 +133,44 @@ export default {
           filterable: true,
           sortType: null,
           filterValue: "",
+          width: "10%",
+        },
+        {
+          text: "Phone",
+          value: "phone",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
+          width: "10%",
+        },
+        {
+          text: "Address",
+          value: "address",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
+          width: "15%",
         },
         {
           text: "Status",
           value: "status",
+          width: "1%",
         },
         {
-          text: "Phone 1",
-          value: "phone_1",
+          text: "Tags",
+          value: "taggable",
           filterable: true,
           sortType: null,
           filterValue: "",
+          width: "15%",
         },
         {
-          text: "Phone 2",
-          value: "phone_1",
+          text: "Groups",
+          value: "groupable",
           filterable: true,
           sortType: null,
           filterValue: "",
+          width: "15%",
         },
         {
           text: "Created at",
@@ -97,6 +178,7 @@ export default {
           filterable: true,
           sortType: null,
           filterValue: "",
+          width: "5%",
         },
         {
           text: "Updated at",
@@ -104,36 +186,87 @@ export default {
           filterable: true,
           sortType: null,
           filterValue: "",
+          width: "5%",
         },
         {
           text: "Action",
           value: "action",
         },
       ],
+      statistics:{},
       data: [],
       drawer: false,
       isDescending: true,
     };
   },
   mounted() {
-    this.initalize();
+    this.initialize();
+  },
+  computed: {
+    formattedStatistics() {
+      return [
+        {
+          title:'Total Coaches',
+          value: this.statistics.totalCoach,
+          type: 'number'
+        },
+        {
+          title:'Total Active',
+          value: this.statistics.totalActiveCoach,
+          type: 'number'
+        },
+        {
+          title:'Total In-Active',
+          value: this.statistics.totalInactive,
+          type: 'number'
+        },
+        {
+          title:'Total w/ Client',
+          value: this.statistics.totalWithClient,
+          type: 'number'
+        },
+        {
+          title:'Total w/o Client',
+          value: this.statistics.totalWithOutClient,
+          type: 'number'
+        },
+        {
+          title:'Total Active',
+          value: this.statistics.totalActiveCoach,
+          type: 'number'
+        },
+      ]
+    }
   },
   methods: {
-    initalize() {
-      this.$axios.get(`coaches?${this.urlQuery()}`).then(({ data }) => {
-        this.data = data.data;
-        this.options = data.options;
-      });
+    initialize() {
+      this.getStatistics();
+      this.getTableRecords()
+    },
+    getTableRecords() {
+      this.$axios
+        .get(`${this.$coaches}?${this.urlQuery()}&relations=taggable,groupable,country,city,zipcode`)
+        .then(({ data }) => {
+          console.log("data", data);
+          this.data = data.data;
+          this.options = data.options;
+        });
     },
     addRecord() {
       this.goTo("settings-coaches-create");
     },
     changeStatus(payload) {
       this.$axios
-        .put(`coaches/${payload.id}/updateStatus`, payload)
+        .put(`${this.$coaches}/${payload.id}/status`, payload)
         .then(({ data }) => {
-          this.successNotification( payload, "updated", "coach", "coaches", "first_name");
-          this.initalize();
+          this.successNotification(
+            payload,
+            "updated",
+            "coach",
+            "coaches",
+            "first_name"
+          );
+          this.initialize();
         });
     },
     editRecord(item) {
@@ -142,12 +275,62 @@ export default {
     deleteRecord(items) {
       this.delete().then(() => {
         let ids = this.getIds(items);
-        this.$axios.delete(`coaches/${ids}`).then(({ data }) => {
-          this.successNotification( items, "deleted", "coach", "coaches", "first_name");
-          this.initalize();
+        this.$axios.delete(`${this.$coaches}/${ids}`).then(({ data }) => {
+          this.successNotification(
+            items,
+            "deleted",
+            "coach",
+            "coaches",
+            "first_name"
+          );
+          this.initialize();
         });
       });
     },
+    deleteTaggable(item) {
+      this.delete().then(() => {
+        this.$axios
+          .delete(
+            `${this.$coaches}/${item.pivot.taggable_id}/taggable/${item.pivot.tag_id}`,
+            item
+          )
+          .then(({ data }) => {
+            this.successNotification(
+              item,
+              "deleted",
+              "coach",
+              "coaches",
+              "name"
+            );
+            this.initialize();
+          });
+      });
+    },
+    deleteGroupable(item) {
+      this.delete().then(() => {
+        this.$axios
+          .delete(
+            `${this.$coaches}/${item.pivot.groupable_id}/groupable/${item.pivot.group_id}`,
+            item
+          )
+          .then(({ data }) => {
+            this.successNotification(
+              item,
+              "deleted",
+              "coach",
+              "coaches",
+              "name"
+            );
+            this.initialize();
+          });
+      });
+    },
+    getStatistics() {
+      this.$axios.get(`${this.$coaches}/statistic`)
+      .then(({ data }) => {
+        this.statistics = data
+      });
+    }
   },
 };
 </script>

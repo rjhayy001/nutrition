@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form-page :selectedItem="selectedItem" @updateRecord="update"></form-page>
+    <form-page :selectedItem="selectedItem" @updateRecord="updateRecord"></form-page>
   </div>
 </template>
 <script>
@@ -21,27 +21,29 @@ export default {
     findRecord() {
       this.$axios
         .get(
-          `coaches/${this.$route.params.id}/edit?relations=country,city,zipcode`
+          `${this.$coaches}/${this.$route.params.id}/edit?relations=country,city,zipcode,taggable,groupable`
         )
         .then(({ data }) => {
           data.country_id = data.country;
           data.city_id = data.city;
           data.zipcode_id = data.zipcode;
-          data.tags = data.tags
-          data.groups = data.groups
+          data.taggable = data.taggable.map((item) => item.id)
+          data.groupable = data.groupable.map((item) => item.id)
           this.selectedItem = data;
         });
     },
-    update(payload) {
-      this.$axios.put(`coaches/${payload.id}`, payload).then(({ data }) => {});
-      this.goTo("settings-coaches");
-      this.successNotification(
-        payload,
-        "updated",
-        "coach",
-        "coaches",
-        "first_name"
-      );
+    updateRecord(payload) {
+      console.log(payload,"update")
+      this.update().then(() => {
+        if (payload.city_id) payload.city_id = payload.city_id.id || '';
+        if (payload.country_id) payload.country_id = payload.country_id.id || '';
+        if (payload.zipcode_id) payload.zipcode_id = payload.zipcode_id.id || '';
+
+        this.$axios.put(`${this.$coaches}/${payload.id}`, payload).then(({ data }) => {
+          this.successNotification(data,"updated","coach","coaches","first_name");
+          this.goTo("settings-coaches");
+        });
+      })
     },
   },
 };
