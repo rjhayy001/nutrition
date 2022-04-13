@@ -1,39 +1,34 @@
 <template>
-  <v-container>
-    <!-- <v-navigation-drawer
-      temporary
-      right
-      fixed
-      v-model="drawer1"
-      width="50%"
-    >
-      <p class="pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
-        Add new Client
-        <v-btn icon small @click="goTo('clients-create')">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </p>
-      <hr>
-    </v-navigation-drawer> -->
+  <v-container fluid>
     <data-table
       :options="options"
       :title="title"
       :headers="headers"
       :data="data"
+      :sort-desc.sync="isDescending"
       class="custom-table"
       @addRecord="addRecord"
-      @deleteRecord="deleteRecord($event)"
       @reloadtable="initalize()"
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
+      @searchRecords="searchRecords($event)"
+      @editRecord="editRecord($event)"
     >
-      <template v-slot:status="{item}">
+      <template v-slot:status="{ item }">
         <v-switch
+          @click="changeStatus(item)"
+          v-model="item.status"
           inset
           color="success"
           dense
           hide-details=""
         ></v-switch>
+      </template>
+      <template v-slot:created_at="{ item }">
+        {{ formatDate(item.created_at) }}
+      </template>
+      <template v-slot:updated_at="{ item }">
+        {{ formatDate(item.updated_at) }}
       </template>
     </data-table>
   </v-container>
@@ -41,9 +36,11 @@
 <script>
 import dataTable from "~/components/ui/dataTable.vue";
 import tableHelper from "~/mixins/tableHelper.vue";
+import dateHelper from "~/mixins/dateHelper.vue";
+import formBlog from "~/components/blogs/form.vue";
 export default {
-  components: { dataTable },
-  mixins:[tableHelper],
+  components: { dataTable, formBlog },
+  mixins: [tableHelper, dateHelper],
   data() {
     return {
       options: {},
@@ -52,88 +49,144 @@ export default {
         {
           text: "#",
           value: "id",
-          width:'2%',
+          width: "2%",
         },
         {
-          text: "First name",
-          value: "first_name",
-          filterable:true,
-          sortType:null,
-          filterValue:''
+          text: "Title",
+          value: "title",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
         },
-        { 
-          text: "Last name", 
-          value: "last_name",
-          filterable:true,
-          sortType:null,
-          filterValue:''
+        {
+          text: "Slug",
+          value: "slug",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
         },
-        { 
-          text: "Email", 
-          value: "email",
-          filterable:true,
-          sortType:null,
-          filterValue:'',
+        {
+          text: "Summary",
+          value: "summary",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
         },
-        { 
-          text: "Status", 
-          value: "status",
+        {
+          text: "Keywords",
+          value: "keyword",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
         },
-        { 
-          text: "Phone 1", 
-          value: "phone_1",
-          filterable:true,
-          sortType:null,
-          filterValue:''
+        {
+          text: "Show right column",
+          value: "show_right_column",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
         },
-        { 
-          text: "Phone 2", 
-          value: "phone_1",
-          filterable:true,
-          sortType:null,
-          filterValue:''
+        {
+          text: "Show to registered users",
+          value: "show_to_registered_users",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
         },
-        { 
-          text: "Action", 
-          value: "action" 
+        {
+          text: "Optional Url",
+          value: "optional_url",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
+        },
+        {
+          text: "Content",
+          value: "content",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
+        },
+        {
+          text: "Image",
+          value: "image",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
+        },
+        {
+          text: "Blog type",
+          value: "blog_type",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
+        },
+        {
+          text: "Category",
+          value: "category",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
+        },
+        {
+          text: "Created at",
+          value: "created_at",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
+        },
+        {
+          text: "Updated at",
+          value: "updated_at",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
+        },
+        {
+          text: "Action",
+          value: "action",
         },
       ],
       data: [],
-      drawer1:false
+      drawer: false,
+      isDescending: true,
     };
   },
   mounted() {
-    this.initalize()
+    this.initalize();
   },
   methods: {
     initalize() {
-      this.$axios.get(`clients?${this.urlQuery()}`).then(({data}) => {
+
+      this.$axios.get(`${this.$blogs}?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
       })
     },
-    addRecord() {
-      this.goTo('clients-create')
-      // this.$root.dialog(
-      //   "Confirm Message!",
-      //   "Are you sure you want to add this record ?",
-      //   "c"
-      // )
-      //   .then(() => {});
+    addRecord(payload) {
+      this.goTo("blog-create");
     },
     deleteRecord(items) {
-      this.$root.dialog(
-        "Confirm Action!",
-        `Are you sure you want to delete ${items.length == 1 ? 'this record' : 'these records'} ?`,
-        "delete"
-      ).then(() => {
+      this.delete().then(() => {
         let ids = this.getIds(items)
-        this.$axios.delete(`client/${ids}`).then(({data}) => {
-          this.successNotification(items, 'deleted', 'client', 'clients')
+        this.$axios.delete(`${this.$blogs}/${ids}`).then(({data}) => {
+          this.successNotification(items, 'deleted', 'name', 'color', 'description')
           this.initalize()
         })
       });
     },
+    editRecord(item) {
+      this.drawer = !this.drawer
+      this.selectedItem = this.cloneVariable(item)
+    },
+    updateRecord(payload) {
+      this.update().then(() => {
+        this.$axios.put(`${this.$blogs}/${payload.id}`, payload).then(({data}) => {
+          this.successNotification(data, 'updated', 'country', 'countries', 'short_name')
+          this.initalize()
+        })
+      })
+    }
   },
 };
 </script>
