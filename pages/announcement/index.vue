@@ -1,39 +1,46 @@
 <template>
   <v-container>
-    <!-- <v-navigation-drawer
-      temporary
-      right
-      fixed
-      v-model="drawer1"
-      width="50%"
-    >
-      <p class="pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
-        Add new Client
-        <v-btn icon small @click="goTo('clients-create')">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </p>
-      <hr>
-    </v-navigation-drawer> -->
+    <form-drawer :drawerStatus="drawer" @closeDrawer="drawer = !drawer"
+      @addRecord="addRecord($event)"
+      @updateRecord="updateRecord($event)"
+      :selectedItem="selectedItem"
+    ></form-drawer>
     <data-table
       :options="options"
       :title="title"
       :headers="headers"
       :data="data"
+      searchPlaceholder="Title"
       class="custom-table"
-      @addRecord="addRecord"
+      @addRecord="drawer = !drawer"
       @deleteRecord="deleteRecord($event)"
-      @reloadtable="initalize()"
+      @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
+      @searchRecords="searchRecords($event)"
+      @editRecord="editRecord($event)"
     >
       <template v-slot:status="{item}">
         <v-switch
+          v-model="item.status"
           inset
           color="success"
           dense
           hide-details=""
         ></v-switch>
+      </template>
+      <template v-slot:send_to="{ item }">
+        <span><strong>{{item.clients.length}}</strong> clients</span>,
+        <span><strong>{{item.coaches.length}}</strong> coaches</span>
+      </template>
+      <template v-slot:type="{item}">
+        {{ item.type==0 ? "One Time Only" : "Recurring" }}
+      </template>
+      <template v-slot:created_at="{item}">
+        {{formatDate(item.created_at)}}
+      </template>
+      <template v-slot:updated_at="{item}">
+        {{formatDate(item.updated_at)}}
       </template>
     </data-table>
   </v-container>
@@ -41,57 +48,54 @@
 <script>
 import dataTable from "~/components/ui/dataTable.vue";
 import tableHelper from "~/mixins/tableHelper.vue";
+import dateHelper from "~/mixins/dateHelper.vue";
+import formDrawer from "~/components/announcement/form.vue";
+import commonDialog from "@/components/common/commonDialog.vue";
 export default {
-  components: { dataTable },
-  mixins:[tableHelper],
+  components: { dataTable, formDrawer, commonDialog},
+  mixins:[tableHelper, dateHelper],
   data() {
     return {
       options: {},
-      title: "Announcements",
+      default_limit: 2,
+      title: "Announcement",
       headers: [
-        {
-          text: "#",
-          value: "id",
-          width:'2%',
-        },
-        {
-          text: "First name",
-          value: "first_name",
-          filterable:true,
-          sortType:null,
-          filterValue:''
+        { 
+          text: "#", 
+          value: "id", 
+          width:'2%'
         },
         { 
-          text: "Last name", 
-          value: "last_name",
-          filterable:true,
-          sortType:null,
-          filterValue:''
+          text: "title", 
+          value: "title"
         },
         { 
-          text: "Email", 
-          value: "email",
-          filterable:true,
-          sortType:null,
-          filterValue:'',
+          text: "Message", 
+          value: "message" 
+        },
+        { 
+          text: "Send to", 
+          value: "send_to" 
+        },
+        { 
+          text: "Type", 
+          value: "type" 
+        },
+        { 
+          text: "Time", 
+          value: "time" 
         },
         { 
           text: "Status", 
-          value: "status",
+          value: "status" 
         },
         { 
-          text: "Phone 1", 
-          value: "phone_1",
-          filterable:true,
-          sortType:null,
-          filterValue:''
+          text: "Created at", 
+          value: "created_at" 
         },
         { 
-          text: "Phone 2", 
-          value: "phone_1",
-          filterable:true,
-          sortType:null,
-          filterValue:''
+          text: "Updated at", 
+          value: "updated_at" 
         },
         { 
           text: "Action", 
@@ -99,40 +103,56 @@ export default {
         },
       ],
       data: [],
-      drawer1:false
+      receiver:[],
+      drawer:false,
+      selectedItem:{}
     };
   },
   mounted() {
-    this.initalize()
+    this.initialize()
   },
   methods: {
-    initalize() {
-      this.$axios.get(`clients?${this.urlQuery()}`).then(({data}) => {
+    initialize() {
+      this.$axios.get(`${this.$announces}?${this.urlQuery()}&relations=clients,coaches`).then(({data}) => {
+
+
+        // console.log(list,"sad")
+
+        
         this.data = data.data
         this.options = data.options
       })
     },
-    addRecord() {
-      this.goTo('clients-create')
-      // this.$root.dialog(
-      //   "Confirm Message!",
-      //   "Are you sure you want to add this record ?",
-      //   "c"
-      // )
-      //   .then(() => {});
+    addRecord(payload) {
+      this.create().then(() => {
+        this.$axios.post(`${this.$announces}`, payload).then(({data}) => {
+          this.successNotification(data, 'added', 'announce', 'announces', 'title')
+          this.initialize()
+        })
+      })
     },
     deleteRecord(items) {
       this.$root.dialog(
-        "Confirm Action!",
+        "Confirm delete Action!",
         `Are you sure you want to delete ${items.length == 1 ? 'this record' : 'these records'} ?`,
         "delete"
       ).then(() => {
         let ids = this.getIds(items)
-        this.$axios.delete(`client/${ids}`).then(({data}) => {
-          this.successNotification(items, 'deleted', 'client', 'clients')
-          this.initalize()
+        this.$axios.delete(`cities/${ids}`).then(({data}) => {
+          this.successNotification(data, 'deleted', 'city', 'cities', 'name')
+          this.initialize()
         })
       });
+    },
+    editRecord(item) {
+      this.drawer = !this.drawer
+      this.selectedItem = this.cloneVariable(item)
+    },
+    updateRecord(payload) {
+      this.$axios.put(`cities/${payload.id}`, payload).then(({data}) => {
+        this.successNotification(data, 'updated', 'city', 'cities', 'name')
+        this.initialize()
+      })
     },
   },
 };

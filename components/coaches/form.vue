@@ -329,6 +329,7 @@
                       upload photo
                     </v-btn>
                     <input
+                      accept="image/png, image/gif, image/jpeg"
                       ref="uploader"
                       type="file"
                       @change="onFileChange"

@@ -11,6 +11,7 @@ export default {
   },
   methods: {
     add(payload) {
+      console.log("createCoach" , payload);
       this.create().then(() => {
         if (payload.city_id) payload.city_id = payload.city_id.id || '';
         if (payload.country_id) payload.country_id = payload.country_id.id || '';
