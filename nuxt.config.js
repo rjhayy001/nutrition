@@ -40,7 +40,8 @@ export default {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/i18n',
-    '@nuxtjs/auth-next'
+    '@nuxtjs/auth-next',
+    'vue2-editor/nuxt'
   ],
   i18n: {
     langDir: 'locales/',
