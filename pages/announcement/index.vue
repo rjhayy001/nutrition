@@ -1,9 +1,21 @@
 <template>
   <v-container>
-    <form-drawer :drawerStatus="drawer" @closeDrawer="drawer = !drawer"
+    <statistics-component
+      :statistics="formattedStatistics"
+      :title="title"
+    />
+    <view-item
+      :viewStatus="view" 
+      :dataItem="dataItem"
+      :title="AnnounceTitle"
+      @closeDrawer="view = !view"
+    />
+    <form-drawer 
+      :drawerStatus="drawer" 
+      :selectedItem="selectedItem"
+      @closeDrawer="drawer = !drawer"
       @addRecord="addRecord($event)"
       @updateRecord="updateRecord($event)"
-      :selectedItem="selectedItem"
     ></form-drawer>
     <data-table
       :options="options"
@@ -13,6 +25,7 @@
       searchPlaceholder="Title"
       class="custom-table"
       @addRecord="drawer = !drawer"
+      @updateRecord="drawer = !drawer"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
@@ -22,6 +35,8 @@
     >
       <template v-slot:status="{item}">
         <v-switch
+          @click="changeStatus(item)"
+          :disabled="item.type == 0"
           v-model="item.status"
           inset
           color="success"
@@ -29,9 +44,12 @@
           hide-details=""
         ></v-switch>
       </template>
+      <template v-slot:is_sent="{ item }">
+        <span>{{item.is_sent ? "sent" : "not sent"}}</span>
+      </template>
       <template v-slot:send_to="{ item }">
-        <span><strong>{{item.clients.length}}</strong> clients</span>,
-        <span><strong>{{item.coaches.length}}</strong> coaches</span>
+        <span @click="coach(item)"><strong>{{item.coaches.length}}</strong> coaches</span>,
+        <span @click="client(item)"><strong>{{item.clients.length}}</strong> clients</span>
       </template>
       <template v-slot:type="{item}">
         {{ item.type==0 ? "One Time Only" : "Recurring" }}
@@ -51,14 +69,17 @@ import tableHelper from "~/mixins/tableHelper.vue";
 import dateHelper from "~/mixins/dateHelper.vue";
 import formDrawer from "~/components/announcement/form.vue";
 import commonDialog from "@/components/common/commonDialog.vue";
+import viewItem from "@/components/announcement/drawerView.vue";
+import statisticsComponent from "@/components/common/statisticComponent.vue";
 export default {
-  components: { dataTable, formDrawer, commonDialog},
+  components: { dataTable, formDrawer, commonDialog, viewItem, statisticsComponent},
   mixins:[tableHelper, dateHelper],
   data() {
     return {
       options: {},
       default_limit: 2,
       title: "Announcement",
+      AnnounceTitle:'',
       headers: [
         { 
           text: "#", 
@@ -74,8 +95,12 @@ export default {
           value: "message" 
         },
         { 
-          text: "Send to", 
+          text: "Receiver", 
           value: "send_to" 
+        },
+        { 
+          text: "Announce Status", 
+          value: "is_sent" 
         },
         { 
           text: "Type", 
@@ -86,8 +111,24 @@ export default {
           value: "time" 
         },
         { 
+          text: "Date", 
+          value: "date" 
+        },
+        { 
           text: "Status", 
           value: "status" 
+        },
+        { 
+          text: "Schedule Period", 
+          value: "schedule_period" 
+        },
+        { 
+          text: "Cycle Count", 
+          value: "cycle_count" 
+        },
+        { 
+          text: "Cycle Type", 
+          value: "cycle_type" 
         },
         { 
           text: "Created at", 
@@ -105,41 +146,91 @@ export default {
       data: [],
       receiver:[],
       drawer:false,
-      selectedItem:{}
+      view:false,
+      selectedItem:{},
+      dataItem:[],
+      statistics:{},
     };
   },
   mounted() {
     this.initialize()
   },
+  computed: {
+    formattedStatistics() {
+      return [
+        {
+          title:'Total Announce',
+          value: this.statistics.totalAnnounce,
+          type: 'number'
+        },
+        {
+          title:'Total Sent',
+          value: this.statistics.totalSent,
+          type: 'number'
+        },
+        {
+          title:'Total Once Save',
+          value: this.statistics.totalSaveOnce,
+          type: 'number'
+        },
+        {
+          title:'Total Once Sent',
+          value: this.statistics.totalOnceSent,
+          type: 'number'
+        },
+        {
+          title:'Total Recurring Save',
+          value: this.statistics.totalSaveRecurring,
+          type: 'number'
+        },
+        {
+          title:'Total Recurring Sent',
+          value: this.statistics.totalRecurringSent,
+          type: 'number'
+        },
+      ]
+    }
+  },
   methods: {
+    coach(item) {
+      this.dataItem = item.coaches
+      this.view=true
+      this.AnnounceTitle="Coach"
+    },
+    client(item) {
+      this.dataItem = item.clients
+      this.view=true
+      this.AnnounceTitle="Client"
+    },
     initialize() {
+      this.getStatistics();
+      this.getTableRecords()
+    },
+    getTableRecords(){
       this.$axios.get(`${this.$announces}?${this.urlQuery()}&relations=clients,coaches`).then(({data}) => {
-
-
-        // console.log(list,"sad")
-
-        
         this.data = data.data
         this.options = data.options
+        console.log(this.data,"data")
       })
     },
     addRecord(payload) {
       this.create().then(() => {
         this.$axios.post(`${this.$announces}`, payload).then(({data}) => {
-          this.successNotification(data, 'added', 'announce', 'announces', 'title')
+          if(payload.is_sent==1) {
+            this.successNotification(payload, "sent","coach","coaches","title")
+          }else{
+            this.successNotification(payload, "save","coach","coaches","title")
+          }
+          this.$store.commit('resetForm', true)
           this.initialize()
         })
       })
     },
     deleteRecord(items) {
-      this.$root.dialog(
-        "Confirm delete Action!",
-        `Are you sure you want to delete ${items.length == 1 ? 'this record' : 'these records'} ?`,
-        "delete"
-      ).then(() => {
+      this.delete().then(() => {
         let ids = this.getIds(items)
-        this.$axios.delete(`cities/${ids}`).then(({data}) => {
-          this.successNotification(data, 'deleted', 'city', 'cities', 'name')
+        this.$axios.delete(`${this.$announces}/${ids}`).then(({data}) => {
+          this.successNotification(items, 'deleted', 'announce', 'announces', 'title')
           this.initialize()
         })
       });
@@ -149,11 +240,34 @@ export default {
       this.selectedItem = this.cloneVariable(item)
     },
     updateRecord(payload) {
-      this.$axios.put(`cities/${payload.id}`, payload).then(({data}) => {
-        this.successNotification(data, 'updated', 'city', 'cities', 'name')
+      this.$axios.put(`${this.$announces}/${payload.id}`, payload).then(({data}) => {
+        this.successNotification(data, 'updated', 'announce', 'announces', 'title')
+        this.$store.commit('resetForm', true)
         this.initialize()
+        this.drawer=false
       })
     },
+    changeStatus(payload) {
+      this.$axios
+        .put(`${this.$announces}/${payload.id}/status`, payload)
+        .then(({ data }) => {
+          this.successNotification(
+            payload,
+            "updated",
+            "announce",
+            "announces",
+            "title"
+          );
+          this.initialize();
+        });
+    },
+    getStatistics() {
+      this.$axios.get(`${this.$announces}/statistic`)
+      .then(({ data }) => {
+        this.statistics = data
+        console.log(this.statistics,"statistic")
+      });
+    }
   },
 };
 </script>

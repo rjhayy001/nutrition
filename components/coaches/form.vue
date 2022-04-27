@@ -473,13 +473,14 @@ export default {
         }
         if (!val) return;
         this.payload = this.cloneVariable(val);
+        console.log(this.payload,"value")
       },
       deep: true,
       immediate: true,
     },
     tagsSelected: {
       handler(val) {
-        this.tagsSelected = val;
+        // this.tagsSelected = val;
         this.tagsSelected = val;
       }
     }
