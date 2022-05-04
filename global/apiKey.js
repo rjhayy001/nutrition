@@ -8,3 +8,5 @@ Vue.prototype.$groups = 'groups'
 Vue.prototype.$coaches = 'coaches'
 Vue.prototype.$announces = 'announces'
 Vue.prototype.$blogs = 'blogs'
+Vue.prototype.$uploadedImages = 'uploaded-images'
+

@@ -163,7 +163,7 @@ export default {
         this.options = data.options
       })
     },
-    addRecord(payload) {
+    addRecord() {
       this.goTo("blog-create");
     },
     deleteRecord(items) {
