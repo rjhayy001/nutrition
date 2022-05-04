@@ -25,7 +25,7 @@
     </p>
     <v-divider class="mb-2"></v-divider>
     <ValidationObserver ref="form">
-      <v-form class="form-box" @submit.prevent="sendForm(1)">
+      <v-form class="form-box" @submit.prevent="sendForm(true)">
         <v-container grid-list-md>
           <v-layout row wrap class="px-1">
             <v-flex xs12 style="height: 2em">
@@ -406,11 +406,11 @@
               >
                 <v-btn
                   class="success mt-1"
-                  @click="sendForm(0)"
+                  @click="sendForm(false)"
                   style="width: 49% !important"
                 >
                   <v-icon>mdi-content-save-outline</v-icon>
-                  {{ payload.id ? "Update and Save" : "Save" }}
+                  {{ payload.id ? "Update" : "Save" }}
                 </v-btn>
                 <v-btn
                   class="success mt-1"
@@ -418,7 +418,7 @@
                   style="width: 49% !important"
                 >
                   <v-icon>mdi-content-save-outline</v-icon>
-                  {{ payload.id ? "Update and Send" : "Save and Send" }}
+                  Send
                 </v-btn>
               </div>
             </v-flex>
@@ -430,6 +430,7 @@
 </template>
 <script>
 import moment from "moment";
+const is_ricurring = 1;
 export default {
   data() {
     return {
@@ -492,53 +493,28 @@ export default {
   },
   methods: {
     resetValidation() {
-    },
+      },
     initialize () {
       this.selectAllCoach();
       this.selectAllClient();
       this.getClients();
       this.getCoaches();
     },
-    sendForm(value) {
+    sendForm(is_sent) {
       this.$refs.form.validate().then((result) => {
         if (!result) return;
-        if(this.payload.type == 1 ) {
-          this.payload.status = 1;
-          this.payload.time='';
-          this.payload.date='';
-          this.payload.schedule_period = this.payload.schedule_period
-          if(this.payload.schedule_period == 7){
-            this.payload.cycle_count = this.payload.cycle_count
-            this.payload.cycle_type = this.payload.cycle_type
+        this.payload.is_sent = is_sent;
+        if(is_sent) {
+          if(this.payload.id) {
+            this.payload.status = 0;
+            this.$emit("updateRecord", this.payload);
           }else{
-            this.payload.cycle_count= ''
-            this.payload.cycle_type= ''
+            this.payload.status = 1;
+            this.$emit("addRecord", this.payload);
           }
         }else{
           this.payload.status = 0;
-          this.payload.schedule_period= ''
-          this.payload.cycle_count= ''
-          this.payload.cycle_type= ''
-        }
-        if (this.payload.id) {
-          if(this.payload.is_sent==1){
-            this.payload.is_sent = value;
-            this.payload.time = moment().format("HH:mm"),
-            this.payload.date = moment().format("YYYY-MM-DD"),
-            this.$emit("addRecord", this.payload);
-          }else{
-            this.payload.is_sent = value;
-            this.$emit("updateRecord", this.payload);
-            this.drawer=false;
-          }
-        }else{
-          this.payload.is_sent = value;
-          if(this.payload.is_sent=0) {
-            this.payload.status=1;
-          }else{
-            this.payload.status=0;
-          }
-          this.$emit("addRecord", this.payload);
+          this.$emit("saveRecord", this.payload)
         }
       });
     },
@@ -589,17 +565,16 @@ export default {
         this.selectAllClient(val);
       },
     },
-    '$store.state.resetForm'(val) {
-      if(val) {
-        this.payload = this.cloneVariable(this.originalPayload)
-        this.$store.commit('resetForm', false)
-      }
-    },
+    // '$store.state.resetForm'(val) {
+    //   if(val) {
+    //     this.payload = this.cloneVariable(this.originalPayload)
+    //     this.$store.commit('resetForm', false)
+    //   }
+    // },
     drawerStatus(val) {
       if (val && !this.originalPayload) 
         this.originalPayload = this.cloneVariable(this.payload);
         this.drawer = val;
-        console.log(this.payload,"payloaddrawer")
     },
     drawer(val) {
       if (!val) {
@@ -617,8 +592,6 @@ export default {
 
         const selectedCoachesIds = this.payload.coaches.map(({ id }) => id);
         this.payload.coaches = selectedCoachesIds;
-
-        console.log(this.payload,"payload");
       },
       deep: true,
     }

@@ -21,7 +21,7 @@ export default {
     findRecord() {
       this.$axios
         .get(
-          `${this.$coaches}/${this.$route.params.id}/edit?relations=country,city,zipcode,taggable,groupable`
+          `${this.$clients}/${this.$route.params.id}/edit?relations=country,city,zipcode,taggable,groupable`
         )
         .then(({ data }) => {
           data.country_id = data.country;
@@ -38,9 +38,9 @@ export default {
         if (payload.country_id) payload.country_id = payload.country_id.id || '';
         if (payload.zipcode_id) payload.zipcode_id = payload.zipcode_id.id || '';
 
-        this.$axios.put(`${this.$coaches}/${payload.id}`, payload).then(({ data }) => {
-          this.successNotification(data,"updated","coach","coaches","first_name");
-          this.goTo("settings-coaches");
+        this.$axios.put(`${this.$clients}/${payload.id}`, payload).then(({ data }) => {
+          this.successNotification(data,"updated","client","clients","first_name");
+          this.goTo("client");
         });
       })
     },

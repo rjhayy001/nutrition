@@ -28,7 +28,6 @@ export default {
     selectedItem: {
       handler(val) {
         this.payload = this.cloneVariable(val);
-        console.log(this.payload,"edit")
       },
       deep: true,
     }

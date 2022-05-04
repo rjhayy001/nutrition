@@ -15,6 +15,7 @@
       :selectedItem="selectedItem"
       @closeDrawer="drawer = !drawer"
       @addRecord="addRecord($event)"
+      @saveRecord="saveRecord($event)"
       @updateRecord="updateRecord($event)"
     ></form-drawer>
     <data-table
@@ -25,7 +26,6 @@
       searchPlaceholder="Title"
       class="custom-table"
       @addRecord="drawer = !drawer"
-      @updateRecord="drawer = !drawer"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
@@ -36,7 +36,6 @@
       <template v-slot:status="{item}">
         <v-switch
           @click="changeStatus(item)"
-          :disabled="item.type == 0"
           v-model="item.status"
           inset
           color="success"
@@ -53,6 +52,30 @@
       </template>
       <template v-slot:type="{item}">
         {{ item.type==0 ? "One Time Only" : "Recurring" }}
+      </template>
+      <template v-slot:cycle_count="{item}">
+        <template v-if="item.type==0">...</template>
+        <template v-else>
+          {{ item.cycle_count }}
+        </template>
+      </template>
+      <template v-slot:cycle_type="{item}">
+        <template v-if="item.type==0">...</template>
+        <template v-else>
+          {{ item.cycle_type }}
+        </template>
+      </template>
+      <template v-slot:schedule_period="{item}">
+        <template v-if="item.type==0">...</template>
+        <template v-else>
+          {{ item.schedule_period }}
+        </template>
+      </template>
+      <template v-slot:time="{item}">
+        <template v-if="item.type==1">...</template>
+        <template v-else>
+          {{ item.time }}
+        </template>
       </template>
       <template v-slot:created_at="{item}">
         {{formatDate(item.created_at)}}
@@ -99,7 +122,7 @@ export default {
           value: "send_to" 
         },
         { 
-          text: "Announce Status", 
+          text: "Check", 
           value: "is_sent" 
         },
         { 
@@ -216,12 +239,15 @@ export default {
     addRecord(payload) {
       this.create().then(() => {
         this.$axios.post(`${this.$announces}`, payload).then(({data}) => {
-          if(payload.is_sent==1) {
-            this.successNotification(payload, "sent","coach","coaches","title")
-          }else{
-            this.successNotification(payload, "save","coach","coaches","title")
-          }
-          this.$store.commit('resetForm', true)
+          this.successNotification(payload, "sent","coach","coaches","title")
+          this.initialize()
+        })
+      })
+    },
+    saveRecord(payload) {
+      this.create().then(() => {
+        this.$axios.post(`${this.$announces}/save`, payload).then(({data}) => {
+          this.successNotification(payload, "save","coach","coaches","title")
           this.initialize()
         })
       })
@@ -240,11 +266,12 @@ export default {
       this.selectedItem = this.cloneVariable(item)
     },
     updateRecord(payload) {
-      this.$axios.put(`${this.$announces}/${payload.id}`, payload).then(({data}) => {
-        this.successNotification(data, 'updated', 'announce', 'announces', 'title')
-        this.$store.commit('resetForm', true)
-        this.initialize()
-        this.drawer=false
+      this.update().then(() => {
+        this.$axios.put(`${this.$announces}/${payload.id}`, payload).then(({data}) => {
+          this.successNotification(data, 'updated', 'announce', 'announces', 'title')
+          // this.$store.commit('resetForm', true)
+          this.initialize()
+        });
       })
     },
     changeStatus(payload) {
@@ -265,7 +292,6 @@ export default {
       this.$axios.get(`${this.$announces}/statistic`)
       .then(({ data }) => {
         this.statistics = data
-        console.log(this.statistics,"statistic")
       });
     }
   },

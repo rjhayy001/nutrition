@@ -19,7 +19,7 @@
             <v-flex xs12 class="mb-2">
               <div class="d-flex align-center py-2 data-table-cus">
                 <p class="title mr-1">
-                  {{ payload.id ? "EDIT" : "CREATE NEW" }} COACH
+                  {{ payload.id ? "EDIT" : "CREATE NEW" }} CLIENT
                 </p>
                 <v-spacer></v-spacer>
                 <v-btn class="mr-1" small @click="$router.go('-1')">

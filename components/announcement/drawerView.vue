@@ -30,22 +30,6 @@
             </div>
           </div>
         </template>
-        <template v-slot:item.address="{ item }">
-          <template v-if="item.address_1 == null && item.address_2 == null && item.zipcode == null && item.city == null && item.country == null"> ... </template>
-          {{ getCompleteAddress(item) }}
-        </template>
-        <template v-slot:item.birthday="{ item }">
-          <template v-if="item.birthday == null">...</template>
-          <template v-else>
-            {{ $moment(item.birthday).format('MMM Do, YYYY') }}
-          </template>
-        </template>
-        <template v-slot:item.complete_phone="{ item }">
-          <template v-if="item.complete_phone == null">...</template>
-          <template v-else>
-            {{ item.complete_phone }}
-          </template>
-        </template>
         <template v-slot:item.email="{ item }">
           <template v-if="item.email == null">...</template>
           <template v-else>
@@ -55,14 +39,10 @@
         <template v-slot:item.created_at="{ item }">
           {{ formatDate(item.created_at) }}
         </template>
-        <template v-slot:item.updated_at="{ item }">
-          {{ formatDate(item.updated_at) }}
-        </template>
       </v-data-table>
     </div>
   </v-navigation-drawer>
 </template>
-
 <script>
 import addressHelper from "@/mixins/addressHelper.vue";
 import dateHelper from "@/mixins/dateHelper.vue";
@@ -74,13 +54,9 @@ export default {
       viewItem:[],
       headers: [
         { text: 'Full Name', align: 'start', value: 'full_name', width: '350px'},
-        { text: 'Address', align: 'start', value: 'address', width: '400px' },
-        { text: 'Contact', align: 'start', value: 'complete_phone', width: '150px' },
         { text: 'Email', align: 'start', value: 'email', width: '150px' },
-        { text: 'Birthday', align: 'start', value: 'birthday', width: '150px' },
         { text: 'created_at', align: 'start', value: 'created_at', width: '200px' },
-        { text: 'updated_at', align:'start',  value: 'updated_at', width: '200px' },
-        ],
+      ],
     };
   },
     props: {
@@ -107,7 +83,6 @@ export default {
       }
     },
     dataItem(val) {
-      console.log(val)
       this.viewItem = val
     }
   }
