@@ -14,43 +14,43 @@ export default {
   data() {
     return {
       submenus: [
-        { 
-          title: 'Client', 
+        {
+          title: 'Client',
           icon: 'mdi-account-multiple-outline',
-          to:'new-clients',
+          to:'new-client',
           total_records:'5'
         },
-        { 
-          title: 'Chat', 
+        {
+          title: 'Chat',
           icon: 'mdi-chat-plus-outline',
-          to:'new-clients-chat',
+          to:'new-client-chat',
         },
-        { 
-          title: 'Objectives', 
+        {
+          title: 'Objectives',
           icon: 'mdi-store-outline',
-          to:'new-clients-objectives',
+          to:'new-client-objectives',
         },
-        { 
-          title: 'Suivi', 
+        {
+          title: 'Suivi',
           icon: 'mdi-car-shift-pattern',
-          to:'new-clients-follow',
+          to:'new-client-follow',
           total_records:'7'
         },
-        { 
-          title: 'Photos', 
+        {
+          title: 'Photos',
           icon: 'mdi-image-multiple',
-          to:'new-clients-photos',
+          to:'new-client-photos',
           total_records:'10'
         },
-        { 
-          title: 'Documents', 
+        {
+          title: 'Documents',
           icon: 'mdi-file-document-multiple-outline',
-          to:'new-clients-documents',
+          to:'new-client-documents',
         },
-        { 
-          title: 'Abonnement', 
+        {
+          title: 'Abonnement',
           icon: 'mdi-account-reactivate-outline',
-          to:'new-clients-subscription',
+          to:'new-client-subscription',
         },
       ]
     }
