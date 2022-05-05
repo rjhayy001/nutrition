@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <form-drawer :drawerStatus="drawer" @closeDrawer="drawer = !drawer"
       @addRecord="addRecord($event)"
       @updateRecord="updateRecord($event)"
@@ -11,26 +11,16 @@
       :title="title"
       :headers="headers"
       :data="data"
-      searchPlaceholder="Short name, Long name, Code"
+      searchPlaceholder="Name, Color, Description"
       class="custom-table"
       @addRecord="drawer = !drawer"
       @deleteRecord="deleteRecord($event)"
-      @reloadtable="initialize()"
+      @reloadtable="initalize()"
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
       @searchRecords="searchRecords($event)"
       @editRecord="editRecord($event)"
     >
-      <template v-slot:is_default="{item}">
-        <v-switch
-          v-model="item.is_default"
-          inset
-          color="success"
-          dense
-          hide-details=""
-          @change="updateDefaultValue(item)"
-        ></v-switch>
-      </template>
       <template v-slot:created_at="{item}">
         {{formatDate(item.created_at)}}
       </template>
@@ -44,23 +34,22 @@
 import dataTable from "~/components/ui/dataTable.vue";
 import tableHelper from "~/mixins/tableHelper.vue";
 import dateHelper from "~/mixins/dateHelper.vue";
-import formDrawer from "~/components/country/form.vue";
+import formDrawer from "~/components/tag/form.vue";
 export default {
   components: { dataTable, formDrawer},
   mixins:[tableHelper, dateHelper],
   data() {
     return {
       options: {},
-      title: "Countries",
+      title: "Tags",
       headers: [
-        { text: "#", value: "id", width:'2%'},
-        { text: "Short name", value: "short_name"},
-        { text: "Long name", value: "long_name" },
-        { text: "Code", value: "country_numcode" },
-        { text: "Default", value: "is_default" },
-        { text: "Created at", value: "created_at"},
-        { text: "Updated at", value: "updated_at"},
-        { text: "Action", value: "action"},
+        { text: "#", value: "id", width:'2%', filterable:true, sortType:null, filterValue:''},
+        { text: "Name", value: "name", filterable:true, sortType:null, filterValue:''},
+        { text: "Color", value: "color" , filterable:true, sortType:null, filterValue:''},
+        { text: "Description", value: "description" , filterable:true, sortType:null, filterValue:''},
+        { text: "Created at", value: "created_at", filterable:true, sortType:null, filterValue:''},
+        { text: "Updated at", value: "updated_at", filterable:true, sortType:null, filterValue:''},
+        { text: "Action", value: "action", filterable:true, sortType:null, filterValue:''},
       ],
       data: [],
       drawer:false,
@@ -68,37 +57,31 @@ export default {
     };
   },
   mounted() {
-    this.initialize()
+    this.initalize()
   },
   methods: {
-    initialize() {
-      this.$axios.get(`${this.$countries}?${this.urlQuery()}`).then(({data}) => {
+    initalize() {
+
+      this.$axios.get(`${this.$tags}?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
       })
     },
     addRecord(payload) {
       this.create().then(() => {
-        this.$axios.post(`${this.$countries}`, payload).then(({data}) => {
-          this.successNotification(data, 'added', 'country', 'countries', 'short_name')
-          this.$store.commit('resetForm', true)
+        this.$axios.post(`${this.$tags}`, payload).then(({data}) => {
+          this.successNotification(data, 'added', 'name', 'color', 'description')
         })
       })
     },
     deleteRecord(items) {
       this.delete().then(() => {
         let ids = this.getIds(items)
-        this.$axios.delete(`${this.$countries}/${ids}`).then(({data}) => {
-          this.successNotification(items, 'deleted', 'country', 'countries', 'short_name')
-          this.initialize()
+        this.$axios.delete(`${this.$tags}/${ids}`).then(({data}) => {
+          this.successNotification(items, 'deleted', 'name', 'color', 'description')
+          this.initalize()
         })
-      })
-    },
-    updateDefaultValue(item) {
-      let payload = {is_default:item.is_default}
-      this.$axios.put(`${this.$countries}/${item.id}/default`, payload).then(({data}) => {
-        this.successNotification(item, 'set as default', 'country', 'countries', 'short_name')
-      })
+      });
     },
     editRecord(item) {
       this.drawer = !this.drawer
@@ -106,10 +89,9 @@ export default {
     },
     updateRecord(payload) {
       this.update().then(() => {
-        this.$axios.put(`${this.$countries}/${payload.id}`, payload).then(({data}) => {
+        this.$axios.put(`${this.$tags}/${payload.id}`, payload).then(({data}) => {
           this.successNotification(data, 'updated', 'country', 'countries', 'short_name')
-          this.$store.commit('resetForm', true)
-          this.initialize()
+          this.initalize()
         })
       })
     }

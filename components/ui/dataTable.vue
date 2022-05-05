@@ -56,7 +56,7 @@
         <template v-slot:header="{ props }">
           <thead class="v-data-table-header">
             <tr>
-              <th role="columnheader" scope="col" v-for="head in props.headers">
+              <th role="columnheader" scope="col" v-for="head in props.headers" style="width:200px">
                 <span
                   class="d-flex justify-space-between block"
                   v-if="head.value != 'data-table-select'"

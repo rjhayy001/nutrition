@@ -45,7 +45,7 @@
 					.then((result) => {
 						if (result) {
 							// this.$store.commit('SHOW_LOADER')
-							this.$store.commit('SET_LOGO_LOADER', true)
+							// this.$store.commit('SET_LOGO_LOADER', true)
 							resolve(result)
 						}
 					}).catch(error => {

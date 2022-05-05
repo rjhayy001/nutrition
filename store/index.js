@@ -1,6 +1,7 @@
 export const state = () => ({
   sidebarStatus: true,
-  miniVariant: false
+  miniVariant: false,
+  resetForm:false,
 })
 
 export const mutations = {
@@ -17,6 +18,9 @@ export const mutations = {
     } else {
       state.miniVariant = !state.miniVariant
     }
+  },
+  resetForm(state, value) {
+    state.resetForm = value
   }
 }
 

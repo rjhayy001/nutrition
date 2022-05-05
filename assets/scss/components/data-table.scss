@@ -10,6 +10,18 @@
     width: 140px !important;
   }
 
+  
+  th {
+    width: 210px;
+    min-width: 210px;
+  }
+
+  th:nth-child(2),
+  th:nth-child(1) {
+    width: 60px;
+    min-width: 60px;
+  }
+
   td {
     cursor: pointer;
   }
@@ -60,7 +72,7 @@
 
   td:last-child,
   td:first-child {
-    // background-color: #bbc8f2 !important
+    background-color: #ffff !important
   }
 
   tr th {

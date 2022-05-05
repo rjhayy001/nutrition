@@ -1,5 +1,5 @@
 <template>
-   <v-navigation-drawer
+  <v-navigation-drawer
     temporary
     right
     fixed
@@ -7,14 +7,24 @@
     width="40%"
     hide-overlay
   >
-    <p class="form-title pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
-      {{countryPayload.id ? 'Add new' : 'Edit'}} Country
+    <p
+      class="
+        form-title
+        pa-2
+        title
+        font-weight-regular
+        text-uppercase
+        d-flex
+        justify-space-between
+      "
+    >
+      {{ payload.id ? "Add new" : "Edit" }} Country
       <v-btn icon small @click="drawer = false">
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </p>
     <v-divider class="mb-2"></v-divider>
-    <ValidationObserver  ref="form">
+    <ValidationObserver ref="form">
       <v-form class="form-box" @submit.prevent="saveForm">
         <v-container grid-list-md>
           <v-layout row wrap class="px-1">
@@ -22,14 +32,20 @@
               <p class="subtitle-1 font-weight-medium mb-2">INFORMATIONS</p>
             </v-flex>
             <v-flex xs12 sm6>
-              <ValidationProvider slim name="short name" rules="required|min:1|max:100" v-slot="{ errors }">
+              <ValidationProvider
+                mode="passive"
+                slim
+                name="short name"
+                rules="required|min:1|max:100"
+                v-slot="{ errors }"
+              >
                 <div class="mb-1">
                   <p class="subtitle-2 font-weight-regular mb-2">
                     <span>*</span>
                     Short Name
                   </p>
                   <v-text-field
-                    v-model="countryPayload.short_name"
+                    v-model="payload.short_name"
                     placeholder="Type short name..."
                     type="text"
                     hide-details="auto"
@@ -40,14 +56,20 @@
               </ValidationProvider>
             </v-flex>
             <v-flex xs12 sm6>
-              <ValidationProvider slim name="long name" rules="required|min:1|max:100" v-slot="{ errors }">
+              <ValidationProvider
+                mode="passive"
+                slim
+                name="long name"
+                rules="required|min:1|max:100"
+                v-slot="{ errors }"
+              >
                 <div class="mb-1">
                   <p class="subtitle-2 font-weight-regular mb-2">
                     <span>*</span>
                     Long Name
                   </p>
                   <v-text-field
-                    v-model="countryPayload.long_name"
+                    v-model="payload.long_name"
                     placeholder="Type long name..."
                     type="text"
                     hide-details="auto"
@@ -58,13 +80,17 @@
               </ValidationProvider>
             </v-flex>
             <v-flex xs12 sm6>
-              <ValidationProvider slim name="code" rules="numeric" v-slot="{ errors }">
+              <ValidationProvider
+                mode="passive"
+                slim
+                name="code"
+                rules="numeric"
+                v-slot="{ errors }"
+              >
                 <div class="mb-1">
-                  <p class="subtitle-2 font-weight-regular mb-2">
-                    Code
-                  </p>
+                  <p class="subtitle-2 font-weight-regular mb-2">Code</p>
                   <v-text-field
-                    v-model="countryPayload.country_numcode"
+                    v-model="payload.country_numcode"
                     placeholder="Type code..."
                     type="number"
                     hide-details="auto"
@@ -75,13 +101,11 @@
               </ValidationProvider>
             </v-flex>
             <v-flex xs12 sm6>
-              <ValidationProvider slim name="is_default" v-slot="{ errors }">
+              <ValidationProvider mode="passive" slim name="is_default" v-slot="{ errors }">
                 <div class="mb-1">
-                  <p class="subtitle-2 font-weight-regular mb-2">
-                    Default
-                  </p>
+                  <p class="subtitle-2 font-weight-regular mb-2">Default</p>
                   <v-select
-                    v-model="countryPayload.is_default"
+                    v-model="payload.is_default"
                     :items="DefaultOptions"
                     hide-details="auto"
                     solo
@@ -94,7 +118,7 @@
             <v-flex xs12>
               <v-btn class="success mt-1" block type="submit">
                 <v-icon>mdi-content-save-outline</v-icon>
-                {{countryPayload.id ? 'UPDATE' : 'SAVE'}}
+                {{ payload.id ? "UPDATE" : "SAVE" }}
               </v-btn>
             </v-flex>
           </v-layout>
@@ -104,67 +128,48 @@
   </v-navigation-drawer>
 </template>
 <script>
+import FormDrawerHelper from "@/mixins/formDrawerHelper.vue";
 export default {
+  mixins: [FormDrawerHelper],
   data() {
     return {
-      drawer:false,
-      countryPayload: {
-        short_name:'',
-        long_name:'',
-        country_numcode:'',
-        is_default:0,
+      payload: {
+        short_name: "",
+        long_name: "",
+        country_numcode: "",
+        is_default: 0,
       },
-      DefaultOptions:[
-        {id:1, text:'Yes'},
-        {id:0, text:'No'}
+      DefaultOptions: [
+        { id: 1, text: "Yes" },
+        { id: 0, text: "No" },
       ],
-      originalPayload:null
-    }
+    };
   },
   props: {
     drawerStatus: {
-      type:Boolean,
-      default: () => false
+      type: Boolean,
+      default: () => false,
     },
     selectedItem: {
-      type:Object,
-      default:() => {}
-    }
+      type: Object,
+      default: () => {},
+    },
   },
   methods: {
+    reset() {
+      this.$refs.form.reset()
+    },
     saveForm() {
-      this.$refs.form.validate().then(result => {
-        if (!result) return
-        if (this.countryPayload.id) {
-          this.$emit('updateRecord', this.countryPayload)
+      this.$refs.form.validate().then((result) => {
+        if (!result) return;
+        if (this.payload.id) {
+          this.$emit("updateRecord", this.payload);
         } else {
-          this.$emit('addRecord', this.countryPayload)
+          this.$emit("addRecord", this.payload);
         }
-      })
-    }
+        this.reset()
+      });
+    },
   },
-  watch: {
-    drawerStatus(val) {
-      if(val) this.drawer = val
-    },
-    drawer(val) {
-      if(this.originalPayload) {
-        this.countryPayload = this.cloneVariable(this.originalPayload)
-      }
-
-      if(!val) {
-        this.$emit('closeDrawer')
-      }
-    },
-    selectedItem: {
-      handler(val) {
-        if (!this.originalPayload) {
-          this.originalPayload = this.cloneVariable(this.countryPayload)
-        }
-        this.countryPayload = this.cloneVariable(val)
-      },
-      deep:true
-    }
-  }
-}
+};
 </script>
