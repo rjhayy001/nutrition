@@ -12,6 +12,7 @@
       :sort-desc.sync="isDescending"
       class="custom-table"
       @addRecord="addRecord"
+      @showRecord="showRecord($event)"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
@@ -32,7 +33,7 @@
       <!-- status -->
       <template v-slot:status="{ item }">
         <v-switch
-          @click="changeStatus(item)"
+          @click.stop="changeStatus(item)"
           v-model="item.status"
           inset
           color="success"
@@ -247,6 +248,9 @@ export default {
         this.data = data.data
         this.options = data.options
       })
+    },
+    showRecord(item){
+      this.goTo("client-id", { id: item.id });
     },
     addRecord() {
       this.goTo('client-create')

@@ -77,7 +77,9 @@
   </div>
 </template>
 <script>
+import arrayHelper from "@/mixins/arrayHelper.vue";
   export default {
+    mixins: [arrayHelper],
     data(){
       return {
         photos:[],
@@ -99,12 +101,6 @@
       },
       removePhoto(photo){
         this.$arraysplicer(photo, this.photos)
-      },
-      $arraysplicer(item, array_given) {
-            array_given.splice(array_given.indexOf(item), 1);
-      },
-      $arrayupdater(item, array_given) {
-          array_given.unshift(item);
       },
       $isOnArray(item, array_given){
           let found = array_given.some(arr => arr.id === item.id);
