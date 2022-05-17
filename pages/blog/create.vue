@@ -4,20 +4,11 @@
   </div>
 </template>
 <script>
-import formPage from "~/components/blogs/form.vue";
+import formPage from "~/components/blog/form.vue";
 export default {
-  components: {
-    formPage,
-  },
-  methods: {
-    add(payload) {
-      this.$axios.post(`${this.$blogs}`, payload).then(({ data }) => {
-      });
-      this.goTo("blog");
-      this.successNotification(
-        payload,
-      );
-    },
-  },
-};
+  components:{
+    formPage
+  }
+
+}
 </script>

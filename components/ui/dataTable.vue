@@ -52,6 +52,8 @@
         disable-sort
         height="800"
         v-model="selectedItems"
+        @click:row="showRecord($event)"
+        @click.prevent.stop=""
       >
         <template v-slot:header="{ props }">
           <thead class="v-data-table-header">
@@ -248,6 +250,9 @@ export default {
     this.searchFieldValue();
   },
   methods: {
+    showRecord($event){
+      this.$emit("showRecord", $event);
+    },
     setFilterbyParamValue() {
       if (!this.$route.query.filters) return;
       let currentFilters = this.$route.query.filters.split(",");

@@ -81,6 +81,7 @@ export default {
       this.create().then(() => {
         this.$axios.post(`${this.$countries}`, payload).then(({data}) => {
           this.successNotification(data, 'added', 'country', 'countries', 'short_name')
+          this.$store.commit('resetForm', true)
         })
       })
     },
@@ -107,6 +108,7 @@ export default {
       this.update().then(() => {
         this.$axios.put(`${this.$countries}/${payload.id}`, payload).then(({data}) => {
           this.successNotification(data, 'updated', 'country', 'countries', 'short_name')
+          this.$store.commit('resetForm', true)
           this.initialize()
         })
       })
