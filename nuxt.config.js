@@ -29,6 +29,7 @@ export default {
     { src: '~plugins/vee-validate', ssr: false },
     { src: '~plugins/i18n', ssr: false },
     { src: '~plugins/components/vue-notification', ssr: true },
+    { src: '~plugins/components/vue-file-agent', ssr: false },
     { src: '~global/globalMixin', ssr: true },
     { src: '~global/apiKey', ssr: true },
   ],

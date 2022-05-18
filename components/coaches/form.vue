@@ -479,7 +479,7 @@ export default {
     },
     tagsSelected: {
       handler(val) {
-        this.tagsSelected = val;
+        // this.tagsSelected = val;
         this.tagsSelected = val;
       }
     }

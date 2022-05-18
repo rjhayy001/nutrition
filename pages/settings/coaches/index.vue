@@ -4,7 +4,6 @@
      :statistics="formattedStatistics"
      :title="title"
     />
-
     <data-table
       :options="options"
       :title="title"
@@ -247,7 +246,6 @@ export default {
       this.$axios
         .get(`${this.$coaches}?${this.urlQuery()}&relations=taggable,groupable,country,city,zipcode`)
         .then(({ data }) => {
-          console.log("data", data);
           this.data = data.data;
           this.options = data.options;
         });

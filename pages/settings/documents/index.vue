@@ -1,135 +1,123 @@
 <template>
-  <v-container>
-    <!-- <v-navigation-drawer
-      temporary
-      right
-      fixed
-      v-model="drawer1"
-      width="50%"
-    >
-      <p class="pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
-        Add new Client
-        <v-btn icon small @click="goTo('clients-create')">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </p>
-      <hr>
-    </v-navigation-drawer> -->
-    <data-table
-      :options="options"
-      :title="title"
-      :headers="headers"
-      :data="data"
-      class="custom-table"
-      @addRecord="addRecord"
-      @deleteRecord="deleteRecord($event)"
-      @reloadtable="initalize()"
-      @FilterBy="filterBy($event)"
-      @updatePagenum="updatePagenum($event)"
-    >
-      <template v-slot:status="{item}">
-        <v-switch
-          inset
-          color="success"
-          dense
-          hide-details=""
-        ></v-switch>
-      </template>
-    </data-table>
-  </v-container>
+   <v-container grid-list-md class="main-container" @contextmenu.prevent="show">
+    <v-layout row wrap>
+      <v-flex xs12 class="pb-5">
+        <div class="toolbar-container">
+          <v-toolbar  dense >
+            <v-toolbar-title class="title-header">Documents</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-icon class="mx-2">mdi-format-list-checkbox</v-icon>
+            <v-icon class="mx-2">mdi-phone-outline</v-icon>
+            <v-icon class="mx-2">mdi-video-outline</v-icon>
+            <pinned-messages/>
+          </v-toolbar>
+        </div>
+      </v-flex>
+    </v-layout>
+    <input type="file" multiple ref="file_input" class="d-none">
+    <file-viewer
+      :files="files"
+    />
+    <select-menu
+      :dialog="showMenu"
+      :options="menu_options"
+      @close="showMenu=false"
+      @addDocuments="addDocuments"
+    />
+   </v-container>
 </template>
 <script>
-import dataTable from "~/components/ui/dataTable.vue";
-import tableHelper from "~/mixins/tableHelper.vue";
+import fileViewer from '@/components/ui/fileViewer.vue'
+import selectMenu from '@/components/clients/documents/selectMenu.vue'
 export default {
-  components: { dataTable },
-  mixins:[tableHelper],
-  data() {
-    return {
-      options: {},
-      title: "Clients",
-      headers: [
+  components:{
+    fileViewer,
+    selectMenu
+  },
+  data(){
+    return{
+      showMenu: false,
+      menu_options:{
+        x:0,
+        y:0,
+        in_item_click:false
+      },
+      files:[
         {
-          text: "#",
-          value: "id",
-          width:'2%',
+          type: 'folder',
+          link: 'folder1/',
+          name: 'folderasdasdjasldjasl;kdjasl;djasl;djasl;djasl;djasl;dj',
+          data: '',
         },
         {
-          text: "First name",
-          value: "first_name",
-          filterable:true,
-          sortType:null,
-          filterValue:''
+          type: 'image',
+          link: 'folder1/',
+          name: 'image1',
+          data: 'https://assets-global.website-files.com/5ec7dad2e6f6295a9e2a23dd/621367c9ae7ebd6cf845847c_upwork-profile-examples.jpeg',
         },
-        { 
-          text: "Last name", 
-          value: "last_name",
-          filterable:true,
-          sortType:null,
-          filterValue:''
+        {
+          type: 'pdf',
+          link: '',
+          name: 'pdf',
+          data: '',
         },
-        { 
-          text: "Email", 
-          value: "email",
-          filterable:true,
-          sortType:null,
-          filterValue:'',
+         {
+          type: 'txt',
+          link: '',
+          name: 'text',
+          data: '',
         },
-        { 
-          text: "Status", 
-          value: "status",
+        {
+          type: 'docx',
+          link: '',
+          name: 'docs',
+          data: '',
         },
-        { 
-          text: "Phone 1", 
-          value: "phone_1",
-          filterable:true,
-          sortType:null,
-          filterValue:''
+        {
+          type: 'zip',
+          link: '',
+          name: 'zip',
+          data: '',
         },
-        { 
-          text: "Phone 2", 
-          value: "phone_1",
-          filterable:true,
-          sortType:null,
-          filterValue:''
+        {
+          type: 'html',
+          link: '',
+          name: 'html',
+          data: '',
         },
-        { 
-          text: "Action", 
-          value: "action" 
+        {
+          type: 'mp3',
+          link: '',
+          name: 'mp3',
+          data: '',
+        },
+        {
+          type: 'ppt',
+          link: 'folder1/',
+          name: 'unverified',
+          data: 'https://assets-global.website-files.com/5ec7dad2e6f6295a9e2a23dd/621367c9ae7ebd6cf845847c_upwork-profile-examples.jpeg',
         },
       ],
-      data: [],
-      drawer1:false
-    };
+    }
   },
-  mounted() {
-    this.initalize()
-  },
-  methods: {
-    initalize() {
-      this.$axios.get(`clients?${this.urlQuery()}`).then(({data}) => {
-        this.data = data.data
-        this.options = data.options
+  methods:{
+    addDocuments(){
+      this.$refs.file_input.click()
+    },
+    show (e) {
+      e.preventDefault()
+      this.showMenu = false
+      this.menu_options.x = e.clientX
+      this.menu_options.y = e.clientY
+      this.$nextTick(() => {
+        this.showMenu = true
       })
     },
-    addRecord() {
-      this.goTo('clients-create')
-      // this.$root.dialog(
-      //   "Confirm Message!",
-      //   "Are you sure you want to add this record ?",
-      //   "c"
-      // )
-      //   .then(() => {});
-    },
-    deleteRecord(items) {
-      this.delete().then(() => {
-        let ids = this.getIds(items)
-        this.$axios.delete(`client/${ids}`).then(({data}) => {
-          this.successNotification(items, 'deleted', 'client', 'clients')
-          this.initalize()
-        })
-      })
-    },
-  },
-};
+  }
+}
 </script>
+<style scoped>
+.main-container {
+  min-height: 92vh !important;
+}
+</style>

@@ -7,7 +7,17 @@
     width="40%"
     hide-overlay
   >
-    <p class="form-title pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
+    <p
+      class="
+        form-title
+        pa-2
+        title
+        font-weight-regular
+        text-uppercase
+        d-flex
+        justify-space-between
+      "
+    >
       Add New Notification
       <v-btn icon small @click="drawer = false">
         <v-icon>mdi-close</v-icon>
@@ -15,13 +25,16 @@
     </p>
     <v-divider class="mb-2"></v-divider>
     <ValidationObserver ref="form">
-      <v-form class="form-box" @submit.prevent="saveForm">
+      <v-form class="form-box" @submit.prevent="sendForm(true)">
         <v-container grid-list-md>
           <v-layout row wrap class="px-1">
             <v-flex xs12 style="height: 2em">
               <ValidationProvider slim>
                 <div class="mb-1 d-flex">
-                  <p class="subtitle-2 font-weight-regular my-auto" style="margin-bottom!important; margin-right: 0.85em">
+                  <p
+                    class="subtitle-2 font-weight-regular my-auto"
+                    style="margin-bottom!important; margin-right: 0.85em"
+                  >
                     <span>coach:</span>
                   </p>
                   <v-checkbox
@@ -51,7 +64,10 @@
             <v-flex xs12 style="height: 4em">
               <ValidationProvider slim>
                 <div class="mb-1 d-flex">
-                  <p class="subtitle-2 font-weight-regular my-auto" style="margin-bottom!important; margin-right: 1em">
+                  <p
+                    class="subtitle-2 font-weight-regular my-auto"
+                    style="margin-bottom!important; margin-right: 1em"
+                  >
                     <span>client:</span>
                   </p>
                   <v-checkbox
@@ -80,11 +96,14 @@
             </v-flex>
             <v-flex xs12>
               <div class="mb-1 d-flex">
-                <p class="subtitle-2 font-weight-medium my-auto" style="margin-bottom!important; margin-right: 0.85em">
+                <p
+                  class="subtitle-2 font-weight-medium my-auto"
+                  style="margin-bottom!important; margin-right: 0.85em"
+                >
                   <span>coach:</span>
                 </p>
                 <v-checkbox
-                  v-model="coachSelect"
+                  v-model="taggleAllCoach"
                   class="user-checkbox"
                   label="Select All"
                 ></v-checkbox>
@@ -96,7 +115,7 @@
                   <v-autocomplete
                     deletable-chips
                     class="user-option"
-                    v-model="payload.coach"
+                    v-model="payload.coaches"
                     :items="coaches"
                     placeholder="Select Coach ..."
                     dense
@@ -114,11 +133,8 @@
                       <v-chip v-if="index === 0">
                         <span>{{ item.full_name }}</span>
                       </v-chip>
-                      <span
-                        v-if="index === 1"
-                        class="grey--text text-caption"
-                      >
-                        (+{{ payload.coach.length - 1 }} selected)
+                      <span v-if="index === 1" class="grey--text text-caption">
+                        (+{{ payload.coaches.length - 1 }} selected)
                       </span>
                     </template>
                   </v-autocomplete>
@@ -126,12 +142,15 @@
               </ValidationProvider>
             </v-flex>
             <v-flex xs12>
-             <div class="mb-1 d-flex">
-                <p class="subtitle-2 font-weight-medium my-auto" style="margin-bottom!important; margin-right: 0.85em">
+              <div class="mb-1 d-flex">
+                <p
+                  class="subtitle-2 font-weight-medium my-auto"
+                  style="margin-bottom!important; margin-right: 0.85em"
+                >
                   <span>client:</span>
                 </p>
                 <v-checkbox
-                  v-model="clientSelect"
+                  v-model="taggleAllClient"
                   class="user-checkbox"
                   label="Select All"
                 ></v-checkbox>
@@ -142,7 +161,7 @@
                 <div class="mb-1">
                   <v-autocomplete
                     class="user-option"
-                    v-model="payload.client"
+                    v-model="payload.clients"
                     :items="clients"
                     placeholder="Select Client ..."
                     dense
@@ -160,32 +179,11 @@
                       <v-chip v-if="index === 0">
                         <span>{{ item.full_name }}</span>
                       </v-chip>
-                      <span
-                        v-if="index === 1"
-                        class="grey--text text-caption"
-                      >
-                        (+{{ payload.client.length - 1 }} selected)
+                      <span v-if="index === 1" class="grey--text text-caption">
+                        (+{{ payload.clients.length - 1 }} selected)
                       </span>
-                    </template> 
+                    </template>
                   </v-autocomplete>
-                </div>
-              </ValidationProvider>
-            </v-flex>
-            <v-flex xs12 v-if="selectedClientType != 'non-subscriber'">
-              <p class="subtitle-1 font-weight-medium">Subscription</p>
-            </v-flex>
-            <v-flex xs12 v-if="selectedClientType != 'non-subscriber'">
-              <ValidationProvider slim>
-                <div class="mb-1">
-                  <v-select
-                    v-model="payload.abonnement_id"
-                    :items="subscribeOptions"
-                    placeholder="Select Subscription ..."
-                    item-value="id"
-                    item-text="name"
-                    hide-details="auto"
-                    solo
-                  ></v-select>
                 </div>
               </ValidationProvider>
             </v-flex>
@@ -196,13 +194,12 @@
             </v-flex>
             <v-flex xs12>
               <v-expansion-panels v-model="panel">
-                <v-expansion-panel
-                  v-for="(set_up, i) in payload.set_ups"
-                  :key="i"
-                >
+                <v-expansion-panel>
                   <v-expansion-panel-header>
                     <div class="d-flex justify-space-between">
-                      {{payload.type ? "Recurring" : "On Time Only"}}
+                      <strong>{{
+                        payload.type==1 ? "Recurring" : "On Time Only"
+                      }}</strong>
                     </div>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
@@ -222,41 +219,94 @@
                         RECURRING
                       </v-btn>
                     </div>
-                    <p class="subtitle-2 font-weight-regular mb-2">
-                      <span>*</span>
-                      Time Period
-                    </p>
-                    <v-col cols="12" class="pb-1 pt-2">
-                      <v-menu
-                        ref="time"
-                        v-model="set_time"
-                        :close-on-content-click="false"
-                        :return-value.sync="payload.time"
-                        transition="scale-transition"
-                        offset-y
-                        :nudge-right="40"
-                        min-width="auto"
+                    <template v-if="payload.type == 0">
+                      <div
+                        class="d-flex flex-row"
+                        style="width: 100%; justify-content: space-between"
                       >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn 
-                            v-on="on" 
-                            v-bind="attrs" 
-                            width="100%" 
-                            large
-                            style="color:#909090; justify-content: initial;"
+                        <div style="width: 48%">
+                          <p class="subtitle-2 font-weight-regular mb-2">
+                            <span>*</span>
+                            Time Period
+                          </p>
+                          <v-menu
+                            ref="time"
+                            v-model="time"
+                            :close-on-content-click="false"
+                            :return-value.sync="payload.time"
+                            transition="scale-transition"
+                            offset-y
+                            min-width="auto"
                           >
-                            <v-icon class="mr-2">mdi-clock-outline</v-icon>
-                            {{payload.time ? payload.time : "Choose the time"}}
-                          </v-btn>
-                        </template>
-                        <v-time-picker
-                          format="24hr"
-                          :landscape="$vuetify.breakpoint.mdAndUp"
-                          v-model="payload.time"
-                          @click:minute="$refs.time[i].save(payload.time)"
-                        ></v-time-picker>
-                      </v-menu>
-                    </v-col>
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field
+                                v-model="payload.time"
+                                dense
+                                solo
+                                prepend-inner-icon="mdi-clock-time-four-outline"
+                                readonly
+                                v-bind="attrs"
+                                v-on="on"
+                                :hide-details="true"
+                                class="mb-2"
+                              ></v-text-field>
+                            </template>
+                            <v-time-picker
+                              format="24hr"
+                              :landscape="$vuetify.breakpoint.mdAndUp"
+                              v-model="payload.time"
+                              @click:minute="$refs.time[i].save(payload.time)"
+                            ></v-time-picker>
+                          </v-menu>
+                        </div>
+                        <div style="width: 48%">
+                          <p class="subtitle-2 font-weight-regular mb-2">
+                            <span>*</span>
+                            Date
+                          </p>
+                          <v-menu
+                            ref="date"
+                            v-model="menu"
+                            :close-on-content-click="false"
+                            :return-value.sync="payload.date"
+                            transition="scale-transition"
+                            offset-y
+                            min-width="auto"
+                          >
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-text-field
+                                v-model="payload.date"
+                                dense
+                                solo
+                                prepend-inner-icon="mdi-calendar"
+                                readonly
+                                v-bind="attrs"
+                                v-on="on"
+                                :hide-details="true"
+                                class="mb-2"
+                              ></v-text-field>
+                            </template>
+                            <v-date-picker
+                              v-model="payload.date"
+                              no-title
+                              scrollable
+                            >
+                              <v-spacer></v-spacer>
+                              <v-btn text color="primary" @click="menu = false">
+                                Cancel
+                              </v-btn>
+                              <v-btn
+                                text
+                                color="primary"
+                                @click="$refs.date[i].save(payload.date)"
+                              >
+                                OK
+                              </v-btn>
+                            </v-date-picker>
+                          </v-menu>
+                        </div>
+                      </div>
+                    </template>
                     <template v-if="payload.type == 1">
                       <div class="mb-2">
                         <p class="subtitle-2 font-weight-regular mb-2">
@@ -264,70 +314,83 @@
                           Schedule Period
                         </p>
                         <v-select
-                          v-model="set_up.schedule_period"
+                          v-model="payload.schedule_period"
                           :items="periodOptions"
                           hide-details="auto"
                           solo
                           item-text="text"
                           item-value="id"
                         ></v-select>
-                        <template v-if="set_up.schedule_period == 7">
-                          <div class="mb-2">
-                            <p class="subtitle-2 font-weight-regular mb-2">
-                              <span>*</span>
-                              Cycle Count
-                            </p>
-                            <v-text-field
-                              placeholder="Type total cycle..."
-                              type="text"
-                              hide-details="auto"
-                              solo
-                              v-model="set_up.recycle_count"
-                            ></v-text-field>
-                          </div>
-                          <div class="mb-2">
-                            <p class="subtitle-2 font-weight-regular mb-2">
-                              <span>*</span>
-                              Cycle Type
-                            </p>
-                            <v-select
-                              v-model="set_up.recycle_type"
-                              :items="recycleOptions"
-                              hide-details="auto"
-                              solo
-                              item-text="text"
-                              item-value="id"
-                            ></v-select>
-                          </div>
-                        </template>
                       </div>
+                      <template v-if="payload.schedule_period == 7">
+                        <div class="mb-2">
+                          <p class="subtitle-2 font-weight-regular mb-2">
+                            <span>*</span>
+                            Cycle Count
+                          </p>
+                          <v-text-field
+                            placeholder="Type total cycle..."
+                            type="text"
+                            hide-details="auto"
+                            solo
+                            v-model="payload.cycle_count"
+                          ></v-text-field>
+                        </div>
+                        <div class="mb-2">
+                          <p class="subtitle-2 font-weight-regular mb-2">
+                            <span>*</span>
+                            Cycle Type
+                          </p>
+                          <v-select
+                            v-model="payload.cycle_type"
+                            :items="cycleOptions"
+                            hide-details="auto"
+                            solo
+                            item-text="text"
+                            item-value="id"
+                          ></v-select>
+                        </div>
+                      </template>
                     </template>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
               </v-expansion-panels>
             </v-flex>
             <v-flex xs12>
-              <ValidationProvider slim>
+              <ValidationProvider
+                slim
+                name="title"
+                rules="required"
+                v-slot="{ errors }"
+              >
                 <div class="mb-1">
-                  <p class="subtitle-2 font-weight-regular mb-2">Title:</p>
+                  <v-flex xs12>
+                    <p class="subtitle-1 font-weight-medium text-uppercase">
+                      Title:
+                    </p>
+                  </v-flex>
                   <v-text-field
                     v-model="payload.title"
-                    name="email_1"
                     placeholder="Type your Title ..."
                     hide-details="auto"
                     type="text"
+                    :error-messages="errors"
                     solo
                   ></v-text-field>
                 </div>
               </ValidationProvider>
             </v-flex>
             <v-flex xs12>
-              <ValidationProvider slim>
+              <ValidationProvider>
                 <div class="mb-1">
-                  <p class="subtitle-2 font-weight-regular mb-2">Message:</p>
+                  <v-flex xs12>
+                    <p class="subtitle-1 font-weight-medium text-uppercase">
+                      Message:
+                    </p>
+                  </v-flex>
                   <v-text-field
                     v-model="payload.message"
-                    name="email_1"
+                    name="message"
                     placeholder="Type your Message ..."
                     hide-details="auto"
                     type="text"
@@ -337,10 +400,27 @@
               </ValidationProvider>
             </v-flex>
             <v-flex xs12>
-              <v-btn class="success mt-1" block type="submit">
-                <v-icon>mdi-content-save-outline</v-icon>
-                SAVE
-              </v-btn>
+              <div
+                class="d-flex mb-2 justify-space-between"
+                style="width: 100% !important"
+              >
+                <v-btn
+                  class="success mt-1"
+                  @click="sendForm(false)"
+                  style="width: 49% !important"
+                >
+                  <v-icon>mdi-content-save-outline</v-icon>
+                  {{ payload.id ? "Update" : "Save" }}
+                </v-btn>
+                <v-btn
+                  class="success mt-1"
+                  type="submit"
+                  style="width: 49% !important"
+                >
+                  <v-icon>mdi-content-save-outline</v-icon>
+                  Send
+                </v-btn>
+              </div>
             </v-flex>
           </v-layout>
         </v-container>
@@ -349,32 +429,30 @@
   </v-navigation-drawer>
 </template>
 <script>
-import moment from 'moment';
+import moment from "moment";
+const is_ricurring = 1;
 export default {
   data() {
     return {
-      coachSelect: true,
-      clientSelect: true,
-      drawer: false,
+      time: false,
+      menu: false,
+      taggleAllCoach: true,
+      taggleAllClient: true,
       selectedClientType: "all",
       selectedCoachType: "all",
-      subscribeOptions: ["sad", "sad2"],
       payload: {
-        client: [],
-        coach: [],
-        abonnement_id: "",
+        clients: [],
+        coaches: [],
         status: "",
+        is_sent: 0,
         title: "",
         message: "",
-        time:moment().format('HH:mm'),  
+        time: moment().format("HH:mm"),
+        date: moment().format("YYYY-MM-DD"),
         type: 0,
-        set_ups: [
-          {
-            schedule_period: 3,
-            recycle_count: 2,
-            recycle_type: 3,
-          },
-        ],
+        schedule_period: 3,
+        cycle_count: 2,
+        cycle_type: 3,
       },
       set_time: false,
       panel: 1,
@@ -387,13 +465,15 @@ export default {
         { id: 6, text: "Every Year" },
         { id: 7, text: "Custom" },
       ],
-      recycleOptions:[
+      cycleOptions: [
         { id: 1, text: "Daily" },
         { id: 2, text: "Weekly" },
         { id: 3, text: "Monthly" },
       ],
       clients: [],
       coaches: [],
+      drawer: false,
+      originalPayload: null,
     };
   },
   props: {
@@ -401,57 +481,73 @@ export default {
       type: Boolean,
       default: () => false,
     },
-    
-    // selectedItem: {
-    //   type:Object,
-    //   default:() => {}
-    // }
+
+    selectedItem: {
+      type:Object,
+      default:() => {}
+    }
   },
+
   mounted() {
-    this.getCoaches()
-    this.getClients()
+    this.initialize()
   },
   methods: {
+    resetValidation() {
+      },
+    initialize () {
+      this.selectAllCoach();
+      this.selectAllClient();
+      this.getClients();
+      this.getCoaches();
+    },
+    sendForm(is_sent) {
+      this.$refs.form.validate().then((result) => {
+        if (!result) return;
+        this.payload.is_sent = is_sent;
+        if(is_sent) {
+          if(this.payload.id) {
+            this.payload.status = 0;
+            this.$emit("updateRecord", this.payload);
+          }else{
+            this.payload.status = 1;
+            this.$emit("addRecord", this.payload);
+          }
+        }else{
+          this.payload.status = 0;
+          this.$emit("saveRecord", this.payload)
+        }
+      });
+    },
     selectAllCoach() {
-      if (this.coachSelect==true){
-        this.payload.coach=[];
+      if (this.taggleAllCoach == true) {
         const selectedCoachIds = this.coaches.map(({ id }) => id);
-        this.payload.coach=selectedCoachIds;
+        this.payload.coaches = selectedCoachIds;
+      } else {
+        this.payload.coaches = [];
       }
     },
     selectAllClient() {
-      if (this.clientSelect==true){
-        this.payload.client=[];
+      if (this.taggleAllClient == true) {
         const selectedClientIds = this.clients.map(({ id }) => id);
-        this.payload.client=selectedClientIds;
-        console.log("CLIENT",selectedClientIds)
+        this.payload.clients = selectedClientIds;
+      } else {
+        this.payload.clients = [];
       }
-    },
-    getPriceTitle(set_up) {
-      return `${set_up.type ? set_up.type : "One Time Only"}`;
-    },
-    saveForm() {  
-      this.$refs.form.validate().then(result => {
-        if (!result) return
-        if (this.payload.id) {
-          this.$emit('updateRecord', this.payload)
-        } else {
-          this.$emit('addRecord', this.payload)
-        }
-      })
     },
     getClients(type) {
       this.$axios
-      .get(`clients?type=${type}&no-paginate=true`)
-      .then(({ data }) => {
-        this.clients = data.data;
-      });
+        .get(`clients?type=${type}&no-paginate=true`)
+        .then(({ data }) => {
+          this.clients = data.data;
+          this.selectAllClient()
+        });
     },
     getCoaches(type) {
       this.$axios
         .get(`coaches?type=${type}&no-paginate=true`)
         .then(({ data }) => {
           this.coaches = data.data;
+          this.selectAllCoach()
         });
     },
     getItemText(item) {
@@ -459,68 +555,46 @@ export default {
     },
   },
   watch: {
+    taggleAllCoach: {
+      handler(val) {
+        this.selectAllCoach(val);
+      },
+    },
+    taggleAllClient: {
+      handler(val) {
+        this.selectAllClient(val);
+      },
+    },
+    // '$store.state.resetForm'(val) {
+    //   if(val) {
+    //     this.payload = this.cloneVariable(this.originalPayload)
+    //     this.$store.commit('resetForm', false)
+    //   }
+    // },
     drawerStatus(val) {
-      if (val) this.drawer = val;
-
-      if (val == true) {
-        this.getClients(this.selectedClientType);
-        this.getCoaches(this.selectedCoachType);
-        this.selectAllCoach();
-        this.selectAllClient();
-      }
+      if (val && !this.originalPayload) 
+        this.originalPayload = this.cloneVariable(this.payload);
+        this.drawer = val;
     },
     drawer(val) {
       if (!val) {
+        if (this.payload.id)
+          this.payload = this.cloneVariable(this.originalPayload);
         this.$emit("closeDrawer");
       }
     },
-    payload: {
+    selectedItem: {
       handler(val) {
-        alert(val)
-      }
-    },
-    selectedClientType: {
-      handler(val) {
-        this.getClients(val);
-        return;
-      },
-    },
-    selectedCoachType: {
-      handler(val) {
-        this.getCoaches(val);
-        if(val){
-          return;
-        }
-      },
-    },
-    coachSelect: {
-      handler(val) {
-        this.payload.coach=[];
-        this.selectAllCoach();
-      }
-    },
-    clientSelect: {
-      handler(val) {
-        this.payload.client=[];
-        this.selectAllClient();
-      }
-    },
+        this.payload = this.cloneVariable(val);
 
-    
-    // selected: {
-    //   handler(val) {
-    //     this.userCategoty()
-    //   }
-    // }
-    // selectedItem: {
-    //   handler(val) {
-    //     if (!this.originalPayload) {
-    //       this.originalPayload = this.cloneVariable(this.countryPayload)
-    //     }
-    //     this.countryPayload = this.cloneVariable(val)
-    //   },
-    //   deep:true
-    // }
+        const selectedClientIds = this.payload.clients.map(({ id }) => id);
+        this.payload.clients = selectedClientIds; 
+
+        const selectedCoachesIds = this.payload.coaches.map(({ id }) => id);
+        this.payload.coaches = selectedCoachesIds;
+      },
+      deep: true,
+    }
   },
 };
 </script>

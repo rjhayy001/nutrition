@@ -33,7 +33,6 @@ export default {
         });
     },
     updateRecord(payload) {
-      console.log(payload,"update")
       this.update().then(() => {
         if (payload.city_id) payload.city_id = payload.city_id.id || '';
         if (payload.country_id) payload.country_id = payload.country_id.id || '';

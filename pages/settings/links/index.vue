@@ -1,47 +1,41 @@
 <template>
   <v-container>
-    <h1>TESTING</h1>
-    <v-navigation-drawer
-      temporary
-      right
-      fixed
-      v-model="drawer1"
-      width="40%"
+    <form-drawer :drawerStatus="drawer1" @closeDrawer="drawer1 = !drawer1"
+      @addRecord="addRecord($event)"
+      @updateRecord="updateRecord($event)"
+      :selectedItem="selectedItem"
     >
-      <p class="pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
-        Add new Client
-        <v-btn icon small @click="goTo('clients-create')">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </p>
-      <hr>
-    </v-navigation-drawer>
+    </form-drawer>
     <data-table
       :options="options"
       :title="title"
       :headers="headers"
       :data="data"
-      searchPlaceholder="Short name, Long name, Code"
+      searchPlaceholder="Name, Description, Links"
       class="custom-table"
-      @addRecord="addRecord"
+      @addRecord="drawer1 = !drawer1"
       @deleteRecord="deleteRecord($event)"
-      @reloadtable="initalize()"
+      @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
       @searchRecords="searchRecords($event)"
+      @editRecord="editRecord($event)"
     >
-      <template v-slot:is_default="{item}">
+      <template v-slot:status="{item}">
         <v-switch
-          v-model="item.is_default"
           inset
           color="success"
+          v-model="item.status"
           dense
+          @change="updateStatusValue(item)"
           hide-details=""
-          @change="updateDefaultValue(item)"
         ></v-switch>
       </template>
-      <template v-slot:created_at="{item}">
+       <template v-slot:created_at="{item}">
         {{formatDate(item.created_at)}}
+      </template>
+      <template v-slot:link="{item}">
+        <a :href="item.link" target="_blank">{{item.link}}</a>
       </template>
       <template v-slot:updated_at="{item}">
         {{formatDate(item.updated_at)}}
@@ -53,63 +47,72 @@
 import dataTable from "~/components/ui/dataTable.vue";
 import tableHelper from "~/mixins/tableHelper.vue";
 import dateHelper from "~/mixins/dateHelper.vue";
+import formDrawer from "~/components/settings/links/form.vue";
 export default {
-  components: { dataTable },
+  components: { dataTable, formDrawer },
   mixins:[tableHelper, dateHelper],
   data() {
     return {
       options: {},
-      title: "Countries",
+      title: "Links",
       headers: [
         { text: "#", value: "id", width:'2%'},
-        { text: "Short name", value: "short_name"},
-        { text: "Long name", value: "long_name" },
-        { text: "Code", value: "country_numcode" },
-        { text: "Default", value: "is_default" },
+        { text: "title", value: "title"},
+        { text: "Description", value: "description" },
+        { text: "Link", value: "link" },
+        { text: "Status", value: "status" },
         { text: "Created at", value: "created_at"},
         { text: "Updated at", value: "updated_at"},
         { text: "Action", value: "action"},
       ],
       data: [],
-      drawer1:false
+      drawer1:false,
+      selectedItem:{}
     };
   },
   mounted() {
-    this.initalize()
+    this.initialize()
   },
   methods: {
-    initalize() {
-      this.$axios.get(`countries?${this.urlQuery()}`).then(({data}) => {
+    initialize() {
+      this.$axios.get(`${this.$links}?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
       })
     },
-    addRecord() {
+    addRecord(payload) {
+       this.create().then(() => {
+        this.$axios.post(`${this.$links}`, payload).then(({data}) => {
+          this.successNotification(data, 'added', 'link', 'links', 'title')
+          this.initialize()
+        })
+      })
+    },
+    editRecord(item) {
       this.drawer1 = !this.drawer1
-      // this.$root.dialog(
-      //   "Confirm Message!",
-      //   "Are you sure you want to add this record ?",
-      //   "c"
-      // )
-      //   .then(() => {});
+      this.selectedItem = this.cloneVariable(item)
     },
     deleteRecord(items) {
-      this.$root.dialog(
-        "Confirm delete Action!",
-        `Are you sure you want to delete ${items.length == 1 ? 'this record' : 'these records'} ?`,
-        "delete"
-      ).then(() => {
+      this.delete().then(() => {
         let ids = this.getIds(items)
-        this.$axios.delete(`countries/${ids}`).then(({data}) => {
-          this.successNotification(items, 'deleted', 'country', 'countries', 'short_name')
-          this.initalize()
+        this.$axios.delete(`${this.$links}/${ids}`).then(({data}) => {
+          this.successNotification(items, 'deleted', 'link', 'links', 'title')
+          this.initialize()
         })
-      });
+      })
     },
-    updateDefaultValue(item) {
-      let payload = {is_default:item.is_default}
-      this.$axios.put(`countries/${item.id}/default`, payload).then(({data}) => {
-        this.successNotification(item, 'set as default', 'country', 'countries', 'short_name')
+    updateStatusValue(item) {
+      let payload = {status:item.status}
+      this.$axios.put(`links/${item.id}/status`, payload).then(({data}) => {
+        this.successNotification(item, 'change status', 'link', 'links', 'title')
+      })
+    },
+    updateRecord(payload) {
+      this.update().then(() => {
+        this.$axios.put(`${this.$links}/${payload.id}`, payload).then(({data}) => {
+          this.successNotification(payload, 'updated', 'link', 'links', 'title')
+          this.initialize()
+        })
       })
     }
   },

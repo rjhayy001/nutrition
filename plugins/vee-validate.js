@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
 import {
-   required, 
-   numeric, 
-   email, 
-   integer, 
-   between, 
-   confirmed, 
-   min_value, 
-   max_value 
+   required,
+   numeric,
+   email,
+   integer,
+   between,
+   confirmed,
+   min_value,
+   max_value
 } from 'vee-validate/dist/rules';
 
 Vue.component('ValidationProvider', ValidationProvider)

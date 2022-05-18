@@ -130,7 +130,7 @@ export default {
             },
             {
               title:'Liens utiles',
-              to: 'settings-documents'
+              to: 'settings-links'
             },
             {
               title:'Phototeque',
@@ -179,13 +179,13 @@ export default {
       get() {
         return this.$store.getters.sidebarStatus
       },
-      set(){} 
+      set(){}
     },
     miniVariantStatus: {
       get() {
         return this.$store.getters.miniVariant
       },
-      set(){} 
+      set(){}
     }
   }
 }
