@@ -15,6 +15,9 @@ Vue.mixin({
         this.$awn.success(`Successfully ${action} ${suffixSingular} <strong>${selectedItem[key]}</strong>.`)
       }
     },
+    errorNotification(error) {
+        this.$awn.alert(`Failed: ${error}`)
+    },
     fullNotification(message) {
       this.$awn.success(`${message}`)
     },

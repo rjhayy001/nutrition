@@ -1,29 +1,44 @@
 <template>
   <v-container>
-    <form-drawer :drawerStatus="drawer" @closeDrawer="drawer = !drawer" @addRecord="addRecord($event)" @updateRecord="updateRecord($event)" :selectedItem="selectedItem">
+    <form-drawer :drawerStatus="drawer" @closeDrawer="drawer = !drawer" @addRecord="addRecord($event)"
+      @updateRecord="updateRecord($event)" :selectedItem="selectedItem">
     </form-drawer>
-    <data-table :options="options" :title="title" :headers="headers" :data="data" searchPlaceholder="Short name, Long name, Code" class="custom-table" @addRecord="drawer = !drawer" @deleteRecord="deleteRecord($event)" @reloadtable="initialize()" @FilterBy="filterBy($event)" @updatePagenum="updatePagenum($event)" @searchRecords="searchRecords($event)" @editRecord="editRecord($event)">
-      <template v-slot:status="{item}">
-        <v-switch v-model="item.status" inset color="success" dense hide-details="" @change="updateDefaultValue(item)"></v-switch>
-      </template>
-      <template v-slot:prices="{item}">
-        <template v-if="item.prices.length">
-          <template v-for="(price, index) of item.prices">
-            <v-chip small outlined label class="mr-1 mb-1" color="primary" :key="`${index}-price`">
-              {{ price | displayPrice }}
-            </v-chip>
+    <data-table :options="options" :title="title" :headers="headers" :data="data"
+      searchPlaceholder="Short name, Long name, Code" class="custom-table" @addRecord="drawer = !drawer"
+      @deleteRecord="deleteRecord($event)" @reloadtable="initialize()" @FilterBy="filterBy($event)"
+      @updatePagenum="updatePagenum($event)" @searchRecords="searchRecords($event)" @editRecord="editRecord($event)">
+
+      <template v-slot:description="{ item }">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <div v-bind="attrs" v-on="on">
+              {{ item.description | truncate(30) }}
+            </div>
           </template>
+          {{ item.description }}
+        </v-tooltip>
+      </template>
+
+      <template v-slot:status="{ item }">
+        <v-switch v-model="item.status" inset color="success" dense hide-details="auto" @change="updateDefaultValue(item)">
+        </v-switch>
+      </template>
+
+      <template v-slot:prices="{ item }">
+        <template v-if="item.prices.length">
+          <plan-prices :prices="item.prices" />
         </template>
         <template v-else>
           ...
         </template>
-        <!-- {{formatDate(item.created_at)}} -->
       </template>
-      <template v-slot:created_at="{item}">
-        {{formatDate(item.created_at)}}
+
+
+      <template v-slot:created_at="{ item }">
+        {{ formatDate(item.created_at) }}
       </template>
-      <template v-slot:updated_at="{item}">
-        {{formatDate(item.updated_at)}}
+      <template v-slot:updated_at="{ item }">
+        {{ formatDate(item.updated_at) }}
       </template>
     </data-table>
   </v-container>
@@ -33,22 +48,25 @@ import dataTable from "~/components/ui/dataTable.vue";
 import tableHelper from "~/mixins/tableHelper.vue";
 import dateHelper from "~/mixins/dateHelper.vue";
 import formDrawer from "~/components/plan/form.vue";
+import priceHelperVue from "../../../mixins/priceHelper.vue";
+import planPrices from '~/components/plan/planPrices.vue';
+import textHelper from "~/mixins/textHelper.vue";
 export default {
-  components: { dataTable, formDrawer },
-  mixins: [tableHelper, dateHelper],
+  components: { dataTable, formDrawer, planPrices },
+  mixins: [tableHelper, dateHelper, priceHelperVue, textHelper],
   data() {
     return {
       options: {},
       title: "Plans",
       headers: [
         { text: "#", value: "id", width: "2%" },
-        { text: "Name", value: "name" },
+        { text: "Nom", value: "name" },
         { text: "Description", value: "description" },
-        { text: "Price", value: "prices" },
-        { text: "Active", value: "status" },
-        { text: "Created at", value: "created_at" },
-        { text: "Updated at", value: "updated_at" },
-        { text: "Action", value: "action" },
+        { text: "Prix", value: "prices" },
+        { text: "Actif", value: "status" },
+        { text: "Créé le", value: "created_at" },
+        { text: "Mis à jour le", value: "updated_at" },
+        { text: "Actions", value: "action" },
       ],
       data: [],
       drawer: false,
@@ -70,7 +88,7 @@ export default {
     addRecord(payload) {
       this.create().then(() => {
         this.$axios.post(`${this.$plans}`, payload).then(({ data }) => {
-          this.successNotification(data, "added", "country", "plans", "name");
+          this.successNotification(data, "added", "plan", "plans", "name");
           this.initialize();
         });
       });
@@ -82,7 +100,7 @@ export default {
           this.successNotification(
             items,
             "deleted",
-            "country",
+            "plan",
             "plans",
             "name"
           );
@@ -98,7 +116,7 @@ export default {
           this.successNotification(
             item,
             "set as default",
-            "country",
+            "plan",
             "plans",
             "name"
           );
@@ -116,31 +134,13 @@ export default {
             this.successNotification(
               data,
               "updated",
-              "country",
+              "plan",
               "plans",
               "name"
             );
             this.initialize();
           });
       });
-    },
-  },
-  filters: {
-    displayPrice(price) {
-      if (!price.price) price.price = 0;
-      let newPrice = `${price.price.toFixed(2)} €`;
-
-      const suffixes = ["day", "week", "month", "3 months", "6 months", "year"];
-      const types = ["day", "week", "month"];
-      let suffix = "";
-
-
-      if (price.is_recurring) suffix += "every ";
-
-      if (price.billing_period == 7) suffix += `${price.recycle_count} ${types[price.recycle_type - 1]}${price.recycle_count > 1 ? 's' : ''}`;
-      else if (price.billing_period) suffix += suffixes[price.billing_period - 1];
-
-      return `${newPrice} / ${suffix}`;
     },
   },
 };
