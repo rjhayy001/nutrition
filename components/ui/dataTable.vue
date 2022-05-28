@@ -122,7 +122,7 @@
               color="primary"
               class="mr-1"
               small
-              @click="editRecord(item)"
+              @click.stop="editRecord(item)"
             >
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
