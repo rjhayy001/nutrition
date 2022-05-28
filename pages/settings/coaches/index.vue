@@ -12,6 +12,7 @@
       :sort-desc.sync="isDescending"
       class="custom-table"
       @addRecord="addRecord"
+      @showRecord="showRecord($event)"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
@@ -266,6 +267,9 @@ export default {
           );
           this.initialize();
         });
+    },
+    showRecord(item){
+      this.goTo("settings-coaches-id", { id: item.id });
     },
     editRecord(item) {
       this.goTo("settings-coaches-edit-id", { id: item.id });

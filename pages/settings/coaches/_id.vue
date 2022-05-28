@@ -15,20 +15,20 @@ export default {
     return {
       submenus: [
         {
-          title: 'Profile',
+          title: 'Coach',
           icon: 'mdi-account-multiple-outline',
-          to:'client-id-profile',
+          to:'settings-coaches-id',
           total_records:'5'
         },
         {
           title: 'Chat',
           icon: 'mdi-chat-plus-outline',
-          to:'client-id-chat',
+          to:'settings-coaches-id-chat',
         },
         {
           title: 'Objectives',
           icon: 'mdi-store-outline',
-          to:'client-id-objectives',
+          to:'settings-coaches-id-objectives',
         },
         // {
         //   title: 'Suivi',
@@ -39,7 +39,7 @@ export default {
         {
           title: 'Photos',
           icon: 'mdi-image-multiple',
-          to:'client-id-photos',
+          to:'settings-coaches-id-photos',
           total_records:'10'
         },
         // {
