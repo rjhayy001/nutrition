@@ -57,7 +57,7 @@
       </template>
       <!-- taggable -->
       <template v-slot:taggable="{ item }">
-        <template v-if="!item.taggable.length"> ... </template>
+        <template v-if="!item.taggable"> ... </template>
         <common-dialog
           v-else
           :datas="item.taggable"
@@ -67,7 +67,7 @@
       </template>
       <!-- groupable -->
       <template v-slot:groupable="{ item }">
-        <template v-if="!item.groupable.length"> ... </template>
+        <template v-if="!item.groupable"> ... </template>
         <common-dialog
           v-else
           :datas="item.groupable"
