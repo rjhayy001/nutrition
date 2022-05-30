@@ -250,7 +250,7 @@ export default {
       })
     },
     showRecord(item){
-      this.goTo("client-id", { id: item.id });
+      this.goTo("client-id-profile", { id: item.id });
     },
     addRecord() {
       this.goTo('client-create')
