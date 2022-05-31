@@ -1,18 +1,21 @@
 <template>
   <v-container>
     <subscription-form :drawerStatus="drawer" @closeDrawer="drawer = !drawer" @addRecord="addRecord($event)"
-      @updateRecord="updateRecord($event)" :selectedItem="selectedItem" />
+      :selectedItem="selectedItem" />
 
     <data-table :options="options" :title="title" :headers="headers" :data="data" class="custom-table"
       @addRecord="addRecord" @deleteRecord="deleteRecord($event)" @reloadtable="initalize()"
       @FilterBy="filterBy($event)" @updatePagenum="updatePagenum($event)">
 
       <template v-slot:status="{ item }">
-        <v-switch inset color="success" dense hide-details="auto" v-model="item.status"></v-switch>
+        <v-chip outlined label :color="statuses[item.status].color" v-if="statuses[item.status]">
+          <v-icon left>mdi-{{ statuses[item.status].icon }}</v-icon>
+          {{ statuses[item.status].label }}
+        </v-chip>
       </template>
 
       <template v-slot:client="{ item }">
-        <v-chip color="primary" @click="$router.push('/client')">
+        <v-chip color="primary" @click="$router.push({ path: `/client/${item.id}/profile` })">
           <v-avatar left size="md">
             <v-img :src="item.client.logo" v-if="item.client.logo != null"></v-img>
             <v-icon v-else>mdi-account-circle</v-icon>
@@ -33,6 +36,28 @@
 
       </template>
 
+      <template v-slot:action="{ item }">
+        <div>
+          <v-tooltip v-if="item.status == 1" left>
+            <template v-slot:activator="{ on }">
+              <v-btn icon color="error" small @click="deleteRecord(item)" v-on="on">
+                <v-icon>mdi-clock-remove-outline</v-icon>
+              </v-btn>
+            </template>
+            <span>Annuler</span>
+          </v-tooltip>
+
+          <v-tooltip v-else left>
+            <template v-slot:activator="{ on }">
+              <v-btn icon color="secondary" small @click="restoreRecord(item)" v-on="on">
+                <v-icon>mdi-delete-restore</v-icon>
+              </v-btn>
+            </template>
+            <span>Restaurer</span>
+          </v-tooltip>
+        </div>
+      </template>
+
     </data-table>
   </v-container>
 </template>
@@ -40,7 +65,7 @@
 import dataTable from "~/components/ui/dataTable.vue";
 import tableHelper from "~/mixins/tableHelper.vue";
 import subscriptionForm from "~/components/subscription/form.vue"
-import priceHelperVue from '../../mixins/priceHelper.vue';
+import priceHelperVue from '~/mixins/priceHelper.vue';
 export default {
   components: { dataTable, subscriptionForm },
   mixins: [tableHelper, priceHelperVue],
@@ -72,6 +97,7 @@ export default {
           text: "Status",
           value: "status",
           filterable: true,
+          sortable: true,
           sortType: null,
           filterValue: '',
         },
@@ -97,43 +123,87 @@ export default {
       data: [],
       drawer: false,
       selectedItem: {},
-    };
+      statuses: [
+        {
+          label: "Annulé",
+          icon: "close-circle-outline",
+          color: "error"
+        },
+        {
+          label: "En cours",
+          icon: "check-circle-outline",
+          color: "primary"
+        },
+        {
+          label: "En attente d'annulation",
+          icon: "timer-sand",
+          color: "warning"
+        },
+        {
+          label: "Incomplet",
+          icon: "timer-sand",
+          color: "warning"
+        },
+        {
+          label: "Incomplet annulé",
+          icon: "close-circle-outline",
+          color: "error"
+        },
+        {
+          label: "En essai",
+          icon: "timer-sand",
+          color: "info"
+        },
+        {
+          label: 'Impayé',
+          icon: 'close-circle-outline',
+          color: 'error'
+        },
+      ]
+  };
+},
+mounted() {
+  this.initalize()
+},
+methods: {
+  initalize() {
+    this.$axios.get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client`).then(({ data }) => {
+      this.data = data.data
+      this.options = data.options
+    })
   },
-  mounted() {
-    this.initalize()
+  addRecord() {
+    this.drawer = true
   },
-  methods: {
-    initalize() {
-      this.$axios.get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client`).then(({ data }) => {
-        this.data = data.data
-        this.options = data.options
+  deleteRecord(items) {
+    this.$root.dialog(
+      "Annuler un abonnement",
+      `Êtes-vous sûr de vouloir annuler cet abonnement ?`,
+      "annuler"
+    ).then(() => {
+      let ids = items.id
+      this.$axios.delete(`${this.$subscriptions}/${ids}`).then(({ data }) => {
+        this.successNotification(items, 'annulé', 'abonnement', 'abonnements')
+        this.initalize()
+      }).catch((error) => {
+        this.errorNotification(error)
       })
-    },
-    addRecord() {
-      this.drawer = true
-      // this.goTo('subscriptions-create')
-      // this.$root.dialog(
-      //   "Confirm Message!",
-      //   "Are you sure you want to add this record ?",
-      //   "c"
-      // )
-      //   .then(() => {});
-    },
-    deleteRecord(items) {
-      this.$root.dialog(
-        "Confirm Action!",
-        `Are you sure you want to delete ${items.length == 1 ? 'this record' : 'these records'} ?`,
-        "delete"
-      ).then(() => {
-        let ids = this.getIds(items)
-        this.$axios.delete(`${this.$subscriptions}/${ids}`).then(({ data }) => {
-          this.successNotification(items, 'deleted', 'client', 'clients')
-          this.initalize()
-        }).catch((error) => {
-          this.errorNotification(error)
-        })
-      })
-    },
+    })
   },
+  restoreRecord(item) {
+    this.$root.dialog(
+      "Restaurer un abonnement ?",
+      `Êtes-vous sûr de vouloir restaurer cet enregistrement ?`,
+      "restaurer"
+    ).then(() => {
+      this.$axios.patch(`${this.$subscriptions}/${item.id}/restore`).then(({ data }) => {
+        this.successNotification(item, 'réstauré', 'abonnement', 'abonnements')
+        this.initalize()
+      }).catch((error) => {
+        this.errorNotification(error)
+      })
+    })
+  }
+},
 };
 </script>
