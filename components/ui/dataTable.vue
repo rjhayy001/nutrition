@@ -7,17 +7,9 @@
       </v-btn>
       <v-spacer></v-spacer>
       <div class="mr-1" style="width: 400px">
-        <v-text-field
-          auto-select-first
-          v-model="searchKeyword"
-          filled
-          rounded
-          hide-details=""
-          :placeholder="`Search by ${searchPlaceholder} ...`"
-          dense
-          append-icon="mdi-magnify"
-          @keydown.enter="searchRecords(searchKeyword)"
-        ></v-text-field>
+        <v-text-field auto-select-first v-model="searchKeyword" filled rounded hide-details=""
+          :placeholder="`Search by ${searchPlaceholder} ...`" dense append-icon="mdi-magnify"
+          @keydown.enter="searchRecords(searchKeyword)"></v-text-field>
       </div>
       <v-btn class="mr-1 success" small @click="addNewRecord">
         <v-icon>mdi-plus</v-icon>
@@ -27,77 +19,44 @@
         <v-icon>mdi-delete-outline</v-icon>
         DELETE
       </v-btn>
-      <v-btn
-        class="mr-1 primary"
-        small
-        @click="toggleFilter"
-        v-if="headHasFilterable"
-      >
+      <v-btn class="mr-1 primary" small @click="toggleFilter" v-if="headHasFilterable">
         <v-icon>mdi-filter-outline</v-icon>
         Filter
       </v-btn>
     </div>
     <hr />
     <div>
-      <v-data-table
-        :headers="headers"
-        :items="data"
-        :items-per-page="items_per_page"
-        class="elevation-0 custom-table my-sticky-header-column-table"
-        :show-select="showSelect"
-        :hide-default-footer="hideFooter"
-        :hide-default-header="true"
-        :fixed-header="true"
-        item-key="id"
-        disable-sort
-        height="800"
-        v-model="selectedItems"
-        @click:row="showRecord($event)"
-        @click.prevent.stop=""
-      >
+      <v-data-table :headers="headers" :items="data" :items-per-page="items_per_page"
+        class="elevation-0 custom-table my-sticky-header-column-table" :show-select="showSelect"
+        :hide-default-footer="hideFooter" :hide-default-header="true" :fixed-header="true" item-key="id" disable-sort
+        height="800" v-model="selectedItems" @click:row="showRecord($event)" @click.prevent.stop="">
         <template v-slot:header="{ props }">
           <thead class="v-data-table-header">
             <tr>
               <th role="columnheader" scope="col" v-for="head in props.headers" style="width:200px">
-                <span
-                  class="d-flex justify-space-between block"
-                  v-if="head.value != 'data-table-select'"
-                >
+                <span class="d-flex justify-space-between block" v-if="head.value != 'data-table-select'">
                   {{ head.text }}
                   <div v-if="head.filterable">
-                    <v-btn
-                      x-small
-                      icon
-                      class="filter-action"
-                      @click="sortTable(head)"
-                    >
+                    <v-btn x-small icon class="filter-action" @click="sortTable(head)">
                       <v-icon>
                         {{
-                          head.sortType == null
-                            ? "mdi-sort"
-                            : head.sortType == 1
-                            ? "mdi-sort-ascending"
-                            : "mdi-sort-descending"
-                        }}</v-icon
-                      >
+                            head.sortType == null
+                              ? "mdi-sort"
+                              : head.sortType == 1
+                                ? "mdi-sort-ascending"
+                                : "mdi-sort-descending"
+                        }}</v-icon>
                     </v-btn>
                   </div>
                 </span>
-                <div
-                  v-else
-                  class="v-data-table__checkbox v-simple-checkbox"
-                  @click="toggleMultipleItems"
-                >
+                <div v-else class="v-data-table__checkbox v-simple-checkbox" @click="toggleMultipleItems">
                   <div class="v-input--selection-controls__input">
-                    <i
-                      aria-hidden="true"
-                      :class="[
-                        'v-icon notranslate mdi theme--light',
-                        isAllSelected
-                          ? 'mdi-checkbox-marked'
-                          : 'mdi-checkbox-blank-outline',
-                      ]"
-                    ></i>
+                    <i aria-hidden="true" :class="[
+                      'v-icon notranslate mdi theme--light',
+                      isAllSelected
+                        ? 'mdi-checkbox-marked'
+                        : 'mdi-checkbox-blank-outline',
+                    ]"></i>
                     <div class="v-input--selection-controls__ripple"></div>
                   </div>
                 </div>
@@ -105,10 +64,7 @@
             </tr>
           </thead>
         </template>
-        <template
-          v-for="(head, index) of headers"
-          v-slot:[`item.${head.value}`]="props"
-        >
+        <template v-for="(head, index) of headers" v-slot:[`item.${head.value}`]="props">
           <td :props="props">
             <slot :name="head.value" :item="props.item">
               {{ props.item[head.value] || "..." }}
@@ -116,60 +72,35 @@
           </td>
         </template>
         <template v-slot:item.action="{ item }">
-          <div>
-            <v-btn
-              icon
-              color="primary"
-              class="mr-1"
-              small
-              @click.stop="editRecord(item)"
-            >
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-            <v-btn
-              icon
-              color="error"
-              class="mr-1"
-              small
-              @click="deleteRecord(item)"
-            >
-              <v-icon>mdi-delete-outline</v-icon>
-            </v-btn>
-          </div>
+          <slot name="action" :item="item">
+            <div>
+              <v-btn icon color="primary" class="mr-1" small @click.stop="editRecord(item)">
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+              <v-btn icon color="error" class="mr-1" small @click="deleteRecord(item)">
+                <v-icon>mdi-delete-outline</v-icon>
+              </v-btn>
+            </div>
+          </slot>
         </template>
         <template v-slot:body="" v-if="loaded == 0">
           <tr v-for="n in 15" :key="n">
             <td v-for="i in headers.length + 1" :key="i">
-              <v-skeleton-loader
-                ref="skeleton"
-                type="list-item-two-line"
-                class="mx-auto skel-loader"
-              ></v-skeleton-loader>
+              <v-skeleton-loader ref="skeleton" type="list-item-two-line" class="mx-auto skel-loader">
+              </v-skeleton-loader>
             </td>
           </tr>
         </template>
         <template v-slot:body.prepend="{ item }" v-if="loaded == 2">
           <v-scroll-y-transition>
-            <tr
-              class="filter-row"
-              v-show="showFilter || (isFiltered && !filterStatusChanged)"
-              transition="fade-transition"
-            >
+            <tr class="filter-row" v-show="showFilter || (isFiltered && !filterStatusChanged)"
+              transition="fade-transition">
               <td class="py-2"></td>
               <template v-for="(head, index) of headers">
-                <td
-                  v-if="index == 0 || !head.filterable"
-                  :key="`filter-${index}`"
-                ></td>
+                <td v-if="index == 0 || !head.filterable" :key="`filter-${index}`"></td>
                 <td v-else class="py-2" :key="index">
-                  <v-text-field
-                    solo
-                    hide-details=""
-                    :placeholder="`Filter by ${head.text}`"
-                    dense
-                    v-model="head.filterValue"
-                    @keydown.enter="filterBy(head)"
-                  ></v-text-field>
+                  <v-text-field solo hide-details="" :placeholder="`Filter by ${head.text}`" dense
+                    v-model="head.filterValue" @keydown.enter="filterBy(head)"></v-text-field>
                 </td>
               </template>
             </tr>
@@ -178,14 +109,8 @@
       </v-data-table>
     </div>
     <div class="text-center" v-if="loaded == 2">
-      <v-pagination
-        v-model="options.page"
-        :length="options.length"
-        circle
-        :total-visible="10"
-        class="custom-pagination"
-        @input="changePagenumber"
-      ></v-pagination>
+      <v-pagination v-model="options.page" :length="options.length" circle :total-visible="10" class="custom-pagination"
+        @input="changePagenumber"></v-pagination>
     </div>
   </fragment>
 </template>
@@ -250,7 +175,7 @@ export default {
     this.searchFieldValue();
   },
   methods: {
-    showRecord($event){
+    showRecord($event) {
       this.$emit("showRecord", $event);
     },
     setFilterbyParamValue() {

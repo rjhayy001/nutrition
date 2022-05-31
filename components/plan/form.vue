@@ -1,17 +1,7 @@
 <template>
-  <v-navigation-drawer
-    temporary
-    right
-    fixed
-    v-model="drawer"
-    width="40%"
-    hide-overlay
-    stateless
-  >
-    <p
-      class="form-title pa-2 title font-weight-regular text-uppercase d-flex justify-space-between"
-    >
-      {{ !payload.id ? "Add new" : "Edit" }} Plan
+  <v-navigation-drawer temporary right fixed v-model="drawer" width="40%" hide-overlay stateless>
+    <p class="form-title pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
+      {{ !payload.id ? "Ajouter" : "Modifier" }} un Plan
       <v-btn icon small @click="drawer = false">
         <v-icon>mdi-close</v-icon>
       </v-btn>
@@ -27,66 +17,42 @@
               </p>
             </v-flex>
             <v-flex xs12>
-              <ValidationProvider
-                slim
-                name="name"
-                rules="required|min:1|max:100"
-                v-slot="{ errors }"
-              >
+              <ValidationProvider slim name="name" rules="required|min:1|max:100" v-slot="{ errors }">
                 <div class="mb-1">
                   <p class="subtitle-2 font-weight-regular mb-2">
                     <span>*</span>
-                    Name
+                    Nom
                   </p>
-                  <v-text-field
-                    v-model="payload.name"
-                    placeholder="Type name..."
-                    type="text"
-                    hide-details="auto"
-                    solo
-                    :error-messages="errors"
-                  ></v-text-field>
+                  <v-text-field v-model="payload.name" placeholder="Type name..." type="text" hide-details="auto" solo
+                    :error-messages="errors"></v-text-field>
                 </div>
               </ValidationProvider>
             </v-flex>
             <v-flex xs12>
-              <ValidationProvider
-                slim
-                name="description"
-                rules="max:200"
-                v-slot="{ errors }"
-              >
+              <ValidationProvider slim name="description" rules="max:200" v-slot="{ errors }">
                 <div class="mb-1">
                   <p class="subtitle-2 font-weight-regular mb-2">
                     Description
                   </p>
-                  <v-textarea
-                    v-model="payload.description"
-                    placeholder="Type description..."
-                    type="text"
-                    hide-details="auto"
-                    solo
-                    rows="2"
-                  ></v-textarea>
+                  <v-textarea v-model="payload.description" placeholder="Type description..." type="text"
+                    hide-details="auto" solo rows="2" :ezrror-messages="errors"></v-textarea>
                 </div>
               </ValidationProvider>
             </v-flex>
             <v-flex xs12>
               <p class="subtitle-1 font-weight-medium my-2 text-uppercase">
-                Prices
+                Prix
               </p>
             </v-flex>
             <v-flex xs12>
               <v-expansion-panels v-model="panel">
-                <v-expansion-panel
-                  v-for="(price, i) in payload.prices"
-                  :key="i"
-                >
+                <v-expansion-panel v-for="(price, i) in payload.prices" :key="i">
                   <v-expansion-panel-header>
                     <div class="d-flex justify-space-between">
-                      {{ getPriceTitle(price) }}
-                      <v-btn text color="error" small @click.prevent.stop="removePrice(i)" v-if="payload.prices.length != 1">
-                        REmove
+                      {{ price | computePlanPrice }}
+                      <v-btn text color="error" small @click.prevent.stop="removePrice(i)"
+                        v-if="payload.prices.length != 1">
+                        Remove
                       </v-btn>
                     </div>
                   </v-expansion-panel-header>
@@ -94,46 +60,28 @@
                     <div class="mb-2">
                       <p class="subtitle-2 font-weight-regular mb-2">
                         <span>*</span>
-                        Price
+                        Montant
                       </p>
-                      <v-text-field
-                        placeholder="Type price..."
-                        type="text"
-                        hide-details="auto"
-                        solo
-                        prefix="€"
-                        v-model="price.price"
-                      ></v-text-field>
+                      <v-text-field placeholder="Type price..." type="number" hide-details="auto" solo prefix="€"
+                        v-model="price.price" @change="price.price = parseFloat(price.price)"></v-text-field>
                     </div>
                     <div class="d-flex mb-2 justify-space-between">
-                      <v-btn
-                        :class="[price.is_recurring ? 'primary' : 'normal']"
-                        style="width: 49%"
-                        @click="price.is_recurring = 1"
-                      >
-                        RECURRING
+                      <v-btn :class="[price.is_recurring ? 'primary' : 'normal']" style="width: 49%"
+                        @click="price.is_recurring = 1">
+                        Périodique
                       </v-btn>
-                      <v-btn
-                        :class="[!price.is_recurring ? 'primary' : 'normal']"
-                        style="width: 49%"
-                        @click="price.is_recurring = 0"
-                      >
-                        ONE TIME ONLY
+                      <v-btn :class="[!price.is_recurring ? 'primary' : 'normal']" style="width: 49%"
+                        @click="price.is_recurring = 0">
+                        En une fois
                       </v-btn>
                     </div>
                     <div class="mb-2">
                       <p class="subtitle-2 font-weight-regular mb-2">
                         <span>*</span>
-                        Billing Period
+                        Période de facturation
                       </p>
-                      <v-select
-                        v-model="price.billing_period"
-                        :items="periodOptions"
-                        hide-details="auto"
-                        solo
-                        item-text="text"
-                        item-value="id"
-                      ></v-select>
+                      <v-select v-model="price.billing_period" :items="periodOptions" hide-details="auto" solo
+                        item-text="text" item-value="id"></v-select>
                     </div>
                     <template v-if="price.billing_period == 7">
                       <div class="mb-2">
@@ -141,43 +89,31 @@
                           <span>*</span>
                           Cycle Count
                         </p>
-                        <v-text-field
-                          placeholder="Type total cycle..."
-                          type="text"
-                          hide-details="auto"
-                          solo
-                          v-model="price.recycle_count"
-                        ></v-text-field>
+                        <v-text-field placeholder="Type total cycle..." type="text" hide-details="auto" solo
+                          v-model="price.recycle_count"></v-text-field>
                       </div>
                       <div class="mb-2">
                         <p class="subtitle-2 font-weight-regular mb-2">
                           <span>*</span>
                           Cycle Type
                         </p>
-                        <v-select
-                          v-model="price.recycle_type"
-                          :items="recycleOptions"
-                          hide-details="auto"
-                          solo
-                          item-text="text"
-                          item-value="id"
-                        ></v-select>
+                        <v-select v-model="price.recycle_type" :items="recycleOptions" hide-details="auto" solo
+                          item-text="text" item-value="id"></v-select>
                       </div>
                     </template>
-                    <div>
-                      <v-btn class="primary" block @click="addNewPlanPrice">
-                        ADD NEW PRICE
-                        <v-icon>mdi-plus</v-icon>
-                      </v-btn>
-                    </div>
+
                   </v-expansion-panel-content>
                 </v-expansion-panel>
               </v-expansion-panels>
             </v-flex>
             <v-flex xs12>
+              <v-btn class="primary" block @click="addNewPlanPrice">
+                Ajouter un prix
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
               <v-btn class="success mt-1" block type="submit">
                 <v-icon>mdi-content-save-outline</v-icon>
-                {{ payload.id ? "UPDATE" : "SAVE" }}
+                {{ payload.id ? "SAUVEGARDER" : "CRÉER" }}
               </v-btn>
             </v-flex>
           </v-layout>
@@ -187,7 +123,11 @@
   </v-navigation-drawer>
 </template>
 <script>
+import priceHelperVue from "../../mixins/priceHelper.vue";
 export default {
+  mixins: [
+    priceHelperVue
+  ],
   data() {
     return {
       panel: 0,
@@ -200,30 +140,30 @@ export default {
             price: 0,
             is_recurring: 1,
             billing_period: 3,
-            recycle_count: 2,
+            recycle_count: 1,
             recycle_type: 3,
           },
         ],
       },
       DefaultOptions: [
-        { id: 1, text: "Yes" },
-        { id: 0, text: "No" },
+        { id: 1, text: "Oui" },
+        { id: 0, text: "Non" },
       ],
       originalPayload: null,
       periodOptions: [
-        { id: 1, text: "Daily" },
-        { id: 2, text: "Weekly" },
-        { id: 3, text: "Monthly" },
-        { id: 4, text: "Every 3 months" },
-        { id: 5, text: "Every 6 months" },
-        { id: 6, text: "Every Year" },
-        { id: 7, text: "Custom" },
+        { id: 1, text: "Par jours" },
+        { id: 2, text: "Par semaine" },
+        { id: 3, text: "Par mois" },
+        { id: 4, text: "Tous les 3 mois" },
+        { id: 5, text: "Tous les 6 mois" },
+        { id: 6, text: "Tous les ans" },
+        { id: 7, text: "Personalisé" },
       ],
-      recycleOptions:[
-        { id: 1, text: "Daily" },
-        { id: 2, text: "Weekly" },
-        { id: 3, text: "Monthly" },
-      ]
+      recycleOptions: [
+        { id: 1, text: "Par jours" },
+        { id: 2, text: "Par semaine" },
+        { id: 3, text: "Par mois" },
+      ],
     };
   },
   props: {
@@ -233,7 +173,7 @@ export default {
     },
     selectedItem: {
       type: Object,
-      default: () => {},
+      default: () => { },
     },
   },
   methods: {
@@ -242,7 +182,7 @@ export default {
         price: 0,
         is_recurring: 1,
         billing_period: 3,
-        recycle_count: 2,
+        recycle_count: 1,
         recycle_type: 3,
       });
     },
@@ -256,13 +196,10 @@ export default {
         }
       });
     },
-    getPriceTitle(price) {
-      return `€ ${price.price ? price.price : "0.00"} EURO / Month`;
-    },
     removePrice(index) {
-      if(this.payload.prices.length == 1) return
-      this.payload.prices.splice(index, 1)
-    }
+      if (this.payload.prices.length == 1) return;
+      this.payload.prices.splice(index, 1);
+    },
   },
   watch: {
     drawerStatus(val) {
@@ -284,9 +221,9 @@ export default {
             price: 0,
             is_recurring: 1,
             billing_period: 3,
-            recycle_count: 2,
+            recycle_count: 1,
             recycle_type: 3,
-          })
+          });
         }
         if (!this.originalPayload) {
           this.originalPayload = this.cloneVariable(this.payload);
