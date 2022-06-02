@@ -408,13 +408,14 @@
                   class="success mt-1"
                   @click="sendForm(false)"
                   style="width: 49% !important"
+                  type="submit"
                 >
                   <v-icon>mdi-content-save-outline</v-icon>
                   {{ payload.id ? "Update" : "Save" }}
                 </v-btn>
                 <v-btn
+                  @click="sendForm(true)"
                   class="success mt-1"
-                  type="submit"
                   style="width: 49% !important"
                 >
                   <v-icon>mdi-content-save-outline</v-icon>
@@ -492,8 +493,6 @@ export default {
     this.initialize()
   },
   methods: {
-    resetValidation() {
-      },
     initialize () {
       this.selectAllCoach();
       this.selectAllClient();
@@ -598,6 +597,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-</style>

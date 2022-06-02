@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form-page :selectedItem="selectedItem" @updateRecord="updateRecord"></form-page>
+    <form-page :selectedItem="selectedItem" @updateRecord="updateRecord" :headerEdit="profile"></form-page>
   </div>
 </template>
 <script>
@@ -12,6 +12,7 @@ export default {
   data() {
     return {
       selectedItem: {},
+      profile: true,
     };
   },
   mounted() {
@@ -40,7 +41,7 @@ export default {
 
         this.$axios.put(`${this.$coaches}/${payload.id}`, payload).then(({ data }) => {
           this.successNotification(data,"updated","coach","coaches","first_name");
-          this.goTo("settings-coaches");
+          this.goTo("settings-coaches-id");
         });
       })
     },

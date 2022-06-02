@@ -26,6 +26,7 @@
       searchPlaceholder="Title"
       class="custom-table"
       @addRecord="drawer = !drawer"
+      @showRecord="showRecord($event)"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
@@ -34,43 +35,61 @@
       @editRecord="editRecord($event)"
     >
       <template v-slot:status="{item}">
-        <v-switch
-          @click="changeStatus(item)"
-          v-model="item.status"
-          inset
-          color="success"
-          dense
-          hide-details=""
-        ></v-switch>
+        <template v-if="item.type == 1">
+          <v-switch
+            @click.stop="changeStatus(item)"
+            v-model="item.status"
+            inset
+            color="success"
+            dense
+            hide-details=""
+          ></v-switch>
+        </template>
+        <template v-else>
+          <v-switch
+            v-if="item.is_sent==0"
+            @click="changeStatus(item)"
+            v-model="item.status"
+            inset
+            color="success"
+            dense
+            hide-details=""
+          ></v-switch>
+          <template v-else>
+            Not Available
+          </template>
+        </template>
       </template>
       <template v-slot:is_sent="{ item }">
         <span>{{item.is_sent ? "sent" : "not sent"}}</span>
       </template>
       <template v-slot:send_to="{ item }">
-        <span @click="coach(item)"><strong>{{item.coaches.length}}</strong> coaches</span>,
-        <span @click="client(item)"><strong>{{item.clients.length}}</strong> clients</span>
+        <span style="padding: 10% 0!important" @click.stop="coach(item)"><strong>{{item.coaches.length}}</strong> coaches</span>,
+        <span style="padding: 10% 0!important" @click.stop="client(item)"><strong>{{item.clients.length}}</strong> clients</span>
       </template>
       <template v-slot:type="{item}">
         {{ item.type==0 ? "One Time Only" : "Recurring" }}
       </template>
-      <template v-slot:cycle_count="{item}">
+
+      <template v-slot:schedule_period="{item}">
         <template v-if="item.type==0">...</template>
+        <template v-else>
+          {{ schedulePeriod(item) }}
+        </template>
+      </template>
+      <template v-slot:cycle_count="{item}">
+        <template v-if="item.type==0 || item.schedule_period!=7">...</template>
         <template v-else>
           {{ item.cycle_count }}
         </template>
       </template>
       <template v-slot:cycle_type="{item}">
-        <template v-if="item.type==0">...</template>
+        <template v-if="item.type==0 || item.schedule_period!=7">...</template>
         <template v-else>
-          {{ item.cycle_type }}
+          {{ cycleType(item) }}
         </template>
       </template>
-      <template v-slot:schedule_period="{item}">
-        <template v-if="item.type==0">...</template>
-        <template v-else>
-          {{ item.schedule_period }}
-        </template>
-      </template>
+
       <template v-slot:time="{item}">
         <template v-if="item.type==1">...</template>
         <template v-else>
@@ -166,6 +185,20 @@ export default {
           value: "action" 
         },
       ],
+      periodOptions: [
+        { id: 1, text: "Daily" },
+        { id: 2, text: "Weekly" },
+        { id: 3, text: "Monthly" },
+        { id: 4, text: "Every 3 months" },
+        { id: 5, text: "Every 6 months" },
+        { id: 6, text: "Every Year" },
+        { id: 7, text: "Custom" },
+      ],
+      cycleOptions: [
+        { id: 1, text: "Daily" },
+        { id: 2, text: "Weekly" },
+        { id: 3, text: "Monthly" },
+      ],
       data: [],
       receiver:[],
       drawer:false,
@@ -215,16 +248,6 @@ export default {
     }
   },
   methods: {
-    coach(item) {
-      this.dataItem = item.coaches
-      this.view=true
-      this.AnnounceTitle="Coach"
-    },
-    client(item) {
-      this.dataItem = item.clients
-      this.view=true
-      this.AnnounceTitle="Client"
-    },
     initialize() {
       this.getStatistics();
       this.getTableRecords()
@@ -237,9 +260,11 @@ export default {
       })
     },
     addRecord(payload) {
+      console.log(payload,"payload")
       this.create().then(() => {
         this.$axios.post(`${this.$announces}`, payload).then(({data}) => {
-          this.successNotification(payload, "sent","coach","coaches","title")
+          this.successNotification(payload, "sent","announce","announces","title")
+          // this.$store.commit('resetForm', true)
           this.initialize()
         })
       })
@@ -247,7 +272,8 @@ export default {
     saveRecord(payload) {
       this.create().then(() => {
         this.$axios.post(`${this.$announces}/save`, payload).then(({data}) => {
-          this.successNotification(payload, "save","coach","coaches","title")
+          this.successNotification(payload, "save","announce","announces","title")
+          // this.$store.commit('resetForm', true)
           this.initialize()
         })
       })
@@ -269,7 +295,7 @@ export default {
       this.update().then(() => {
         this.$axios.put(`${this.$announces}/${payload.id}`, payload).then(({data}) => {
           this.successNotification(data, 'updated', 'announce', 'announces', 'title')
-          // this.$store.commit('resetForm', true)
+          this.$store.commit('resetForm', true)
           this.initialize()
         });
       })
@@ -293,7 +319,28 @@ export default {
       .then(({ data }) => {
         this.statistics = data
       });
-    }
+    },
+    cycleType(item) {
+      let data = this.cycleOptions.find(cycle => cycle.id === item.cycle_type)
+      return data.text
+    },
+    schedulePeriod(item){
+      let data = this.periodOptions.find(period => period.id === item.schedule_period)
+      return data.text
+    },
+    coach(item) {
+      this.dataItem = item.coaches
+      this.view=true
+      this.AnnounceTitle="Coach"
+    },
+    client(item) {
+      this.dataItem = item.clients
+      this.view=true
+      this.AnnounceTitle="Client"
+    },
+    showRecord(item){
+        this.goTo("announcement-id", { id: item.id });
+    },
   },
 };
 </script>

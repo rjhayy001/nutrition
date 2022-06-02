@@ -19,7 +19,7 @@
             <v-flex xs12 class="mb-2">
               <div class="d-flex align-center py-2 data-table-cus">
                 <p class="title mr-1">
-                  {{ payload.id ? "EDIT" : "CREATE NEW" }} COACH
+                  {{headerEdit ? "PROFILE" : ( payload.id ? "EDIT" : "CREATE NEW") }} COACH
                 </p>
                 <v-spacer></v-spacer>
                 <v-btn class="mr-1" small @click="$router.go('-1')">
@@ -45,18 +45,21 @@
                   >
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">
-                        <span>*</span>
+                        <span :hidden="!enableEdit">*</span>
                         first name
                       </p>
                       <v-text-field
-                        style="text-transform: capitalize"
+                        filled
+                        flat
+                        dense
+                        :disabled="!enableEdit"
+                        style="text-transform: capitalize;"
                         v-model="payload.first_name"
                         name="first_name"
                         placeholder="Type first name..."
                         hide-details="auto"
                         type="text"
                         :error-messages="errors"
-                        solo
                       ></v-text-field>
                     </div>
                   </ValidationProvider>
@@ -66,13 +69,16 @@
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">Last name</p>
                       <v-text-field
+                        filled
+                        flat
+                        dense
+                        :disabled="!enableEdit"
                         class="text-capitalize"
                         v-model="payload.last_name"
                         name="last_name"
                         placeholder="Type last name ..."
                         hide-details="auto"
                         type="text"
-                        solo
                       ></v-text-field>
                     </div>
                   </ValidationProvider>
@@ -81,16 +87,19 @@
                   <ValidationProvider slim>
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">
-                        <span>*</span>
+                        <span :hidden="!enableEdit">*</span>
                         Phone #1
                       </p>
                       <v-text-field
+                        filled
+                        flat
+                        dense
+                        :disabled="!enableEdit"
                         v-model="payload.phone_1"
                         name="phone_1"
                         placeholder="Type your mobile ..."
                         hide-details="auto"
                         type="text"
-                        solo
                       ></v-text-field>
                     </div>
                   </ValidationProvider>
@@ -100,12 +109,15 @@
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">Phone #2</p>
                       <v-text-field
+                        filled
+                        flat
+                        dense
+                        :disabled="!enableEdit"
                         v-model="payload.phone_2"
                         name="phone_2"
                         placeholder="Type your mobile ..."
                         hide-details="auto"
                         type="text"
-                        solo
                       ></v-text-field>
                     </div>
                   </ValidationProvider>
@@ -114,16 +126,19 @@
                   <ValidationProvider slim>
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">
-                        <span>*</span>
+                        <span :hidden="!enableEdit">*</span>
                         Email Address
                       </p>
                       <v-text-field
+                        filled
+                        flat
+                        dense
+                        :disabled="!enableEdit"
                         v-model="payload.email"
                         name="email_1"
                         placeholder="Type your email ..."
                         hide-details="auto"
                         type="text"
-                        solo
                       ></v-text-field>
                     </div>
                   </ValidationProvider>
@@ -143,6 +158,7 @@
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
+                            :disabled="!enableEdit"
                             v-model="payload.birthday"
                             solo
                             flat
@@ -181,12 +197,15 @@
                         Email Address/username
                       </p>
                       <v-text-field
+                        filled
+                        flat
+                        dense
+                        :disabled="!enableEdit"
                         v-model="payload.email"
                         name="email_2"
                         placeholder="Type your email ..."
                         hide-details="auto"
                         type="text"
-                        solo
                       ></v-text-field>
                     </div>
                   </ValidationProvider>
@@ -196,13 +215,16 @@
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">Password</p>
                       <v-text-field
+                        filled
+                        flat
+                        dense
+                        :disabled="!enableEdit"
                         v-model="payload.password"
                         name="password"
                         :append-icon="
                           viewPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'
                         "
                         placeholder="Type your password ..."
-                        solo
                         hide-details="auto"
                         :type="viewPassword ? 'text' : 'password'"
                         @click:append="viewPassword = !viewPassword"
@@ -217,16 +239,19 @@
                   <ValidationProvider slim>
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">
-                        <span>*</span>
+                        <span :hidden="!enableEdit">*</span>
                         Address
                       </p>
                       <v-text-field
+                        filled
+                        flat
+                        dense
+                        :disabled="!enableEdit"
                         v-model="payload.address_1"
                         name="address_1"
                         placeholder="Type your address ..."
                         hide-details="auto"
                         type="text"
-                        solo
                       ></v-text-field>
                     </div>
                   </ValidationProvider>
@@ -238,10 +263,13 @@
                         Additonal Address
                       </p>
                       <v-textarea
+                        filled
+                        flat
+                        dense
+                        :disabled="!enableEdit"
                         v-model="payload.address_2"
                         name="address_2"
                         placeholder="Type your additional address ..."
-                        solo
                         hide-details="auto"
                         type="text"
                         rows="2"
@@ -253,14 +281,17 @@
                   <ValidationProvider slim>
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">
-                        <span>*</span>
+                        <span :hidden="!enableEdit">*</span>
                         City
                       </p>
                       <v-combobox
+                        filled
+                        flat
+                        dense
+                        :disabled="!enableEdit"
                         v-model="payload.city_id"
                         :items="cities"
                         hide-details="auto"
-                        solo
                         deletable-chips
                         item-text="name"
                         item-value="id"
@@ -273,10 +304,13 @@
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">Zipcode</p>
                       <v-combobox
+                        filled
+                        flat
+                        dense
+                        :disabled="!enableEdit"
                         v-model="payload.zipcode_id"
                         :items="zipcodes"
                         hide-details="auto"
-                        solo
                         item-text="code"
                         item-value="id"
                       ></v-combobox>
@@ -287,15 +321,18 @@
                   <ValidationProvider slim>
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">
-                        <span>*</span>
+                        <span :hidden="!enableEdit">*</span>
                         Country
                       </p>
                       <v-combobox
+                        filled
+                        flat
+                        dense
+                        :disabled="!enableEdit"
                         v-model="payload.country_id"
                         :items="countries"
                         name="country"
                         hide-details="auto"
-                        solo
                         item-text="short_name"
                         item-value="id"
                       ></v-combobox>
@@ -320,6 +357,7 @@
                       ></v-img>
                     </div>
                     <v-btn
+                      v-if="this.enableEdit"
                       color="success"
                       small
                       outlined
@@ -342,9 +380,12 @@
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">Tags</p>
                       <v-autocomplete
+                        filled
+                        flat
+                        dense
+                        :disabled="!enableEdit"
                         v-model="payload.taggable"
                         :items="tagsOption"
-                        solo
                         label="Select tags ..."
                         hide-details="auto"
                         prepend-inner-icon="mdi-plus"
@@ -361,10 +402,13 @@
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">Groups</p>
                       <v-autocomplete
+                        filled
+                        flat
+                        dense
+                        :disabled="!enableEdit"
                         v-model="payload.groupable"
                         :items="groupsOption"
                         hide-details="auto"
-                        solo
                         @click:prepend-inner.stop="groupDrawer = !groupDrawer"
                         item-text="name"
                         item-value="id"
@@ -381,22 +425,43 @@
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">Status</p>
                       <v-select
+                        filled
+                        flat
+                        dense
+                        :disabled="!enableEdit"
                         v-model="payload.status"
                         :items="statusOptions"
                         item-value="id"
                         item-text="name"
                         hide-details="auto"
-                        solo
                       ></v-select>
                     </div>
                   </ValidationProvider>
                 </v-flex>
               </v-layout>
             </v-flex>
-            <div class="form-footer d-flex align-content-end justify-end">
-              <v-btn class="success" type="submit">
+            <div v-if="headerEdit">
+              <div v-if="this.enableEdit" class="form-footer d-flex align-content-end justify-end" style="gap: 20px;">
+                <v-btn v-if="this.enableEdit" @click="cancelBtn">
+                  <v-icon>mdi-content-save-outline</v-icon>
+                  cancel
+                </v-btn>
+                <v-btn v-if="this.enableEdit" class="success" type="submit">
+                  <v-icon>mdi-content-save-outline</v-icon>
+                  {{ payload.id ? "update" : "save" }}
+                </v-btn>
+              </div>
+              <div v-else class="form-footer d-flex align-content-end justify-end">
+                <v-btn class="success" @click="editBtn">
+                  <v-icon>mdi-content-save-outline</v-icon>
+                  edit
+                </v-btn>
+              </div>
+            </div>
+            <div v-else class="form-footer d-flex align-content-end justify-end">
+              <v-btn class="success" @click="saveForm">
                 <v-icon>mdi-content-save-outline</v-icon>
-                {{ payload.id ? "update" : "save" }}
+                {{ payload.id ? "update" : "saves" }}
               </v-btn>
             </div>
           </v-layout>
@@ -448,6 +513,7 @@ export default {
       cities: [],
       zipcodes: [],
       tagsSelected: [],
+      enableEdit: '',
     };
   },
   props: {
@@ -459,6 +525,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    headerEdit: {
+      type: Boolean,
+      default: () => {},
+    }
   },
   watch: {
     drawerStatus: {
@@ -482,6 +552,12 @@ export default {
         // this.tagsSelected = val;
         this.tagsSelected = val;
       }
+    },
+    headerEdit: {
+      handler(val) {
+        this.headerEdit=this.enableEdit
+        console.log(this.enableEdit,"enable")
+      }
     }
   },
   created() {
@@ -491,14 +567,30 @@ export default {
     this.getAllTags();
     this.getAllGroups();
   },
+  mounted() {
+    if(this.headerEdit=='' || this.headerEdit== null) {
+      this.enableEdit=true
+    }
+  },
   methods: {
     saveForm() {
+      alert("sad")
       this.$refs.form.validate().then((result) => {
         if (!result) return;
-        if (this.payload.id) {
-          this.$emit("updateRecord", this.payload);
-        } else {
-          this.$emit("addRecord", this.payload);
+        if(this.headerEdit==true) {
+          // if (this.payload.id) {
+            this.$emit("updateRecord", this.payload);
+            this.goTo("settings-coaches-id");
+            this.enableEdit=false
+          // } else {
+          //   this.$emit("addRecord", this.payload);
+          // }
+        }else{
+          if (this.payload.id) {
+            this.$emit("updateRecord", this.payload);
+          } else {
+            this.$emit("addRecord", this.payload);
+          }
         }
       });
     },
@@ -559,6 +651,25 @@ export default {
         })
       })
     },
+    editBtn() {
+      this.enableEdit=true
+    },
+    cancelBtn() {
+      this.enableEdit=false
+    }
   },
 };
 </script>
+
+
+
+<style scoped>
+.v-text-field >>> .v-input__slot::before  { 
+  border-color: transparent !important; 
+}
+
+.form-box.v-input__slot {
+  border: 0px solid #d7d2d2!important;
+}
+
+</style>
