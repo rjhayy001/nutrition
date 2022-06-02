@@ -26,6 +26,14 @@
               <div class="profile-box">
                 <div class="mb-2">
                   <v-img
+                    v-if="photoPayload.id"
+                    height="200px"
+                    width="200px"
+                    class="my-0 mx-auto"
+                    :src="photoPayload.image ? photoPayload.image: imageUrl('clients', id, photoPayload.file_name)"
+                  ></v-img>
+                  <v-img
+                    v-else
                     height="200px"
                     width="200px"
                     class="my-0 mx-auto"
@@ -46,6 +54,7 @@
                   type="file"
                   @change="onFileChange"
                   class="d-none"
+                  accept="image/x-png,image/gif,image/jpeg"
                 />
               </div>
             </v-flex>
@@ -115,20 +124,24 @@
 export default {
   data() {
     return {
+      id:0,
       drawer:false,
       photoPayload: {
         title:'',
         image:'',
         description:'',
-        links:'',
         sharable:1,
-        status:1,
       },
       sharableOptions:[
         {id:1, text:'Yes'},
         {id:0, text:'No'}
       ],
-      originalPayload:null
+      originalPayload: {
+        title:'',
+        image:'',
+        description:'',
+        sharable:1,
+        }
     }
   },
   props: {
@@ -146,10 +159,17 @@ export default {
       this.$refs.form.validate().then(result => {
         if (!result) return
         if (this.photoPayload.id) {
+          this.update().then(() => {
             this.$emit('updateRecord', this.photoPayload)
-          } else {
+            this.photoPayload = this.cloneVariable(this.originalPayload);
+          })
+        } else {
+          this.create().then(() => {
+            console.log(this.photoPayload , 'test2')
             this.$emit('addRecord', this.photoPayload)
-          }
+            this.photoPayload = this.cloneVariable(this.originalPayload);
+          })
+        }
       })
     },
     handleFileImport() {
@@ -181,6 +201,8 @@ export default {
       if(!val) {
         this.$emit('closeDrawer')
       }
+
+      this.id = this.$route.params.id
     },
     selectedItem: {
       handler(val) {

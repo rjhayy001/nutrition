@@ -56,7 +56,7 @@
         {{ item.birthday ? formatDate(item.birthday) : "..." }}
       </template>
       <!-- taggable -->
-      <template v-slot:taggable="{ item }">
+      <!-- <template v-slot:taggable="{ item }">
         <template v-if="!item.taggable.length"> ... </template>
         <common-dialog
           v-else
@@ -64,9 +64,9 @@
           :default_limit="default_limit"
           @delete="deleteTaggable"
         />
-      </template>
+      </template> -->
       <!-- groupable -->
-      <template v-slot:groupable="{ item }">
+      <!-- <template v-slot:groupable="{ item }">
         <template v-if="!item.groupable.length"> ... </template>
         <common-dialog
           v-else
@@ -74,7 +74,7 @@
           :default_limit="default_limit"
           @delete="deleteGroupable"
         />
-      </template>
+      </template> -->
       <!-- create_at -->
       <template v-slot:created_at="{ item }">
         {{ formatDate(item.created_at) }}
