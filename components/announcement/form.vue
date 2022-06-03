@@ -23,17 +23,16 @@
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </p>
-    <v-divider class="mb-2"></v-divider>
+    <v-divider ></v-divider>
     <ValidationObserver ref="form">
       <v-form class="form-box" @submit.prevent="sendForm(true)">
         <v-container grid-list-md>
           <v-layout row wrap class="px-1">
-            <v-flex xs12 style="height: 2em">
+            <v-flex xs12>
               <ValidationProvider slim>
-                <div class="mb-1 d-flex">
+                <div class="mb-1 d-flex announce-text-field">
                   <p
-                    class="subtitle-2 font-weight-regular my-auto"
-                    style="margin-bottom!important; margin-right: 0.85em"
+                    class="subtitle-2 font-weight-regular my-auto mr-1"
                   >
                     <span>coach:</span>
                   </p>
@@ -42,13 +41,15 @@
                     v-model="selectedCoachType"
                     label="All Select Coaches"
                     value="all"
+                    @change="getCoaches($event)"
                     id="all"
                   ></v-checkbox>
                   <v-checkbox
                     class="user-checkbox"
                     v-model="selectedCoachType"
                     label="Have Client"
-                    value="has-clients"
+                    value="have-clients"
+                    @change="getCoaches($event)"
                     id="subscriber"
                   ></v-checkbox>
                   <v-checkbox
@@ -56,17 +57,17 @@
                     v-model="selectedCoachType"
                     label="Do not have Client"
                     value="dont-have-clients"
+                    @change="getCoaches($event)"
                     id="non-subscriber"
                   ></v-checkbox>
                 </div>
               </ValidationProvider>
             </v-flex>
-            <v-flex xs12 style="height: 4em">
-              <ValidationProvider slim>
-                <div class="mb-1 d-flex">
+            <v-flex xs12>
+              <ValidationProvider slim class="announce-text-field">
+                <div class="mb-1 d-flex ">
                   <p
-                    class="subtitle-2 font-weight-regular my-auto"
-                    style="margin-bottom!important; margin-right: 1em"
+                    class="subtitle-2 font-weight-regular my-auto mr-2"
                   >
                     <span>client:</span>
                   </p>
@@ -75,30 +76,32 @@
                     v-model="selectedClientType"
                     label="All Select Clients"
                     value="all"
+                    @change="getClients($event)"
                     id="all"
                   ></v-checkbox>
                   <v-checkbox
                     class="user-checkbox"
                     v-model="selectedClientType"
                     label="Subscriber Clients"
-                    value="subscribed-clients"
+                    value="subscribed"
+                    @change="getClients($event)"
                     id="subscriber"
                   ></v-checkbox>
                   <v-checkbox
                     class="user-checkbox"
                     v-model="selectedClientType"
                     label="Non-subscriber Clients"
-                    value="non-subscriber"
+                    value="not-subscribed"
+                    @change="getClients($event)"
                     id="not-subscribed-clients"
                   ></v-checkbox>
                 </div>
               </ValidationProvider>
             </v-flex>
             <v-flex xs12>
-              <div class="mb-1 d-flex">
+              <div class="mb-1 d-flex announce-text-field">
                 <p
-                  class="subtitle-2 font-weight-medium my-auto"
-                  style="margin-bottom!important; margin-right: 0.85em"
+                  class="subtitle-2 font-weight-medium my-auto mr-1"
                 >
                   <span>coach:</span>
                 </p>
@@ -110,7 +113,7 @@
               </div>
             </v-flex>
             <v-flex xs12>
-              <ValidationProvider>
+              <ValidationProvider  class="announce-text-field">
                 <div class="mb-1">
                   <v-autocomplete
                     deletable-chips
@@ -142,10 +145,9 @@
               </ValidationProvider>
             </v-flex>
             <v-flex xs12>
-              <div class="mb-1 d-flex">
+              <div class="mb-1 d-flex announce-text-field">
                 <p
-                  class="subtitle-2 font-weight-medium my-auto"
-                  style="margin-bottom!important; margin-right: 0.85em"
+                  class="subtitle-2 font-weight-medium my-auto mr-1"
                 >
                   <span>client:</span>
                 </p>
@@ -157,7 +159,7 @@
               </div>
             </v-flex>
             <v-flex xs12>
-              <ValidationProvider>
+              <ValidationProvider class="announce-text-field">
                 <div class="mb-1">
                   <v-autocomplete
                     class="user-option"
@@ -206,14 +208,14 @@
                     <div class="d-flex mb-2 justify-space-between">
                       <v-btn
                         :class="[!payload.type ? 'primary' : 'normal']"
-                        style="width: 49%"
+                        width="49%"
                         @click="payload.type = 0"
                       >
                         ONE TIME ONLY
                       </v-btn>
                       <v-btn
                         :class="[payload.type ? 'primary' : 'normal']"
-                        style="width: 49%"
+                        width="49%"
                         @click="payload.type = 1"
                       >
                         RECURRING
@@ -221,10 +223,9 @@
                     </div>
                     <template v-if="payload.type == 0">
                       <div
-                        class="d-flex flex-row"
-                        style="width: 100%; justify-content: space-between"
+                        class="d-flex flex-row "
                       >
-                        <div style="width: 48%">
+                        <div class="col-sm">
                           <p class="subtitle-2 font-weight-regular mb-2">
                             <span>*</span>
                             Time Period
@@ -259,7 +260,7 @@
                             ></v-time-picker>
                           </v-menu>
                         </div>
-                        <div style="width: 48%">
+                        <div class="col-sm">
                           <p class="subtitle-2 font-weight-regular mb-2">
                             <span>*</span>
                             Date
@@ -401,13 +402,12 @@
             </v-flex>
             <v-flex xs12>
               <div
-                class="d-flex mb-2 justify-space-between"
-                style="width: 100% !important"
+                class="d-flex mb-2 justify-space-between w-100"
               >
                 <v-btn
                   class="success mt-1"
                   @click="sendForm(false)"
-                  style="width: 49% !important"
+                  width="49%"
                   type="submit"
                 >
                   <v-icon>mdi-content-save-outline</v-icon>
@@ -416,7 +416,7 @@
                 <v-btn
                   @click="sendForm(true)"
                   class="success mt-1"
-                  style="width: 49% !important"
+                  width="49%"
                 >
                   <v-icon>mdi-content-save-outline</v-icon>
                   Send
@@ -538,6 +538,7 @@ export default {
         .get(`clients?type=${type}&no-paginate=true`)
         .then(({ data }) => {
           this.clients = data.data;
+          console.log(this.clients,"clients")
           this.selectAllClient()
         });
     },

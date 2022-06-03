@@ -49,11 +49,11 @@
                         first name
                       </p>
                       <v-text-field
+                      class="text-capitalize"
                         filled
                         flat
                         dense
                         :disabled="!enableEdit"
-                        style="text-transform: capitalize;"
                         v-model="payload.first_name"
                         name="first_name"
                         placeholder="Type first name..."
@@ -441,24 +441,24 @@
               </v-layout>
             </v-flex>
             <div v-if="headerEdit">
-              <div v-if="this.enableEdit" class="form-footer d-flex align-content-end justify-end" style="gap: 20px;">
+              <div v-if="this.enableEdit" class="form-footer d-flex justify-end">
                 <v-btn v-if="this.enableEdit" @click="cancelBtn">
                   <v-icon>mdi-content-save-outline</v-icon>
                   cancel
                 </v-btn>
-                <v-btn v-if="this.enableEdit" class="success" type="submit">
+                <v-btn v-if="this.enableEdit" class="success ml-5" type="submit">
                   <v-icon>mdi-content-save-outline</v-icon>
-                  {{ payload.id ? "update" : "save" }}
+                  update
                 </v-btn>
               </div>
-              <div v-else class="form-footer d-flex align-content-end justify-end">
+              <div v-else class="form-footer d-flex justify-end">
                 <v-btn class="success" @click="editBtn">
                   <v-icon>mdi-content-save-outline</v-icon>
                   edit
                 </v-btn>
               </div>
             </div>
-            <div v-else class="form-footer d-flex align-content-end justify-end">
+            <div v-else class="form-footer d-flex justify-content-end">
               <v-btn class="success" @click="saveForm">
                 <v-icon>mdi-content-save-outline</v-icon>
                 {{ payload.id ? "update" : "saves" }}

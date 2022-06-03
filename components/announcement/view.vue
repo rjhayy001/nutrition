@@ -56,11 +56,11 @@
             </v-card>
           </v-col> -->
             <v-card width="100%" class="px-3 py-2" >
-              <v-card-title style="justify-content: center;">
+              <v-card-title>
                 {{viewAnnounce.title}}
               </v-card-title>
               <v-card-subtitle class="d-flex">
-                <v-card-text v-if="viewAnnounce.type==0" style="width: 100px!important; padding:10px!important; margin-top:auto; margin-bottom:auto;">
+                <v-card-text v-if="viewAnnounce.type==0" class="my-auto wd-view-130">
                   <span>
                     time:
                   </span>
@@ -68,7 +68,7 @@
                     {{viewAnnounce.time}}
                   </span>
                 </v-card-text>
-                <v-card-text style="width: 135px!important; padding:10px!important; margin-top:auto; margin-bottom:auto;">
+                <v-card-text class="my-auto wd-view-155">
                   <span>
                     Type:
                   </span>
@@ -76,7 +76,7 @@
                     {{viewAnnounce.type==0? "Once Only":"Recurring"}}
                   </span>
                 </v-card-text>
-                <v-card-text v-if="viewAnnounce.type==0" style="width: 145px!important; padding:10px!important; margin-top:auto; margin-bottom:auto;">
+                <v-card-text v-if="viewAnnounce.type==0" class="my-auto wd-view-155">
                   <span>
                     Date:
                   </span>
@@ -84,7 +84,7 @@
                     {{viewAnnounce.date}}
                   </span>
                 </v-card-text>
-                <v-card-text style="width: 95px!important; padding:10px!important; margin-top:auto; margin-bottom:auto;">
+                <v-card-text class="my-auto wd-view-130">
                   <span>
                     Status:
                   </span>
@@ -92,7 +92,7 @@
                     {{viewAnnounce.status==1? "on":"off"}}
                   </span>
                 </v-card-text>
-                <v-card-text v-if="viewAnnounce.type==1" style="width: 155px!important; padding:10px!important; margin-top:auto; margin-bottom:auto;">
+                <v-card-text v-if="viewAnnounce.type==1" class="my-auto wd-view-155">
                   <span>
                     Schedule Period:
                   </span>
@@ -100,7 +100,7 @@
                     {{viewAnnounce.schedule_period}}
                   </span>
                 </v-card-text>
-                <v-card-text v-if="viewAnnounce.type==1" style="width: 130px!important; padding:10px!important; margin-top:auto; margin-bottom:auto;">
+                <v-card-text v-if="viewAnnounce.type==1" class="my-auto wd-view-130">
                   <span>
                     Cycle Count:
                   </span>
@@ -108,7 +108,7 @@
                     {{viewAnnounce.cycle_count}}
                   </span>
                 </v-card-text>
-                <v-card-text v-if="viewAnnounce.type==1" style="width: 130px!important; padding:10px!important; margin-top:auto; margin-bottom:auto;">
+                <v-card-text v-if="viewAnnounce.type==1" class="my-auto wd-view-130">
                   <span>
                     Cycle Type:
                   </span>

@@ -60,12 +60,17 @@
           </template>
         </template>
       </template>
+      <template v-slot:message="{ item }">
+        <div class="announce-message">
+          {{item.message}}
+        </div>
+      </template>
       <template v-slot:is_sent="{ item }">
         <span>{{item.is_sent ? "sent" : "not sent"}}</span>
       </template>
       <template v-slot:send_to="{ item }">
-        <span style="padding: 10% 0!important" @click.stop="coach(item)"><strong>{{item.coaches.length}}</strong> coaches</span>,
-        <span style="padding: 10% 0!important" @click.stop="client(item)"><strong>{{item.clients.length}}</strong> clients</span>
+        <span @click.stop="coach(item)"><strong>{{item.coaches.length}}</strong> coaches</span>,
+        <span @click.stop="client(item)"><strong>{{item.clients.length}}</strong> clients</span>
       </template>
       <template v-slot:type="{item}">
         {{ item.type==0 ? "One Time Only" : "Recurring" }}
