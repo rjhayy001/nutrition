@@ -14,6 +14,7 @@
       searchPlaceholder="Short name, Long name, Code"
       class="custom-table"
       @addRecord="drawer = !drawer"
+      @sortTable="sortTable"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
@@ -54,12 +55,12 @@ export default {
       title: "Countries",
       headers: [
         { text: "#", value: "id", width:'2%'},
-        { text: "Short name", value: "short_name"},
-        { text: "Long name", value: "long_name" },
-        { text: "Code", value: "country_numcode" },
+        { text: "Short name", value: "short_name", filterable: true, sortType: null, filterValue: ""},
+        { text: "Long name", value: "long_name", filterable: true, sortType: null, filterValue: ""},
+        { text: "Code", value: "country_numcode", filterable: true, sortType: null, filterValue: ""},
         { text: "Default", value: "is_default" },
-        { text: "Created at", value: "created_at"},
-        { text: "Updated at", value: "updated_at"},
+        { text: "Created at", value: "created_at", filterable: true, sortType: null, filterValue: ""},
+        { text: "Updated at", value: "updated_at", filterable: true, sortType: null, filterValue: ""},
         { text: "Action", value: "action"},
       ],
       data: [],
@@ -112,7 +113,22 @@ export default {
           this.initialize()
         })
       })
-    }
+    },
+    sortTable(query) {
+      let sortBy = null;
+      if(query.sortType){
+        sortBy = `${query.value},${query.sortType == 1 ? 'asc' : 'desc'}`
+        this.$axios
+        .get(`${this.$countries}?${this.urlQuery()}&sort=${sortBy}`)
+        .then(({ data }) => {
+          this.data = data.data;     
+          this.options = data.options;
+        });
+      }
+      else{
+        this.initialize();
+      } 
+    },
   },
 };
 </script>

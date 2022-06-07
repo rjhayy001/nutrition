@@ -14,6 +14,7 @@
       searchPlaceholder="Name, Color, Description"
       class="custom-table"
       @addRecord="drawer = !drawer"
+      @sortTable="sortTable"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initalize()"
       @FilterBy="filterBy($event)"
@@ -49,7 +50,7 @@ export default {
         { text: "Description", value: "description" , filterable:true, sortType:null, filterValue:''},
         { text: "Created at", value: "created_at", filterable:true, sortType:null, filterValue:''},
         { text: "Updated at", value: "updated_at", filterable:true, sortType:null, filterValue:''},
-        { text: "Action", value: "action", filterable:true, sortType:null, filterValue:''},
+        { text: "Action", value: "action"},
       ],
       data: [],
       drawer:false,
@@ -94,7 +95,22 @@ export default {
           this.initalize()
         })
       })
-    }
+    },
+    sortTable(query) {
+      let sortBy = null;
+      if(query.sortType){
+        sortBy = `${query.value},${query.sortType == 1 ? 'asc' : 'desc'}`
+        this.$axios
+        .get(`${this.$tags}?${this.urlQuery()}&sort=${sortBy}`)
+        .then(({ data }) => {
+          this.data = data.data;     
+          this.options = data.options;
+        });
+      }
+      else{
+        this.initalize();
+      } 
+    },
   },
 };
 </script>

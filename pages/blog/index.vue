@@ -158,7 +158,6 @@ export default {
   },
   methods: {
     initalize() {
-
       this.$axios.get(`${this.$blogs}?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
