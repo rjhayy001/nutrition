@@ -24,6 +24,16 @@
         </v-chip>
       </template>
 
+      <template v-slot:coach="{ item }">
+        <v-chip color="primary" @click="$router.push({ path: `/settings/coaches/${item.coach.id}/profile` })">
+          <v-avatar left size="md">
+            <v-img :src="item.coach.logo" v-if="item.coach.logo != null"></v-img>
+            <v-icon v-else>mdi-account-circle</v-icon>
+          </v-avatar>
+          {{ item.coach.full_name }}
+        </v-chip>
+      </template>
+
       <template v-slot:price="{ item }">
         <v-chip color="primary" @click="$router.push('/settings/plans')" v-if="item.price">
           <v-avatar left size="md">
@@ -82,6 +92,13 @@ export default {
         {
           text: "Client",
           value: "client",
+          filterable: true,
+          sortType: null,
+          filterValue: ''
+        },
+        {
+          text: "Coach",
+          value: "coach",
           filterable: true,
           sortType: null,
           filterValue: ''
@@ -167,8 +184,9 @@ mounted() {
 },
 methods: {
   initalize() {
-    this.$axios.get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client`).then(({ data }) => {
+    this.$axios.get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client,coach`).then(({ data }) => {
       this.data = data.data
+      console.log(this.data,"data")
       this.options = data.options
     })
   },
@@ -197,7 +215,9 @@ methods: {
       "restaurer"
     ).then(() => {
       this.$axios.patch(`${this.$subscriptions}/${item.id}/restore`).then(({ data }) => {
-        this.successNotification(item, 'réstauré', 'abonnement', 'abonnements')
+
+        this.successNotification(item.client, 'réstauré', 'abonnement', 'first_name')
+        console.log(item.client,"itemsssss")
         this.initalize()
       }).catch((error) => {
         this.errorNotification(error)

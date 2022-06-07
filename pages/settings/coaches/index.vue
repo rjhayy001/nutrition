@@ -33,7 +33,7 @@
       <!-- status -->
       <template v-slot:status="{ item }">
         <v-switch
-          @click="changeStatus(item)"
+          @click.stop="changeStatus(item)"
           v-model="item.status"
           inset
           color="success"
@@ -269,7 +269,7 @@ export default {
         });
     },
     showRecord(item){
-      this.goTo("settings-coaches-id", { id: item.id });
+        this.goTo("settings-coaches-id-profile", { id: item.id });
     },
     editRecord(item) {
       this.goTo("settings-coaches-edit-id", { id: item.id });
