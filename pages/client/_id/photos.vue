@@ -57,13 +57,15 @@
 import formDrawer from "~/components/clients/photos/form.vue";
 import defaultView from "~/components/clients/photos/view/default.vue";
 import listView from "~/components/clients/photos/view/list.vue";
+import pinnedMessages from '@/components/clients/chats/pinnedMessages.vue'
 export default {
   components: {
     formDrawer,
     defaultView,
-    listView
+    listView,
+    pinnedMessages,
   },
-  data(){
+    data(){
     return {
       search:'',
       awaitingSearch: false,
@@ -131,4 +133,3 @@ export default {
   }
 }
 </script>
-

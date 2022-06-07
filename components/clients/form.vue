@@ -393,7 +393,7 @@
                 </v-flex>
               </v-layout>
             </v-flex>
-            <div class="form-footer d-flex align-content-end justify-end">
+            <div class="form-footer d-flex justify-end">
               <v-btn class="success" type="submit">
                 <v-icon>mdi-content-save-outline</v-icon>
                 {{ payload.id ? "update" : "save" }}

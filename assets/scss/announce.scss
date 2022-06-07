@@ -5,9 +5,27 @@
 }
 
 .user-checkbox {
-  margin-top: 8px!important;
+  margin-top: -5px!important;
 }
 
 .user-option .v-input__control .v-input__slot .v-select__slot .v-select__selections input {
   max-height: none!important;
+}
+
+.announce-text-field {
+  height: 35px
+}
+
+.wd-view-130 {
+  width: 130px!important;
+}
+.wd-view-155 {
+  width: 155px!important;
+}
+
+.announce-message {
+  white-space: nowrap; 
+  width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis; 
 }

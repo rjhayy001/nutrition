@@ -15,44 +15,90 @@ export default {
     return {
       submenus: [
         {
-          title: 'Coach',
+          title: 'Profil',
           icon: 'mdi-account-multiple-outline',
-          to:'settings-coaches-id',
+          to:'settings-coaches-id-profile',
           total_records:'5'
         },
         {
-          title: 'Chat',
-          icon: 'mdi-chat-plus-outline',
-          to:'settings-coaches-id-chat',
+          title: 'Coach',
+          icon: 'mdi-account-multiple-outline',
+          showSubmenu:false,
+          submenus:[
+            {
+              title:'Global',
+              to: 'settings-coaches-id-global'
+            },
+            {
+              title:'Formulaire',
+              to: 'settings-coaches-id-formula'
+            },
+            {
+              title:'Mesures',
+              to: 'settings-coaches-id-measure'
+            },
+            {
+              title:'Tracking',
+              to: 'settings-coaches-id-tracking'
+            },
+            {
+              title:'Photos',
+              to: 'settings-coaches-id-photos'
+            },
+            {
+              title:'Feedback',
+              to: 'settings-coaches-id-feedback'
+            },
+          ],
         },
         {
           title: 'Objectives',
           icon: 'mdi-store-outline',
           to:'settings-coaches-id-objectives',
         },
-        // {
-        //   title: 'Suivi',
-        //   icon: 'mdi-car-shift-pattern',
-        //   to:'new-client-follow',
-        //   total_records:'7'
-        // },
         {
-          title: 'Photos',
+          title: 'Abonnement',
+          icon: 'mdi-account-reactivate-outline',
+          to:'new-client-subscription',
+        },
+        {
+          title: 'Ressources',
           icon: 'mdi-image-multiple',
-          to:'settings-coaches-id-photos',
+          to:'settings-coaches-id-resource',
           total_records:'10'
         },
-        // {
-        //   title: 'Documents',
-        //   icon: 'mdi-file-document-multiple-outline',
-        //   to:'new-client-documents',
-        // },
-        // {
-        //   title: 'Abonnement',
-        //   icon: 'mdi-account-reactivate-outline',
-        //   to:'new-client-subscription',
-        // },
+        {
+          title: 'Chat',
+          icon: 'mdi-chat-plus-outline',
+          to:'settings-coaches-id-chat',
+        },
       ]
+    }
+  },
+  methods: {
+    toggleSidebar() {
+      let sidebarstatus = this.$store.getters.sidebarStatus
+      this.$store.commit('updateSidebarStatus', !sidebarstatus)
+    },
+    hasActiveSubmenu(parent, menu) {
+      if(this.$route.name.includes(parent)) {
+        if (!menu.showSubmenu) menu.showSubmenu = true
+        return 'subactive'
+      } 
+    }
+  },
+  computed: {
+    sidebarStatus: {
+      get() {
+        return this.$store.getters.sidebarStatus
+      },
+      set(){}
+    },
+    miniVariantStatus: {
+      get() {
+        return this.$store.getters.miniVariant
+      },
+      set(){}
     }
   }
 }

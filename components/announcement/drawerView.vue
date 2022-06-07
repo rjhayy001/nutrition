@@ -18,7 +18,7 @@
       >
         <template v-slot:item.full_name="{ item }">
           <div class="d-flex justify-content-around">
-            <v-avatar style="margin:auto 0;" size="36px">
+            <v-avatar class="my-auto mx-0" size="36px">
               <img
                 :alt="item.image"
                 :src="item.logo ? item.logo : '/images/empty_person.png'"

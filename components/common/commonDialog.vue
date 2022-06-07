@@ -6,7 +6,7 @@
         class="mr-1 my-1 primary"
         small
         :key="index"
-        v-if="index <= 3"
+        v-if="index <= default_limit"
         @click:close="deleteData(data)"
       >
         {{ data.name }}
