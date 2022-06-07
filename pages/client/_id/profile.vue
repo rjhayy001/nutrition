@@ -12,7 +12,6 @@ export default {
   data() {
     return {
       selectedItem: {},
-      client: true,
     };
   },
   mounted() {
@@ -41,7 +40,6 @@ export default {
 
         this.$axios.put(`${this.$clients}/${payload.id}`, payload).then(({ data }) => {
           this.successNotification(data,"updated","client","clients","first_name");
-          this.goTo("settings-clients-id");
         });
       })
     },

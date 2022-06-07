@@ -1,5 +1,9 @@
 <template>
-   <v-navigation-drawer permanent clipped class="left-sidebar sub-side">
+  <v-navigation-drawer
+    permanent
+    clipped
+    class="left-sidebar sub-side"
+  >
     <!-- <v-list-item>
       <v-list-item-content>
         <v-list-item-title class="text-h6">
@@ -11,48 +15,31 @@
       </v-list-item-content>
     </v-list-item>
     <v-divider></v-divider> -->
-    <!-- <v-list
+    <v-list
       dense
       nav
     >
-      <v-list-item
-        v-for="(item, index) in submenus"
-        :key="index"
-        :to="{name: item.to}"
-      >
-        <v-list-item-icon>
-          <v-icon>{{ item.icon }}</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
-        </v-list-item-content>
-        <template v-if="item.total_records">
-          <span class="count-records">
-            {{item.total_records}}
-          </span>
-        </template>
-      </v-list-item>
-    </v-list> -->
-
-    <v-list>
-      <template v-for="(item, i) in items">
+      <template v-for="(item, index) in submenus">
         <v-list-item
-          :key="i"
-          :to="{name:item.to}"
-          router
+          :key="index"
+          :to="{name: item.to}"
           v-if="!item.submenus"
-          exact
-          :class="['main-menu', $route.path.includes(item.to) ? 'active' : '']"
         >
-          <v-list-item-action>
+          <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
+          </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
+            <v-list-item-title>{{ item.title }}
+              {{item.submenus}}</v-list-item-title>
           </v-list-item-content>
+          <template v-if="item.total_records">
+            <span class="count-records">
+              {{item.total_records}}
+            </span>
+          </template>
         </v-list-item>
         <v-list-group
-          :key="i"
+          :key="index"
           v-else
           no-action
           :prepend-icon="item.icon"
@@ -69,7 +56,6 @@
             :key="i"
             link
             :to="{name:menu.to}"
-            :class="hasActiveSubmenu(menu.parent, item)"
           >
             <!-- <v-list-item-title>
               {{$route.name}}
@@ -86,43 +72,25 @@
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
-      
+
     }
   },
   props: {
-    items: {
-      type:Array,
+    submenus: {
+      type: Array,
       default: () => {
         return []
       }
     }
   },
   methods: {
-    toggleSidebar() {
-      let sidebarstatus = this.$store.getters.sidebarStatus
-      this.$store.commit('updateSidebarStatus', !sidebarstatus)
-    },
-    hasActiveSubmenu(parent, menu) {
-      if(this.$route.name.includes(parent)) {
+    hasActiveSubmenu (parent, menu) {
+      if (this.$route.name.includes(parent)) {
         if (!menu.showSubmenu) menu.showSubmenu = true
         return 'subactive'
-      } 
-    }
-  },
-  computed: {
-    sidebarStatus: {
-      get() {
-        return this.$store.getters.sidebarStatus
-      },
-      set(){}
-    },
-    miniVariantStatus: {
-      get() {
-        return this.$store.getters.miniVariant
-      },
-      set(){}
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <fragment>
-    <sub-sidebar :items="submenus"></sub-sidebar>
+    <sub-sidebar :submenus="submenus"></sub-sidebar>
     <v-container>
       <Nuxt />
     </v-container>

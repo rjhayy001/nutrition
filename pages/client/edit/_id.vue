@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import formPage from "~/components/clients/form.vue";
+import formPage from "~/components/coaches/form.vue";
 export default {
   components: {
     formPage,
