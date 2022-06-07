@@ -45,6 +45,20 @@
     </v-layout>
   </v-container>
 </template>
+<script>
+  import pinnedMessages from '@/components/clients/chats/pinnedMessages.vue'
+    export default {
+    components: {
+      pinnedMessages,
+    },
+    data(){
+      return {
+
+      }
+    },
+  }
+</script>
+
 <style scoped>
 .title-header{
   background: #e3e3e3;

@@ -1,5 +1,13 @@
 <template>
   <div>
-    this is index
+    <profile/>
   </div>
 </template>
+<script>
+import profile from './profile.vue';
+export default {
+  components: {
+    profile
+  },
+}
+</script>

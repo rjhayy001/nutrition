@@ -47,7 +47,7 @@
         </template>
         <template v-else>
           <v-switch
-            v-if="item.is_sent==0"
+            v-if="item.type==1"
             @click="changeStatus(item)"
             v-model="item.status"
             inset
@@ -69,13 +69,13 @@
         <span>{{item.is_sent ? "sent" : "not sent"}}</span>
       </template>
       <template v-slot:send_to="{ item }">
-        <span @click.stop="coach(item)"><strong>{{item.coaches.length}}</strong> coaches</span>,
-        <span @click.stop="client(item)"><strong>{{item.clients.length}}</strong> clients</span>
+        <span v-if="item.coaches.length!=0" @click.stop="coach(item)"><strong>{{item.coaches.length}}</strong> coaches</span>
+        <span v-if="item.coaches.length!=0 && item.clients.length!=0">,</span>
+        <span v-if="item.clients.length!=0" @click.stop="client(item)"><strong>{{item.clients.length}}</strong> clients</span>
       </template>
       <template v-slot:type="{item}">
         {{ item.type==0 ? "One Time Only" : "Recurring" }}
       </template>
-
       <template v-slot:schedule_period="{item}">
         <template v-if="item.type==0">...</template>
         <template v-else>
@@ -94,7 +94,6 @@
           {{ cycleType(item) }}
         </template>
       </template>
-
       <template v-slot:time="{item}">
         <template v-if="item.type==1">...</template>
         <template v-else>
@@ -344,7 +343,7 @@ export default {
       this.AnnounceTitle="Client"
     },
     showRecord(item){
-        this.goTo("announcement-id", { id: item.id });
+      this.goTo("announcement-id", { id: item.id });
     },
   },
 };

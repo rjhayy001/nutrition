@@ -458,7 +458,7 @@
                 </v-btn>
               </div>
             </div>
-            <div v-else class="form-footer d-flex justify-content-end">
+            <div v-else class="form-footer d-flex justify-end">
               <v-btn class="success" @click="saveForm">
                 <v-icon>mdi-content-save-outline</v-icon>
                 {{ payload.id ? "update" : "saves" }}

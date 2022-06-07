@@ -73,8 +73,9 @@
 </template>
 <script>
 import formDrawer from "~/components/clients/photos/form.vue";
+import pinnedMessages from '@/components/clients/chats/pinnedMessages.vue'
 export default {
-  components: { formDrawer },
+  components: { formDrawer, pinnedMessages },
   data(){
     return {
       drawer1:false,
