@@ -39,13 +39,6 @@
 
       </v-layout>
       <default-view
-        v-if="default_view"
-        :data="data"
-        @openDetails="openDetails"
-        @download="downloadImage"
-      />
-      <list-view
-        v-else
         :data="data"
         @openDetails="openDetails"
         @download="downloadImage"
@@ -55,7 +48,7 @@
 </template>
 <script>
 import formDrawer from "~/components/clients/photos/form.vue";
-import defaultView from "~/components/clients/photos/view/default.vue";
+import defaultView from "~/components/clients/photos/view/coaching.vue";
 import listView from "~/components/clients/photos/view/list.vue";
 export default {
   components: {
