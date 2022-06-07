@@ -8,6 +8,7 @@
       :sort-desc.sync="isDescending"
       class="custom-table"
       @addRecord="addRecord"
+      @sortTable="sortTable"
       @reloadtable="initalize()"
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
@@ -186,7 +187,22 @@ export default {
           this.initalize()
         })
       })
-    }
+    },
+    sortTable(query) {
+      let sortBy = null;
+      if(query.sortType){
+        sortBy = `${query.value},${query.sortType == 1 ? 'asc' : 'desc'}`
+        this.$axios
+        .get(`${this.$blogs}?${this.urlQuery()}&sort=${sortBy}`)
+        .then(({ data }) => {
+          this.data = data.data;     
+          this.options = data.options;
+        });
+      }
+      else{
+        this.initalize();
+      } 
+    },
   },
 };
 </script>

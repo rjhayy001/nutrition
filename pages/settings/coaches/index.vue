@@ -13,6 +13,7 @@
       class="custom-table"
       @addRecord="addRecord"
       @showRecord="showRecord($event)"
+      @sortTable="sortTable"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
@@ -249,6 +250,7 @@ export default {
         .then(({ data }) => {
           this.data = data.data;
           this.options = data.options;
+          console.log(data, 'query fdaoajf')
         });
     },
     addRecord() {
@@ -332,7 +334,24 @@ export default {
       .then(({ data }) => {
         this.statistics = data
       });
-    }
+    },
+    sortTable(query) {
+      //console.log(query, 'query1st')
+      let sortBy = null;
+      if(query.sortType){
+        sortBy = `${query.value},${query.sortType == 1 ? 'asc' : 'desc'}`
+        this.$axios
+        .get(`${this.$coaches}?${this.urlQuery()}&relations=taggable,groupable,country,city,zipcode&sort=${sortBy}`)
+        .then(({ data }) => {
+          this.data = data.data;     
+          this.options = data.options;
+          console.log(data, 'query fdaoajf')
+        });
+      }
+      else{
+        this.initialize();
+      } 
+    },
   },
 };
 </script>

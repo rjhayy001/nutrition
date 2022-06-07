@@ -3,21 +3,13 @@
     <subscription-form :drawerStatus="drawer" @closeDrawer="drawer = !drawer" @addRecord="addRecord($event)"
       :selectedItem="selectedItem" />
 
-    <data-table 
-      :options="options" 
-      :title="title" 
-      :headers="headers" 
-      :data="data" 
-      class="custom-table"
-      @sortTable="sortTable"
-      @addRecord="addRecord" 
-      @deleteRecord="deleteRecord($event)" 
-      @reloadtable="initialize()"
-      @FilterBy="filterBy($event)" 
-      @updatePagenum="updatePagenum($event)"
-    >
+    <data-table :options="options" :title="title" :headers="headers" :data="data" class="custom-table"
+      @addRecord="addRecord" @deleteRecord="deleteRecord($event)" @sortTable="sortTable" @reloadtable="initalize()"
+      @FilterBy="filterBy($event)" @updatePagenum="updatePagenum($event)">
 
-      <template v-slot:status="{ item }">
+
+
+      <!-- <template v-slot:status="{ item }">
         <v-chip outlined label :color="statuses[item.status].color" v-if="statuses[item.status]">
           <v-icon left>mdi-{{ statuses[item.status].icon }}</v-icon>
           {{ statuses[item.status].label }}
@@ -66,7 +58,7 @@
             <span>Restaurer</span>
           </v-tooltip>
         </div>
-      </template>
+      </template> -->
 
     </data-table>
   </v-container>
@@ -77,7 +69,6 @@ import tableHelper from "~/mixins/tableHelper.vue";
 import subscriptionForm from "~/components/subscription/form.vue"
 import priceHelperVue from '~/mixins/priceHelper.vue';
 export default {
-  name: "index",
   components: { dataTable, subscriptionForm },
   mixins: [tableHelper, priceHelperVue],
   data() {
@@ -88,49 +79,137 @@ export default {
         {
           text: "#",
           value: "id",
-          width: '2%',
+          width: "1%",
         },
         {
-          text: "Client",
-          value: "client",
+          text: "Full Name",
+          value: "full_name",
           filterable: true,
           sortType: null,
-          filterValue: ''
+          filterValue: "",
+          width: "20%",
         },
         {
-          text: "Abonnement",
-          value: "price",
+          text: "Birthday",
+          value: "birthday",
           filterable: true,
           sortType: null,
-          filterValue: ''
+          filterValue: "",
+          width: "10%",
+        },
+        {
+          text: "Email",
+          value: "email",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
+          width: "10%",
+        },
+        {
+          text: "Phone",
+          value: "phone",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
+          width: "10%",
+        },
+        {
+          text: "Address",
+          value: "address",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
+          width: "15%",
         },
         {
           text: "Status",
           value: "status",
-          filterable: true,
-          sortable: true,
-          sortType: null,
-          filterValue: '',
+          width: "1%",
         },
         {
-          text: "Début",
-          value: "start_date",
+          text: "Tags",
+          value: "taggable",
           filterable: true,
           sortType: null,
-          filterValue: '',
+          filterValue: "",
+          width: "15%",
         },
         {
-          text: "Fin",
-          value: "end_date",
+          text: "Groups",
+          value: "groupable",
           filterable: true,
           sortType: null,
-          filterValue: '',
+          filterValue: "",
+          width: "15%",
+        },
+        {
+          text: "Created at",
+          value: "created_at",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
+          width: "5%",
+        },
+        {
+          text: "Updated at",
+          value: "updated_at",
+          filterable: true,
+          sortType: null,
+          filterValue: "",
+          width: "5%",
         },
         {
           text: "Action",
-          value: "action"
+          value: "action",
         },
       ],
+      // headers: [
+      //   {
+      //     text: "#",
+      //     value: "id",
+      //     width: '2%',
+      //   },
+      //   {
+      //     text: "Client",
+      //     value: "client",
+      //     filterable: true,
+      //     sortType: null,
+      //     filterValue: ''
+      //   },
+      //   {
+      //     text: "Abonnement",
+      //     value: "price",
+      //     filterable: true,
+      //     sortType: null,
+      //     filterValue: ''
+      //   },
+      //   {
+      //     text: "Status",
+      //     value: "status",
+      //     filterable: true,
+      //     sortable: true,
+      //     sortType: null,
+      //     filterValue: '',
+      //   },
+      //   {
+      //     text: "Début",
+      //     value: "start_date",
+      //     filterable: true,
+      //     sortType: null,
+      //     filterValue: '',
+      //   },
+      //   {
+      //     text: "Fin",
+      //     value: "end_date",
+      //     filterable: true,
+      //     sortType: null,
+      //     filterValue: '',
+      //   },
+      //   {
+      //     text: "Action",
+      //     value: "action"
+      //   },
+      // ],
       data: [],
       drawer: false,
       selectedItem: {},
@@ -174,15 +253,21 @@ export default {
   };
 },
 mounted() {
-  this.initialize()
+  this.initalize()
 },
 methods: {
-  initialize() {
-    this.$axios.get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client`).then(({ data }) => {
-      this.data = data.data
-      this.options = data.options
-    })
+  initalize() {
+    this.getTableRecords();
   },
+  getTableRecords() {
+      this.$axios
+        .get(`${this.$coaches}?${this.urlQuery()}&relations=taggable,groupable,country,city,zipcode`)
+        .then(({ data }) => {
+          this.data = data.data;
+          this.options = data.options;
+          console.log(data, 'query fdaoajf')
+        });
+    },
   // initalize(sortBy) {
   //   this.data = []
   //   this.$axios.get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client&sort=${sortBy??null}`).then(({ data }) => {
@@ -227,33 +312,17 @@ methods: {
     let sortBy = null;
     if(query.sortType){
       sortBy = `${query.value},${query.sortType == 1 ? 'asc' : 'desc'}`
-      this.$axios
-      .get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client&sort=${sortBy}`)
-      .then(({ data }) => {
-        this.data = data.data;     
-        this.options = data.options;
-        console.log(this.data, 'datajmalkjfklaj')
-      });
+      // this.$axios
+      // .get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client&sort=${sortBy}`)
+      // .then(({ data }) => {
+      //   this.data = data.data;     
+      //   this.options = data.options;
+      // });
     }
     else{
-      this.initialize();
-    } 
+      } 
+      this.initalize(sortBy);
   }
-  // sortTable(query) {
-  //   let sortBy = null;
-  //   if(query.sortType){
-  //     sortBy = `${query.value},${query.sortType == 1 ? 'asc' : 'desc'}`
-  //     // this.$axios
-  //     // .get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client&sort=${sortBy}`)
-  //     // .then(({ data }) => {
-  //     //   this.data = data.data;     
-  //     //   this.options = data.options;
-  //     // });
-  //   }
-  //   else{
-  //     } 
-  //     this.initalize(sortBy);
-  // }
 },
 };
 </script>
