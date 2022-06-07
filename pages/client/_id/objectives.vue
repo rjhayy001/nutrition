@@ -1,19 +1,28 @@
 <template>
   <v-container grid-list-md>
     <v-layout row wrap>
-      <v-flex xs12 class="pb-0">
+      <v-flex xs12 class="pb-5">
         <div class="toolbar-container">
-          <v-toolbar flat dense >
-            <v-toolbar-title class="title-header">Objectives</v-toolbar-title>
+          <v-toolbar  flat outlined color="primary" dark>
+            <v-toolbar-title>Objectives</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn color="success" small>
-              <v-icon left>mdi-plus</v-icon>
-              add
-            </v-btn>
+            <div style="width: 400px;">
+              <v-text-field
+                clearable
+                filled
+                rounded
+                hide-details=""
+                placeholder="Search items by title, description ..."
+                height="10"
+                dense
+                append-icon="mdi-magnify"
+              ></v-text-field>
+            </div>
+            <v-icon class="mx-2">mdi-plus</v-icon>
             <pinned-messages/>
           </v-toolbar>
         </div>
-      </v-flex>
+        </v-flex>
       <v-flex xs12 class="pb-0">
         <v-btn large outlined tile color="primary">02.22.22 / 09.22.22</v-btn>
         <v-layout row wrap>
@@ -21,13 +30,14 @@
               <v-card class="mt-4 scrollable-element">
                 <v-subheader class="title-header pos-sticky" dense>
                   NOM LISTE OBJECTIF {{item}}
+                  <v-spacer></v-spacer>
+                  <v-icon icon color="primary">mdi-plus</v-icon>
                 </v-subheader>
                 <div class="ml-4">
                   <v-checkbox
                     dense
                     class="my-0 list-box"
                     v-for="(check, check_index) in 10" :key="check_index+'check'"
-                    label=" LOREM IPSUM GENERATOR "
                     hide-details="auto"
                     value="John"
                     style="font-size:13px !important;"
@@ -36,7 +46,6 @@
                       <span class="text-capitalize" style="font-size:14px !important">lorem ipsum generator {{check}}</span>
                     </template>
                   </v-checkbox>
-                  <v-checkbox label="test"></v-checkbox>
                 </div>
               </v-card>
             </v-flex>

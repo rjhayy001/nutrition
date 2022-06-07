@@ -31,6 +31,18 @@ Vue.mixin({
     showPrice(price = '') {
       if (!price) price = 0
       return `${price.toFixed(2)} €`
+    },
+    imageUrl(folder, id, filename) {
+      const url = this.$imageUrl+folder+'/'+id+'/'+filename
+      return url;
+    },
+    download(data, payload){
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', payload.file_name);
+      document.body.appendChild(link);
+      link.click();
     }
   }
 })

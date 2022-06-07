@@ -107,7 +107,7 @@ button {
     margin-bottom: 2rem! important;
     font-size: 20px !important;
   }
- 
+
 }
 
 /*
@@ -140,7 +140,7 @@ button {
 
   .v-app-bar__nav-icon {
     position: absolute;
-    top: 25px; 
+    top: 25px;
     right: 1rem;
     color: white;
 
@@ -173,7 +173,7 @@ button {
   .subtitle-2 {
     text-transform: capitalize !important;
   }
-  
+
   .profile-box {
     text-align: center;
   }
@@ -181,7 +181,7 @@ button {
   .v-text-field {
     border-radius: 2px !important;
   }
-  
+
   .v-input__slot {
     box-shadow: none !important;
     border: 1px solid #d7d2d2;
@@ -206,6 +206,10 @@ button {
   .profile-image {
     text-align: center;
   }
+}
+
+.pointer{
+  cursor: pointer!important;
 }
 
 /*
