@@ -65,7 +65,6 @@
                                             <span class="white--text text-caption" v-else>{{ item | initials }}</span>
                                         </v-avatar>
                                         <span class="pl-2">
-                                        {{item.coach.id}}
                                             {{ item.full_name }}
                                         </span>
                                     </v-flex>
@@ -196,7 +195,7 @@ export default {
     },
 
     methods: {
-        
+
         async saveForm (data) {
             console.log(this.payload)
             const response = await this.$axios.post(`${this.$subscriptions}`, this.payload)
