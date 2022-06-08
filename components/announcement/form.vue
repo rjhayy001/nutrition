@@ -48,7 +48,7 @@
                     class="user-checkbox"
                     v-model="selectedCoachType"
                     label="Have Client"
-                    value="have-clients"
+                    value="client"
                     @change="getCoaches($event)"
                     id="subscriber"
                   ></v-checkbox>
@@ -56,7 +56,7 @@
                     class="user-checkbox"
                     v-model="selectedCoachType"
                     label="Do not have Client"
-                    value="dont-have-clients"
+                    value="not-client"
                     @change="getCoaches($event)"
                     id="non-subscriber"
                   ></v-checkbox>
