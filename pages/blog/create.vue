@@ -1,14 +1,13 @@
 <template>
   <div>
-    <form-page @addRecord="add"></form-page>
+    <form-page></form-page>
   </div>
 </template>
 <script>
-import formPage from "~/components/blog/form.vue";
+import formPage from "~/components/blogs/form.vue";
 export default {
   components:{
     formPage
   }
-
 }
 </script>

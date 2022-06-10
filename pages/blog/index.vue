@@ -8,7 +8,7 @@
       :sort-desc.sync="isDescending"
       class="custom-table"
       @addRecord="addRecord"
-      @reloadtable="initalize()"
+      @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
       @searchRecords="searchRecords($event)"
@@ -23,6 +23,9 @@
           dense
           hide-details=""
         ></v-switch>
+      </template>
+      <template v-slot:content="{ item }">
+        <div v-html="item.content"></div>
       </template>
       <template v-slot:created_at="{ item }">
         {{ formatDate(item.created_at) }}
@@ -153,17 +156,16 @@ export default {
     };
   },
   mounted() {
-    this.initalize();
+    this.initialize();
   },
   methods: {
-    initalize() {
-
+    initialize() {
       this.$axios.get(`${this.$blogs}?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
       })
     },
-    addRecord(payload) {
+    addRecord() {
       this.goTo("blog-create");
     },
     deleteRecord(items) {
@@ -171,7 +173,7 @@ export default {
         let ids = this.getIds(items)
         this.$axios.delete(`${this.$blogs}/${ids}`).then(({data}) => {
           this.successNotification(items, 'deleted', 'name', 'color', 'description')
-          this.initalize()
+          this.initialize()
         })
       });
     },
@@ -183,7 +185,7 @@ export default {
       this.update().then(() => {
         this.$axios.put(`${this.$blogs}/${payload.id}`, payload).then(({data}) => {
           this.successNotification(data, 'updated', 'country', 'countries', 'short_name')
-          this.initalize()
+          this.initialize()
         })
       })
     }
