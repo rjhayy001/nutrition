@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer temporary right fixed v-model="drawerStatus" width="50%">
+    <v-navigation-drawer temporary right fixed v-model="drawer" width="50%">
         <p class="pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
             {{ !payload.id ? "Ajouter" : "Modifier" }} un abonnement
             <v-btn icon small @click="$emit('closeDrawer')">
@@ -17,6 +17,36 @@
                                 Client
                             </p>
                             <v-autocomplete clearable label="Selectionner un client" :items="clients" item-value="id" v-model="payload.client_id" :filter="filterClients" hide-details="auto" solo>
+                                <template v-slot:item="{ item, on, attrs }">
+                                    <v-list-item v-on="on" v-bind="attrs">
+                                        <v-list-item-avatar color="primary">
+                                            <v-img :src="item.logo" v-if="item.logo != null"></v-img>
+                                            <span class="white--text" v-else>{{ item | initials }}</span>
+                                        </v-list-item-avatar>
+                                        <v-list-item-title>
+                                            {{ item.full_name }}
+                                        </v-list-item-title>
+                                    </v-list-item>
+                                </template>
+                                <template v-slot:selection="{ item }">
+                                    <v-flex class="d-flex align-center">
+                                        <v-avatar color="primary" size="30">
+                                            <v-img :src="item.logo" v-if="item.logo != null"></v-img>
+                                            <span class="white--text text-caption" v-else>{{ item | initials }}</span>
+                                        </v-avatar>
+                                        <span class="pl-2">
+                                            {{ item.full_name }}
+                                        </span>
+                                    </v-flex>
+                                </template>
+                            </v-autocomplete>
+                        </v-flex>
+
+                        <v-flex xs12>
+                            <p class="subtitle-2 font-weight-regular mb-2">
+                                Coach
+                            </p>
+                            <v-autocomplete clearable label="Selectionner un coach" :items="coaches" item-value="id" v-model="payload.coach_id" :filter="filterClients" hide-details="auto" solo>
                                 <template v-slot:item="{ item, on, attrs }">
                                     <v-list-item v-on="on" v-bind="attrs">
                                         <v-list-item-avatar color="primary">
@@ -138,20 +168,34 @@ export default {
     data: () => ({
         payload: {
             client_id: null,
+            coach_id: null,
             plan_id: null,
             price_id: null,
         },
         plans: [],
         clients: [],
+        coaches: [],
+        drawer:false,
     }),
 
     mounted() {
         this.fetchPlans()
         this.fetchClients()
+        this.fetchCoaches()
+    },
+    watch: {
+        drawerStatus(val) {
+            this.drawer = val;
+        },
+        drawer(val) {
+            if (!val) {
+                this.$emit("closeDrawer");
+            }
+        },
     },
 
     methods: {
-        
+
         async saveForm (data) {
             console.log(this.payload)
             const response = await this.$axios.post(`${this.$subscriptions}`, this.payload)
@@ -159,8 +203,13 @@ export default {
         },
 
         async fetchClients() {
-            const { data: response } = await this.$axios.get(`${this.$clients}`)
+            const { data: response } = await this.$axios.get(`${this.$clients}?no-paginate=true`)
             this.clients = response.data
+        },
+
+        async fetchCoaches() {
+            const { data: response } = await this.$axios.get(`${this.$coaches}?no-paginate=true`)
+            this.coaches = response.data
         },
 
         async fetchPlans() {

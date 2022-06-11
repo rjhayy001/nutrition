@@ -36,7 +36,7 @@ export default {
             },
             {
               title: 'Formulaire',
-              to: 'client-id-coaching-formula',
+              to: 'client-id-coaching-formula-food',
             },
             {
               title: 'Tracking',
@@ -45,6 +45,10 @@ export default {
             {
               title: 'Photos',
               to: 'client-id-coaching-photos',
+            },
+            {
+              title: 'Objective',
+              to: 'client-id-coaching-objective',
             },
             {
               title: 'Feedback',
@@ -57,17 +61,6 @@ export default {
           icon: 'mdi-chat-plus-outline',
           to: 'client-id-chat',
         },
-        {
-          title: 'Objectives',
-          icon: 'mdi-store-outline',
-          to: 'client-id-objectives',
-        },
-        // {
-        //   title: 'Suivi',
-        //   icon: 'mdi-car-shift-pattern',
-        //   to:'new-client-follow',
-        //   total_records:'7'
-        // },
         {
           title: 'Photos',
           icon: 'mdi-image-multiple',
