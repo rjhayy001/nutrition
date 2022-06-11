@@ -6,7 +6,7 @@
     <data-table :options="options" :title="title" :headers="headers" :data="data"
       searchPlaceholder="Short name, Long name, Code" class="custom-table" @addRecord="drawer = !drawer"
       @deleteRecord="deleteRecord($event)" @reloadtable="initialize()" @FilterBy="filterBy($event)"
-      @updatePagenum="updatePagenum($event)" @searchRecords="searchRecords($event)" @editRecord="editRecord($event)">
+      @updatePagenum="updatePagenum($event)" :currentUrl="url" @searchRecords="searchRecords($event)" @editRecord="editRecord($event)">
 
       <template v-slot:description="{ item }">
         <v-tooltip bottom>
@@ -60,17 +60,18 @@ export default {
       title: "Plans",
       headers: [
         { text: "#", value: "id", width: "2%" },
-        { text: "Nom", value: "name" },
-        { text: "Description", value: "description" },
-        { text: "Prix", value: "prices" },
+        { text: "Nom", value: "name", filterable: true, sortType: null, filterValue: "" },
+        { text: "Description", value: "description", filterable: true, sortType: null, filterValue: "" },
+        { text: "Prix", value: "prices", filterable: true, sortType: null, filterValue: "" },
         { text: "Actif", value: "status" },
-        { text: "Créé le", value: "created_at" },
-        { text: "Mis à jour le", value: "updated_at" },
+        { text: "Créé le", value: "created_at", filterable: true, sortType: null, filterValue: "" },
+        { text: "Mis à jour le", value: "updated_at", filterable: true, sortType: null, filterValue: "" },
         { text: "Actions", value: "action" },
       ],
       data: [],
       drawer: false,
       selectedItem: {},
+      url: ''
     };
   },
   mounted() {
@@ -83,6 +84,7 @@ export default {
         .then(({ data }) => {
           this.data = data.data;
           this.options = data.options;
+          this.url = `${this.$plans}?${this.urlQuery()}&relations=prices`
         });
     },
     addRecord(payload) {

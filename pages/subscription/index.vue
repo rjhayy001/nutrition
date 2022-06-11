@@ -8,8 +8,8 @@
       :title="title" 
       :headers="headers" 
       :data="data" 
+      :currentUrl="url"
       class="custom-table"
-      @sortTable="sortTable"
       @addRecord="addRecord" 
       @deleteRecord="deleteRecord($event)" 
       @reloadtable="initialize()"
@@ -134,6 +134,7 @@ export default {
       data: [],
       drawer: false,
       selectedItem: {},
+      url: '',
       statuses: [
         {
           label: "Annulé",
@@ -181,16 +182,9 @@ methods: {
     this.$axios.get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client`).then(({ data }) => {
       this.data = data.data
       this.options = data.options
+      this.url = `${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client`
     })
   },
-  // initalize(sortBy) {
-  //   this.data = []
-  //   this.$axios.get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client&sort=${sortBy??null}`).then(({ data }) => {
-  //     this.data = data.data
-  //     console.log(this.data,"data sssssssssss")
-  //     this.options = data.options
-  //   })
-  // },
   addRecord() {
     this.drawer = true
   },
@@ -239,21 +233,6 @@ methods: {
       this.initialize();
     } 
   }
-  // sortTable(query) {
-  //   let sortBy = null;
-  //   if(query.sortType){
-  //     sortBy = `${query.value},${query.sortType == 1 ? 'asc' : 'desc'}`
-  //     // this.$axios
-  //     // .get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client&sort=${sortBy}`)
-  //     // .then(({ data }) => {
-  //     //   this.data = data.data;     
-  //     //   this.options = data.options;
-  //     // });
-  //   }
-  //   else{
-  //     } 
-  //     this.initalize(sortBy);
-  // }
 },
 };
 </script>

@@ -14,7 +14,7 @@
       searchPlaceholder="Short name, Long name, Code"
       class="custom-table"
       @addRecord="drawer = !drawer"
-      @sortTable="sortTable"
+      :currentUrl="url"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
@@ -65,7 +65,8 @@ export default {
       ],
       data: [],
       drawer:false,
-      selectedItem:{}
+      selectedItem:{},
+      url: ''
     };
   },
   mounted() {
@@ -76,6 +77,7 @@ export default {
       this.$axios.get(`${this.$countries}?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
+        this.url = `${this.$countries}?${this.urlQuery()}`
       })
     },
     addRecord(payload) {
@@ -113,21 +115,6 @@ export default {
           this.initialize()
         })
       })
-    },
-    sortTable(query) {
-      let sortBy = null;
-      if(query.sortType){
-        sortBy = `${query.value},${query.sortType == 1 ? 'asc' : 'desc'}`
-        this.$axios
-        .get(`${this.$countries}?${this.urlQuery()}&sort=${sortBy}`)
-        .then(({ data }) => {
-          this.data = data.data;     
-          this.options = data.options;
-        });
-      }
-      else{
-        this.initialize();
-      } 
     },
   },
 };

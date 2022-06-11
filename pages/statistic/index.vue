@@ -22,7 +22,7 @@
       :data="data"
       class="custom-table"
       @addRecord="addRecord"
-      @sortTable="sortTable"
+      :currentUrl="url"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initalize()"
       @FilterBy="filterBy($event)"
@@ -100,7 +100,8 @@ export default {
         },
       ],
       data: [],
-      drawer1:false
+      drawer1:false,
+      url: ''
     };
   },
   mounted() {
@@ -111,6 +112,7 @@ export default {
       this.$axios.get(`clients?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
+        this.url = `clients?${this.urlQuery()}`
       })
     },
     addRecord() {
@@ -134,21 +136,6 @@ export default {
           this.initalize()
         })
       });
-    },
-    sortTable(query) {
-      let sortBy = null;
-      if(query.sortType){
-        sortBy = `${query.value},${query.sortType == 1 ? 'asc' : 'desc'}`
-        this.$axios
-        .get(`clients?${this.urlQuery()}&sort=${sortBy}`)
-        .then(({ data }) => {
-          this.data = data.data;     
-          this.options = data.options;
-        });
-      }
-      else{
-        this.initalize();
-      } 
     },
   },
 };

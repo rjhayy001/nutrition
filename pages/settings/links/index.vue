@@ -14,7 +14,7 @@
       searchPlaceholder="Name, Description, Links"
       class="custom-table"
       @addRecord="drawer1 = !drawer1"
-      @sortTable="sortTable"
+      :currentUrl="url"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
@@ -68,7 +68,8 @@ export default {
       ],
       data: [],
       drawer1:false,
-      selectedItem:{}
+      selectedItem:{},
+      url: ''
     };
   },
   mounted() {
@@ -79,6 +80,7 @@ export default {
       this.$axios.get(`${this.$links}?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
+        this.url = `${this.$links}?${this.urlQuery()}`
       })
     },
     addRecord(payload) {

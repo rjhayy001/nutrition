@@ -62,7 +62,6 @@ export default {
   },
   methods: {
     initalize() {
-
       this.$axios.get(`${this.$tags}?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options

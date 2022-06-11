@@ -6,6 +6,7 @@
     />
     <data-table
       :options="options"
+      :currentUrl="url"
       :title="title"
       :headers="headers"
       :data="data"
@@ -13,7 +14,6 @@
       class="custom-table"
       @addRecord="addRecord"
       @showRecord="showRecord($event)"
-      @sortTable="sortTable"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
@@ -197,6 +197,7 @@ export default {
       data: [],
       drawer1:false,
       isDescending: true,
+      url:''
     };
   },
   mounted() {
@@ -247,6 +248,7 @@ export default {
       this.$axios.get(`${this.$clients}?${this.urlQuery()}&relations=taggable,groupable,country,city,zipcode`).then(({data}) => {
         this.data = data.data
         this.options = data.options
+        this.url = `${this.$clients}?${this.urlQuery()}&relations=taggable,groupable,country,city,zipcode`
       })
     },
     showRecord(item){
@@ -331,23 +333,23 @@ export default {
         this.statistics = data
       });
     },
-    sortTable(query) {
-      console.log(query, 'client testing')
-      let sortBy = null;
-      if(query.sortType){
-        sortBy = `${query.value},${query.sortType == 1 ? 'asc' : 'desc'}`
-        this.$axios
-        .get(`${this.$clients}?${this.urlQuery()}&relations=taggable,groupable,country,city,zipcode&sort=${sortBy}`)
-        .then(({ data }) => {
-          this.data = data.data;     
-          this.options = data.options;
-          console.log(data, 'query fdaoajf')
-        });
-      }
-      else{
-        this.initialize();
-      } 
-    }
+    // sortTable(query) {
+    //   console.log(query, 'client testing')
+    //   let sortBy = null;
+    //   if(query.sortType){
+    //     sortBy = `${query.value},${query.sortType == 1 ? 'asc' : 'desc'}`
+    //     this.$axios
+    //     .get(`${this.$clients}?${this.urlQuery()}&relations=taggable,groupable,country,city,zipcode&sort=${sortBy}`)
+    //     .then(({ data }) => {
+    //       this.data = data.data;     
+    //       this.options = data.options;
+    //       console.log(data, 'query fdaoajf')
+    //     });
+    //   }
+    //   else{
+    //     this.initialize();
+    //   } 
+    // }
   },
 };
 </script>

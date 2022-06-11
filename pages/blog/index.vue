@@ -8,7 +8,7 @@
       :sort-desc.sync="isDescending"
       class="custom-table"
       @addRecord="addRecord"
-      @sortTable="sortTable"
+      :currentUrl="url"
       @reloadtable="initalize()"
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
@@ -151,6 +151,7 @@ export default {
       data: [],
       drawer: false,
       isDescending: true,
+      url: ''
     };
   },
   mounted() {
@@ -161,6 +162,7 @@ export default {
       this.$axios.get(`${this.$blogs}?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
+        this.url = `${this.$blogs}?${this.urlQuery()}`
       })
     },
     addRecord(payload) {
