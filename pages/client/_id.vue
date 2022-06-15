@@ -31,12 +31,12 @@ export default {
               to: 'client-id-coaching-global',
             },
             {
-              title: 'Measures',
-              to: 'client-id-coaching-measure',
-            },
-            {
               title: 'Formulaire',
               to: 'client-id-coaching-formula-food',
+            },
+            {
+              title: 'Measures',
+              to: 'client-id-coaching-measure',
             },
             {
               title: 'Tracking',

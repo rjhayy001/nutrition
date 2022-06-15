@@ -18,6 +18,7 @@
       <v-flex
         sm2
         class="mb-2"
+        v-if="!hide_status"
       >
         <v-card class="custom-card">
           homme celibataire pas d'enfants
@@ -107,6 +108,16 @@
     </v-layout>
   </v-container>
 </template>
+<script>
+export default {
+   props:{
+    hide_status:{
+      type: Boolean,
+      default:false
+    },
+  }
+}
+</script>
 <style scoped>
 .custom-card {
   text-transform: capitalize;
