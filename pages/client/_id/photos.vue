@@ -32,7 +32,6 @@
               {{!default_view ? 'mdi-view-grid-outline' : 'mdi-format-list-bulleted'}}
             </v-icon>
             <v-icon class="mx-2" @click="drawer1=true">mdi-plus</v-icon>
-            <pinned-messages/>
           </v-toolbar>
         </div>
         </v-flex>
