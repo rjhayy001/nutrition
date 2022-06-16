@@ -248,6 +248,7 @@ export default {
             if(sortInt==null){
               if(element==tableColumn+'/desc'){
                 this.sortData.splice(this.sortData.indexOf(element),1)
+                this.columnName.splice(index,1)
               }
             }else{
               this.sortData[index] = type[0] + '/' + sortInt
@@ -259,13 +260,21 @@ export default {
         this.sortData.push(tableColumn + '/' + sortInt)
       }
       toSort = this.sortData.join()
-
-      this.$axios
-        .get(`${this.realUrl}&sort=${toSort}`)
-        .then(({ data }) => {
-          this.currentdata = data.data;     
-          this.currentoptions = data.options;
-        });
+      if(!this.columnName || this.columnName.length == 0){
+        this.$axios
+          .get(`${this.realUrl}`)
+          .then(({ data }) => {
+            this.currentdata = data.data;     
+            this.currentoptions = data.options;
+          });
+      }else{
+        this.$axios
+          .get(`${this.realUrl}&sort=${toSort}`)
+          .then(({ data }) => {
+            this.currentdata = data.data;     
+            this.currentoptions = data.options;
+          });
+      }
     },
     toggleMultipleItems() {
       this.isAllSelected = !this.isAllSelected;
