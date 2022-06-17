@@ -33,7 +33,7 @@
 					.then((result) => {
 						if (result) {
 							resolve(result)
-						} 
+						}
 					}).catch(error => {
 						reject(error);
 					})
