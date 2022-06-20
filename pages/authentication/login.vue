@@ -83,7 +83,7 @@ export default {
    data() {
      return {
        admin: {
-         email:'admin@gmail.com',
+         email:'CoachQonvex@dev.com',
          password:'password'
        },
        loading:false,
