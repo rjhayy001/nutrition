@@ -16,6 +16,9 @@ export default {
   },
   mounted() {
     this.findRecord();
+    // console.log(`${this.$clients}`);
+    // console.log('test');
+    // console.log(`${this.$route.params.id}`);
   },
   methods: {
     findRecord() {
