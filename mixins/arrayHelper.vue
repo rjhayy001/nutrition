@@ -7,6 +7,9 @@ export default {
     $arrayupdater (item, array_given) {
       array_given.unshift(item);
     },
+    $isIncluded(item,array_given){
+      return array_given.includes(item)
+    }
   }
 }
 </script>

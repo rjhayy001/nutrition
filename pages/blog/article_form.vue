@@ -2,20 +2,15 @@
   <ValidationObserver ref="form">
     <v-form class="form-box" @submit.prevent="saveForm">
       <v-container grid-list-md fluid>
-        <tag-form-drawer
-          :drawerStatus="tagDrawer"
-          @addRecord="addTagRecord($event)"
-          @updateRecord="updateRecord($event)"
-          :selectedItem="selectedItem"
-        >
-        </tag-form-drawer>
-        <group-form-drawer
-          :drawerStatus="groupDrawer"
-          @addRecord="addGroupRecord($event)"
-          @updateRecord="updateRecord($event)"
-          :selectedItem="selectedItem"
-        >
-        </group-form-drawer>
+        <view-Category
+          :drawerStatus="viewCategory"
+          @close="viewCategory=false"
+          :updateData="updateData"
+        />
+        <view-Subcategory
+          :drawerStatus="viewSubcategory"
+          @close="viewSubcategory=false"
+        />
         <v-layout row wrap>
           <v-flex xs12 class="mb-2">
             <div class="d-flex align-center py-2 data-table-cus">
@@ -122,7 +117,6 @@
                       multiple
                       ref="select_image"
                     />
-                    <!-- <v-btn class="_button font-weight-medium" outlined @click="selectImage" small>Select Image</v-btn> -->
                     <v-dialog
                       max-width="55%"
                       transition="dialog-top-transition"
@@ -140,10 +134,6 @@
                         </v-btn>
                       </template>
                       <v-card id="_card" class="pb-15 px-2">
-                        <!-- <content-preview :contents="payload.content"></content-preview> -->
-                        <!-- <div>
-                        {{payload.content}}
-                      </div> -->
                         <div class="py-3 px-3">
                           <v-layout>
                             <v-flex xs3>
@@ -218,7 +208,6 @@
 
                 <div style="width: 100%; height: 100%">
                   <div>
-                    <!-- <vue-responsive-image :image-url="images" :image-ratio="17/10"></vue-responsive-image> -->
                     <v-img
                       :src="images"
                       :aspect-ratio="1.9"
@@ -227,22 +216,8 @@
                       srcset
                       lazy-src
                     ></v-img>
-                    <!-- <div class="details">
-                    <span class="name" v-text="files[index].name"></span>
-                    <span class="size" v-text="files[index].size"></span>
-                  </div> -->
                   </div>
                 </div>
-
-                <!-- <div>
-                <div class="wrapper">
-                  <img :src="images">
-                  <div class="details">
-                    <span class="name" v-text="files[index].name"></span>
-                    <span class="size" v-text="files[index].size"></span>
-                  </div>
-                </div>
-              </div> -->
               </div>
 
               <span class="sub_options"> or Add image Url </span>
@@ -252,16 +227,15 @@
                 outlined
                 dense
                 @change="watchImageUrl(payload.image)"
-              >
-              </v-text-field>
+              ></v-text-field>
+
               <span class="sub_options"> Image Description </span>
               <v-text-field
                 v-model="payload.image_description"
                 placeholder="Image Description"
                 outlined
                 dense
-              >
-              </v-text-field>
+              ></v-text-field>
 
               <div>
                 <span class="sub_options">Add more Images</span>
@@ -273,8 +247,7 @@
                   outlined
                   @click="$refs.activateUploaderDialog.$el.click()"
                   small
-                  >Select more Images</v-btn
-                >
+                >Select more Images</v-btn>
               </div>
 
               <div class="pad_top">
@@ -288,33 +261,79 @@
                   outlined
                   @click="addFiles"
                   small
-                  >Add files</v-btn
                 >
+                  Add files
+                </v-btn>
               </div>
 
               <div class="pad_top" id="category">
                 <span class="font-weight-regular"> Category </span>
-                <p class="sub_options" id="sub_opChild">Language</p>
-                <v-select
-                  dense
-                  outlined
-                  v-model="payload.languages"
-                  :items="languages"
-                ></v-select>
-                <p class="sub_options">Category</p>
-                <v-select
-                  dense
-                  outlined
-                  v-model="payload.categories"
-                  :items="categories"
-                ></v-select>
-                <p class="sub_options">Subcategory</p>
-                <v-select
-                  dense
-                  outlined
-                  v-model="payload.sub_categories"
-                  :items="payload.sub_categories"
-                ></v-select>
+                <div>
+                  <p class="sub_options" id="sub_opChild">Language</p>
+                  <v-select
+                    dense
+                    outlined
+                    v-model="payload.languages"
+                    :items="languages"
+                  ></v-select>
+                </div>
+
+                <div class="mb-5">
+                  <div class="d-flex mb-1" style="justify-content:space-between">
+                    <p class="sub_options">Category</p>
+                    <v-btn 
+                      class="_button font-weight-regular"
+                      x-small
+                      outlined
+                       @click.stop="viewCategory = !viewCategory"
+                    >View</v-btn>
+                  </div>
+                  <v-autocomplete
+                    flat
+                    dense
+                    outlined
+                    hide-no-data
+                    return-object
+                    item-value="id"
+                    item-text="name"
+                    hide-details="auto"
+                    v-model="payload.category"
+                    @click:prepend-inner.stop="addCategory"
+                    @change="resetCategory"
+                    :loading="loading"
+                    :items="categories"
+                    :search-input.sync="search"
+                    :prepend-inner-icon="this.empty? 'mdi-plus': ''"
+                  ></v-autocomplete>
+                </div>
+
+                <div>
+                  <div class="d-flex mb-1" style="justify-content:space-between">
+                    <p class="sub_options">Subcategory</p>
+                    <v-btn 
+                      class="_button font-weight-regular"
+                      x-small
+                      outlined
+                      @click.stop="viewSubcategory = !viewSubcategory"
+                    >View</v-btn>
+                  </div>
+                  <v-autocomplete
+                    flat
+                    dense
+                    outlined
+                    hide-no-data
+                    item-value="id"
+                    item-text="name"
+                    hide-details="auto"
+                    v-model="payload.sub_category"
+                    @click:prepend-inner.stop="addSubcategory"
+                    :loading="loading"
+                    :items="sub_categories"
+                    :search-input.sync="search_sub"
+                    :prepend-inner-icon="this.empty_sub? 'mdi-plus': ''"
+                  ></v-autocomplete>
+                </div>
+
               </div>
             </v-col>
           </v-flex>
@@ -327,9 +346,6 @@
               </template>
               <v-card width="auto">
                 <content-preview :contents="payload.content"></content-preview>
-                <!-- <div>
-                  {{payload.content}}
-                </div> -->
               </v-card>
             </v-dialog>
             <v-btn class="success" type="submit">
@@ -343,12 +359,17 @@
   </ValidationObserver>
 </template>
 <script>
-import tagFormDrawer from "~/components/tag/form.vue";
-import groupFormDrawer from "~/components/group/form.vue";
 import { VueEditor } from "vue2-editor";
 import contentPreview from "~/pages/blog/content_preview.vue";
+import viewSubcategory from "~/pages/blog/category/subcategory";
+import viewCategory from "~/pages/blog/category";
 export default {
-  components: { tagFormDrawer, groupFormDrawer, VueEditor, contentPreview },
+  components: {
+    VueEditor, 
+    contentPreview,
+    viewCategory,
+    viewSubcategory
+  },
 
   data() {
     return {
@@ -366,21 +387,16 @@ export default {
         blog_type: "Article",
         category_id: "",
         languages: "",
-        categories: "",
-        sub_categories: [],
+        category: "",
+        sub_category: [],
         tags: [],
         uploaded_images: [],
       },
-      categories: [
-        "Fruits",
-        "Vegetables",
-        "Grains",
-        "Protein Foods",
-        "Dairy",
-      ],
+      categories: [],
+      sub_categories:[],
+      updateData:[],
       languages: ["French", "English"],
       searchKeyword: "",
-      modal: false,
       loading: false,
       errorMessage: "",
       originalPayload: {},
@@ -392,10 +408,13 @@ export default {
       dragCount: 0,
       files: [],
       images: "",
-      tagDrawer: false,
-      groupDrawer: false,
-      tagsOption: [],
-      tagsSelected: [],
+      viewCategory: false,
+      viewSubcategory: false,
+      selectedCategory: '',
+      empty: false,
+      search: null,
+      search_sub: null,
+      empty_sub: false,
     };
   },
   props: {
@@ -419,11 +438,37 @@ export default {
         this.tagsSelected = val;
       },
     },
+    'payload.category': {
+      handler(val){
+        if(val!=null){
+          this.selectedCategory=val.id
+        }
+      }
+    },
+    search: {
+      handler(val) {
+        if (val === undefined || val === null || val.length === 0) {
+          this.empty=false
+          this.selectedCategory=''
+          return;
+        }
+        this.viewAllCategory()
+      },
+    }, 
+    search_sub: {
+      handler(val) {
+        if (val === undefined || val === null || val.length === 0) {
+          this.empty_sub=false
+          this.selectedCategory=''
+          return;
+        }
+        this.viewSubcategoryData()
+      },
+    }
   },
   mounted() {
-    this.getAllTags();
-    this.getAllGroups();
-    this.getUploadedImages();
+    this.viewAllCategory();
+    this.viewSubcategoryData()
   },
   methods: {
     saveForm() {
@@ -437,10 +482,8 @@ export default {
     },
 
     addBlog(payload) {
-      alert("click")
       this.$axios.post(`${this.$blogs}`, payload).then(({ data }) => {});
       this.successNotification(payload);
-      // this.goTo("blog");
     },
 
     handleFileImport() {
@@ -459,14 +502,6 @@ export default {
       // this.dragCount++;
       // this.isDragging = true;                //For drag & drop if ever they want it
       // return false;
-    },
-
-    getUploadedImages() {
-      this.$axios
-        .get(`${this.$uploadedImages}?no-paginate=''`)
-        .then(({ data }) => {
-          this.payload.uploaded_images = data.data;
-        });
     },
 
     onDragLeave(e) {
@@ -493,7 +528,6 @@ export default {
         } else {
           this.payload.image[0] = img;
         }
-        // this.$refs.close_btn.$attrs.hidden=false
       } else {
         this.$refs.select_image.click();
       }
@@ -532,36 +566,82 @@ export default {
 
       reader.readAsDataURL(file);
     },
-
-    getAllTags() {
-      this.$axios.get(`${this.$tags}?no-paginate=''`).then(({ data }) => {
-        this.tagsOption = data.data;
-      });
-    },
-
-    getAllGroups() {
-      this.$axios.get(`${this.$groups}?no-paginate=''`).then(({ data }) => {
-        this.groupsOption = data.data;
-      });
-    },
-
-    addTagRecord(payload) {
-      this.create().then(() => {
-        this.$axios.post(`${this.$tags}`, payload).then(({ data }) => {
-          this.successNotification(data, "added", "", "", "name");
-          this.getAllTags();
+    viewAllCategory() {
+      this.loading = true
+      if (this.timerCat) {
+        clearTimeout(this.timerCat);
+        this.timerCat = null;
+      }
+      this.timerCat = setTimeout(() => { 
+        this.categories=[];
+        this.$axios.get(`${this.$category}/search?keyword=`+this.search).then(({ data }) => {
+          this.categories = data;
+          this.loading=false
+          if(this.categories.length===0) {
+            this.empty=true
+          }
+        }).catch(err => {
+          console.log(err)
         });
-      });
+      }, 3000);
     },
+    resetCategory() {
+      this.viewSubcategoryData()
+    },
+    viewSubcategoryData() {
+      this.loading = true
+      if (this.timerSub) {
+        clearTimeout(this.timerSub);
+        this.timerSub = null;
+      }
+      this.timerSub = setTimeout(() => { 
+        this.sub_categories=[];
+        this.$axios.get(`${this.$subcategory}?category_id=` + this.selectedCategory).then(({ data }) => {
+          this.sub_categories = data; 
 
-    addGroupRecord(payload) {
-      this.create().then(() => {
-        this.$axios.post(`${this.$groups}`, payload).then(({ data }) => {
-          this.successNotification(data, "added", "", "", "name");
-          this.getAllGroups();
+        console.log(this.search,"search")
+          if(this.search === undefined || this.search === null || this.search.length === 0 ) {
+            this.payload.sub_category=[]
+            this.sub_categories=[];
+          }else{
+            this.payload.sub_category=this.sub_categories[0]
+            if(this.sub_categories.length===0) {
+              this.empty_sub=true
+            }
+          }
+            this.loading=false
+        }).catch(err => {
+          console.log(err)
         });
+      }, 3000);
+    },
+    addCategory() {
+      let data= {
+        name: this.search
+      }
+      this.$axios.post(`${this.$category}`, data).then(({ data }) => {
+        this.successNotification(data,"create","category","categories","name");
+        this.search=""
+        this.empty=false
+        this.updateData=this.categories
       });
     },
+    addSubcategory() {
+      let paylaodSubcategory = {
+        category_id: this.selectedCategory,
+        name: this.search_sub
+      }
+      console.log(paylaodSubcategory , "addSub")
+    },
+          edit (index, item) {
+        if (!this.editing) {
+          this.editing = item
+          this.editingIndex = index
+        } else {
+          this.editing = null
+          this.editingIndex = -1
+        }
+      },
   },
 };
 </script>

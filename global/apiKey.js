@@ -14,4 +14,6 @@ Vue.prototype.$subscriptions = 'subscriptions'
 Vue.prototype.$clients = 'clients'
 Vue.prototype.$links = 'links'
 Vue.prototype.$uploadedImages = 'uploaded-images'
+Vue.prototype.$category = 'category'
+Vue.prototype.$subcategory = 'subcategory'
 
