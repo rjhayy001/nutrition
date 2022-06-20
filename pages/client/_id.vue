@@ -31,12 +31,12 @@ export default {
               to: 'client-id-coaching-global',
             },
             {
-              title: 'Measures',
-              to: 'client-id-coaching-measure',
-            },
-            {
               title: 'Formulaire',
               to: 'client-id-coaching-formula-food',
+            },
+            {
+              title: 'Measures',
+              to: 'client-id-coaching-measure',
             },
             {
               title: 'Tracking',
@@ -46,10 +46,10 @@ export default {
               title: 'Photos',
               to: 'client-id-coaching-photos',
             },
-            {
-              title: 'Objective',
-              to: 'client-id-coaching-objective',
-            },
+            // {
+            //   title: 'Objective',
+            //   to: 'client-id-coaching-objective',
+            // },
             {
               title: 'Feedback',
               to: 'client-id-coaching-feedback',
@@ -67,11 +67,11 @@ export default {
           to: 'client-id-photos',
           total_records: '10'
         },
-        // {
-        //   title: 'Documents',
-        //   icon: 'mdi-file-document-multiple-outline',
-        //   to:'new-client-documents',
-        // },
+        {
+          title: 'Documents',
+          icon: 'mdi-file-document-multiple-outline',
+          to:'client-id-document',
+        },
         {
           title: 'Abonnement',
           icon: 'mdi-account-reactivate-outline',

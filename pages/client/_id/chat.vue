@@ -9,13 +9,13 @@
             <v-icon class="mx-2">mdi-magnify</v-icon>
             <v-icon class="mx-2">mdi-phone-outline</v-icon>
             <v-icon class="mx-2">mdi-video-outline</v-icon>
-        
+
             <pinned-messages @getPinnedMessage="getPinnedMessage" :pinned="pinMessages"/>
           </v-toolbar>
         </div>
       </v-flex>
-      
-      <v-flex xs10>
+
+      <v-flex xs12>
         <v-list class="scrollable-element">
           <!-- <div v-for="item in chatList"  :key="item.id"> -->
           <div v-for="(item, index) in chatList" :key="item.id">
@@ -124,9 +124,9 @@
           </v-text-field>
         </div>
       </v-flex>
-     
+
       <v-flex xs2 class="pt-0">
-        <coach></coach>
+        <!-- <coach></coach> -->
       </v-flex>
       <div class="text-center">
       </div>
@@ -199,7 +199,7 @@
     mounted(){
       const thiss = this;
       window.addEventListener('keyup', function(event) {
-        if (event.keyCode === 13) { 
+        if (event.keyCode === 13) {
           thiss.sendMessage();
         }
         if (event.keyCode === 27) { 
@@ -236,14 +236,14 @@
           this.is_pinned = id;
         }
       },
-  
+
       sendMessage(){
         if(this.message !=''){
           this.$axios
           .post(`${this.$clients}/addChat/`,{
               client_id : `${this.$route.params.id}`,
               message : this.message,
-              sender_id : localStorage.getItem('coach_id'),
+              sender_id : this.$auth.user.id,
               sender_type : 'coach',
               selected : 'coach',
               type : 'text'
@@ -260,7 +260,7 @@
           .post(`${this.$clients}/addChat/`,{
               client_id : `${this.$route.params.id}`,
               message : this.image_selecteds,
-              sender_id : localStorage.getItem('coach_id'),
+              sender_id : this.$auth.user.id,
               sender_type : 'coach',
               selected : 'coach',
               type : 'image'
@@ -312,14 +312,14 @@
        var currentDate = new Date();
 
        var formatted_date = new Date().toJSON().slice(0,10).replace(/-/g,'-');
- 
+
         if(date == formatted_date){
             return 'Today';
         }
         else{
             return moment(date).format('MMM DD YYYY');
         }
-     
+
       },
       getPinnedMessage(){
       const thiss = this;
@@ -337,10 +337,10 @@
       },
       onFileChange(e) {
         var files = e.target.files || e.dataTransfer.files;
-      
+
         for(var i=0;i<files.length;i++){
           this.createImg(files[i],i);
-        
+
         }
       },
       createImg(file,index) {
@@ -353,7 +353,7 @@
             image: image
           }
            this.image_selecteds.push(this.image_selected);
-          // this.image_selected[index] =image;  
+          // this.image_selected[index] =image;
         };
         reader.readAsDataURL(file);
       },

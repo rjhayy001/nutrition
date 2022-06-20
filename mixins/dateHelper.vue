@@ -3,6 +3,9 @@ export default {
   methods: {
     formatDate(date) {
       return this.$moment(date).format('Do MMM YYYY hh:mm:ss')
+    },
+    frFormat(date){
+      return this.$moment(date).format('ddd  DD MMM')
     }
   }
 }

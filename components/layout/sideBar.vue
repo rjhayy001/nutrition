@@ -83,11 +83,11 @@ export default {
           title: 'Dashboard',
           to: 'dashboard'
         },
-        {
-          icon: 'mdi-account-arrow-right-outline',
-          title: 'Clients semaine',
-          to: 'new-client'
-        },
+        // {
+        //   icon: 'mdi-account-arrow-right-outline',
+        //   title: 'Clients semaine',
+        //   to: 'new-client'
+        // },
         {
           icon: 'mdi-account-group-outline',
           title: 'Clients',
@@ -171,7 +171,7 @@ export default {
       if(this.$route.name.includes(parent)) {
         if (!menu.showSubmenu) menu.showSubmenu = true
         return 'subactive'
-      } 
+      }
     }
   },
   computed: {
