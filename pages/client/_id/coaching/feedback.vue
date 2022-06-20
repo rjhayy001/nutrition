@@ -16,22 +16,24 @@
           <h4 class="mb-5">Historique des feedback</h4>
         </v-flex>
         <v-flex xs6>
-        <v-btn depressed rounded>
+        <v-btn depressed rounded @click="CreateNewFeedback(true)">
             Faire un feedback
         </v-btn>
         </v-flex>
-        <v-flex xs8 v-for="item in data"  :key="item.id">
-            <div class="d-flex flex-column mb-6">
-              <!-- <h4 class="mb-2"><strong>{{test(1)}}</strong></h4>  -->
-              <h4 class="mb-2"><strong>{{convert(item.created_at)}}</strong></h4> 
-              <div class="pl-7">
-                {{item.feedbackscol}}
-              </div> 
-            </div>
-        </v-flex>
+        <div class="scrollable-element" style="margin-top:30px;width: 100%;">
+          <v-flex xs8 v-for="item in data"  :key="item.id">
+              <div class="d-flex flex-column mb-6">
+                <!-- <h4 class="mb-2"><strong>{{test(1)}}</strong></h4>  -->
+                <h4 class="mb-2"><strong>{{convert(item.created_at)}}</strong></h4> 
+                <div class="pl-7">
+                  {{item.feedbackscol}}
+                </div> 
+              </div>
+          </v-flex>
+        </div>
     </v-layout>
     <div>
-      <feed-back-create @submitFeedback="submitFeedback"></feed-back-create>
+      <feed-back-create @submitFeedback="submitFeedback" @feedBackForm="feedBackForm"  :showFeedback = "showCreateFeedback"></feed-back-create>
     </div>
   </v-container>
 </template>
@@ -46,11 +48,10 @@ export default {
   data() {
     return {
      data : [],
+     showCreateFeedback: false,
     };
   },
   mounted() {
- 
-
   this.getFeedback();
   },
   methods: {
@@ -66,6 +67,12 @@ export default {
     },
     submitFeedback(){
      this.getFeedback();
+    },
+    CreateNewFeedback(bool){
+     this.showCreateFeedback = bool;
+    },
+    feedBackForm(bool){
+      this.showCreateFeedback = bool;
     },
     convert(date){
     let currentDate = moment();
@@ -84,7 +91,6 @@ export default {
     else{
       return 'Semaine derniere';
     }
-   
 
     },
 
@@ -118,6 +124,13 @@ export default {
   position: fixed;
     right: 57px;
     bottom: 31px;
+}
+.scrollable-element {
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: auto;
+    height:63vh;
+    border-bottom: #dfdfdf;
 }
 
 

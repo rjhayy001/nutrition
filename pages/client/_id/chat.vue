@@ -202,6 +202,9 @@
         if (event.keyCode === 13) { 
           thiss.sendMessage();
         }
+        if (event.keyCode === 27) { 
+           thiss.is_pinned = null;
+        }
       });
       this.getChats();
       this.getPinnedMessage();
