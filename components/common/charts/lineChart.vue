@@ -66,7 +66,7 @@ export default {
     },
     styles: {
       type: Object,
-      default: () => {}
+      default: () => { }
     },
     plugins: {
       type: Array,
@@ -74,28 +74,36 @@ export default {
     },
     chartData: {
       type: Object,
-      default: () => {}
+      default: () => { }
     },
-    removeLabel:{
+    removeLabel: {
       type: Boolean,
       default: false
     }
 
   },
-  data() {
+  data () {
     return {
       chartOptions: {
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        // scales: {
+        //   xAxes: [{
+        //     stacked: false,
+        //   }],
+        //   yAxes: [{
+        //     stacked: false,
+        //   }]
+        // },
       }
     }
   },
   created () {
-    if(this.removeLabel){
+    if (this.removeLabel) {
       this.chartOptions.plugins = {
-          legend: {
-            display: false
-          }
+        legend: {
+          display: false
+        }
       }
     }
   }

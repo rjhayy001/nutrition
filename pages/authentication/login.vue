@@ -83,7 +83,7 @@ export default {
    data() {
      return {
        admin: {
-         email:'admin@gmail.com',
+         email:'CoachQonvex@dev.com',
          password:'password'
        },
        loading:false,
@@ -100,6 +100,7 @@ export default {
      },
      authenticateUser() {
       this.$auth.loginWith('laravelSanctum', {data:this.admin}).then(({data}) => {
+        localStorage.setItem('coach_id',data.id);
         this.$router.push({name:'dashboard'})
       }).catch(({response}) => {
         this.errorMessage = response.data.message

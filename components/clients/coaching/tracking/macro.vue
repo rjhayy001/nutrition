@@ -139,34 +139,38 @@ export default {
         datasets: [
           {
             label: 'Protein',
-            backgroundColor: '#D8EAF8',
-            // fill: true,
-            // borderColor: '#1C3B9F',
-            data: [40, 39, 16, 40, 49, 80, 40],
+            fill: true,
+            backgroundColor: "rgba(183, 192, 223, 0.5)",
+            borderColor: '#4860B1',
+            pointRadius: 4,
+            data: [30, 39, 66, 60, 69, 90, 50],
             tension: 0.5
           },
           {
             label: 'Lipides',
-            backgroundColor: '#D8EAF8',
-            // fill: true,
-            // borderColor: '#1C3B9F',
-            data: [40, 39, 16, 40, 49, 80, 40],
+            fill: true,
+            borderColor: 'red',
+            pointRadius: 4,
+            backgroundColor: "rgba(253, 222, 170, 0.6)",
+            data: [40, 39, 16, 40, 49, 80, 80],
             tension: 0.5
           },
           {
             label: 'Glucides',
-            backgroundColor: '#D8EAF8',
-            // fill: true,
-            // borderColor: '#1C3B9F',
-            data: [40, 39, 16, 40, 49, 80, 40],
+            fill: true,
+            pointRadius: 4,
+            borderColor: 'green',
+            backgroundColor: "rgba(206, 249, 206, 0.6)",
+            data: [70, 19, 21, 67, 59, 70, 90],
             tension: 0.5
           },
           {
             label: 'Legumes',
-            backgroundColor: '#EFC7F2',
-            // fill: true,
-            // borderColor: '#B805C5',
-            data: [60, 59, 36, 40, 89, 70, 30],
+            backgroundColor: "rgba(240, 202, 243, 0.5)",
+            fill: true,
+            borderColor: '#C83FD3',
+            pointRadius: 4,
+            data: [64, 57, 32, 45, 81, 76, 39],
             tension: 0.5
           },
         ]
