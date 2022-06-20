@@ -108,9 +108,12 @@ export default {
     },
     downloadImage(payload){
       payload['client_id'] = this.$route.params.id
-      this.$axios.post(`${this.$images}/download`, payload).then(({data}) => {
-        console.log(data)
-        this.download(data, payload)
+      this.$axios.post(`${this.$images}/download`, payload,{
+        responseType: 'arraybuffer'
+      })
+      .then(({data}) => {
+        // this.download(data, payload)
+        this.downloadClientPhoto(data, payload)
       })
     },
     addRecord(payload){
@@ -120,7 +123,7 @@ export default {
         this.initialize()
         console.log(data, 'addPhoto')
       })
-    },
+    }, 
     updateRecord(payload){
       payload['client_id'] = this.$route.params.id
       this.$axios.put(`${this.$images}/${payload.id}`, payload).then(({data}) => {
