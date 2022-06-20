@@ -321,6 +321,10 @@ button {
   display: none !important;
 }
 
+.v-input--radio-group .v-input__slot {
+  border: none !important;
+}
+
 // .v-app-bar--fixed {
 //   left: 230px !important;
 // }
@@ -328,3 +332,11 @@ button {
 // .v-main {
 //   padding: 64px 0px 0px 231px !important;
 // }
+.formula-text{
+  color: #757575 !important;
+  font-size: 15px;
+}
+
+.stripe-table tr:nth-of-type(odd) {
+  background-color: #7a7a7a0d;
+}

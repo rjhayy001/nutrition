@@ -3,7 +3,7 @@ export default {
     filters: {
 
         // User filters
-        initials: item => item.first_name.charAt(0) + item.last_name.charAt(0),
+        initials: item => item.first_name ? item.first_name.charAt(0): '' + item.last_name ?  item.last_name.charAt(0) : '',
         fullname: item => `${item.first_name} ${item.last_name}`,
 
         // text filters
