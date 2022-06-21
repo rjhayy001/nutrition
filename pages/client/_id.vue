@@ -62,12 +62,6 @@ export default {
           to: 'client-id-chat',
         },
         {
-          title: 'Photos',
-          icon: 'mdi-image-multiple',
-          to: 'client-id-photos',
-          total_records: '10'
-        },
-        {
           title: 'Documents',
           icon: 'mdi-file-document-multiple-outline',
           to:'client-id-document',

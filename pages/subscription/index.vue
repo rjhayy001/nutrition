@@ -15,7 +15,7 @@
       </template>
 
       <template v-slot:client="{ item }">
-        <v-chip color="primary" @click="$router.push({ path: `/client/${item.client.id}/profile` })">
+        <v-chip color="primary" @click="$router.push({ path: `/client/${item.client.id}/coaching/global` })">
           <v-avatar left size="md">
             <v-img :src="item.client.logo" v-if="item.client.logo != null"></v-img>
             <v-icon v-else>mdi-account-circle</v-icon>

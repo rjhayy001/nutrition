@@ -24,8 +24,15 @@
         append-icon="mdi-magnify"
       ></v-autocomplete>
     </div>
-     <v-btn icon>
-      <v-icon>mdi-account-switch-outline</v-icon>
+     <v-btn @click="changeView" icon v-if="$isAdmin()">
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-icon v-on="on">mdi-account-switch-outline</v-icon>
+        </template>
+        <span>
+          switch to {{$view() == 'coach' ? 'Admin' : 'Coach'}} view
+        </span>
+      </v-tooltip>
     </v-btn>
     <v-btn icon>
       <v-icon>mdi-bell-outline</v-icon>
@@ -51,7 +58,7 @@ export default {
     return {
       clipped: false,
       accountLinks:[
-        { 
+        {
           title: 'Profile',
           icon:'mdi-account'
         },
@@ -76,6 +83,13 @@ export default {
     }
   },
   methods: {
+    changeView(){
+      let view = this.$view() == 'coach' ? 'admin' : 'coach'
+
+      localStorage.setItem('view', view)
+
+      window.location.reload();
+    },
     toggleSidebar() {
       let sidebarstatus = this.$store.getters.sidebarStatus
       this.$store.commit('updateSidebarStatus', !sidebarstatus)

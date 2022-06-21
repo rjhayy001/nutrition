@@ -101,6 +101,9 @@ export default {
      authenticateUser() {
       this.$auth.loginWith('laravelSanctum', {data:this.admin}).then(({data}) => {
         localStorage.setItem('coach_id',data.id);
+        if(data.is_admin == 1){
+          localStorage.setItem('view', 'coach')
+        }
         this.$router.push({name:'dashboard'})
       }).catch(({response}) => {
         this.errorMessage = response.data.message
