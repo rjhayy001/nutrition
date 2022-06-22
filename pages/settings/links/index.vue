@@ -58,12 +58,12 @@ export default {
       title: "Links",
       headers: [
         { text: "#", value: "id", width:'2%'},
-        { text: "title", value: "title"},
-        { text: "Description", value: "description" },
-        { text: "Link", value: "link" },
+        { text: "title", value: "title", filterable:true, sortType:null, filterValue:''},
+        { text: "Description", value: "description", filterable:true, sortType:null, filterValue:'' },
+        { text: "Link", value: "link", filterable:true, sortType:null, filterValue:'' },
         { text: "Status", value: "status" },
-        { text: "Created at", value: "created_at"},
-        { text: "Updated at", value: "updated_at"},
+        { text: "Created at", value: "created_at", filterable:true, sortType:null, filterValue:'' },
+        { text: "Updated at", value: "updated_at", filterable:true, sortType:null, filterValue:'' },
         { text: "Action", value: "action"},
       ],
       data: [],
@@ -118,21 +118,6 @@ export default {
         })
       })
     },
-    sortTable(query) {
-      let sortBy = null;
-      if(query.sortType){
-        sortBy = `${query.value},${query.sortType == 1 ? 'asc' : 'desc'}`
-        this.$axios
-        .get(`${this.$links}?${this.urlQuery()}&sort=${sortBy}`)
-        .then(({ data }) => {
-          this.data = data.data;     
-          this.options = data.options;
-        });
-      }
-      else{
-        this.initialize();
-      } 
-    }
   },
 };
 </script>

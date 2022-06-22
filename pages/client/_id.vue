@@ -61,17 +61,17 @@ export default {
           icon: 'mdi-chat-plus-outline',
           to: 'client-id-chat',
         },
-        {
-          title: 'Photos',
-          icon: 'mdi-image-multiple',
-          to: 'client-id-photos',
-          total_records: '10'
-        },
-        {
-          title: 'Documents',
-          icon: 'mdi-file-document-multiple-outline',
-          to:'client-id-document',
-        },
+        // {
+        //   title: 'Photos',
+        //   icon: 'mdi-image-multiple',
+        //   to: 'client-id-photos',
+        //   total_records: '10'
+        // },
+        // {
+        //   title: 'Documents',
+        //   icon: 'mdi-file-document-multiple-outline',
+        //   to:'new-client-documents',
+        // },
         {
           title: 'Abonnement',
           icon: 'mdi-account-reactivate-outline',

@@ -333,23 +333,6 @@ export default {
         this.statistics = data
       });
     },
-    // sortTable(query) {
-    //   console.log(query, 'client testing')
-    //   let sortBy = null;
-    //   if(query.sortType){
-    //     sortBy = `${query.value},${query.sortType == 1 ? 'asc' : 'desc'}`
-    //     this.$axios
-    //     .get(`${this.$clients}?${this.urlQuery()}&relations=taggable,groupable,country,city,zipcode&sort=${sortBy}`)
-    //     .then(({ data }) => {
-    //       this.data = data.data;     
-    //       this.options = data.options;
-    //       console.log(data, 'query fdaoajf')
-    //     });
-    //   }
-    //   else{
-    //     this.initialize();
-    //   } 
-    // }
   },
 };
 </script>
