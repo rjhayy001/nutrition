@@ -237,22 +237,6 @@ methods: {
       })
     })
   },
-  sortTable(query) {
-    let sortBy = null;
-    if(query.sortType){
-      sortBy = `${query.value},${query.sortType == 1 ? 'asc' : 'desc'}`
-      this.$axios
-      .get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client&sort=${sortBy}`)
-      .then(({ data }) => {
-        this.data = data.data;     
-        this.options = data.options;
-        console.log(this.data, 'datajmalkjfklaj')
-      });
-    }
-    else{
-      this.initialize();
-    } 
-  }
 },
 };
 </script>
