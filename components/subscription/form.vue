@@ -197,9 +197,8 @@ export default {
     methods: {
 
         async saveForm (data) {
-            console.log(this.payload)
-            const response = await this.$axios.post(`${this.$subscriptions}`, this.payload)
-            console.log(response)
+           this.$emit('addRecord', this.payload)
+           this.$emit("closeDrawer");
         },
 
         async fetchClients() {

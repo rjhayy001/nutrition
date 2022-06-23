@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <subscription-form :drawerStatus="drawer" @closeDrawer="drawer = !drawer" @addRecord="addRecord($event)"
+    <subscription-form :drawerStatus="drawer" @closeDrawer="drawer = false" @addRecord="addSubscription($event)"
       :selectedItem="selectedItem" />
 
     <data-table :options="options" :title="title" :headers="headers" :data="data" class="custom-table"
@@ -192,6 +192,11 @@ methods: {
   },
   addRecord() {
     this.drawer = true
+  },
+  addSubscription(payload) {
+      this.$axios.post(`${this.$subscriptions}`, payload)
+      this.drawer = false
+      this.initalize()
   },
   deleteRecord(items) {
     this.$root.dialog(
