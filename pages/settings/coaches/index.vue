@@ -11,6 +11,7 @@
       :data="data"
       :sort-desc.sync="isDescending"
       class="custom-table"
+      :currentUrl="url"
       @addRecord="addRecord"
       @showRecord="showRecord($event)"
       @deleteRecord="deleteRecord($event)"
@@ -197,6 +198,8 @@ export default {
       data: [],
       drawer: false,
       isDescending: true,
+      sortData: [],
+      url: ''
     };
   },
   mounted() {
@@ -249,6 +252,8 @@ export default {
         .then(({ data }) => {
           this.data = data.data;
           this.options = data.options;
+          this.url = `${this.$coaches}?${this.urlQuery()}&relations=taggable,groupable,country,city,zipcode`
+          console.log(data, 'query fdaoajf')
         });
     },
     addRecord() {
@@ -332,7 +337,7 @@ export default {
       .then(({ data }) => {
         this.statistics = data
       });
-    }
+    },
   },
 };
 </script>

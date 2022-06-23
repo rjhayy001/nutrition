@@ -8,7 +8,7 @@
     hide-overlay
   >
     <p class="form-title pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
-      {{tagPayload.id ? 'Add new' : 'Edit'}} Tags
+      {{tagPayload.id ? 'Edit' : 'Add new'}} Tags
       <v-btn icon small @click="drawer = false">
         <v-icon>mdi-close</v-icon>
       </v-btn>
@@ -94,7 +94,8 @@ export default {
       tagPayload: {
         name:'',
         color:'',
-        description:''
+        description:'',
+        type: ''
       },
       DefaultOptions:[
         {id:1, text:'Yes'},
@@ -104,7 +105,7 @@ export default {
     }
   },
   props: {
-    drawerStatus: {
+    tagDrawer: {
       type:Boolean,
       default: () => false
     },
@@ -126,17 +127,14 @@ export default {
     }
   },
   watch: {
-    drawerStatus(val) {
+    tagDrawer(val) {
       if(val) this.drawer = val
     },
     drawer(val) {
       if(this.originalPayload) {
         this.tagPayload = this.cloneVariable(this.originalPayload)
       }
-
-      if(!val) {
-        this.$emit('closeDrawer')
-      }
+      console.log(val,'tag drawer')
     },
     selectedItem: {
       handler(val) {
