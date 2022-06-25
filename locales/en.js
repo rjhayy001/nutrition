@@ -3,7 +3,7 @@ import en from 'vee-validate/dist/locale/en'
 const messages = {
   validation: en.messages,
   "popups": {
-    "confirm": "Confirmer",
+    "confirm": "Confirm",
     "cancel": "Annuler",
     "title": {
         "confirm": "Confirmation!",

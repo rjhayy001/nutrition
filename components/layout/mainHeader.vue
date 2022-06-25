@@ -37,9 +37,40 @@
     <v-btn icon>
       <v-icon>mdi-bell-outline</v-icon>
     </v-btn>
-    <v-btn icon>
-      <v-icon>mdi-translate</v-icon>
-    </v-btn>
+    <!-- <v-btn icon>
+      <v-icon  @click.prevent.stop="changeLanguage">mdi-translate</v-icon>
+    </v-btn> -->
+    <v-menu
+    bottom left offset-y
+    tile
+    min-width="200"
+    nudge-left="0"
+    nudge-top="-8"
+  >
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn icon
+        v-bind="attrs"
+        v-on="on"
+      >
+        <v-icon  >mdi-translate</v-icon>
+      </v-btn>
+    </template>
+    <v-list>
+      <v-list-item
+        v-for="(item, index) in language"
+        :key="index.code"
+        dense
+        @click.prevent.stop="changeLanguage(item.code)"
+      >
+        <v-list-item-avatar tile>
+          <v-img :src="item.flag"/>
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title v-text="item.title"></v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+  </v-menu>
     <custom-list :items="accountLinks">
     </custom-list>
     <v-btn icon @click="$auth.logout()">
@@ -63,6 +94,18 @@ export default {
           icon:'mdi-account'
         },
         { title: 'Click Me' },
+      ],
+      language:[
+        {
+          title: 'French',
+          code:'fr',
+          flag: '/images/flags/france.png'
+        },
+        {
+          title: 'English',
+          code:'en',
+           flag: '/images/flags/usa.png'
+        },
       ],
       items: [
         {
@@ -88,7 +131,7 @@ export default {
 
       localStorage.setItem('view', view)
 
-      window.location.reload();
+      location.reload();
     },
     toggleSidebar() {
       let sidebarstatus = this.$store.getters.sidebarStatus
@@ -97,6 +140,11 @@ export default {
     toggleMiniVariant() {
       let miniVariant = this.$store.getters.miniVariant
       this.$store.commit('updateMiniVariant', !miniVariant)
+    },
+    changeLanguage(code) {
+
+      this.$i18n.setLocale(code);
+      location.reload();
     }
   }
 }
