@@ -23,10 +23,10 @@
         <v-flex xs8 v-for="item in data"  :key="item.id">
             <div class="d-flex flex-column mb-6">
               <!-- <h4 class="mb-2"><strong>{{test(1)}}</strong></h4>  -->
-              <h4 class="mb-2"><strong>{{convert(item.created_at)}}</strong></h4> 
+              <h4 class="mb-2"><strong>{{convert(item.created_at)}}</strong></h4>
               <div class="pl-7">
                 {{item.feedbackscol}}
-              </div> 
+              </div>
             </div>
         </v-flex>
     </v-layout>
@@ -49,7 +49,7 @@ export default {
     };
   },
   mounted() {
- 
+
 
   this.getFeedback();
   },
@@ -76,7 +76,7 @@ export default {
     let formattedEnd = weekEnd.format('YYYY-MM-DD');
 
     var time = moment(date).format("YYYY-MM-DD h:mm:ss");
-  
+
     if(moment(time).isBetween(formattedStart.toString(), formattedEnd.toString())){
        let date = new Date(time);
         return 'Semaine du ' + (date.getMonth() + 1) +'/'+date.getDate()
@@ -84,11 +84,11 @@ export default {
     else{
       return 'Semaine derniere';
     }
-   
+
 
     },
 
-  
+
   },
 };
 
@@ -111,9 +111,9 @@ export default {
 
 }
 
-#wrapper_feedback{
+/* #wrapper_feedback{
     padding: 0px 10rem !important;
-}
+} */
 #wrapper-comment{
   position: fixed;
     right: 57px;

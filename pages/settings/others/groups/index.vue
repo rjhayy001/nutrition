@@ -11,6 +11,7 @@
       :title="title"
       :headers="headers"
       :data="data"
+      :currentUrl="url"
       searchPlaceholder="Name, Color, Description"
       class="custom-table"
       @addRecord="drawer = !drawer"
@@ -43,15 +44,16 @@ export default {
       options: {},
       title: "Groups",
       headers: [
-        { text: "#", value: "id", width:'2%', filterable:true, sortType:null, filterValue:''},
+        { text: "#", value: "id", width:'2%' },
         { text: "Name", value: "name", filterable:true, sortType:null, filterValue:''},
         { text: "Created at", value: "created_at", filterable:true, sortType:null, filterValue:''},
         { text: "Updated at", value: "updated_at", filterable:true, sortType:null, filterValue:''},
-        { text: "Action", value: "action", filterable:true, sortType:null, filterValue:''},
+        { text: "Action", value: "action" },
       ],
       data: [],
       drawer:false,
-      selectedItem:{}
+      selectedItem:{},
+      url:''
     };
   },
   mounted() {
@@ -63,6 +65,7 @@ export default {
       this.$axios.get(`${this.$groups}?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
+        this.url = `${this.$groups}?${this.urlQuery()}`
       })
     },
     addRecord(payload) {

@@ -9,7 +9,7 @@
     <div :style="{ backgroundImage: `url(/images/profile_back_image.png)` }" class="profile-logo">
       <div class="profile-content">
         <img src="https://randomuser.me/api/portraits/women/85.jpg"/>
-        <p>{{$auth.user.name}}</p>
+        <p>{{$auth.user.full_name}}</p>
         <small>ADMIN</small>
         <v-app-bar-nav-icon @click.stop="toggleSidebar" />
       </div>
@@ -83,11 +83,6 @@ export default {
           title: 'Dashboard',
           to: 'dashboard'
         },
-        // {
-        //   icon: 'mdi-account-arrow-right-outline',
-        //   title: 'Clients semaine',
-        //   to: 'new-client'
-        // },
         {
           icon: 'mdi-account-group-outline',
           title: 'Clients',
@@ -111,7 +106,7 @@ export default {
         {
           icon: 'mdi-bell-badge-outline',
           title: 'Pushs',
-          to: 'announcement'
+          to: 'announcement',
         },
         {
           icon: 'mdi-chart-bar-stacked',

@@ -6,6 +6,7 @@
     />
     <data-table
       :options="options"
+      :currentUrl="url"
       :title="title"
       :headers="headers"
       :data="data"
@@ -196,6 +197,7 @@ export default {
       data: [],
       drawer1:false,
       isDescending: true,
+      url:''
     };
   },
   mounted() {
@@ -242,11 +244,11 @@ export default {
       this.getTableRecords();
       this.getStatistics();
     },
-
     getTableRecords() {
       this.$axios.get(`${this.$clients}?${this.urlQuery()}&relations=taggable,groupable,country,city,zipcode`).then(({data}) => {
         this.data = data.data
         this.options = data.options
+        this.url = `${this.$clients}?${this.urlQuery()}&relations=taggable,groupable,country,city,zipcode`
       })
     },
     showRecord(item){
@@ -330,7 +332,7 @@ export default {
       .then(({ data }) => {
         this.statistics = data
       });
-    }
+    },
   },
 };
 </script>

@@ -104,15 +104,29 @@
             ></v-data-table>
           </v-card>
         </v-flex>
-        <v-flex
+         <v-flex
           xs6
           class="mt-4 px-2"
         >
           <v-card
-            min-height="450"
+            style="overflow:auto"
+            height="450"
             class="pa-3"
           >
-            test
+            <v-toolbar
+              flat
+              dense
+            >
+              <v-toolbar-title class="font-weight-medium">Tous les points hebdomadaires</v-toolbar-title>
+            </v-toolbar>
+            <v-data-table
+              :headers="headers"
+              :items="desserts"
+              hide-default-footer
+              hide-default-header
+              :items-per-page="-1"
+              class="elevation-1 stripe-table"
+            ></v-data-table>
           </v-card>
         </v-flex>
       </v-row>

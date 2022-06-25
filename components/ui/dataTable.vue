@@ -26,7 +26,7 @@
     </div>
     <hr />
     <div>
-      <v-data-table :headers="headers" :items="data" :items-per-page="items_per_page"
+      <v-data-table :headers="headers" :items="currentdata" :items-per-page="items_per_page"
         class="elevation-0 custom-table my-sticky-header-column-table" :show-select="showSelect"
         :hide-default-footer="hideFooter" :hide-default-header="true" :fixed-header="true" item-key="id" disable-sort
         height="800" v-model="selectedItems" @click:row="showRecord($event)" @click.prevent.stop="">
@@ -109,7 +109,7 @@
       </v-data-table>
     </div>
     <div class="text-center" v-if="loaded == 2">
-      <v-pagination v-model="options.page" :length="options.length" circle :total-visible="10" class="custom-pagination"
+      <v-pagination v-model="currentoptions.page" :length="currentoptions.length" circle :total-visible="10" class="custom-pagination"
         @input="changePagenumber"></v-pagination>
     </div>
   </fragment>
@@ -132,9 +132,17 @@ export default {
       filterStatusChanged: false,
       items_per_page: 50,
       searchKeyword: "",
+      sortData: [],
+      columnName: [],
+      realUrl: null,
+      currentdata: [],
+      currentoptions: []
     };
   },
   props: {
+    currentUrl:{
+      type: String
+    },
     hideFooter: {
       type: Boolean,
       default: () => true,
@@ -217,11 +225,56 @@ export default {
       this.$emit("editRecord", item);
     },
     sortTable(head) {
-      if (head.sortType == null) head.sortType = 1;
-      else if (head.sortType == 1) head.sortType = 2;
-      else head.sortType = null;
+      if (head.sortType == null) {
+        head.sortType = 1;
+        var sortInt = 'asc';
+      }else if (head.sortType == 1){
+        head.sortType = 2;
+        var sortInt = 'desc';
+      }else{
+        head.sortType = null;
+        var sortInt = null;
+      }
       console.log(head, "head");
-      this.$emit("sortTable", head);
+      // this.$emit("sortTable", head);
+
+      //multi sort
+      let toSort = '';
+      let tableColumn = head.value
+      if(this.columnName.includes(tableColumn)){
+        this.sortData.forEach((element, index) => {
+          let type = element.split("/")
+          if(type[0]==tableColumn){
+            if(sortInt==null){
+              if(element==tableColumn+'/desc'){
+                this.sortData.splice(this.sortData.indexOf(element),1)
+                this.columnName.splice(index,1)
+              }
+            }else{
+              this.sortData[index] = type[0] + '/' + sortInt
+            }
+          }
+        });
+      }else{
+        this.columnName.push(tableColumn)
+        this.sortData.push(tableColumn + '/' + sortInt)
+      }
+      toSort = this.sortData.join()
+      if(!this.columnName || this.columnName.length == 0){
+        this.$axios
+          .get(`${this.realUrl}`)
+          .then(({ data }) => {
+            this.currentdata = data.data;     
+            this.currentoptions = data.options;
+          });
+      }else{
+        this.$axios
+          .get(`${this.realUrl}&sort=${toSort}`)
+          .then(({ data }) => {
+            this.currentdata = data.data;     
+            this.currentoptions = data.options;
+          });
+      }
     },
     toggleMultipleItems() {
       this.isAllSelected = !this.isAllSelected;
@@ -254,8 +307,16 @@ export default {
     selectedItems(val) {
       console.log(val, "res");
     },
+    currentUrl: {
+      handler(val) {
+        this.realUrl = val
+      },
+      immediate: true,
+      deep: true
+    },
     data: {
       handler(val) {
+        this.currentdata=val 
         if (val.length > -1 && this.loaded == 0) {
           setTimeout(() => {
             this.loaded = 2;
