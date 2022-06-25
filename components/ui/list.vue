@@ -1,9 +1,9 @@
 <template>
-   <v-menu 
-    bottom left offset-y 
+   <v-menu
+    bottom left offset-y
     tile
     min-width="200"
-    nudge-left="0" 
+    nudge-left="0"
     nudge-top="-8"
   >
     <template v-slot:activator="{ on, attrs }">
@@ -11,7 +11,7 @@
         v-bind="attrs"
         v-on="on"
       >
-        <v-icon>mdi-account-circle-outline</v-icon>
+        <v-icon>{{icon}}</v-icon>
       </v-btn>
     </template>
     <v-list>
@@ -37,6 +37,10 @@ export default {
     }
   },
   props: {
+    icon:{
+      type: String,
+      default: 'mdi-account-circle-outline'
+    },
     items: {
       type: Array,
       default:() => {

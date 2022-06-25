@@ -3,17 +3,17 @@
     <subscription-form :drawerStatus="drawer" @closeDrawer="drawer = !drawer" @addRecord="addRecord($event)"
       :selectedItem="selectedItem" />
 
-    <data-table 
-      :options="options" 
-      :title="title" 
-      :headers="headers" 
-      :data="data" 
+    <data-table
+      :options="options"
+      :title="title"
+      :headers="headers"
+      :data="data"
       :currentUrl="url"
       class="custom-table"
-      @addRecord="addRecord" 
-      @deleteRecord="deleteRecord($event)" 
+      @addRecord="addRecord"
+      @deleteRecord="deleteRecord($event)"
       @reloadtable="initialize()"
-      @FilterBy="filterBy($event)" 
+      @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
     >
 
@@ -195,7 +195,7 @@ mounted() {
   this.initialize()
 },
 methods: {
-  initalize() {
+  initialize() {
     this.$axios.get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client,coach`).then(({ data }) => {
       this.data = data.data
       console.log(this.data,"data")
