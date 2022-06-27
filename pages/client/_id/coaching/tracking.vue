@@ -11,17 +11,20 @@
         <daily-view></daily-view>
       </v-expansion-panels>
     </v-row>
+    <feed-back-form></feed-back-form>
   </v-container>
 </template>
 <script>
 import macroView from '@/components/clients/coaching/tracking/macro.vue'
 import formDrawer from "~/components/clients/coaching/tracking/macroForm.vue";
 import dailyView from '@/components/clients/coaching/tracking/daily.vue'
+import feedBackForm from "~/components/clients/coaching/feedback/form.vue"
 export default {
   components: {
     macroView,
     formDrawer,
-    dailyView
+    dailyView,
+    feedBackForm
   },
   data(){
     return{

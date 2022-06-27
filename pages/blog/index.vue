@@ -8,6 +8,7 @@
       :sort-desc.sync="isDescending"
       class="custom-table"
       @addRecord="addRecord"
+      :currentUrl="url"
       @reloadtable="initalize()"
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
@@ -150,6 +151,7 @@ export default {
       data: [],
       drawer: false,
       isDescending: true,
+      url: ''
     };
   },
   mounted() {
@@ -157,10 +159,10 @@ export default {
   },
   methods: {
     initalize() {
-
       this.$axios.get(`${this.$blogs}?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
+        this.url = `${this.$blogs}?${this.urlQuery()}`
       })
     },
     addRecord(payload) {
@@ -186,7 +188,7 @@ export default {
           this.initalize()
         })
       })
-    }
+    },
   },
 };
 </script>

@@ -15,7 +15,7 @@
                 <v-card-actions class="mt-0 float-end" id="submitFeedback">
                   <v-btn
                   outlined
-                  text 
+                  text
                   v-on:click="submitFeedback"
                 >
                   submit

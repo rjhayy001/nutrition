@@ -14,6 +14,7 @@
       searchPlaceholder="Name, Description, Links"
       class="custom-table"
       @addRecord="drawer1 = !drawer1"
+      :currentUrl="url"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
@@ -57,17 +58,18 @@ export default {
       title: "Links",
       headers: [
         { text: "#", value: "id", width:'2%'},
-        { text: "title", value: "title"},
-        { text: "Description", value: "description" },
-        { text: "Link", value: "link" },
+        { text: "title", value: "title", filterable:true, sortType:null, filterValue:''},
+        { text: "Description", value: "description", filterable:true, sortType:null, filterValue:'' },
+        { text: "Link", value: "link", filterable:true, sortType:null, filterValue:'' },
         { text: "Status", value: "status" },
-        { text: "Created at", value: "created_at"},
-        { text: "Updated at", value: "updated_at"},
+        { text: "Created at", value: "created_at", filterable:true, sortType:null, filterValue:'' },
+        { text: "Updated at", value: "updated_at", filterable:true, sortType:null, filterValue:'' },
         { text: "Action", value: "action"},
       ],
       data: [],
       drawer1:false,
-      selectedItem:{}
+      selectedItem:{},
+      url: ''
     };
   },
   mounted() {
@@ -78,6 +80,7 @@ export default {
       this.$axios.get(`${this.$links}?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
+        this.url = `${this.$links}?${this.urlQuery()}`
       })
     },
     addRecord(payload) {
@@ -114,7 +117,7 @@ export default {
           this.initialize()
         })
       })
-    }
+    },
   },
 };
 </script>

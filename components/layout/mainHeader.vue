@@ -24,15 +24,60 @@
         append-icon="mdi-magnify"
       ></v-autocomplete>
     </div>
-     <v-btn icon>
-      <v-icon>mdi-account-switch-outline</v-icon>
+     <v-btn @click="changeView" icon v-if="$isAdmin()">
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-icon v-on="on">mdi-account-switch-outline</v-icon>
+        </template>
+        <span>
+          switch to {{$view() == 'coach' ? 'Admin' : 'Coach'}} view
+        </span>
+      </v-tooltip>
     </v-btn>
     <v-btn icon>
       <v-icon>mdi-bell-outline</v-icon>
     </v-btn>
-    <v-btn icon>
-      <v-icon>mdi-translate</v-icon>
-    </v-btn>
+    <!-- <v-btn icon>
+      <v-icon  @click.prevent.stop="changeLanguage">mdi-translate</v-icon>
+    </v-btn> -->
+    <v-menu
+    bottom left offset-y
+    tile
+    min-width="200"
+    nudge-left="0"
+    nudge-top="-8"
+  >
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn icon
+        v-bind="attrs"
+        v-on="on"
+      >
+        <v-icon  >mdi-translate</v-icon>
+      </v-btn>
+    </template>
+    <v-list>
+       <v-list-item-group
+        v-model="active_language"
+        color="primary"
+      >
+      <v-list-item
+        v-for="(item, index) in language"
+        :key="index.code"
+        dense
+        @click.prevent.stop="changeLanguage(item.code)"
+        active
+      >
+        <v-list-item-avatar tile>
+          <v-img :src="item.flag"/>
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title v-text="item.title"></v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      </v-list-item-group>
+
+    </v-list>
+  </v-menu>
     <custom-list :items="accountLinks">
     </custom-list>
     <v-btn icon @click="$auth.logout()">
@@ -51,11 +96,23 @@ export default {
     return {
       clipped: false,
       accountLinks:[
-        { 
+        {
           title: 'Profile',
           icon:'mdi-account'
         },
         { title: 'Click Me' },
+      ],
+      language:[
+        {
+          title: 'French',
+          code:'fr',
+          flag: '/images/flags/france.png'
+        },
+        {
+          title: 'English',
+          code:'en',
+           flag: '/images/flags/usa.png'
+        },
       ],
       items: [
         {
@@ -75,7 +132,23 @@ export default {
       title: 'Vuetify.js'
     }
   },
+   computed: {
+    active_language() {
+      let curr_language = this.language.find(lang => {
+        return lang.code === this.$i18n.locale
+      });
+
+      return this.language.indexOf(curr_language)
+    },
+  },
   methods: {
+    changeView(){
+      let view = this.$view() == 'coach' ? 'admin' : 'coach'
+
+      localStorage.setItem('view', view)
+
+      location.reload();
+    },
     toggleSidebar() {
       let sidebarstatus = this.$store.getters.sidebarStatus
       this.$store.commit('updateSidebarStatus', !sidebarstatus)
@@ -83,6 +156,11 @@ export default {
     toggleMiniVariant() {
       let miniVariant = this.$store.getters.miniVariant
       this.$store.commit('updateMiniVariant', !miniVariant)
+    },
+    changeLanguage(code) {
+
+      this.$i18n.setLocale(code);
+      location.reload();
     }
   }
 }
