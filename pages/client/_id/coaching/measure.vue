@@ -39,16 +39,19 @@
           </v-card>
         </v-flex>
       </v-row>
+      <feed-back-form></feed-back-form>
     </v-container>
   </div>
 </template>
 <script>
 import clientInfo from '@/components/clients/coaching/formula/clientInfo.vue'
 import lineChart from "@/components/common/charts/lineChart.vue";
+import feedBackForm from "~/components/clients/coaching/feedback/form.vue"
 export default {
   components: {
     clientInfo,
-    lineChart
+    lineChart,
+    feedBackForm
   },
   data () {
     return {

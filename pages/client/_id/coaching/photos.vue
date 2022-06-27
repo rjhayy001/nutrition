@@ -40,18 +40,24 @@
         </v-flex>
 
       </v-layout>
-      <default-view
-        v-if="default_view"
-        :data="data"
-        @openDetails="openDetails"
-        @download="downloadImage"
-      />
-      <list-view
-        v-else
-        :data="data"
-        @openDetails="openDetails"
-        @download="downloadImage"
-      />
+      <template v-if="data.length">
+        <default-view
+          v-if="default_view"
+          :data="data"
+          @openDetails="openDetails"
+          @download="downloadImage"
+        />
+        <list-view
+          v-else
+          :data="data"
+          @openDetails="openDetails"
+          @download="downloadImage"
+        />
+      </template>
+       <v-flex xs12 v-else>
+          <empty-data></empty-data>
+        </v-flex>
+         <feed-back-form></feed-back-form>
     </v-container>
   </div>
 </template>
@@ -59,12 +65,16 @@
 import formDrawer from "~/components/clients/photos/form.vue";
 import defaultView from "~/components/clients/photos/view/default.vue";
 import listView from "~/components/clients/photos/view/list.vue";
+import emptyData from "~/components/error/empty_data.vue"
+import feedBackForm from "~/components/clients/coaching/feedback/form.vue"
 // import pinnedMessages from '@/components/clients/chats/pinnedMessages.vue'
 export default {
   components: {
     formDrawer,
     defaultView,
     listView,
+    emptyData,
+    feedBackForm
     // pinnedMessages,
   },
     data(){

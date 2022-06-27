@@ -56,11 +56,16 @@
       </v-btn>
     </template>
     <v-list>
+       <v-list-item-group
+        v-model="active_language"
+        color="primary"
+      >
       <v-list-item
         v-for="(item, index) in language"
         :key="index.code"
         dense
         @click.prevent.stop="changeLanguage(item.code)"
+        active
       >
         <v-list-item-avatar tile>
           <v-img :src="item.flag"/>
@@ -69,6 +74,8 @@
           <v-list-item-title v-text="item.title"></v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+      </v-list-item-group>
+
     </v-list>
   </v-menu>
     <custom-list :items="accountLinks">
@@ -124,6 +131,15 @@ export default {
       rightDrawer: false,
       title: 'Vuetify.js'
     }
+  },
+   computed: {
+    active_language() {
+      let curr_language = this.language.find(lang => {
+        return lang.code === this.$i18n.locale
+      });
+
+      return this.language.indexOf(curr_language)
+    },
   },
   methods: {
     changeView(){
