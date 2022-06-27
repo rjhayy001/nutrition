@@ -44,7 +44,7 @@
                     <p class="d-flex  justify-space-between mb-2">
                       <span>Password</span>
                       <span>
-                        <a href="">Forgot Password ?</a>
+                        <p text @click="goTo('forgot_password')" color="primary" style="cursor:pointer; color:#7c94de;" dense>Forgot Password ?</p>
                       </span>
                     </p>
                     <v-text-field
