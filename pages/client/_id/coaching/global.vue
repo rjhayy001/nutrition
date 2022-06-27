@@ -80,6 +80,28 @@
 
         </v-flex>
         <v-flex
+          xs4
+          class="px-3"
+        >
+          <v-card height="208">
+            <div class="client-info text-center pt-6">
+              <h2 class="font-weight-bold mb-4">{{client.full_name}}</h2>
+              <div class="caption">
+                registered since
+                <span class="font-weight-bold">{{frFormat(client.created_at)}}</span>
+              </div>
+              <div class="caption">
+                subscribed since
+                <span class="font-weight-bold">{{active_subscription ? frFormat(active_subscription.start_date) : 'none'}}</span>
+              </div>
+              <div class="caption">
+                active_subscription
+                <span class="font-weight-bold"> {{ active_subscription ?  computePlanPrice2(active_subscription.price) : 'none'}}</span>
+              </div>
+            </div>
+          </v-card>
+        </v-flex>
+        <v-flex
           xs6
           class="mt-4 px-2"
         >
@@ -130,15 +152,18 @@
           </v-card>
         </v-flex>
       </v-row>
+    <feed-back-form></feed-back-form>
     </v-container>
   </div>
 </template>
 <script>
 import priceHelperVue from "@/mixins/priceHelper.vue";
 import dateHelper from "@/mixins/dateHelper.vue";
+import feedBackForm from "~/components/clients/coaching/feedback/form.vue"
 export default {
   name: 'Global',
   components: {
+    feedBackForm,
   },
   mixins: [
     priceHelperVue,

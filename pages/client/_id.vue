@@ -1,6 +1,7 @@
 <template>
   <fragment>
-
+    <div>
+    </div>
     <sub-sidebar :submenus="active_subscription ? submenus : unsubscribed"></sub-sidebar>
     <v-container>
       <Nuxt />
