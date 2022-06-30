@@ -80,7 +80,7 @@ export default {
       items: [
         {
           icon: 'mdi-monitor-dashboard',
-          title: 'Dashboard',
+          title: this.$t('sidebar.dashboard'),
           to: 'dashboard'
         },
         {
@@ -90,45 +90,45 @@ export default {
         },
         {
           icon: 'mdi-account-reactivate-outline',
-          title: 'Abonnements',
+          title: this.$t('sidebar.subscriptions'),
           to: 'subscription'
         },
         {
           icon: 'mdi-credit-card-settings-outline',
-          title: 'Paiements',
+          title: this.$t('sidebar.payments'),
           to: 'payments'
         },
-         {
+        {
           icon: 'mdi-post-outline',
-          title: 'Blogs',
+          title: this.$t('sidebar.blogs'),
           to: 'blog'
         },
         {
           icon: 'mdi-bell-badge-outline',
-          title: 'Pushs',
+          title: this.$t('sidebar.announcement'),
           to: 'announcement',
         },
         {
           icon: 'mdi-chart-bar-stacked',
-          title: 'Statistiques',
+          title: this.$t('sidebar.statistic'),
           to: 'statistic'
         },
         {
           icon: 'mdi-cog-refresh-outline',
-          title: 'Parameters',
+          title: this.$t('sidebar.settings'),
           to: '/',
           showSubmenu:false,
           submenus:[
             {
-              title:'Document utiles',
+              title: this.$t('subSidebar.usefulDocuments'),
               to: 'settings-documents'
             },
             {
-              title:'Liens utiles',
+              title: this.$t('subSidebar.usefulLinks'),
               to: 'settings-links'
             },
             {
-              title:'Phototeque',
+              title: this.$t('subSidebar.photos'),
               to: 'settings-photos'
             },
             {
@@ -136,20 +136,20 @@ export default {
               to: 'settings-formations'
             },
             {
-              title:'Coachs',
+              title: this.$t('subSidebar.coaches'),
               to: 'settings-coaches'
             },
             {
-              title:'Abonnements',
+              title: this.$t('subSidebar.plans'),
               to: 'settings-plans'
             },
             {
-              title:'Address',
+              title: this.$t('subSidebar.address'),
               to: 'settings-address-countries',
               parent:'settings-address'
             },
             {
-              title:'Others',
+              title: this.$t('subSidebar.others'),
               to: 'settings-others-tags'
             }
           ],

@@ -19,7 +19,7 @@
         filled
         rounded
         hide-details=""
-        placeholder="Search items by name, age ..."
+        :placeholder="this.$t('header.search')"
         dense
         append-icon="mdi-magnify"
       ></v-autocomplete>

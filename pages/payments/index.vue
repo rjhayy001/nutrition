@@ -33,7 +33,7 @@ export default {
   data() {
     return {
       options: {},
-      title: "Payments",
+      title: this.$t('global.payment')+'s',
       headers: [
         {
           text: "#",
@@ -41,39 +41,39 @@ export default {
           width:'2%',
         },
         {
-          text: "First name",
+          text: this.$t('clients.firstName'),
           value: "first_name",
           filterable:true,
           sortType:null,
           filterValue:''
         },
         { 
-          text: "Last name", 
+          text: this.$t('clients.lastName'), 
           value: "last_name",
           filterable:true,
           sortType:null,
           filterValue:''
         },
         { 
-          text: "Email", 
+          text: this.$t('clients.email'), 
           value: "email",
           filterable:true,
           sortType:null,
           filterValue:'',
         },
         { 
-          text: "Status", 
+          text: this.$t('clients.status'), 
           value: "status",
         },
         { 
-          text: "Phone 1", 
+          text: this.$t('clients.phone')+' 1', 
           value: "phone_1",
           filterable:true,
           sortType:null,
           filterValue:''
         },
         { 
-          text: "Phone 2", 
+          text: this.$t('clients.firstName')+' 2', 
           value: "phone_1",
           filterable:true,
           sortType:null,
