@@ -93,7 +93,7 @@ export default {
   data() {
     return {
       options: {},
-      title: "Subscriptions",
+      title: this.$t('global.subscription')+'s',
       headers: [
         {
           text: "#",
@@ -108,21 +108,21 @@ export default {
           filterValue: ''
         },
         {
-          text: "Coach",
+          text: this.$t('global.coach'),
           value: "coach",
           filterable: true,
           sortType: null,
           filterValue: ''
         },
         {
-          text: "Abonnement",
+          text: this.$t('global.subscription'),
           value: "price",
           filterable: true,
           sortType: null,
           filterValue: ''
         },
         {
-          text: "Status",
+          text: this.$t('global.status'),
           value: "status",
           filterable: true,
           sortable: true,
@@ -130,14 +130,14 @@ export default {
           filterValue: '',
         },
         {
-          text: "Début",
+          text: this.$t('global.start'),
           value: "start_date",
           filterable: true,
           sortType: null,
           filterValue: '',
         },
         {
-          text: "Fin",
+          text: this.$t('global.end'),
           value: "end_date",
           filterable: true,
           sortType: null,
@@ -154,37 +154,37 @@ export default {
       url: '',
       statuses: [
         {
-          label: "Annulé",
+          label: this.$t('subscription.cancelled'),
           icon: "close-circle-outline",
           color: "error"
         },
         {
-          label: "En cours",
+          label: this.$t('subscription.inProgress'),
           icon: "check-circle-outline",
           color: "primary"
         },
         {
-          label: "En attente d'annulation",
+          label: this.$t('subscription.pendingCancellation'),
           icon: "timer-sand",
           color: "warning"
         },
         {
-          label: "Incomplet",
+          label: this.$t('subscription.incomplete'),
           icon: "timer-sand",
           color: "warning"
         },
         {
-          label: "Incomplet annulé",
+          label: this.$t('subscription.incompleteCancelled'),
           icon: "close-circle-outline",
           color: "error"
         },
         {
-          label: "En essai",
+          label: this.$t('subscription.onTrial'),
           icon: "timer-sand",
           color: "info"
         },
         {
-          label: 'Impayé',
+          label: this.$t('subscription.unpaid'),
           icon: 'close-circle-outline',
           color: 'error'
         },

@@ -18,7 +18,7 @@
   <!-- For Editing and Adding Form -->
   <div v-if="isEdit==1">
     <p class="form-title pa-2 title font-weight-regular text-uppercase d-flex justify-space-between pl-4">
-      {{photoPayload.id ?  'Edit' : 'Add New'}} Photo
+      {{photoPayload.id ?  this.$t('global.edit')+' la' : this.$t('clients.addNewPhoto') }} Photo
       <v-btn icon small @click="drawer = false, isEdit = 2">
         <v-icon>mdi-close</v-icon>
       </v-btn>
@@ -56,7 +56,7 @@
                   @click="handleFileImport"
                 >
                   <v-icon>mdi-upload-outline</v-icon>
-                  upload photo
+                  {{ this.$t('global.uploadPhoto') }}
                 </v-btn>
                 <input
                   ref="uploader"
@@ -72,11 +72,11 @@
                 <div class="mb-1">
                   <p class="subtitle-2 font-weight-regular mb-2">
                     <span>*</span>
-                    Title
+                    {{ $t('blogs.title') }}
                   </p>
                   <v-text-field
                     v-model="photoPayload.title"
-                    placeholder="Type title ..."
+                    :placeholder=" $t('clients.typeTitle')+' ...'"
                     type="text"
                     hide-details="auto"
                     solo
@@ -88,7 +88,7 @@
             <v-flex xs12 sm3>
               <div class="mb-1">
                 <p class="subtitle-2 font-weight-regular mb-2">
-                  Sharable
+                  {{ $t('clients.shareable') }}
                 </p>
                 <v-select
                   v-model="photoPayload.sharable"
@@ -108,7 +108,7 @@
                   </p>
                   <v-textarea
                     v-model="photoPayload.description"
-                    placeholder="Type or Paste Description ..."
+                    :placeholder=" $t('clients.typeDescription')+' ...'"
                     type="text"
                     hide-details="auto"
                     solo
@@ -127,7 +127,7 @@
                     dense
                     v-model="photoPayload.taggable"
                     :items="tagsItem"
-                    label="Select tags ..."
+                    :label="this.$t('clients.selectGroups')"
                     hide-details="auto"
                     prepend-inner-icon="mdi-plus"
                     @click:prepend-inner.stop="tagDrawer = !tagDrawer"
@@ -141,7 +141,7 @@
             <v-flex xs12>
               <v-btn class="success mt-1" block type="submit">
                 <v-icon>mdi-content-save-outline</v-icon>
-                {{photoPayload.id ? 'UPDATE' : 'SAVE'}}
+                {{photoPayload.id ? this.$t('global.update') : this.$t('global.save') }}
               </v-btn>
             </v-flex>
           </v-layout>
@@ -359,8 +359,8 @@ export default {
         taggable: [],
       },
       sharableOptions:[
-        {id:1, text:'Yes'},
-        {id:0, text:'No'}
+        {id:1, text: this.$t('global.yes') },
+        {id:0, text: this.$t('global.no') }
       ],
       originalPayload: {
         title:'',

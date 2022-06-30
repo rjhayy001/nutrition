@@ -2,7 +2,8 @@
   <v-container fluid grid-list-md grid-list-sm class="page-statistics">
     <v-layout row wrap class="clients-statistics-wrapper">
       <v-flex xs12>
-        <p class="title mb-0 font-weight-medium">{{title}} Summary</p>
+        <!-- <p class="title mb-0 font-weight-medium">{{title}} Summary</p> -->
+        <p class="title mb-0 font-weight-medium">{{ $t('global.summary') }}</p>
       </v-flex>
       <v-flex xs1.5 v-for="(item, index) in statistics" :key="index">
         <v-card max-width="344">
