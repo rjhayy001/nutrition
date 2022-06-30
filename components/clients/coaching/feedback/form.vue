@@ -17,7 +17,7 @@
           <v-tooltip left color="primary">
             <template v-slot:activator="{ on}">
               <v-icon x-large v-on="on">
-                mdi-message-plus-outline mdi-spin
+                mdi-plus-circle mdi-spin
               </v-icon>
             </template>
             <span>Add Feedback</span>

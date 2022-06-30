@@ -31,7 +31,7 @@
       wrap
       id="wrapper_feedback"
     >
-      <v-flex xs8>
+      <v-flex xs8 v-if="data.length">
         <div
           v-for="(items, index) in data"
           :key="index"
@@ -58,6 +58,9 @@
           </div>
         </div>
       </v-flex>
+      <v-flex xs12 v-else>
+          <empty-data></empty-data>
+      </v-flex>
       <!-- <v-flex xs4>
         asdsa
       </v-flex> -->
@@ -68,15 +71,16 @@
     </div>
   </v-container>
 </template>
-
 <script>
+import emptyData from "~/components/error/empty_data.vue"
 import feedBackCreate from "~/components/clients/createFeedback.vue";
 import feedBackForm from "~/components/clients/coaching/feedback/form.vue"
 import moment from 'moment'
 export default {
   components: {
     feedBackCreate,
-    feedBackForm
+    feedBackForm,
+    emptyData
   },
   data () {
     return {

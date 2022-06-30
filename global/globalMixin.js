@@ -1,5 +1,10 @@
 import Vue from 'vue'
 Vue.mixin({
+    data(){
+      return {
+        select_addOn:  { name: 'All', id:0}
+      }
+    },
     methods: {
         getIds(items) {
             return items.map((item) => {
