@@ -11,7 +11,7 @@
         <content-preview
           :contents="payload"
           :drawerStatus="preview"
-          :category="categories"
+          :categories="categories"
           @dataLink="openLink"
           @close="preview = false"
         />
@@ -200,7 +200,7 @@
             </v-col>
           </v-flex>
           <div class="d-flex ms-auto">
-            <v-btn color="primary mr-2" @click="preview = true">
+            <v-btn color="primary mr-2" @click="preview=true">
               Blog Preview
             </v-btn>
             <v-btn class="success" type="submit">
@@ -246,7 +246,7 @@ export default {
       viewCategory: false,
       preview: false,
       related_links:'',
-      title:''
+      title:'',
     };
   },
   props: {
@@ -287,12 +287,11 @@ export default {
   },
   methods: {
     saveForm() {
-      console.log(this.payload,"payload")
       this.$refs.form.validate().then((result) => {
         if (!result) return;
         if (this.payload.id) {
           this.$emit("updateRecord", this.payload);
-        } else {
+        } else { arr
           this.$emit("addRecord",this.payload);
         }
       });
@@ -333,7 +332,6 @@ export default {
         this.related_links=""
         this.title=""
       }
-      console.log(this.payload.links)
     },
     deleteLink(items) {
       this.$axios.delete(`${this.$bloglinks}/${items.id}`).then(({ data }) => {

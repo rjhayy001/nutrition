@@ -556,7 +556,6 @@ export default {
     headerEdit: {
       handler(val) {
         this.headerEdit=this.enableEdit
-        console.log(this.enableEdit,"enable")
       }
     }
   },

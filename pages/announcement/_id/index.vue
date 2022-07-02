@@ -19,7 +19,6 @@ export default {
   },
   methods: {
     findRecord() {
-      console.log(this.selectedItem,"caca");
       this.$axios.get(`${this.$announces}/${this.$route.params.id}/view?relations=clients,coaches`).then(({ data }) => {
         this.selectedItem = data;
       });

@@ -11,7 +11,9 @@ export default {
   },
   data() {
     return {
-      selectedItem: {},
+      selectedItem: {
+        links:[]
+      },
     };
   },
   mounted() {
@@ -24,7 +26,7 @@ export default {
           data.coach_name = data.coach.full_name
           data.category_id = data.category_id.id
           this.selectedItem = data;
-          console.log( this.selectedItem ," this.selectedItem ")
+          console.log(this.selectedItem,"this.selectedItem")
         });
     },
     updateRecord(payload) {

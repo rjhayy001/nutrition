@@ -9,7 +9,7 @@
   >
   <div class="previewBlog pa-5">
     <div class="header_previewImage">
-      <v-img height="200px" v-if="contents.image.length" :src="contents.image"></v-img>
+      <v-img height="200px" v-if="contents.image" :src="contents.image"></v-img>
       <v-img height="200px" v-else src="https://foodandhealth.com/blog/wp-content/uploads/2012/12/Screen-shot-2012-12-10-at-9.01.00-AM.png"></v-img>
       <div class="header_category-name">
         {{selected_category.name}}
@@ -20,8 +20,8 @@
       <p> {{ contents.coach_name }} </p>
       <p> {{ current }} </p>
       <p> {{ contents.summary }} </p>
+      <div class="content-data" v-html="contents.content"></div>
     </div>
-    <div class="content-data" v-html="contents.content"></div>
     <div class="mt-6" v-if="contents.links.length">
       <hr>
       <div class="font-weight-bold">
@@ -58,9 +58,9 @@ export default {
   props:{
     contents:{
       type: Object,
-      default:() => {}
+      default: () => ({})
     },
-    category:{
+    categories:{
       type: Array,
       default:() => {}
     },
@@ -74,7 +74,7 @@ export default {
       this.$emit("dataLink", item)
     },
     getCategory() {
-      this.selected_category = this.category.find(cat => cat.id == this.contents.category_id)
+      this.selected_category = this.categories.find(cat => cat.id == this.contents.category_id)
     }
   },
   watch: {
@@ -91,11 +91,6 @@ export default {
         this.$emit("close");
       }
     },
-    category: {
-      handler(val) {
-        console.log(val,"categoriresd")
-      }
-    }
   }
 }
 </script>

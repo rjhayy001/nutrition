@@ -504,21 +504,17 @@ export default {
       this.$refs.form.validate().then((result) => {
         if (!result) return;
         this.payload.is_sent = is_sent;
-        console.log(this.payload.type,"type");
         if(is_sent) {
           if(this.payload.id && this.currentTime<=this.payload) {
-            console.log("update");
             if(this.payload.type==0){
               this.payload.status = 0;
             }
             this.$emit("updateRecord", this.payload);
           }else{
-            console.log("create")
             this.payload.status = 1;
             this.$emit("addRecord", this.payload);
           }
         }else{
-          console.log("save")
           this.payload.status = 0;
           this.$emit("saveRecord", this.payload)
         }
@@ -545,7 +541,6 @@ export default {
         .get(`clients?type=${type}&no-paginate=true`)
         .then(({ data }) => {
           this.clients = data.data;
-          console.log(this.clients,"clients")
           this.selectAllClient()
         });
     },
