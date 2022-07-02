@@ -24,18 +24,6 @@ export default {
         this.selectedItem = data;
       });
     },
-    // updateRecord(payload) {
-    //   this.update().then(() => {
-    //     if (payload.city_id) payload.city_id = payload.city_id.id || '';
-    //     if (payload.country_id) payload.country_id = payload.country_id.id || '';
-    //     if (payload.zipcode_id) payload.zipcode_id = payload.zipcode_id.id || '';
-
-    //     this.$axios.put(`${this.$coaches}/${payload.id}`, payload).then(({ data }) => {
-    //       this.successNotification(data,"updated","coach","coaches","first_name");
-    //       this.goTo("settings-coaches-id");
-    //     });
-    //   })
-    // },
   },
 };
 </script>

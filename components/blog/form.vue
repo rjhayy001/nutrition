@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-col class="text-right">
-      <v-btn color="green" class="white--text"> Blogs </v-btn>
+      <v-btn color="green" class="white--text" @click="$router.go('-1')"> Blogs </v-btn>
     </v-col>
     <v-col class="text-center"><span class="font-weight-medium"> Choose a Blog format </span></v-col>
     <v-container grid-list-md fluid>
@@ -26,7 +26,7 @@
       </v-hover>
       <v-hover v-slot="{ hover }">
         <v-col max-width="500">
-          <v-card class="pa-10 text-center" exact tile :elevation="hover ? 12 : 2">
+          <v-card class="pa-10 text-center" exact tile :elevation="hover ? 12 : 2" @click="create_trivia">
             <v-icon large color="green darken-2 pa-2"> mdi-format-list-checkbox </v-icon>
               <p class="font-weight-medium pa-2"> Trivia Quiz </p>
               <p class="font-weight-light pa-2"> An article with images and embed videos </p>
@@ -113,9 +113,13 @@ export default {
       })
     },
     create_article() {
-      this.goTo('blog-article_form')
-
+      this.$emit('article_form')
     },
+    create_trivia() {
+      this.$emit('trivia_form')
+    },
+
+    
     deleteRecord(items) {
       this.$root.dialog(
         "Confirm Action!",

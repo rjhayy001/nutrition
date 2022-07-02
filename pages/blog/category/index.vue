@@ -9,7 +9,26 @@
   >
     <div class="pa-2">
       <v-flex xs12>
-        <p class="title mb-0 font-weight-medium">Category</p>
+        <v-toolbar flat dense>
+          <v-toolbar-title>
+            Category
+          </v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-text-field
+            placeholder="Category Name"            
+            v-model="payload.name"
+            flat
+            dense
+            hide-details="auto"
+            filled
+            rounded
+          />
+          <v-btn class="ml-2" small icon :disabled="payload.name==''" @click="addCategory">
+            <v-icon>
+              mdi-plus
+            </v-icon>
+          </v-btn>
+        </v-toolbar>
       </v-flex>
       <v-data-table
         :headers="headers"
@@ -43,7 +62,7 @@
             @click="saveItem(item)"
             color="green"
           >
-            mdi-heart
+            mdi-check
           </v-icon>
           <v-icon
             small
@@ -63,6 +82,9 @@ import arrayHelper from "@/mixins/arrayHelper.vue";
     mixins: [arrayHelper],
   data() {
     return {
+      payload: {
+        name:'',
+      },
       drawer:false, 
       dialog:false,
       selectedItem:[],
@@ -74,7 +96,7 @@ import arrayHelper from "@/mixins/arrayHelper.vue";
           value: 'index',
         },
         { 
-          text: 'Categoty Name', 
+          text: 'Category Name', 
           align: 'start', 
           value: 'name', 
           width: '200px'
@@ -93,7 +115,7 @@ import arrayHelper from "@/mixins/arrayHelper.vue";
       type:Boolean,
       default: () => false
     },
-    updateData: {
+    data: {
       type: Array,
       default: () => false
     }
@@ -102,8 +124,10 @@ import arrayHelper from "@/mixins/arrayHelper.vue";
     drawerStatus(val) {
       if(val) this.drawer = val
     },
-    updateData(val) {
-      if(val) this.getAllCategory()
+    data: {
+      handler(val) {
+        this.categories=val
+      }
     },
     drawer(val) {
       if (!val) {
@@ -111,15 +135,7 @@ import arrayHelper from "@/mixins/arrayHelper.vue";
       }
     },
   },
-  mounted() {
-    this.getAllCategory()
-  },
   methods: {
-    getAllCategory() {
-      this.$axios.get(`${this.$category}?no-paginate=''`).then(({data}) => {
-        this.categories = data.data
-      })
-    },
     editItem (item) {
       this.selectedItem = []
       if(!this.$isIncluded(item.id, this.selectedItem)){
@@ -130,23 +146,22 @@ import arrayHelper from "@/mixins/arrayHelper.vue";
       this.$axios.put(`${this.$category}/${item.id}`, item).then(({ data }) => {
         this.successNotification(item,"updated","category","categories","name");
         this.$arraysplicer(item.id, this.selectedItem)
-        this.getAllCategory()
+        this.$emit('reload', data)
       });
     },
     deleteItem(items) {
-      this.delete().then(() => {
-        this.$axios.delete(`${this.$category}/${items.id}`).then(({ data }) => {
-          this.successNotification(
-            items,
-            "deleted",
-            "category",
-            "categories",
-            "name"
-          );
-          this.getAllCategory();
-        });
+      this.$axios.delete(`${this.$category}/${items.id}`).then(({ data }) => {
+        this.successNotification(items, "deleted", "category", "categories", "name");
+        this.$emit('reload', data)
       });
     },
+    addCategory() {
+      this.$axios.post(`${this.$category}`, this.payload).then(({ data }) => {
+        this.successNotification(data,"create","category","categories","name");
+        this.payload.name='';
+        this.$emit('reload', data);
+      });
+    }
   }
 }
 </script>
