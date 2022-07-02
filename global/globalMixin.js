@@ -36,6 +36,10 @@ Vue.mixin({
             const url = this.$imageUrl + folder + '/' + id + '/' + filename
             return url;
         },
+        imageUrl2(folder, id, filename) {
+            const url = this.$imageUrl2 + folder + '/' + id + '/' + filename
+            return url;
+        },
         download(data, payload) {
 
             const url = window.URL.createObjectURL(new Blob([data]));

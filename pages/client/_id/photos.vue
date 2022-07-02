@@ -1,11 +1,9 @@
 <template>
   <div>
     <v-container grid-list-md>
-      <form-drawer :comment="comment" :drawerStatus="drawer1" @closeDrawer="drawer1 = !drawer1"
+      <form-drawer :drawerStatus="drawer1" @closeDrawer="drawer1 = !drawer1"
         @addRecord="addRecord($event)"
         @updateRecord="updateRecord($event)"
-        @addComment="addComment"
-        @updateComment="updateComment"
         :selectedItem="selectedItem"
       />
       <v-layout row wrap>
@@ -33,31 +31,24 @@
             >
               {{!default_view ? 'mdi-view-grid-outline' : 'mdi-format-list-bulleted'}}
             </v-icon>
-            <v-icon class="mx-2" @click="newPhoto">mdi-plus</v-icon>
-            <!-- <pinned-messages/> -->
+            <v-icon class="mx-2" @click="drawer1=true">mdi-plus</v-icon>
           </v-toolbar>
         </div>
         </v-flex>
 
       </v-layout>
-      <template v-if="data.length">
-        <default-view
-          v-if="default_view"
-          :data="data"
-          @openDetails="openDetails"
-          @download="downloadImage"
-        />
-        <list-view
-          v-else
-          :data="data"
-          @openDetails="openDetails"
-          @download="downloadImage"
-        />
-      </template>
-       <v-flex xs12 v-else>
-          <empty-data></empty-data>
-        </v-flex>
-         <feed-back-form></feed-back-form>
+      <default-view
+        v-if="default_view"
+        :data="data"
+        @openDetails="openDetails"
+        @download="downloadImage"
+      />
+      <list-view
+        v-else
+        :data="data"
+        @openDetails="openDetails"
+        @download="downloadImage"
+      />
     </v-container>
   </div>
 </template>
@@ -65,28 +56,22 @@
 import formDrawer from "~/components/clients/photos/form.vue";
 import defaultView from "~/components/clients/photos/view/default.vue";
 import listView from "~/components/clients/photos/view/list.vue";
-import emptyData from "~/components/error/empty_data.vue"
-import feedBackForm from "~/components/clients/coaching/feedback/form.vue"
-// import pinnedMessages from '@/components/clients/chats/pinnedMessages.vue'
+import pinnedMessages from '@/components/clients/chats/pinnedMessages.vue'
 export default {
   components: {
     formDrawer,
     defaultView,
     listView,
-    emptyData,
-    feedBackForm
-    // pinnedMessages,
+    pinnedMessages,
   },
     data(){
     return {
       search:'',
       awaitingSearch: false,
-      default_view:true,
+      default_view:false,
       drawer1:false,
       selectedItem:{},
-      data:[],
-      comment: [],
-      isEdit2: false
+      data:[]
     }
   },
   watch: {
@@ -103,20 +88,16 @@ export default {
   mounted(){
     this.initialize()
     console.log(this.imageUrl('clients', 6, 'test' ), 'urlsss')
-    //console.log(this.drawer1,'drawer')
   },
   methods:{
-    newPhoto() {
-      this.isEdit2 = 1
-      this.drawer1 = true
-    },
     initialize(){
       this.id = this.$route.params.id
       this.getDatas()
     },
     getDatas(){
       this.$axios.get(`${this.$clients}/${this.id}/photos`).then(({data}) => {
-
+        console.log(data);
+        return;
         this.data = data
       })
     },
@@ -126,31 +107,15 @@ export default {
     openDetails(item={}){
       this.drawer1 = !this.drawer1
       this.selectedItem = this.cloneVariable(item)
-      this.drawer1 = true
     },
-    // openDetails(item={}){
-    //   this.drawer1 = !this.drawer1
-    //   this.selectedItem = this.cloneVariable(item)
-    // },
     downloadImage(payload){
       payload['client_id'] = this.$route.params.id
-      this.$axios.post(`${this.$images}/download`, payload).then(({data}) => {
-        console.log(data)
-        this.download(data, payload)
+      this.$axios.post(`${this.$images}/download`, payload,{
+        responseType: 'arraybuffer'
       })
-    },
-    addComment(payload){
-      this.$axios.post(`coaches/add-comment`, payload).then(({data}) => {
-        this.comment = data
-        console.log(data, 'data')
-        this.initialize()
-      })
-    },
-    updateComment(payload){
-      this.$axios.put(`coaches/update-comment`, payload).then(({data}) => {
-        this.comment = data
-        console.log(this.comment, 'comment')
-        this.initialize()
+      .then(({data}) => {
+        // this.download(data, payload)
+        this.downloadClientPhoto(data, payload)
       })
     },
     addRecord(payload){
@@ -160,7 +125,7 @@ export default {
         this.initialize()
         console.log(data, 'addPhoto')
       })
-    },
+    }, 
     updateRecord(payload){
       payload['client_id'] = this.$route.params.id
       this.$axios.put(`${this.$images}/${payload.id}`, payload).then(({data}) => {

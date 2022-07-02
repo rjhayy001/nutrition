@@ -4,6 +4,7 @@
       left
       offset-y
       v-model="menu"
+      :close-on-click="false"
       :close-on-content-click="false"
     >
       <template v-slot:activator="{ on, attrs }">
@@ -30,7 +31,7 @@
         class="pa-4"
       >
         <div class="text-center mb-4">
-          <v-icon @click="menu=false">mdi-chevron-down </v-icon>
+          <v-icon @click="hideForm(false)">mdi-chevron-down </v-icon>
         </div>
         <div class="text-overline mb-4">
           Feedback de la semaine
@@ -46,17 +47,29 @@
             submit
           </v-btn>
         </div>
-
       </v-card>
     </v-menu>
   </div>
 </template>
 <script>
 export default {
+  props: {
+    payloads: {
+      type: Object,
+    }
+  },
+  watch: {
+    payloads: function(value) {
+      this.menu = true;
+      this.payload.feedbackscol = value.feedbackscol
+      this.payload.id = value.id
+    }
+  },
   data () {
     return {
       payload:{
         feedbackscol:'',
+        id:'',
         client_id: this.$route.params.id
       },
       menu: false
@@ -70,7 +83,13 @@ export default {
           this.$store.commit('updateFeedbackFlag', true)
           this.menu= false
           this.payload.feedbackscol = ''
+          this.payload.id = ''
         })
+    },
+    hideForm(bool){
+      this.menu = bool;
+      this.payload.feedbackscol = ''
+      this.payload.id = ''
     }
   }
 }
