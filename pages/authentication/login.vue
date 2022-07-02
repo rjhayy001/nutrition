@@ -61,7 +61,7 @@
                   </div>
                 </ValidationProvider>
                 <div>
-                  <v-btn block tile color="primary" rounded @click="login" type="submit" :loading="loading">
+                  <v-btn block tile color="primary" rounded type="submit" :loading="loading">
                     Login
                   </v-btn>
                 </div>

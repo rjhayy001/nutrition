@@ -20,8 +20,8 @@
       <p> {{ contents.coach_name }} </p>
       <p> {{ current }} </p>
       <p> {{ contents.summary }} </p>
-      <div class="content-data" v-html="contents.content"></div>
     </div>
+    <div class="content-data" v-html="contents.content"></div>
     <div class="mt-6" v-if="contents.links.length">
       <hr>
       <div class="font-weight-bold">
