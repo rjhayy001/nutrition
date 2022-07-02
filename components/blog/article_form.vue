@@ -215,7 +215,6 @@
 </template>
 <script>
 import { VueEditor } from "vue2-editor";
-import default_HeaderImage from "@/static/images/default_nutrition.jpg";
 import contentPreview from "~/components/blog/content_preview.vue";
 import viewCategory from "~/pages/blog/category";
 import tableHelper from "~/mixins/tableHelper.vue";
@@ -241,7 +240,6 @@ export default {
         languages: "",
         links: []
       },
-      default_HeaderImage,
       originalPayload: {},
       categories: [],
       languages: ["French", "English"],

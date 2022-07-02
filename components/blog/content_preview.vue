@@ -43,12 +43,10 @@
   </v-navigation-drawer>
 </template>
 <script>
-import default_HeaderImage from "@/static/images/default_nutrition.jpg";
 import moment from 'moment'
 export default {
   data() {
     return {
-      default_HeaderImage,
       drawer:false, 
       current: moment().format('MM/DD/YY'),
       selected_category:{
