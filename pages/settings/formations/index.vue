@@ -21,6 +21,7 @@
       :headers="headers"
       :data="data"
       class="custom-table"
+      :currentUrl="url"
       @addRecord="addRecord"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initalize()"
@@ -99,7 +100,8 @@ export default {
         },
       ],
       data: [],
-      drawer1:false
+      drawer1:false,
+      url: ''
     };
   },
   mounted() {
@@ -110,6 +112,7 @@ export default {
       this.$axios.get(`clients?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
+        this.url = `clients?${this.urlQuery()}`
       })
     },
     addRecord() {

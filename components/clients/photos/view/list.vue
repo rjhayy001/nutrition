@@ -7,7 +7,7 @@
       <v-list>
         <v-list-item-group active-class="violet--text">
           <template v-for="(item, index) in data">
-            <v-list-item :key="item.id+'list'">
+            <v-list-item :key="item.id+'list'" @click="$emit('openDetails', item)">
               <template v-slot:default="{ active }">
                 <v-list-item-avatar>
                   <v-img :src="imageUrl('clients', id, item.file_name)" />
@@ -21,17 +21,12 @@
                   <v-list-item-subtitle v-text="item.description"></v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-action style="flex-direction: row;">
-                  <v-icon class="mr-2" color="primary"
-                    @click="$emit('openDetails', item)"
-                  >
-                    mdi-eye
-                  </v-icon>
-                  <v-icon
-                    color="green"
-                    @click="$emit('download', item)"
-                  >
-                    mdi-download
-                  </v-icon>
+                  <div v-if="item.comment!=0" class="mr-4">
+                    <v-icon
+                    >
+                      mdi-message-processing
+                    </v-icon>
+                  </div>
                 </v-list-item-action>
               </template>
             </v-list-item>
@@ -97,3 +92,18 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.commented{
+  position: absolute;
+  border-top-left-radius: 17px;
+  opacity: 0.8;
+  display: inline-block;
+  right: 0px;
+  bottom: 0px;
+  width: 30%;
+  z-index: 3;
+  padding-left: 10px;
+  background: #1e1e1e;
+}
+</style>

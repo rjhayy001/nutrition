@@ -67,14 +67,18 @@
             </v-img>
           </div>
         </v-flex>
+        <v-flex xs12>
+          <empty-data></empty-data>
+        </v-flex>
       </v-layout>
     </v-container>
   </div>
 </template>
 <script>
 import formDrawer from "~/components/clients/photos/form.vue";
+import emptyData from "~/components/error/empty_data.vue"
 export default {
-  components: { formDrawer },
+  components: { formDrawer, emptyData },
   data(){
     return {
       drawer1:false,

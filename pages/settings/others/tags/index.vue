@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <form-drawer :drawerStatus="drawer" @closeDrawer="drawer = !drawer"
+    <form-drawer :tagDrawer="drawer" @closeDrawer="drawer = !drawer"
       @addRecord="addRecord($event)"
       @updateRecord="updateRecord($event)"
       :selectedItem="selectedItem"
@@ -9,6 +9,7 @@
     <data-table
       :options="options"
       :title="title"
+      :currentUrl="url"
       :headers="headers"
       :data="data"
       searchPlaceholder="Name, Color, Description"
@@ -43,16 +44,17 @@ export default {
       options: {},
       title: "Tags",
       headers: [
-        { text: "#", value: "id", width:'2%', filterable:true, sortType:null, filterValue:''},
+        { text: "#", value: "id", width:'2%' },
         { text: "Name", value: "name", filterable:true, sortType:null, filterValue:''},
         { text: "Color", value: "color" , filterable:true, sortType:null, filterValue:''},
         { text: "Description", value: "description" , filterable:true, sortType:null, filterValue:''},
         { text: "Created at", value: "created_at", filterable:true, sortType:null, filterValue:''},
         { text: "Updated at", value: "updated_at", filterable:true, sortType:null, filterValue:''},
-        { text: "Action", value: "action", filterable:true, sortType:null, filterValue:''},
+        { text: "Action", value: "action"},
       ],
       data: [],
       drawer:false,
+      url: '',
       selectedItem:{}
     };
   },
@@ -61,10 +63,10 @@ export default {
   },
   methods: {
     initalize() {
-
       this.$axios.get(`${this.$tags}?${this.urlQuery()}`).then(({data}) => {
         this.data = data.data
         this.options = data.options
+        this.url = `${this.$tags}?${this.urlQuery()}`
       })
     },
     addRecord(payload) {
@@ -94,7 +96,7 @@ export default {
           this.initalize()
         })
       })
-    }
+    },
   },
 };
 </script>

@@ -58,7 +58,8 @@ export default {
       setTimeout(()=> {
         this.initialize()
       }, 100)
-    }
+    },
+    // sortBy
   }
 }
 </script>

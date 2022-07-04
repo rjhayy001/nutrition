@@ -53,7 +53,15 @@
               class="mx-2 mb-2 pa-3"
               height="196"
             >
-              sasd
+              <v-progress-circular
+                :rotate="360"
+                :size="100"
+                :width="15"
+                :value="value"
+                color="teal"
+              >
+                {{value}}
+              </v-progress-circular>
             </v-card>
             <v-card
               class="mx-2 mt-2 pa-3"
@@ -108,13 +116,20 @@ export default {
   },
   data () {
     return {
+      value:0,
       date_menu: false,
       date: moment().format("YYYY-MM-DD"),
     }
   },
+  created(){
+    setTimeout(() =>{
+      this.value = 40
+    }, 2000);
+  },
   methods: {
     nextDay(){
       this.date = moment(this.date).add(1, 'days').format("YYYY-MM-DD");
+      this.value = 80
     },
     prevDay() {
       this.date = moment(this.date).subtract(1, 'days').format("YYYY-MM-DD");

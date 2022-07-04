@@ -122,6 +122,11 @@ export default {
         name: 'coach-login',
         path: '/coach/login',
         component: resolve(__dirname, 'pages/authentication/coach_login.vue')
+      }),
+      routes.push({
+        name: 'forgot_password',
+        path: '/forgot_password',
+        component: resolve(__dirname, 'pages/authentication/forgot_password.vue')
       })
     }
   },

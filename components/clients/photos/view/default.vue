@@ -9,14 +9,14 @@
       xs1
       class="d-flex child-flex "
     >
-      <div class="image-holder">
+      <div class="image-holder" @click="$emit('openDetails', photo)">
         <div class="image-options text-center py-1">
           <v-icon
             dark
             small
             @click="$emit('openDetails', photo)"
           >
-            mdi-eye
+            mdi-note-edit-outline
           </v-icon>
           <v-icon
             dark
@@ -24,6 +24,20 @@
             @click="$emit('download', photo)"
           >
             mdi-download
+          </v-icon>
+          <v-icon
+            dark
+            small
+          >
+            mdi-message-processing
+          </v-icon>
+        </div>
+        <div v-if="photo.comment!=0" class="commented">
+          <v-icon
+            dark
+            small
+          >
+            mdi-message-processing
           </v-icon>
         </div>
         <v-img
@@ -74,9 +88,12 @@ export default {
   transform: scale(1.5);
   z-index: 99;
 }
-.image-holder:hover .image-options {
+/* .image-holder:hover .image-options {
   display: block;
-}
+} */
+/* .image-holder:hover .commented{
+  display: none;
+} */
 .image-holder {
   transition: 0.5s;
   position: relative;
@@ -89,5 +106,17 @@ export default {
   background: #7c94de;
   z-index: 2;
   display: none;
+}
+.commented{
+  position: absolute;
+  border-top-left-radius: 17px;
+  opacity: 0.8;
+  display: inline-block;
+  right: 0px;
+  bottom: 0px;
+  width: 30%;
+  z-index: 3;
+  padding-left: 10px;
+  background: #1e1e1e;
 }
 </style>

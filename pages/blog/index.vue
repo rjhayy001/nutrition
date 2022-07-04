@@ -14,6 +14,7 @@
       @addRecord="addRecord"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initialize()"
+      :currentUrl="url"
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
       @searchRecords="searchRecords($event)"
@@ -130,6 +131,7 @@ export default {
       drawer: false,
       isDescending: true,
       statistics:{},
+      url: ''
     };
   },
     computed: {
@@ -172,6 +174,7 @@ export default {
       this.$axios.get(`${this.$blogs}?${this.urlQuery()}&relations=coach,category`).then(({data}) => {
         this.data = data.data
         this.options = data.options
+        this.url = `${this.$blogs}?${this.urlQuery()}`
       })
     },
     addRecord() {

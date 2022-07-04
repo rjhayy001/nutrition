@@ -7,6 +7,7 @@
       :data="data"
       class="custom-table"
       @addRecord="addRecord"
+      @sortTable="sortTable"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initalize()"
       @FilterBy="filterBy($event)"
@@ -118,6 +119,21 @@ export default {
           this.initalize()
         })
       });
+    },
+    sortTable(query) {
+      let sortBy = null;
+      if(query.sortType){
+        sortBy = `${query.value},${query.sortType == 1 ? 'asc' : 'desc'}`
+        this.$axios
+        .get(`clients?${this.urlQuery()}&sort=${sortBy}`)
+        .then(({ data }) => {
+          this.data = data.data;     
+          this.options = data.options;
+        });
+      }
+      else{
+        this.initalize();
+      } 
     },
   },
 };
