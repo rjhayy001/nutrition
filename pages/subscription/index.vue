@@ -209,7 +209,7 @@ methods: {
   addSubscription(payload) {
       this.$axios.post(`${this.$subscriptions}`, payload)
       this.drawer = false
-      this.initalize()
+      this.initialize()
   },
   deleteRecord(items) {
     this.$root.dialog(
@@ -220,7 +220,7 @@ methods: {
       let ids = items.id
       this.$axios.delete(`${this.$subscriptions}/${ids}`).then(({ data }) => {
         this.successNotification(items, 'annulé', 'abonnement', 'abonnements')
-        this.initalize()
+        this.initialize()
       }).catch((error) => {
         this.errorNotification(error)
       })
