@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container grid-list-md>
+    <v-container grid-list-md >
       <form-drawer :drawerStatus="drawer1" @closeDrawer="drawer1 = !drawer1"
         @addRecord="addRecord($event)"
         @updateRecord="updateRecord($event)"

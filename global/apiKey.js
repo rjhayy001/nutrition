@@ -1,5 +1,6 @@
 import Vue from 'vue'
 Vue.prototype.$imageUrl = 'http://localhost:9292/images/'
+Vue.prototype.$imageUrl2 = 'http://localhost:9292/'
 Vue.prototype.$countries = 'countries'
 Vue.prototype.$cities = 'cities'
 Vue.prototype.$zipcodes = 'zipcodes'
@@ -17,4 +18,3 @@ Vue.prototype.$links = 'links'
 Vue.prototype.$uploadedImages = 'uploaded-images'
 Vue.prototype.$category = 'category'
 Vue.prototype.$subcategory = 'subcategory'
-

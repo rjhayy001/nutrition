@@ -4,7 +4,7 @@
       <v-flex xs12 class="pb-0">
         <div class="toolbar-container">
           <v-toolbar flat dense color="#f5f5f5">
-            <v-toolbar-title class="title-header">@ Test</v-toolbar-title>
+            <v-toolbar-title class="title-header">@ {{client_name}}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-icon class="mx-2">mdi-magnify</v-icon>
             <v-icon class="mx-2">mdi-phone-outline</v-icon>
@@ -16,7 +16,8 @@
       </v-flex>
 
       <v-flex xs12>
-        <v-list class="scrollable-element">
+        
+        <div class="scrollable-element" id="scrollable-element" ref="chat">
           <!-- <div v-for="item in chatList"  :key="item.id"> -->
           <div v-for="(item, index) in chatList" :key="item.id">
             <div class="date-divider ">
@@ -71,7 +72,7 @@
                   <span>More</span>
                 </v-tooltip>
             </v-list-item>
-
+              
             <!-- <v-list-item>
               <v-list-item-avatar
                 size="30"
@@ -86,7 +87,8 @@
               </v-list-item-content>
             </v-list-item> -->
           </div>
-        </v-list>
+    
+        </div>
         <div class="text-field-container">
           <div v-if="image_selecteds.length > 0">
             <div class="d-flex flex-row g-10" id="img-wrapper">
@@ -183,6 +185,7 @@
         timeout: 2000,
         pinMessages: [],
         default_profile,
+        client_name :'',
         image_selected : {
           name:'',
           image:'',
@@ -202,19 +205,35 @@
         if (event.keyCode === 13) {
           thiss.sendMessage();
         }
+        if (event.keyCode === 27) { 
+           thiss.is_pinned = null;
+        }
       });
       this.getChats();
       this.getPinnedMessage();
+      this.scrollInto();
+     
     },
 
-    // watch: {
-    //     image_selecteds: function(value) {
-    //         // If "pageData" ever changes, then we will console log its new value.
-    //     }
-    // },
+    watch: {
+        chatList: function(value) {
+          this.scrollInto();
+        }
+    },
     methods:{
       initialize(){
         console.log(this.$route.params.id)
+      },
+      changeS(key){
+        setTimeout(function(scope) {
+        document.getElementById("chats"+key).focus();
+        }, 200, this);
+      },
+      scrollInto(){
+        setTimeout(function() {
+          var objDiv = document.getElementById("scrollable-element");
+          objDiv.scrollTop = objDiv.scrollHeight;
+        }, 100, this);
       },
       send(){
         alert('test')
@@ -247,9 +266,11 @@
               }
           )
           .then(({ data }) => {
-            this.chatList = data;
+            // this.chatList = data;
             this.message ='';
             this.getPinnedMessage();
+            this.getChats();
+             this.image_selecteds = [];
           });
         }
         if(this.image_selecteds.length > 0 ){
@@ -264,9 +285,10 @@
               }
           )
           .then(({ data }) => {
-            this.chatList = data;
-            this.message ='';
+            // this.chatList = data.data;
             this.getPinnedMessage();
+            this.message ='';
+            this.getChats();
             this.image_selecteds = [];
           });
         }
@@ -301,8 +323,11 @@
         .get(`${this.$clients}/getChat/`+`${this.$route.params.id}`
          )
         .then(({ data }) => {
-          console.log(data);
-          this.chatList = data;
+          this.chatList = data.data;
+          this.client_name = data.name;
+         
+            //  var container = document.querySelector("#chats25");
+            //  container.focus();
         });
       },
       ChangeDateformat(date){
@@ -324,7 +349,6 @@
         .get(`${this.$clients}/getPinnedMessage/`
          )
         .then(({ data }) => {
-          console.log(data);
           this.pinMessages = data;
         });
       },
@@ -360,6 +384,15 @@
       decodeMessage(message) {
        return JSON.parse(message);
       },
+      scrollIntoView() {
+        var container = document.querySelector("#scrollable-element");
+        var scrollHeight = container.scrollHeight
+        container.scrollTop  = scrollHeight;
+        // alert(scrollHeight);
+        // alert(container.scrollTop);
+        container.scrollTo({ top:container.scrollHeight, behavior: 'smooth'});
+      }
+
     },
     filters: {
         truncate: function (text, length, suffix) {
@@ -380,6 +413,7 @@
     scrollbar-width: none; /* for Firefox */
     overflow-y: auto;
     height:76vh;
+    scroll-behavior: smooth;
     border-bottom: #dfdfdf;
 }
 

@@ -7,6 +7,7 @@ import unverifyIcon from '@/assets/icons/unverify.jpg'
 import zipIcon from '@/assets/icons/zip.png'
 import htmlIcon from '@/assets/icons/html.png'
 import mp3Icon from '@/assets/icons/mp3.png'
+import urlIcon from '@/assets/icons/url.png'
 export default {
   data(){
     return {
@@ -17,7 +18,8 @@ export default {
       unverifyIcon,
       zipIcon,
       htmlIcon,
-      mp3Icon
+      mp3Icon,
+      urlIcon
     }
   },
   computed:{
@@ -54,6 +56,10 @@ export default {
         {
           type:'mp3',
           icon:this.mp3Icon
+        },
+        {
+          type:'url',
+          icon:this.urlIcon
         },
       ]
     }

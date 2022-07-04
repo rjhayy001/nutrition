@@ -3,10 +3,10 @@
      <v-card class="mx-auto" max-width="344" outlined id="wrapper-comment" :style="[expand2==false? {border:'none !important'}:'']">
        <v-list-item three-line >
          <v-list-item-content >
-           <v-icon v-if="expand2==true" class="minimize" large @click="expand2 = !expand2">mdi-menu-down</v-icon>
-           <v-icon v-else class="minimize" large @click="expand2 = !expand2">mdi-plus-circle</v-icon>
+           <v-icon v-if="expand2==true" class="minimize" large @click="showCreateFeedback(false)">mdi-menu-down</v-icon>
+           <v-icon v-else class="minimize" large @click="showCreateFeedback(true)">mdi-plus-circle</v-icon>
             <div class="text-overline mb-4" v-show="expand2">
-              Feedback de la semaine
+              Feedback de la semaine 
             </div>
               <div height="100" width="100" v-show="expand2">
                 <v-form ref="form" v-model="valid" lazy-validation>
@@ -45,7 +45,14 @@
 </template>
 
 <script>
+import { type } from 'os';
+
 export default {
+  props:{
+    showFeedback:{
+        type:Boolean,
+      }
+  },
   data() {
     return {
      data : {
@@ -64,6 +71,11 @@ export default {
     };
   },
 
+  watch: {
+      showFeedback: function(value) {
+       this.expand2 = this.showFeedback;
+      }
+  },
   mounted() {
     // alert(`${this.$route.params.id}`);
     this.getUnsaveFeedback();
@@ -88,8 +100,9 @@ export default {
           // feedback = data.feedback;
         });
     },
-    minimize() {
-      console.log('test');
+    showCreateFeedback(bool) {
+     this.expand2 = bool;
+     this.$emit('feedBackForm',false);
     },
     setStorage() {
       localStorage.setItem(`${this.$route.params.id}`,this.data.feedback);

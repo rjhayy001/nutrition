@@ -15,10 +15,15 @@
           <v-list-item-title class="text-capitalize">add documents</v-list-item-title>
         </v-list-item>
         <v-list-item
+            @click="$emit('addUrl')"
+        >
+          <v-list-item-title class="text-capitalize">add video url</v-list-item-title>
+        </v-list-item>
+        <!-- <v-list-item
            @click="showCreateFolder=true"
         >
           <v-list-item-title class="text-capitalize">new folder</v-list-item-title>
-        </v-list-item>
+        </v-list-item> -->
       </v-list>
       <v-list dense v-else>
         <v-list-item
@@ -31,10 +36,10 @@
         </v-list-item>
       </v-list>
     </v-menu>
-    <create-folder
+    <!-- <create-folder
       :dialog="showCreateFolder"
       @close="showCreateFolder=false"
-    />
+    /> -->
   </div>
 </template>
 <script>
@@ -47,6 +52,7 @@ export default {
   data(){
     return{
       showCreateFolder: false,
+      showAddurl: false,
       x: 0,
       y: 0,
       items: [
@@ -57,6 +63,7 @@ export default {
       ],
     }
   },
+
   methods: {
     addDocuments(){
       alert('sad')
