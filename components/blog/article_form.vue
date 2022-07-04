@@ -291,7 +291,7 @@ export default {
         if (!result) return;
         if (this.payload.id) {
           this.$emit("updateRecord", this.payload);
-        } else { arr
+        } else { 
           this.$emit("addRecord",this.payload);
         }
       });
@@ -334,10 +334,7 @@ export default {
       }
     },
     deleteLink(items) {
-      this.$axios.delete(`${this.$bloglinks}/${items.id}`).then(({ data }) => {
-        this.$arraysplicer(items, this.payload.links)
-        this.successNotification(items, "deleted", "link", "links", "title");
-      });
+      this.$arraysplicer(items, this.payload.links)
     },
     openLink(item) {
       window.open(item.link,'_blank');
