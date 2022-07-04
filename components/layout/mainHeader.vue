@@ -1,5 +1,5 @@
 <template>
-   <v-app-bar
+  <v-app-bar
     fixed
     app
     :style="this.$store.getters.sidebarStatus ? 'left: 230px' : '0px'"
@@ -8,7 +8,11 @@
       <v-app-bar-nav-icon @click.stop="toggleSidebar" />
     </template>
     <p class="title">
-      <img src="/logo.svg" alt="" width="13%">
+      <img
+        src="/logo.svg"
+        alt=""
+        width="13%"
+      >
       RUN YOUR LIFE ADMINISTRATION
     </p>
     <v-spacer />
@@ -24,7 +28,11 @@
         append-icon="mdi-magnify"
       ></v-autocomplete>
     </div>
-     <v-btn @click="changeView" icon v-if="$isAdmin()">
+    <v-btn
+      @click="changeView"
+      icon
+      v-if="$isAdmin()"
+    >
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-icon v-on="on">mdi-account-switch-outline</v-icon>
@@ -34,84 +42,93 @@
         </span>
       </v-tooltip>
     </v-btn>
-    <v-btn icon>
-      <v-icon>mdi-bell-outline</v-icon>
-    </v-btn>
+
+    <notification></notification>
+
     <!-- <v-btn icon>
       <v-icon  @click.prevent.stop="changeLanguage">mdi-translate</v-icon>
     </v-btn> -->
     <v-menu
-    bottom left offset-y
-    tile
-    min-width="200"
-    nudge-left="0"
-    nudge-top="-8"
-  >
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn icon
-        v-bind="attrs"
-        v-on="on"
-      >
-        <v-icon  >mdi-translate</v-icon>
-      </v-btn>
-    </template>
-    <v-list>
-       <v-list-item-group
-        v-model="active_language"
-        color="primary"
-      >
-      <v-list-item
-        v-for="(item, index) in language"
-        :key="index.code"
-        dense
-        @click.prevent.stop="changeLanguage(item.code)"
-        active
-      >
-        <v-list-item-avatar tile>
-          <v-img :src="item.flag"/>
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title v-text="item.title"></v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      </v-list-item-group>
+      bottom
+      left
+      offset-y
+      tile
+      min-width="200"
+      nudge-left="0"
+      nudge-top="-8"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          icon
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-icon>mdi-translate</v-icon>
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item-group
+          v-model="active_language"
+          color="primary"
+        >
+          <v-list-item
+            v-for="(item, index) in language"
+            :key="index.code"
+            dense
+            @click.prevent.stop="changeLanguage(item.code)"
+            active
+          >
+            <v-list-item-avatar tile>
+              <v-img :src="item.flag" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title"></v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
 
-    </v-list>
-  </v-menu>
+      </v-list>
+    </v-menu>
     <custom-list :items="accountLinks">
     </custom-list>
-    <v-btn icon @click="$auth.logout()">
+    <v-btn
+      icon
+      @click="$auth.logout()"
+    >
       <v-icon>mdi-logout-variant</v-icon>
     </v-btn>
   </v-app-bar>
 </template>
 <script>
 import customList from '~/components/ui/list.vue'
+import notification from '~/components/layout/notification.vue'
 export default {
   name: 'DefaultLayout',
   components: {
-    customList
+    customList,
+    notification
   },
   data () {
     return {
+      count: 0,
       clipped: false,
-      accountLinks:[
+      accountLinks: [
         {
           title: 'Profile',
-          icon:'mdi-account'
+          icon: 'mdi-account'
         },
         { title: 'Click Me' },
       ],
-      language:[
+      language: [
         {
           title: 'French',
-          code:'fr',
+          code: 'fr',
           flag: '/images/flags/france.png'
         },
         {
           title: 'English',
-          code:'en',
-           flag: '/images/flags/usa.png'
+          code: 'en',
+          flag: '/images/flags/usa.png'
         },
       ],
       items: [
@@ -132,8 +149,9 @@ export default {
       title: 'Vuetify.js'
     }
   },
-   computed: {
-    active_language() {
+
+  computed: {
+    active_language () {
       let curr_language = this.language.find(lang => {
         return lang.code === this.$i18n.locale
       });
@@ -142,22 +160,22 @@ export default {
     },
   },
   methods: {
-    changeView(){
+    changeView () {
       let view = this.$view() == 'coach' ? 'admin' : 'coach'
 
       localStorage.setItem('view', view)
 
       location.reload();
     },
-    toggleSidebar() {
+    toggleSidebar () {
       let sidebarstatus = this.$store.getters.sidebarStatus
       this.$store.commit('updateSidebarStatus', !sidebarstatus)
     },
-    toggleMiniVariant() {
+    toggleMiniVariant () {
       let miniVariant = this.$store.getters.miniVariant
       this.$store.commit('updateMiniVariant', !miniVariant)
     },
-    changeLanguage(code) {
+    changeLanguage (code) {
 
       this.$i18n.setLocale(code);
       location.reload();

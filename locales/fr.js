@@ -111,11 +111,11 @@ const messages = {
     "edit": "Modifier",
     "profile": "Profil",
     "loginCredential": "INFORMATIONS D'IDENTIFICATION",
-    
+
     "form": "Formulaires",
     "measures": "Mesures",
     "tracking": "Suivi",
-    "feedback": "retour d'information",
+    "feedback": "Feedback",
     //placeholder form
     "typeFirstName": "Type Prénom ...",
     "typeLastName": "Type Nom de famille ...",

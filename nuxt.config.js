@@ -32,6 +32,7 @@ export default {
     { src: '~plugins/components/vue-file-agent', ssr: false },
     { src: '~global/globalMixin', ssr: true },
     { src: '~global/apiKey', ssr: true },
+    { src: '~plugins/firebase', ssr: false },
   ],
   components: false,
   buildModules: [
