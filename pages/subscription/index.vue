@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <subscription-form :drawerStatus="drawer" @closeDrawer="drawer = !drawer" @addRecord="addRecord($event)"
+    <subscription-form :drawerStatus="drawer" @closeDrawer="drawer = false" @addRecord="addSubscription($event)"
       :selectedItem="selectedItem" />
 
     <data-table
@@ -206,6 +206,11 @@ methods: {
   addRecord() {
     this.drawer = true
   },
+  addSubscription(payload) {
+      this.$axios.post(`${this.$subscriptions}`, payload)
+      this.drawer = false
+      this.initialize()
+  },
   deleteRecord(items) {
     this.$root.dialog(
       "Annuler un abonnement",
@@ -215,7 +220,7 @@ methods: {
       let ids = items.id
       this.$axios.delete(`${this.$subscriptions}/${ids}`).then(({ data }) => {
         this.successNotification(items, 'annulé', 'abonnement', 'abonnements')
-        this.initalize()
+        this.initialize()
       }).catch((error) => {
         this.errorNotification(error)
       })

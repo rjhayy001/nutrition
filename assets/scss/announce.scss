@@ -29,3 +29,10 @@
   overflow: hidden;
   text-overflow: ellipsis; 
 }
+
+
+.content-editor .ql-container .ql-editor {
+  overflow-y: auto;
+  height: 50vh!important;
+  min-height: 0!important;
+}

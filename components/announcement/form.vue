@@ -47,16 +47,16 @@
                   <v-checkbox
                     class="user-checkbox"
                     v-model="selectedCoachType"
-                    :label="this.$t('announce.haveClient')"
-                    value="have-clients"
+                    label="Have Client"
+                    value="client"
                     @change="getCoaches($event)"
                     id="subscriber"
                   ></v-checkbox>
                   <v-checkbox
                     class="user-checkbox"
                     v-model="selectedCoachType"
-                    :label="this.$t('announce.dontHaveClient')"
-                    value="dont-have-clients"
+                    label="Do not have Client"
+                    value="not-client"
                     @change="getCoaches($event)"
                     id="non-subscriber"
                   ></v-checkbox>
@@ -368,7 +368,7 @@
                   <v-flex xs12>
                     <p class="subtitle-1 font-weight-medium text-uppercase">
                       {{ $t('blogs.title') }}:
-                    </p> 
+                    </p>
                   </v-flex>
                   <v-text-field
                     v-model="payload.title"
@@ -504,21 +504,17 @@ export default {
       this.$refs.form.validate().then((result) => {
         if (!result) return;
         this.payload.is_sent = is_sent;
-        console.log(this.payload.type,"type");
         if(is_sent) {
           if(this.payload.id && this.currentTime<=this.payload) {
-            console.log("update");
             if(this.payload.type==0){
               this.payload.status = 0;
             }
             this.$emit("updateRecord", this.payload);
           }else{
-            console.log("create")
             this.payload.status = 1;
             this.$emit("addRecord", this.payload);
           }
         }else{
-          console.log("save")
           this.payload.status = 0;
           this.$emit("saveRecord", this.payload)
         }
@@ -545,7 +541,6 @@ export default {
         .get(`clients?type=${type}&no-paginate=true`)
         .then(({ data }) => {
           this.clients = data.data;
-          console.log(this.clients,"clients")
           this.selectAllClient()
         });
     },
@@ -579,7 +574,7 @@ export default {
     //   }
     // },
     drawerStatus(val) {
-      if (val && !this.originalPayload) 
+      if (val && !this.originalPayload)
         this.originalPayload = this.cloneVariable(this.payload);
         this.drawer = val;
     },
@@ -595,7 +590,7 @@ export default {
         this.payload = this.cloneVariable(val);
 
         const selectedClientIds = this.payload.clients.map(({ id }) => id);
-        this.payload.clients = selectedClientIds; 
+        this.payload.clients = selectedClientIds;
 
         const selectedCoachesIds = this.payload.coaches.map(({ id }) => id);
         this.payload.coaches = selectedCoachesIds;

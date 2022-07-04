@@ -264,11 +264,9 @@ export default {
       })
     },
     addRecord(payload) {
-      console.log(payload,"payload")
       this.create().then(() => {
         this.$axios.post(`${this.$announces}`, payload).then(({data}) => {
           this.successNotification(payload, "sent","announce","announces","title")
-          // this.$store.commit('resetForm', true)
           this.initialize()
         })
       })
@@ -277,7 +275,6 @@ export default {
       this.create().then(() => {
         this.$axios.post(`${this.$announces}/save`, payload).then(({data}) => {
           this.successNotification(payload, "save","announce","announces","title")
-          // this.$store.commit('resetForm', true)
           this.initialize()
         })
       })

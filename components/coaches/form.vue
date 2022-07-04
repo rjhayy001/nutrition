@@ -556,7 +556,6 @@ export default {
     headerEdit: {
       handler(val) {
         this.headerEdit=this.enableEdit
-        console.log(this.enableEdit,"enable")
       }
     }
   },
@@ -608,7 +607,9 @@ export default {
       reader.onload = (e) => {
         this.payload.logo = e.target.result;
       };
-      reader.readAsDataURL(file);
+      if(file) {
+        reader.readAsDataURL(file);
+      }
     },
     getAllCountries() {
       this.$store.dispatch("address/FETCH_COUNTRIES").then(({ data }) => {

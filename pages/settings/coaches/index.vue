@@ -274,7 +274,7 @@ export default {
         });
     },
     showRecord(item){
-        this.goTo("settings-coaches-id-profile", { id: item.id });
+      this.goTo("settings-coaches-id-profile", { id: item.id });
     },
     editRecord(item) {
       this.goTo("settings-coaches-edit-id", { id: item.id });
