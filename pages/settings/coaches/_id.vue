@@ -50,18 +50,7 @@ export default {
               title:'Global',
               to: 'settings-coaches-id-global'
             },
-            // {
-            //   title:'Formulaire',
-            //   to: 'settings-coaches-id-formula'
-            // },
-            // {
-            //   title:'Mesures',
-            //   to: 'settings-coaches-id-measure'
-            // },
-            // {
-            //   title:'Tracking',
-            //   to: 'settings-coaches-id-tracking'
-            // },
+
             {
               title:'Photos',
               to: 'settings-coaches-id-photos'
