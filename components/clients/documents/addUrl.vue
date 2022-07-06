@@ -9,22 +9,32 @@
         <v-btn small @click="close">cancel</v-btn>
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
-        <span class="subtitle-1  font-weight-bold">Add url</span>
+        <span class="subtitle-1  font-weight-bold">Add link</span>
       </v-toolbar>
-      <v-card-text class="pa-4">
+      <v-card-text class="">
+        <div>
+          <v-text-field
+          type="text"
+          v-model="url_name"
+          label="Tittle"
+        
+          hide-details ="false"
+          ></v-text-field>
+        </div>
         <div class="mt-3">
           <v-text-field
           type="text"
           v-model="input_url"
-          label="add link here"
-          outline
+          label="Add link here"
+        
           hide-details ="false"
-          solo></v-text-field>
+          ></v-text-field>
         </div>
       </v-card-text>
-      <v-card-actions class="justify-end">
-          <v-btn small @click="save()">Save</v-btn>
-      </v-card-actions>
+       <v-toolbar class="text-h5 grey lighten-2 d-flex justify-end" flat dense>
+             <v-btn small @click="save()">Save</v-btn>
+        </v-toolbar>
+    
     </v-card>
   </v-dialog>
 </template>
@@ -33,7 +43,8 @@ export default {
   props: ['showAddurl'],
   data(){
     return{
-      input_url:''
+      input_url:'',
+      url_name:''
     }
   },
   methods:{
@@ -45,12 +56,13 @@ export default {
         this.$axios
           .post(`documents/urlLinks`,{
               coach_id :  this.$auth.user.id,
+              file_name :  this.url_name,
               file :  this.input_url,
               }
           )
           .then(({ data }) => {
-              console.log(data);
               this.input_url='';
+              this.url_name='';
               this.$emit('showDocument')
           });
     }

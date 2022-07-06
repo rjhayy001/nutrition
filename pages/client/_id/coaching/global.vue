@@ -152,7 +152,7 @@
           </v-card>
         </v-flex>
       </v-row>
-    <feed-back-form></feed-back-form>
+    <feed-back-form :feedback_type="type"></feed-back-form>
     </v-container>
   </div>
 </template>
@@ -174,6 +174,7 @@ export default {
       client: {},
       loading: false,
       active_subscription: {},
+      type:'global',
       headers: [
         {
           text: 'Dessert (100g serving)',

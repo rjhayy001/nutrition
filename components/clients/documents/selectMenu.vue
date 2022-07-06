@@ -17,7 +17,7 @@
         <v-list-item
             @click="$emit('addUrl')"
         >
-          <v-list-item-title class="text-capitalize">add video url</v-list-item-title>
+          <v-list-item-title class="text-capitalize">add link</v-list-item-title>
         </v-list-item>
         <!-- <v-list-item
            @click="showCreateFolder=true"
@@ -25,7 +25,7 @@
           <v-list-item-title class="text-capitalize">new folder</v-list-item-title>
         </v-list-item> -->
       </v-list>
-      <v-list dense v-else>
+      <!-- <v-list dense v-else>
         <v-list-item
         >
           <v-list-item-title class="text-capitalize">rename</v-list-item-title>
@@ -34,7 +34,7 @@
         >
           <v-list-item-title class="text-capitalize">delete</v-list-item-title>
         </v-list-item>
-      </v-list>
+      </v-list> -->
     </v-menu>
     <!-- <create-folder
       :dialog="showCreateFolder"
