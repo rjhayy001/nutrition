@@ -7,7 +7,7 @@
           <div>
             <v-toolbar flat>
               <v-toolbar-title style="font-size: 30px;">
-                Bonjour <span class="font-weight-bold">{{$auth.user.full_name}}!</span>
+                Bonjour <span class="font-weight-bold">{{$auth.user.full_name}}!</span> asdasdasdasdas
               </v-toolbar-title>
               <v-spacer></v-spacer>
               <div style="width:200px;">
