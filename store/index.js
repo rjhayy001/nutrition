@@ -3,6 +3,7 @@ export const state = () => ({
   miniVariant: false,
   resetForm: false,
   feedbackFlag: false,
+  trackingFlag:false,
 })
 
 export const mutations = {
@@ -25,6 +26,9 @@ export const mutations = {
   },
   updateFeedbackFlag (state, value) {
     state.feedbackFlag = value
+  },
+  updateTrackingFlag (state, value) {
+    state.trackingFlag = value
   }
 }
 
@@ -37,5 +41,8 @@ export const getters = {
   },
   feedbackFlag (state) {
     return state.feedbackFlag
+  },
+  trackingFlag (state) {
+    return state.trackingFlag
   }
 }

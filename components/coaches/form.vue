@@ -19,12 +19,12 @@
             <v-flex xs12 class="mb-2">
               <div class="d-flex align-center py-2 data-table-cus">
                 <p class="title mr-1">
-                  {{headerEdit ? "PROFILE" : ( payload.id ? "EDIT" : "CREATE NEW") }} COACH
+                  {{headerEdit ? this.$t('clients.profile') : ( payload.id ? this.$t('coaches.editCoach') : this.$t('coaches.createCoach')) }}
                 </p>
                 <v-spacer></v-spacer>
                 <v-btn class="mr-1" small @click="$router.go('-1')">
                   <v-icon>mdi-arrow-left</v-icon>
-                  BACK
+                  {{ this.$t('global.back') }}
                 </v-btn>
               </div>
               <hr />
@@ -46,7 +46,7 @@
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">
                         <span :hidden="!enableEdit">*</span>
-                        first name
+                        {{ $t('clients.firstName') }}
                       </p>
                       <v-text-field
                       class="text-capitalize"
@@ -56,7 +56,7 @@
                         :disabled="!enableEdit"
                         v-model="payload.first_name"
                         name="first_name"
-                        placeholder="Type first name..."
+                        :placeholder="$t('clients.typeFirstName')"
                         hide-details="auto"
                         type="text"
                         :error-messages="errors"
@@ -67,7 +67,7 @@
                 <v-flex xs6>
                   <ValidationProvider slim>
                     <div class="mb-1">
-                      <p class="subtitle-2 font-weight-regular mb-2">Last name</p>
+                      <p class="subtitle-2 font-weight-regular mb-2">{{ $t('clients.lastName') }}</p>
                       <v-text-field
                         filled
                         flat
@@ -76,7 +76,7 @@
                         class="text-capitalize"
                         v-model="payload.last_name"
                         name="last_name"
-                        placeholder="Type last name ..."
+                        :placeholder="$t('clients.typeLastName')"
                         hide-details="auto"
                         type="text"
                       ></v-text-field>
@@ -88,7 +88,7 @@
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">
                         <span :hidden="!enableEdit">*</span>
-                        Phone #1
+                        {{ $t('clients.phone') }} #1
                       </p>
                       <v-text-field
                         filled
@@ -97,7 +97,7 @@
                         :disabled="!enableEdit"
                         v-model="payload.phone_1"
                         name="phone_1"
-                        placeholder="Type your mobile ..."
+                        :placeholder="$t('clients.typeYourMobile')"
                         hide-details="auto"
                         type="text"
                       ></v-text-field>
@@ -107,7 +107,7 @@
                 <v-flex xs6>
                   <ValidationProvider slim>
                     <div class="mb-1">
-                      <p class="subtitle-2 font-weight-regular mb-2">Phone #2</p>
+                      <p class="subtitle-2 font-weight-regular mb-2">{{ $t('clients.phone') }} #2</p>
                       <v-text-field
                         filled
                         flat
@@ -115,7 +115,7 @@
                         :disabled="!enableEdit"
                         v-model="payload.phone_2"
                         name="phone_2"
-                        placeholder="Type your mobile ..."
+                        :placeholder="$t('clients.typeYourMobile')"
                         hide-details="auto"
                         type="text"
                       ></v-text-field>
@@ -127,7 +127,7 @@
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">
                         <span :hidden="!enableEdit">*</span>
-                        Email Address
+                        {{ $t('clients.email') }}
                       </p>
                       <v-text-field
                         filled
@@ -136,7 +136,7 @@
                         :disabled="!enableEdit"
                         v-model="payload.email"
                         name="email_1"
-                        placeholder="Type your email ..."
+                        :placeholder="$t('clients.typeYourEmail')"
                         hide-details="auto"
                         type="text"
                       ></v-text-field>
@@ -147,7 +147,7 @@
                   <ValidationProvider slim>
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">
-                        Date of birth
+                        {{ $t('clients.birthday') }}
                       </p>
                       <v-dialog
                         ref="dialog"
@@ -162,7 +162,7 @@
                             v-model="payload.birthday"
                             solo
                             flat
-                            label="Choose date of birth"
+                            :label="$t('clients.chooseDateOfBirth')"
                             prepend-inner-icon="mdi-calendar"
                             readonly
                             v-bind="attrs"
@@ -173,7 +173,7 @@
                         <v-date-picker v-model="payload.birthday" scrollable>
                           <v-spacer></v-spacer>
                           <v-btn text color="primary" @click="modal = false">
-                            Cancel
+                            {{ this.$t('global.cancel') }}
                           </v-btn>
                           <v-btn
                             text
@@ -188,13 +188,13 @@
                   </ValidationProvider>
                 </v-flex>
                 <v-flex xs12>
-                  <p class="subtitle-1 font-weight-medium">LOGIN CREDENTIALS</p>
+                  <p class="subtitle-1 font-weight-medium">{{ $t('clients.loginCredential') }}</p>
                 </v-flex>
                 <v-flex xs6>
                   <ValidationProvider slim>
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">
-                        Email Address/username
+                        {{ $t('clients.email') }}/{{ $t('clients.username') }}
                       </p>
                       <v-text-field
                         filled
@@ -203,7 +203,7 @@
                         :disabled="!enableEdit"
                         v-model="payload.email"
                         name="email_2"
-                        placeholder="Type your email ..."
+                        :placeholder="$t('clients.typeEmailOrUsername')"
                         hide-details="auto"
                         type="text"
                       ></v-text-field>
@@ -224,7 +224,7 @@
                         :append-icon="
                           viewPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'
                         "
-                        placeholder="Type your password ..."
+                        :placeholder="$t('clients.typeYourPassword')"
                         hide-details="auto"
                         :type="viewPassword ? 'text' : 'password'"
                         @click:append="viewPassword = !viewPassword"
@@ -233,14 +233,14 @@
                   </ValidationProvider>
                 </v-flex>
                 <v-flex xs12>
-                  <p class="subtitle-1 font-weight-medium">ADDRESS</p>
+                  <p class="subtitle-1 font-weight-medium">{{ $t('clients.address') }}</p>
                 </v-flex>
                 <v-flex xs12>
                   <ValidationProvider slim>
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">
                         <span :hidden="!enableEdit">*</span>
-                        Address
+                        {{ $t('clients.address') }}
                       </p>
                       <v-text-field
                         filled
@@ -249,7 +249,7 @@
                         :disabled="!enableEdit"
                         v-model="payload.address_1"
                         name="address_1"
-                        placeholder="Type your address ..."
+                        :placeholder="$t('clients.typeYourAddress')"
                         hide-details="auto"
                         type="text"
                       ></v-text-field>
@@ -260,7 +260,7 @@
                   <ValidationProvider slim>
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">
-                        Additonal Address
+                        {{ $t('clients.additionalAddress') }}
                       </p>
                       <v-textarea
                         filled
@@ -269,7 +269,7 @@
                         :disabled="!enableEdit"
                         v-model="payload.address_2"
                         name="address_2"
-                        placeholder="Type your additional address ..."
+                        :placeholder="$t('clients.typeYourAddAddress')"
                         hide-details="auto"
                         type="text"
                         rows="2"
@@ -282,7 +282,7 @@
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">
                         <span :hidden="!enableEdit">*</span>
-                        City
+                        {{ $t('clients.city') }}
                       </p>
                       <v-combobox
                         filled
@@ -302,7 +302,7 @@
                 <v-flex xs6>
                   <ValidationProvider slim>
                     <div class="mb-1">
-                      <p class="subtitle-2 font-weight-regular mb-2">Zipcode</p>
+                      <p class="subtitle-2 font-weight-regular mb-2">{{ $t('clients.zipcode') }}</p>
                       <v-combobox
                         filled
                         flat
@@ -322,7 +322,7 @@
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">
                         <span :hidden="!enableEdit">*</span>
-                        Country
+                        {{ $t('clients.country') }}
                       </p>
                       <v-combobox
                         filled
@@ -344,7 +344,7 @@
             <v-flex xs6 class="py-0 px-7">
               <v-layout row wrap>
                 <v-flex xs12>
-                  <p class="subtitle-1 font-weight-medium">PROFILE</p>
+                  <p class="subtitle-1 font-weight-medium">{{ $t('clients.profile') }}</p>
                 </v-flex>
                 <v-flex xs12>
                   <div class="profile-box">
@@ -364,7 +364,7 @@
                       @click="handleFileImport"
                     >
                       <v-icon>mdi-upload-outline</v-icon>
-                      upload photo
+                      {{ $t('global.uploadPhoto') }}
                     </v-btn>
                     <input
                       accept="image/png, image/gif, image/jpeg"
@@ -386,7 +386,7 @@
                         :disabled="!enableEdit"
                         v-model="payload.taggable"
                         :items="tagsOption"
-                        label="Select tags ..."
+                        :label="$t('clients.selectTags')"
                         hide-details="auto"
                         prepend-inner-icon="mdi-plus"
                         @click:prepend-inner.stop="tagDrawer = !tagDrawer"
@@ -400,7 +400,7 @@
                 <v-flex xs12>
                   <ValidationProvider slim>
                     <div class="mb-1">
-                      <p class="subtitle-2 font-weight-regular mb-2">Groups</p>
+                      <p class="subtitle-2 font-weight-regular mb-2">{{ $t('clients.groups') }}</p>
                       <v-autocomplete
                         filled
                         flat
@@ -412,7 +412,7 @@
                         @click:prepend-inner.stop="groupDrawer = !groupDrawer"
                         item-text="name"
                         item-value="id"
-                        label="Select groups ..."
+                        :label="$t('clients.selectGroups')"
                         prepend-inner-icon="mdi-plus"
                         multiple
                       >
@@ -423,7 +423,7 @@
                 <v-flex xs12>
                   <ValidationProvider slim>
                     <div class="mb-1">
-                      <p class="subtitle-2 font-weight-regular mb-2">Status</p>
+                      <p class="subtitle-2 font-weight-regular mb-2">{{ $t('clients.status') }}</p>
                       <v-select
                         filled
                         flat
@@ -444,24 +444,24 @@
               <div v-if="this.enableEdit" class="form-footer d-flex justify-end">
                 <v-btn v-if="this.enableEdit" @click="cancelBtn">
                   <v-icon>mdi-content-save-outline</v-icon>
-                  cancel
+                  {{ this.$t('global.cancel') }}
                 </v-btn>
                 <v-btn v-if="this.enableEdit" class="success ml-5" type="submit">
                   <v-icon>mdi-content-save-outline</v-icon>
-                  update
+                  {{ this.$t('global.update') }}
                 </v-btn>
               </div>
               <div v-else class="form-footer d-flex justify-end">
                 <v-btn class="success" @click="editBtn">
                   <v-icon>mdi-content-save-outline</v-icon>
-                  edit
+                  {{ this.$t('global.edit') }}
                 </v-btn>
               </div>
             </div>
             <div v-else class="form-footer d-flex justify-end">
               <v-btn class="success" @click="saveForm">
                 <v-icon>mdi-content-save-outline</v-icon>
-                {{ payload.id ? "update" : "saves" }}
+                {{ payload.id ? this.$t('global.update') : this.$t('global.save') }}
               </v-btn>
             </div>
           </v-layout>
@@ -502,8 +502,8 @@ export default {
       viewPassword: false,
       originalPayload: {},
       statusOptions: [
-        { id: 1, name: "Active" },
-        { id: 0, name: "Inactive" },
+        { id: 1, name: this.$t('global.active') },
+        { id: 0, name: this.$t('global.inActive') },
       ],
       tagDrawer: false,
       groupDrawer: false,
@@ -556,7 +556,6 @@ export default {
     headerEdit: {
       handler(val) {
         this.headerEdit=this.enableEdit
-        console.log(this.enableEdit,"enable")
       }
     }
   },
@@ -608,7 +607,9 @@ export default {
       reader.onload = (e) => {
         this.payload.logo = e.target.result;
       };
-      reader.readAsDataURL(file);
+      if(file) {
+        reader.readAsDataURL(file);
+      }
     },
     getAllCountries() {
       this.$store.dispatch("address/FETCH_COUNTRIES").then(({ data }) => {

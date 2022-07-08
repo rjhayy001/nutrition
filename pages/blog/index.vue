@@ -1,5 +1,9 @@
 <template>
   <v-container fluid>
+    <statistics-component
+      :statistics="formattedStatistics"
+      :title="title"
+    />
     <data-table
       :options="options"
       :title="title"
@@ -8,28 +12,37 @@
       :sort-desc.sync="isDescending"
       class="custom-table"
       @addRecord="addRecord"
+      @deleteRecord="deleteRecord($event)"
+      @reloadtable="initialize()"
       :currentUrl="url"
-      @reloadtable="initalize()"
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
       @searchRecords="searchRecords($event)"
       @editRecord="editRecord($event)"
     >
-      <template v-slot:status="{ item }">
-        <v-switch
-          @click="changeStatus(item)"
-          v-model="item.status"
-          inset
-          color="success"
-          dense
-          hide-details=""
-        ></v-switch>
+      <template v-slot:coach_id="{ item }">
+        {{item.coach.full_name}}
       </template>
-      <template v-slot:created_at="{ item }">
+      <template v-slot:category="{ item }">
+        {{item.category.name}}
+      </template>
+      <template v-slot:summary="{ item }">
+        <div class="ellipse five-lines">
+        {{item.summary}}
+        </div>
+      </template>
+      <template v-slot:image="{ item }">
+        <div class="profile-box" >
+          <div class="ma-2">
+            <v-img  class="headerimage" height="100px" width="200px" :src="item.image"></v-img>
+          </div>
+        </div>
+      </template>
+      <template v-slot:content="{ item }">
+        <div class="blog-main_content ellipse three-lines" v-html="item.content"></div>
+      </template>
+      <template v-slot:published_date="{ item }">
         {{ formatDate(item.created_at) }}
-      </template>
-      <template v-slot:updated_at="{ item }">
-        {{ formatDate(item.updated_at) }}
       </template>
     </data-table>
   </v-container>
@@ -38,9 +51,10 @@
 import dataTable from "~/components/ui/dataTable.vue";
 import tableHelper from "~/mixins/tableHelper.vue";
 import dateHelper from "~/mixins/dateHelper.vue";
-import formBlog from "~/components/blogs/form.vue";
+import formBlog from "~/components/blog/form.vue";
+import statisticsComponent from "@/components/common/statisticComponent.vue";
 export default {
-  components: { dataTable, formBlog },
+  components: { dataTable, formBlog, statisticsComponent },
   mixins: [tableHelper, dateHelper],
   data() {
     return {
@@ -53,56 +67,35 @@ export default {
           width: "2%",
         },
         {
-          text: "Title",
+          text: this.$t('blogs.title'),
           value: "title",
           filterable: true,
           sortType: null,
           filterValue: "",
         },
         {
-          text: "Slug",
-          value: "slug",
+          text: "Author",
+          value: "coach_id",
           filterable: true,
           sortType: null,
           filterValue: "",
         },
         {
-          text: "Summary",
+          text: this.$t('blogs.summary'),
           value: "summary",
           filterable: true,
           sortType: null,
           filterValue: "",
         },
         {
-          text: "Keywords",
-          value: "keyword",
+          text: "Preview",
+          value: "preview",
           filterable: true,
           sortType: null,
           filterValue: "",
         },
         {
-          text: "Show right column",
-          value: "show_right_column",
-          filterable: true,
-          sortType: null,
-          filterValue: "",
-        },
-        {
-          text: "Show to registered users",
-          value: "show_to_registered_users",
-          filterable: true,
-          sortType: null,
-          filterValue: "",
-        },
-        {
-          text: "Optional Url",
-          value: "optional_url",
-          filterable: true,
-          sortType: null,
-          filterValue: "",
-        },
-        {
-          text: "Content",
+          text: this.$t('blogs.content'),
           value: "content",
           filterable: true,
           sortType: null,
@@ -116,13 +109,6 @@ export default {
           filterValue: "",
         },
         {
-          text: "Blog type",
-          value: "blog_type",
-          filterable: true,
-          sortType: null,
-          filterValue: "",
-        },
-        {
           text: "Category",
           value: "category",
           filterable: true,
@@ -130,15 +116,8 @@ export default {
           filterValue: "",
         },
         {
-          text: "Created at",
-          value: "created_at",
-          filterable: true,
-          sortType: null,
-          filterValue: "",
-        },
-        {
-          text: "Updated at",
-          value: "updated_at",
+          text: "Published Date",
+          value: "published_date",
           filterable: true,
           sortType: null,
           filterValue: "",
@@ -151,43 +130,86 @@ export default {
       data: [],
       drawer: false,
       isDescending: true,
+      statistics:{},
       url: ''
     };
   },
+    computed: {
+    formattedStatistics() {
+      return [
+        {
+          title:'Total Blogs',
+          value: this.statistics.totalBlog,
+          type: 'number'
+        },
+        {
+          title:'Total Training',
+          value: this.statistics.totalTraining,
+          type: 'number'
+        },
+        {
+          title:'Total Lifestyle',
+          value: this.statistics.totalLifestyle,
+          type: 'number'
+        },
+        {
+          title:'Total Nutrition',
+          value: this.statistics.totalNutrition,
+          type: 'number'
+        },
+        {
+          title:'Total Favorite',
+          value: this.statistics.totalFavorite,
+          type: 'number'
+        },
+      ]
+    }
+  },
   mounted() {
-    this.initalize();
+    this.initialize();
+    this.getStatistics();
   },
   methods: {
-    initalize() {
-      this.$axios.get(`${this.$blogs}?${this.urlQuery()}`).then(({data}) => {
+    initialize() {
+      this.$axios.get(`${this.$blogs}?${this.urlQuery()}&relations=coach,category`).then(({data}) => {
         this.data = data.data
         this.options = data.options
         this.url = `${this.$blogs}?${this.urlQuery()}`
       })
     },
-    addRecord(payload) {
-      this.goTo("blog-create");
+    addRecord() {
+      this.goTo("blog-form");
     },
     deleteRecord(items) {
       this.delete().then(() => {
         let ids = this.getIds(items)
         this.$axios.delete(`${this.$blogs}/${ids}`).then(({data}) => {
-          this.successNotification(items, 'deleted', 'name', 'color', 'description')
-          this.initalize()
+          this.successNotification(items, 'deleted', 'blog', 'blogs', 'title')
+          this.initialize()
         })
       });
     },
     editRecord(item) {
-      this.drawer = !this.drawer
-      this.selectedItem = this.cloneVariable(item)
+      this.goTo("blog-edit-id", { id: item.id });
     },
+
+
     updateRecord(payload) {
       this.update().then(() => {
         this.$axios.put(`${this.$blogs}/${payload.id}`, payload).then(({data}) => {
-          this.successNotification(data, 'updated', 'country', 'countries', 'short_name')
-          this.initalize()
+          this.successNotification(data, 'updated', 'blog', 'blogs', 'title')
+          this.initialize()
         })
       })
+    },
+    getStatistics() {
+      this.$axios.get(`${this.$blogs}/statistic`)
+      .then(({ data }) => {
+        this.statistics = data
+      });
+    },
+    showRecord(item) {
+      this.goTo("settings-coaches-id-profile", { id: item.id });
     },
   },
 };

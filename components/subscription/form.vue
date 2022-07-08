@@ -1,7 +1,7 @@
 <template>
     <v-navigation-drawer temporary right fixed v-model="drawer" width="50%">
         <p class="pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
-            {{ !payload.id ? "Ajouter" : "Modifier" }} un abonnement
+            {{ !payload.id ? this.$t('subscription.addSubscription') : this.$t('subscription.updateSubscription') }} 
             <v-btn icon small @click="$emit('closeDrawer')">
                 <v-icon>mdi-close</v-icon>
             </v-btn>
@@ -16,7 +16,7 @@
                             <p class="subtitle-2 font-weight-regular mb-2">
                                 Client
                             </p>
-                            <v-autocomplete clearable label="Selectionner un client" :items="clients" item-value="id" v-model="payload.client_id" :filter="filterClients" hide-details="auto" solo>
+                            <v-autocomplete clearable :label="this.$t('subscription.selectClient')" :items="clients" item-value="id" v-model="payload.client_id" :filter="filterClients" hide-details="auto" solo>
                                 <template v-slot:item="{ item, on, attrs }">
                                     <v-list-item v-on="on" v-bind="attrs">
                                         <v-list-item-avatar color="primary">
@@ -44,9 +44,9 @@
 
                         <v-flex xs12>
                             <p class="subtitle-2 font-weight-regular mb-2">
-                                Coach
+                                {{ $t('global.coach') }}
                             </p>
-                            <v-autocomplete clearable label="Selectionner un coach" :items="coaches" item-value="id" v-model="payload.coach_id" :filter="filterClients" hide-details="auto" solo>
+                            <v-autocomplete clearable :label="this.$t('subscription.selectCoach')" :items="coaches" item-value="id" v-model="payload.coach_id" :filter="filterClients" hide-details="auto" solo>
                                 <template v-slot:item="{ item, on, attrs }">
                                     <v-list-item v-on="on" v-bind="attrs">
                                         <v-list-item-avatar color="primary">
@@ -74,9 +74,9 @@
 
                         <v-flex xs12>
                             <p class="subtitle-2 font-weight-regular mb-2">
-                                Abonnement
+                                {{ $t('global.subscription') }}
                             </p>
-                            <v-autocomplete clearable label="Selectionner un abonnement" v-model="payload.plan_id" :items="plans" item-text="name" item-value="id" hide-details="auto" solo>
+                            <v-autocomplete clearable :label="this.$t('subscription.selectSubscription')" v-model="payload.plan_id" :items="plans" item-text="name" item-value="id" hide-details="auto" solo>
                                 <template v-slot:item="{ item, on, attrs }">
                                     <v-list-item v-on="on" v-bind="attrs">
                                         <v-list-item-icon>
@@ -127,14 +127,14 @@
                         <v-flex xs6>
                             <v-btn block class="grey white--text mt-1" type="button" @click="$emit('closeDrawer')">
                                 <v-icon left>mdi-close</v-icon>
-                                ANNULER
+                                {{ $t('global.cancel') }}
                             </v-btn>
                         </v-flex>
 
                         <v-flex xs6>
                             <v-btn block class="success mt-1" type="submit">
                                 <v-icon left>mdi-content-save-outline</v-icon>
-                                {{ payload.id ? "SAUVEGARDER" : "CRÉER" }}
+                                {{ payload.id ? this.$t('global.update') : this.$t('global.create') }}
                             </v-btn>
                         </v-flex>
 
@@ -197,9 +197,8 @@ export default {
     methods: {
 
         async saveForm (data) {
-            console.log(this.payload)
-            const response = await this.$axios.post(`${this.$subscriptions}`, this.payload)
-            console.log(response)
+           this.$emit('addRecord', this.payload)
+           this.$emit("closeDrawer");
         },
 
         async fetchClients() {

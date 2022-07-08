@@ -8,20 +8,20 @@
       <v-spacer></v-spacer>
       <div class="mr-1" style="width: 400px">
         <v-text-field auto-select-first v-model="searchKeyword" filled rounded hide-details=""
-          :placeholder="`Search by ${searchPlaceholder} ...`" dense append-icon="mdi-magnify"
+          :placeholder="this.$t('global.search')" dense append-icon="mdi-magnify"
           @keydown.enter="searchRecords(searchKeyword)"></v-text-field>
       </div>
       <v-btn class="mr-1 success" small @click="addNewRecord">
         <v-icon>mdi-plus</v-icon>
-        ADD
+        {{ this.$t('global.add') }}
       </v-btn>
       <v-btn class="mr-1 error" small @click="deleteRecord(selectedItems)">
         <v-icon>mdi-delete-outline</v-icon>
-        DELETE
+        {{ this.$t('global.delete') }}
       </v-btn>
       <v-btn class="mr-1 primary" small @click="toggleFilter" v-if="headHasFilterable">
         <v-icon>mdi-filter-outline</v-icon>
-        Filter
+        {{ this.$t('global.filter') }}
       </v-btn>
     </div>
     <hr />

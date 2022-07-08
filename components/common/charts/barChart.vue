@@ -8,7 +8,6 @@
     :css-classes="cssClasses"
     :styles="styles"
     :width="width"
-    :height="height"
   />
 </template>
 
@@ -47,7 +46,7 @@ export default {
     },
     height: {
       type: Number,
-      default: 400
+      default: 800
     },
     cssClasses: {
       default: '',
@@ -55,43 +54,49 @@ export default {
     },
     styles: {
       type: Object,
-      default: () => {}
+      default: () => { }
     },
     plugins: {
       type: Array,
       default: () => []
-    }
+    },
+    chartData: {
+      type: Object,
+      default: () => { }
+    },
   },
-  data() {
+  data () {
     return {
-      chartData: {
-        labels: [
-          'January',
-          'February',
-          'March',
-          'April',
-          'May',
-          'June',
-          'July',
-          'August',
-          'September',
-          'October',
-          'November',
-          'December'
-        ],
-        datasets: [
-          {
-            label: 'Data One',
-            backgroundColor: '#f87979',
-            data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
-          }
-        ]
-      },
+
       chartOptions: {
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            grid: {
+              display: false
+            }
+          },
+          y: {
+            grid: {
+              display: false
+            }
+          }
+        }
+      }
+    }
+  },
+  created () {
+    this.chartOptions.plugins = {
+      legend: {
+        display: false
       }
     }
   }
 }
 </script>
+<style>
+#bar-chart {
+  height: 343px !important;
+}
+</style>

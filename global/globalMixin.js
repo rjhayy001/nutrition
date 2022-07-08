@@ -1,5 +1,10 @@
 import Vue from 'vue'
 Vue.mixin({
+    data(){
+      return {
+        select_addOn:  { name: 'All', id:0}
+      }
+    },
     methods: {
         getIds(items) {
             return items.map((item) => {
@@ -34,6 +39,10 @@ Vue.mixin({
         },
         imageUrl(folder, id, filename) {
             const url = this.$imageUrl + folder + '/' + id + '/' + filename
+            return url;
+        },
+        imageUrl2(folder, id, filename) {
+            const url = this.$imageUrl2 + folder + '/' + id + '/' + filename
             return url;
         },
         download(data, payload) {

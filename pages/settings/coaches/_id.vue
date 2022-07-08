@@ -20,47 +20,16 @@ export default {
           to:'settings-coaches-id-profile',
           total_records:'5'
         },
-        {
-          title: 'Coach',
-          icon: 'mdi-account-multiple-outline',
-          showSubmenu:false,
-          submenus:[
-            {
-              title:'Global',
-              to: 'settings-coaches-id-global'
-            },
-            {
-              title:'Formulaire',
-              to: 'settings-coaches-id-formula'
-            },
-            {
-              title:'Mesures',
-              to: 'settings-coaches-id-measure'
-            },
-            {
-              title:'Tracking',
-              to: 'settings-coaches-id-tracking'
-            },
-            {
-              title:'Photos',
-              to: 'settings-coaches-id-photos'
-            },
-            {
-              title:'Feedback',
-              to: 'settings-coaches-id-feedback'
-            },
-          ],
-        },
-        {
-          title: 'Objectives',
-          icon: 'mdi-store-outline',
-          to:'settings-coaches-id-objectives',
-        },
-        {
-          title: 'Abonnement',
-          icon: 'mdi-account-reactivate-outline',
-          to:'new-client-subscription',
-        },
+        // {
+        //   title: 'Objectives',
+        //   icon: 'mdi-store-outline',
+        //   to:'settings-coaches-id-objectives',
+        // },
+        // {
+        //   title: 'Abonnement',
+        //   icon: 'mdi-account-reactivate-outline',
+        //   to:'new-client-subscription',
+        // },
         {
           title: 'Ressources',
           icon: 'mdi-image-multiple',
@@ -71,6 +40,26 @@ export default {
           title: 'Chat',
           icon: 'mdi-chat-plus-outline',
           to:'settings-coaches-id-chat',
+        },
+        {
+          title: 'Coaching',
+          icon: 'mdi-account-multiple-outline',
+          showSubmenu:false,
+          submenus:[
+            {
+              title:'Global',
+              to: 'settings-coaches-id-global'
+            },
+
+            {
+              title:'Photos',
+              to: 'settings-coaches-id-photos'
+            },
+            {
+              title:'Feedback',
+              to: 'settings-coaches-id-feedback'
+            },
+          ],
         },
       ]
     }

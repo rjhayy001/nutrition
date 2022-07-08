@@ -19,10 +19,10 @@ export default {
       active_subscription:{},
       submenus: [
         {
-          title: 'Profile',
+          title: this.$t('clients.profile'),
           icon: 'mdi-account-multiple-outline',
           to: 'client-id-profile',
-          total_records: '5'
+          // total_records: '5'
         },
         {
           title: 'Coaching',
@@ -35,15 +35,15 @@ export default {
               to: 'client-id-coaching-global',
             },
             {
-              title: 'Formulaire',
+              title: this.$t('clients.form'),
               to: 'client-id-coaching-formula-food',
             },
             {
-              title: 'Measures',
+              title: this.$t('clients.measures'),
               to: 'client-id-coaching-measure',
             },
             {
-              title: 'Tracking',
+              title: this.$t('clients.tracking'),
               to: 'client-id-coaching-tracking',
             },
             {
@@ -55,7 +55,7 @@ export default {
             //   to: 'client-id-coaching-objective',
             // },
             {
-              title: 'Feedback',
+              title: this.$t('clients.feedback'),
               to: 'client-id-coaching-feedback',
             },
           ]
@@ -64,6 +64,7 @@ export default {
           title: 'Chat',
           icon: 'mdi-chat-plus-outline',
           to: 'client-id-chat',
+          // total_records: '5'
         },
         {
           title: 'Documents',
@@ -71,7 +72,7 @@ export default {
           to: 'client-id-document',
         },
         {
-          title: 'Abonnement',
+          title: this.$t('sidebar.subscriptions'),
           icon: 'mdi-account-reactivate-outline',
           to: 'client-id-subscription',
         },
@@ -81,7 +82,6 @@ export default {
           title: 'Profile',
           icon: 'mdi-account-multiple-outline',
           to: 'client-id-profile',
-          total_records: '5'
         },
       ]
     }

@@ -16,12 +16,6 @@
             Historique des feedback
           </p>
           <v-spacer></v-spacer>
-          <!-- <v-btn
-          depressed
-          rounded
-        >
-          Faire un feedback
-        </v-btn> -->
         </div>
         <hr />
       </v-flex>
@@ -31,18 +25,23 @@
       wrap
       id="wrapper_feedback"
     >
-      <v-flex xs8>
+      <v-flex xs8 v-if="data.length != 0">
         <div
           v-for="(items, index) in data"
           :key="index"
         >
           <div class="mb-3 font-weight-bold">{{weeklyFormat(getDateByWeekNumber(index))}}</div>
-          <div
+          <div v-for="(item, key) in items" :key="item.id" class=" feedback-holder pa-2">
+          <!-- <div
             v-for="item in items"
             :key="item.id+'test'"
             class=" feedback-holder pa-2"
-          >
-            <v-card class="pt-2">
+          > -->
+            <v-card class="pt-2" @mouseover="onHover(item.id)" @mouseleave="hover = ''" :class="hover==item.id?'onHover':''">
+              <div class="float-right" id="actions"  v-if="hover==item.id">
+                <v-icon @click="ediFeedback(item)" color="green">mdi-pencil</v-icon>
+                <v-icon @click="showDeleteDialog(item.id)" color="red">mdi-delete</v-icon>
+              </div>
               <div class="feedback-text text-lowercase ml-4 overline"
                style="font-size:15px !important;"
                >
@@ -58,29 +57,75 @@
           </div>
         </div>
       </v-flex>
+      <div class="pa-2 mt-50 _nofeedback" v-else>
+          <v-icon class="mx-2" style="font-size: 100px;">mdi-alert</v-icon>
+          <p class="title mr-1">
+            No feedback
+          </p>
+      </div>
       <!-- <v-flex xs4>
         asdsa
       </v-flex> -->
     </v-layout>
     <div>
       <!-- <feed-back-create @submitFeedback="submitFeedback"></feed-back-create> -->
-      <feed-back-form></feed-back-form>
+      <feed-back-form :payloads="editdata"></feed-back-form>
     </div>
+
+    <v-dialog
+        v-model="deletedialog"
+        max-width="500px"
+      >
+        <v-card>
+          <v-card-title class="font-weight-light">
+            Delete Confirmation
+          </v-card-title>
+          <v-card-text>
+            <div class="my-5">
+              <p class="font-weight-light" style="color:#000;font-size: 17px;">
+               Are you sure to delete this feedback?
+              </p>
+            </div>
+          </v-card-text>
+          <v-card-actions class="justify-end">
+            <v-btn
+              color="green"
+              text
+              @click="deletedialog = false"
+            >
+              Close
+            </v-btn>
+            <v-btn
+              color="red"
+              text
+              @click="deleteSingleFeecback()"
+            >
+              Yes
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+    </v-dialog>
   </v-container>
 </template>
-
 <script>
+import emptyData from "~/components/error/empty_data.vue"
 import feedBackCreate from "~/components/clients/createFeedback.vue";
 import feedBackForm from "~/components/clients/coaching/feedback/form.vue"
 import moment from 'moment'
 export default {
   components: {
     feedBackCreate,
-    feedBackForm
+    feedBackForm,
+    emptyData
   },
   data () {
     return {
       data: [],
+      hover:'',
+      class:'',
+      deletedialog:false,
+      deleteId:'',
+      editdata:{},
     };
   },
   mounted () {
@@ -106,36 +151,37 @@ export default {
           `${this.$clients}/getFeedback/${this.$route.params.id}`
         )
         .then(({ data }) => {
-          console.log(data, 'test');
+          console.log(data);
           this.data = data;
         });
     },
     submitFeedback () {
       this.getFeedback();
     },
-    convert (date) {
-      let currentDate = moment();
-      let weekStart = currentDate.clone().startOf('week');
-      let weekEnd = currentDate.clone().endOf('week');
-
-      let formattedStart = weekStart.format('YYYY-MM-DD');
-      let formattedEnd = weekEnd.format('YYYY-MM-DD');
-
-      var time = moment(date).format("YYYY-MM-DD h:mm:ss");
-
-      if (moment(time).isBetween(formattedStart.toString(), formattedEnd.toString())) {
-        let date = new Date(time);
-        return 'Semaine du ' + (date.getMonth() + 1) + '/' + date.getDate()
-      }
-      else {
-        return 'Semaine derniere';
-      }
-    },
     getDateByWeekNumber (week_number) {
-      return moment().day("Monday").week(week_number).add(7, 'days');
+      var number = week_number.split('/')
+      return moment().day("Monday").week(number[1]).add(7, 'days');
+    },
+    onHover(index){
+     this.hover = index;
+    },
+    showDeleteDialog(id){
+        this.deleteId = id;
+        this.deletedialog = true;
+    },
+    deleteSingleFeecback(){
+       this.$axios
+        .delete(
+          `${this.$clients}/deleteFeedback/`+this.deleteId
+        )
+        .then(({ data }) => {
+         this.getFeedback();
+         this.deletedialog = false;
+        });
+    },
+    ediFeedback(item){
+        this.editdata = item;
     }
-
-
   },
 };
 
@@ -167,10 +213,21 @@ export default {
   right: 57px;
   bottom: 31px;
 }
+._nofeedback{
+  width: 100%;
+  text-align: center;
+  margin-top: 18%;
+}
+.onHover{
+  transform: scale(1.004);
+}
 </style>
 
 <style >
 #wrapper-feedback button span.v-btn__content {
   text-transform: initial !important;
+}
+#actions button:hover{
+  transform: scale(1.1);
 }
 </style>

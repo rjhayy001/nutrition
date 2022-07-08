@@ -105,7 +105,7 @@ export default {
       default_profile,
       default_limit: 2,
       options: {},
-      title: "Coaches",
+      title: this.$t('subSidebar.coaches'),
       headers: [
         {
           text: "#",
@@ -113,7 +113,7 @@ export default {
           width: "1%",
         },
         {
-          text: "Full Name",
+          text: this.$t('clients.fullName'),
           value: "full_name",
           filterable: true,
           sortType: null,
@@ -121,7 +121,7 @@ export default {
           width: "20%",
         },
         {
-          text: "Birthday",
+          text: this.$t('clients.birthday'),
           value: "birthday",
           filterable: true,
           sortType: null,
@@ -129,7 +129,7 @@ export default {
           width: "10%",
         },
         {
-          text: "Email",
+          text: this.$t('clients.email'),
           value: "email",
           filterable: true,
           sortType: null,
@@ -137,7 +137,7 @@ export default {
           width: "10%",
         },
         {
-          text: "Phone",
+          text: this.$t('clients.phone'),
           value: "phone",
           filterable: true,
           sortType: null,
@@ -145,7 +145,7 @@ export default {
           width: "10%",
         },
         {
-          text: "Address",
+          text: this.$t('clients.address'),
           value: "address",
           filterable: true,
           sortType: null,
@@ -153,7 +153,7 @@ export default {
           width: "15%",
         },
         {
-          text: "Status",
+          text: this.$t('clients.status'),
           value: "status",
           width: "1%",
         },
@@ -166,7 +166,7 @@ export default {
           width: "15%",
         },
         {
-          text: "Groups",
+          text: this.$t('clients.groups'),
           value: "groupable",
           filterable: true,
           sortType: null,
@@ -174,7 +174,7 @@ export default {
           width: "15%",
         },
         {
-          text: "Created at",
+          text: this.$t('global.created_at'),
           value: "created_at",
           filterable: true,
           sortType: null,
@@ -182,7 +182,7 @@ export default {
           width: "5%",
         },
         {
-          text: "Updated at",
+          text: this.$t('global.updated_at'),
           value: "updated_at",
           filterable: true,
           sortType: null,
@@ -209,32 +209,32 @@ export default {
     formattedStatistics() {
       return [
         {
-          title:'Total Coaches',
+          title: this.$t('coaches.totalCoaches'),
           value: this.statistics.totalCoach,
           type: 'number'
         },
         {
-          title:'Total Active',
+          title: this.$t('coaches.totalActive'),
           value: this.statistics.totalActiveCoach,
           type: 'number'
         },
         {
-          title:'Total In-Active',
+          title: this.$t('coaches.totalInactive'),
           value: this.statistics.totalInactive,
           type: 'number'
         },
         {
-          title:'Total w/ Client',
+          title: this.$t('coaches.totalWithClient'),
           value: this.statistics.totalWithClient,
           type: 'number'
         },
         {
-          title:'Total w/o Client',
+          title: this.$t('coaches.totalWithoutClient'),
           value: this.statistics.totalWithOutClient,
           type: 'number'
         },
         {
-          title:'Total Active',
+          title: this.$t('coaches.totalActive'),
           value: this.statistics.totalActiveCoach,
           type: 'number'
         },
@@ -274,7 +274,7 @@ export default {
         });
     },
     showRecord(item){
-        this.goTo("settings-coaches-id-profile", { id: item.id });
+      this.goTo("settings-coaches-id-profile", { id: item.id });
     },
     editRecord(item) {
       this.goTo("settings-coaches-edit-id", { id: item.id });

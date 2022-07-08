@@ -32,6 +32,7 @@ export default {
     { src: '~plugins/components/vue-file-agent', ssr: false },
     { src: '~global/globalMixin', ssr: true },
     { src: '~global/apiKey', ssr: true },
+    { src: '~plugins/firebase', ssr: false },
   ],
   components: false,
   buildModules: [
@@ -50,8 +51,8 @@ export default {
       { code: 'en', iso: 'en-US', file: 'en.js' },
       { code: 'fr', iso: 'fr-FR', file: 'fr.js' },
     ],
-    defaultLocale: 'en',
-    fallbackLocale: 'en',
+    defaultLocale: 'fr',
+    fallbackLocale: 'fr',
     strategy: 'no_prefix',
     lazy: true,
     loadLanguagesAsync: true,

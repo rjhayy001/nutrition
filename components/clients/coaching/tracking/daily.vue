@@ -43,7 +43,7 @@
             </v-toolbar>
           </v-flex>
           <v-flex xs4>
-            <stress-tracking></stress-tracking>
+            <stress-tracking :date="date"></stress-tracking>
           </v-flex>
           <v-flex xs4>
             <sleep-tracking></sleep-tracking>
@@ -129,10 +129,11 @@ export default {
   methods: {
     nextDay(){
       this.date = moment(this.date).add(1, 'days').format("YYYY-MM-DD");
-      this.value = 80
+      this.value += 10
     },
     prevDay() {
       this.date = moment(this.date).subtract(1, 'days').format("YYYY-MM-DD");
+      this.value -= 10
     }
   }
 }

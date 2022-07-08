@@ -112,7 +112,7 @@ export default {
           width: "1%",
         },
         {
-          text: "Full Name",
+          text: this.$t('clients.fullName'),
           value: "full_name",
           filterable: true,
           sortType: null,
@@ -120,7 +120,7 @@ export default {
           width: "20%",
         },
         {
-          text: "Birthday",
+          text: this.$t('clients.birthday'),
           value: "birthday",
           filterable: true,
           sortType: null,
@@ -128,7 +128,7 @@ export default {
           width: "10%",
         },
         {
-          text: "Email",
+          text: this.$t('clients.email'),
           value: "email",
           filterable: true,
           sortType: null,
@@ -136,7 +136,7 @@ export default {
           width: "10%",
         },
         {
-          text: "Phone",
+          text: this.$t('clients.phone'),
           value: "phone",
           filterable: true,
           sortType: null,
@@ -144,7 +144,7 @@ export default {
           width: "10%",
         },
         {
-          text: "Address",
+          text: this.$t('clients.address'),
           value: "address",
           filterable: true,
           sortType: null,
@@ -152,12 +152,12 @@ export default {
           width: "15%",
         },
         {
-          text: "Status",
+          text: this.$t('clients.status'),
           value: "status",
           width: "1%",
         },
         {
-          text: "Tags",
+          text: this.$t('clients.tags'),
           value: "taggable",
           filterable: true,
           sortType: null,
@@ -165,7 +165,7 @@ export default {
           width: "15%",
         },
         {
-          text: "Groups",
+          text: this.$t('clients.groups'),
           value: "groupable",
           filterable: true,
           sortType: null,
@@ -173,7 +173,7 @@ export default {
           width: "15%",
         },
         {
-          text: "Created at",
+          text: this.$t('clients.createdAt'),
           value: "created_at",
           filterable: true,
           sortType: null,
@@ -181,7 +181,7 @@ export default {
           width: "5%",
         },
         {
-          text: "Updated at",
+          text:this.$t('clients.updatedAt'),
           value: "updated_at",
           filterable: true,
           sortType: null,
@@ -207,32 +207,32 @@ export default {
     formattedStatistics() {
       return [
         {
-          title:'Total Clients',
+          title: this.$t('clients.totalClients'),
           value: this.statistics.totalClient,
           type: 'number'
         },
         {
-          title:'Total Active',
+          title: this.$t('clients.totalActive'),
           value: this.statistics.totalActiveClient,
           type: 'number'
         },
         {
-          title:'Total In-Active',
+          title: this.$t('clients.totalInactive'),
           value: this.statistics.totalInactive,
           type: 'number'
         },
         {
-          title:'Total w/ Coach',
+          title: this.$t('clients.totalWithCoach'),
           value: this.statistics.totalWithCoach,
           type: 'number'
         },
         {
-          title:'Total w/o Coach',
+          title: this.$t('clients.totalWithoutCoach'),
           value: this.statistics.totalWithOutCoach,
           type: 'number'
         },
         {
-          title:'Total Active',
+          title: this.$t('clients.totalActive'),
           value: this.statistics.totalActiveClient,
           type: 'number'
         },

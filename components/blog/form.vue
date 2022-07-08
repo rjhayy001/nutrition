@@ -1,121 +1,136 @@
 <template>
-  <ValidationObserver ref="form">
-    <v-form class="form-box" @submit.prevent="saveForm">
-      <v-container grid-list-md>
-        <v-layout row wrap>
-          <v-flex xs12 class="mb-2">
-            <div class="d-flex align-center py-2 data-table-cus">
-              <p class="title mr-1">
-                {{ payload.id ? "EDIT" : "CREATE NEW" }} BLOG
-              </p>
-              <v-spacer></v-spacer>
-              <v-btn class="mr-1" small @click="$router.go('-1')">
-                <v-icon>mdi-arrow-left</v-icon>
-                BACK
-              </v-btn>
-            </div>
-            <hr />
-          </v-flex>
-          <v-flex xs12 class="mb-2">
-            asdasd
-          </v-flex>
-        </v-layout>
-      </v-container>
-    </v-form>
-  </ValidationObserver>
+  <v-container fluid>
+    <v-col class="text-right">
+      <v-btn color="green" class="white--text" @click="$router.go('-1')"> Blogs </v-btn>
+    </v-col>
+    <v-col class="text-center"><span class="font-weight-medium"> Choose a Blog format </span></v-col>
+    <v-container grid-list-md fluid>
+    <v-row >
+      <v-hover v-slot="{ hover }">
+        <v-col max-width="500">
+          <v-card class="pa-10 text-center" exact tile :elevation="hover ? 12 : 2" @click="create_article">
+            <v-icon large color="green darken-2 pa-2"> mdi-file-document </v-icon>
+              <p class="font-weight-medium pa-2"> Article </p>
+              <p class="font-weight-light pa-2"> An article with images and embed videos </p>
+          </v-card>
+        </v-col>
+      </v-hover>
+      <v-hover v-slot="{ hover }">
+        <v-col max-width="500">
+          <v-card class="pa-10 text-center" exact tile :elevation="hover ? 12 : 2">
+            <v-icon large color="green darken-2 pa-2"> mdi-sort-ascending </v-icon>
+              <p class="font-weight-medium pa-2"> Sorted list </p>
+              <p class="font-weight-light pa-2"> An article with images and embed videos </p>
+          </v-card>
+        </v-col>
+      </v-hover>
+      <v-hover v-slot="{ hover }">
+        <v-col max-width="500">
+          <v-card class="pa-10 text-center" exact tile :elevation="hover ? 12 : 2" @click="create_trivia">
+            <v-icon large color="green darken-2 pa-2"> mdi-format-list-checkbox </v-icon>
+              <p class="font-weight-medium pa-2"> Trivia Quiz </p>
+              <p class="font-weight-light pa-2"> An article with images and embed videos </p>
+          </v-card>
+        </v-col>
+      </v-hover>
+    </v-row>
+    </v-container>
+  </v-container>
 </template>
 <script>
+import dataTable from "~/components/ui/dataTable.vue";
+import tableHelper from "~/mixins/tableHelper.vue";
 export default {
+  components: { dataTable },
+  mixins:[tableHelper],
   data() {
     return {
-      payload: {
-        first_name: "",
-        last_name: "",
-        phone_1: "",
-        phone_2: "",
-        birthday: "",
-        email: "",
-        password: "",
-        logo: "",
-        address_1: "",
-        address_2: "",
-        city_id: "",
-        zipcode_id: "",
-        country_id: "",
-        status: 1,
-      },
-      modal: false,
-      loading: false,
-      errorMessage: "",
-      viewPassword: false,
-      originalPayload: {},
-      statusOptions: [
-        { id: 1, name: "Active" },
-        { id: 0, name: "Inactive" },
+      drawer:false,
+      options: {},
+      title: "Blogs",
+      headers: [
+        {
+          text: "#",
+          value: "id",
+          width:'2%',
+        },
+        {
+          text: "First name",
+          value: "first_name",
+          filterable:true,
+          sortType:null,
+          filterValue:''
+        },
+        {
+          text: "Last name",
+          value: "last_name",
+          filterable:true,
+          sortType:null,
+          filterValue:''
+        },
+        {
+          text: "Email",
+          value: "email",
+          filterable:true,
+          sortType:null,
+          filterValue:'',
+        },
+        {
+          text: "Status",
+          value: "status",
+        },
+        {
+          text: "Phone 1",
+          value: "phone_1",
+          filterable:true,
+          sortType:null,
+          filterValue:''
+        },
+        {
+          text: "Phone 2",
+          value: "phone_1",
+          filterable:true,
+          sortType:null,
+          filterValue:''
+        },
+        {
+          text: "Action",
+          value: "action"
+        },
       ],
-      tagsOption: ["test11", "test22"],
-      groupsOption: ["test1", "test2"],
-      countries: [],
-      cities: [],
-      zipcodes: [],
+      data: [],
+      drawer1:false
     };
   },
   mounted() {
-    this.getAllCountries();
-    this.getAllZipcodes();
-    this.getAllCities();
+    this.initalize()
   },
   methods: {
-    saveForm() {
-      this.$refs.form.validate().then((result) => {
-        if (!result) return;
-        this.$root
-          .dialog(
-            "Confirm add Action!",
-            `Are you sure you want to add this record ?`,
-            "add"
-          )
-          .then(() => {
-            this.payload.city_id = this.payload.city_id.id;
-            this.payload.country_id = this.payload.country_id.id;
-            this.payload.zipcode_id = this.payload.zipcode_id.id;
-            if (this.payload.id) {
-              this.$emit("updateRecord", this.payload);
-            } else {
-              this.$emit("addRecord", this.payload);
-            }
-          });
-      });
+    initalize() {
+      this.$axios.get(`clients?${this.urlQuery()}`).then(({data}) => {
+        this.data = data.data
+        this.options = data.options
+      })
     },
-    handleFileImport() {
-      window.addEventListener("focus", () => {}, { once: true });
-      this.$refs.uploader.click();
+    create_article() {
+      this.$emit('article_form')
     },
-    onFileChange(e) {
-      var files = e.target.files || e.dataTransfer.files;
-      this.createImg(files[0]);
+    create_trivia() {
+      this.$emit('trivia_form')
     },
-    createImg(file) {
-      var image = new Image();
-      var reader = new FileReader();
-      reader.onload = (e) => {
-        this.payload.logo = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    },
-    getAllCountries() {
-      this.$store.dispatch("address/FETCH_COUNTRIES").then(({ data }) => {
-        this.countries = data;
-      });
-    },
-    getAllZipcodes() {
-      this.$store.dispatch("address/FETCH_ZIPCODES").then(({ data }) => {
-        this.zipcodes = data;
-      });
-    },
-    getAllCities() {
-      this.$store.dispatch("address/FETCH_CITIES").then(({ data }) => {
-        this.cities = data;
+
+    
+    deleteRecord(items) {
+      this.$root.dialog(
+        "Confirm Action!",
+        `Are you sure you want to delete ${items.length == 1 ? 'this record' : 'these records'} ?`,
+        "delete"
+      ).then(() => {
+        let ids = this.getIds(items)
+        this.$axios.delete(`client/${ids}`).then(({data}) => {
+          this.successNotification(items, 'deleted', 'client', 'clients')
+          this.initalize()
+        })
       });
     },
   },

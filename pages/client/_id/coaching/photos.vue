@@ -116,6 +116,7 @@ export default {
     },
     getDatas(){
       this.$axios.get(`${this.$clients}/${this.id}/photos`).then(({data}) => {
+
         this.data = data
       })
     },

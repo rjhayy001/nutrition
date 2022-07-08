@@ -18,7 +18,7 @@
         justify-space-between
       "
     >
-      Add New Notification
+      {{ this.$t('announce.addNewNotification') }}
       <v-btn icon small @click="drawer = false">
         <v-icon>mdi-close</v-icon>
       </v-btn>
@@ -34,12 +34,12 @@
                   <p
                     class="subtitle-2 font-weight-regular my-auto mr-1"
                   >
-                    <span>coach:</span>
+                    <span>{{ $t('global.coach') }}:</span>
                   </p>
                   <v-checkbox
                     class="user-checkbox"
                     v-model="selectedCoachType"
-                    label="All Select Coaches"
+                    :label="this.$t('announce.allCoaches')"
                     value="all"
                     @change="getCoaches($event)"
                     id="all"
@@ -48,7 +48,7 @@
                     class="user-checkbox"
                     v-model="selectedCoachType"
                     label="Have Client"
-                    value="have-clients"
+                    value="client"
                     @change="getCoaches($event)"
                     id="subscriber"
                   ></v-checkbox>
@@ -56,7 +56,7 @@
                     class="user-checkbox"
                     v-model="selectedCoachType"
                     label="Do not have Client"
-                    value="dont-have-clients"
+                    value="not-client"
                     @change="getCoaches($event)"
                     id="non-subscriber"
                   ></v-checkbox>
@@ -74,7 +74,7 @@
                   <v-checkbox
                     class="user-checkbox"
                     v-model="selectedClientType"
-                    label="All Select Clients"
+                    :label="this.$t('announce.allClient')"
                     value="all"
                     @change="getClients($event)"
                     id="all"
@@ -82,7 +82,7 @@
                   <v-checkbox
                     class="user-checkbox"
                     v-model="selectedClientType"
-                    label="Subscriber Clients"
+                    :label="this.$t('announce.subscriberClient')"
                     value="subscribed"
                     @change="getClients($event)"
                     id="subscriber"
@@ -90,7 +90,7 @@
                   <v-checkbox
                     class="user-checkbox"
                     v-model="selectedClientType"
-                    label="Non-subscriber Clients"
+                    :label="this.$t('announce.nonSubscriberClient')"
                     value="not-subscribed"
                     @change="getClients($event)"
                     id="not-subscribed-clients"
@@ -103,12 +103,12 @@
                 <p
                   class="subtitle-2 font-weight-medium my-auto mr-1"
                 >
-                  <span>coach:</span>
+                  <span>{{ $t('global.coach') }}:</span>
                 </p>
                 <v-checkbox
                   v-model="taggleAllCoach"
                   class="user-checkbox"
-                  label="Select All"
+                  :label="this.$t('announce.selecAll')"
                 ></v-checkbox>
               </div>
             </v-flex>
@@ -120,7 +120,7 @@
                     class="user-option"
                     v-model="payload.coaches"
                     :items="coaches"
-                    placeholder="Select Coach ..."
+                    :placeholder="this.$t('subscription.selectCoach')+' ...'"
                     dense
                     solo
                     chips
@@ -137,7 +137,7 @@
                         <span>{{ item.full_name }}</span>
                       </v-chip>
                       <span v-if="index === 1" class="grey--text text-caption">
-                        (+{{ payload.coaches.length - 1 }} selected)
+                        (+{{ payload.coaches.length - 1 }} {{ $t('announce.selected')}})
                       </span>
                     </template>
                   </v-autocomplete>
@@ -154,7 +154,7 @@
                 <v-checkbox
                   v-model="taggleAllClient"
                   class="user-checkbox"
-                  label="Select All"
+                  :label="this.$t('announce.selecAll')"
                 ></v-checkbox>
               </div>
             </v-flex>
@@ -165,7 +165,7 @@
                     class="user-option"
                     v-model="payload.clients"
                     :items="clients"
-                    placeholder="Select Client ..."
+                    :placeholder="this.$t('subscription.selectClient')"
                     dense
                     solo
                     chips
@@ -182,7 +182,7 @@
                         <span>{{ item.full_name }}</span>
                       </v-chip>
                       <span v-if="index === 1" class="grey--text text-caption">
-                        (+{{ payload.clients.length - 1 }} selected)
+                        (+{{ payload.clients.length - 1 }} {{ $t('announce.selected')}})
                       </span>
                     </template>
                   </v-autocomplete>
@@ -200,7 +200,7 @@
                   <v-expansion-panel-header>
                     <div class="d-flex justify-space-between">
                       <strong>{{
-                        payload.type==1 ? "Recurring" : "On Time Only"
+                        payload.type==1 ? this.$t('announce.recurring') : this.$t('announce.onTimeOnly')
                       }}</strong>
                     </div>
                   </v-expansion-panel-header>
@@ -211,14 +211,14 @@
                         width="49%"
                         @click="payload.type = 0"
                       >
-                        ONE TIME ONLY
+                        {{ this.$t('announce.onTimeOnly') }}
                       </v-btn>
                       <v-btn
                         :class="[payload.type ? 'primary' : 'normal']"
                         width="49%"
                         @click="payload.type = 1"
                       >
-                        RECURRING
+                        {{ this.$t('announce.recurring') }}
                       </v-btn>
                     </div>
                     <template v-if="payload.type == 0">
@@ -228,7 +228,7 @@
                         <div class="col-sm">
                           <p class="subtitle-2 font-weight-regular mb-2">
                             <span>*</span>
-                            Time Period
+                            {{ this.$t('announce.timePeriod') }}
                           </p>
                           <v-menu
                             ref="time"
@@ -312,7 +312,7 @@
                       <div class="mb-2">
                         <p class="subtitle-2 font-weight-regular mb-2">
                           <span>*</span>
-                          Schedule Period
+                          {{ this.$t('announce.schedulePeriod') }}
                         </p>
                         <v-select
                           v-model="payload.schedule_period"
@@ -367,12 +367,12 @@
                 <div class="mb-1">
                   <v-flex xs12>
                     <p class="subtitle-1 font-weight-medium text-uppercase">
-                      Title:
+                      {{ $t('blogs.title') }}:
                     </p>
                   </v-flex>
                   <v-text-field
                     v-model="payload.title"
-                    placeholder="Type your Title ..."
+                    :placeholder="$t('blogs.typeTitle')+' ...'"
                     hide-details="auto"
                     type="text"
                     :error-messages="errors"
@@ -392,7 +392,7 @@
                   <v-text-field
                     v-model="payload.message"
                     name="message"
-                    placeholder="Type your Message ..."
+                    :placeholder="$t('blogs.typeMessage')+' ...'"
                     hide-details="auto"
                     type="text"
                     solo
@@ -411,7 +411,7 @@
                   type="submit"
                 >
                   <v-icon>mdi-content-save-outline</v-icon>
-                  {{ payload.id ? "Update" : "Save" }}
+                  {{ payload.id ? this.$t('global.update') : this.$t('global.save') }}
                 </v-btn>
                 <v-btn
                   @click="sendForm(true)"
@@ -419,7 +419,7 @@
                   width="49%"
                 >
                   <v-icon>mdi-content-save-outline</v-icon>
-                  Send
+                  {{ this.$t('announce.send') }}
                 </v-btn>
               </div>
             </v-flex>
@@ -458,18 +458,18 @@ export default {
       set_time: false,
       panel: 1,
       periodOptions: [
-        { id: 1, text: "Daily" },
-        { id: 2, text: "Weekly" },
-        { id: 3, text: "Monthly" },
-        { id: 4, text: "Every 3 months" },
-        { id: 5, text: "Every 6 months" },
-        { id: 6, text: "Every Year" },
-        { id: 7, text: "Custom" },
+        { id: 1, text: this.$t('announce.daily') },
+        { id: 2, text: this.$t('announce.weekly') },
+        { id: 3, text: this.$t('announce.monthly') },
+        { id: 4, text: this.$t('announce.every3months') },
+        { id: 5, text: this.$t('announce.every6months') },
+        { id: 6, text: this.$t('announce.everyYear') },
+        { id: 7, text: this.$t('announce.custom') },
       ],
       cycleOptions: [
-        { id: 1, text: "Daily" },
-        { id: 2, text: "Weekly" },
-        { id: 3, text: "Monthly" },
+        { id: 1, text: this.$t('announce.daily') },
+        { id: 2, text: this.$t('announce.weekly') },
+        { id: 3, text: this.$t('announce.monthly') },
       ],
       clients: [],
       coaches: [],
@@ -504,21 +504,17 @@ export default {
       this.$refs.form.validate().then((result) => {
         if (!result) return;
         this.payload.is_sent = is_sent;
-        console.log(this.payload.type,"type");
         if(is_sent) {
           if(this.payload.id && this.currentTime<=this.payload) {
-            console.log("update");
             if(this.payload.type==0){
               this.payload.status = 0;
             }
             this.$emit("updateRecord", this.payload);
           }else{
-            console.log("create")
             this.payload.status = 1;
             this.$emit("addRecord", this.payload);
           }
         }else{
-          console.log("save")
           this.payload.status = 0;
           this.$emit("saveRecord", this.payload)
         }
@@ -545,7 +541,6 @@ export default {
         .get(`clients?type=${type}&no-paginate=true`)
         .then(({ data }) => {
           this.clients = data.data;
-          console.log(this.clients,"clients")
           this.selectAllClient()
         });
     },
@@ -579,7 +574,7 @@ export default {
     //   }
     // },
     drawerStatus(val) {
-      if (val && !this.originalPayload) 
+      if (val && !this.originalPayload)
         this.originalPayload = this.cloneVariable(this.payload);
         this.drawer = val;
     },
@@ -595,7 +590,7 @@ export default {
         this.payload = this.cloneVariable(val);
 
         const selectedClientIds = this.payload.clients.map(({ id }) => id);
-        this.payload.clients = selectedClientIds; 
+        this.payload.clients = selectedClientIds;
 
         const selectedCoachesIds = this.payload.coaches.map(({ id }) => id);
         this.payload.coaches = selectedCoachesIds;

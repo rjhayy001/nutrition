@@ -87,14 +87,14 @@ export default {
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
-        // scales: {
-        //   xAxes: [{
-        //     stacked: false,
-        //   }],
-        //   yAxes: [{
-        //     stacked: false,
-        //   }]
-        // },
+        scales: {
+          xAxes: [{
+            stacked: false,
+          }],
+          yAxes: [{
+            stacked: false,
+          }]
+        },
       }
     }
   },

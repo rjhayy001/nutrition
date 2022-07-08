@@ -124,7 +124,7 @@ export default {
     return {
       options: {},
       default_limit: 2,
-      title: "Announcement",
+      title: this.$t('sidebar.announcement'),
       AnnounceTitle:'',
       headers: [
         { 
@@ -133,7 +133,7 @@ export default {
           width:'2%'
         },
         { 
-          text: "title", 
+          text: this.$t('blogs.title'), 
           value: "title"
         },
         { 
@@ -141,11 +141,11 @@ export default {
           value: "message" 
         },
         { 
-          text: "Receiver", 
+          text: this.$t('announce.receiver'), 
           value: "send_to" 
         },
         { 
-          text: "Check", 
+          text: this.$t('announce.check'), 
           value: "is_sent" 
         },
         { 
@@ -153,7 +153,7 @@ export default {
           value: "type" 
         },
         { 
-          text: "Time", 
+          text: this.$t('announce.time'), 
           value: "time" 
         },
         { 
@@ -161,27 +161,27 @@ export default {
           value: "date" 
         },
         { 
-          text: "Status", 
+          text: this.$t('global.status'), 
           value: "status" 
         },
         { 
-          text: "Schedule Period", 
+          text: this.$t('announce.schedulePeriod'), 
           value: "schedule_period" 
         },
         { 
-          text: "Cycle Count", 
+          text: this.$t('announce.cycleCount'), 
           value: "cycle_count" 
         },
         { 
-          text: "Cycle Type", 
+          text: this.$t('announce.cycleType'), 
           value: "cycle_type" 
         },
         { 
-          text: "Created at", 
+          text: this.$t('global.created_at'), 
           value: "created_at" 
         },
         { 
-          text: "Updated at", 
+          text: this.$t('global.updated_at'), 
           value: "updated_at" 
         },
         { 
@@ -190,18 +190,18 @@ export default {
         },
       ],
       periodOptions: [
-        { id: 1, text: "Daily" },
-        { id: 2, text: "Weekly" },
-        { id: 3, text: "Monthly" },
-        { id: 4, text: "Every 3 months" },
-        { id: 5, text: "Every 6 months" },
-        { id: 6, text: "Every Year" },
-        { id: 7, text: "Custom" },
+        { id: 1, text: this.$t('announce.daily') },
+        { id: 2, text: this.$t('announce.weekly') },
+        { id: 3, text: this.$t('announce.monthly') },
+        { id: 4, text: this.$t('announce.every3months') },
+        { id: 5, text: this.$t('announce.every6months') },
+        { id: 6, text: this.$t('announce.everyYear') },
+        { id: 7, text: this.$t('announce.custom') },
       ],
       cycleOptions: [
-        { id: 1, text: "Daily" },
-        { id: 2, text: "Weekly" },
-        { id: 3, text: "Monthly" },
+        { id: 1, text: this.$t('announce.daily') },
+        { id: 2, text: this.$t('announce.weekly') },
+        { id: 3, text: this.$t('announce.monthly') },
       ],
       data: [],
       receiver:[],
@@ -219,12 +219,12 @@ export default {
     formattedStatistics() {
       return [
         {
-          title:'Total Announce',
+          title: this.$t('announce.totalAnnounce'),
           value: this.statistics.totalAnnounce,
           type: 'number'
         },
         {
-          title:'Total Sent',
+          title: this.$t('announce.totalSent'),
           value: this.statistics.totalSent,
           type: 'number'
         },
@@ -234,17 +234,17 @@ export default {
           type: 'number'
         },
         {
-          title:'Total Once Sent',
+          title: this.$t('announce.totalOnceSent'),
           value: this.statistics.totalOnceSent,
           type: 'number'
         },
         {
-          title:'Total Recurring Save',
+          title: this.$t('announce.totalRecurringSave'),
           value: this.statistics.totalSaveRecurring,
           type: 'number'
         },
         {
-          title:'Total Recurring Sent',
+          title: this.$t('announce.totalRecurringSent'),
           value: this.statistics.totalRecurringSent,
           type: 'number'
         },
@@ -264,11 +264,9 @@ export default {
       })
     },
     addRecord(payload) {
-      console.log(payload,"payload")
       this.create().then(() => {
         this.$axios.post(`${this.$announces}`, payload).then(({data}) => {
           this.successNotification(payload, "sent","announce","announces","title")
-          // this.$store.commit('resetForm', true)
           this.initialize()
         })
       })
@@ -277,7 +275,6 @@ export default {
       this.create().then(() => {
         this.$axios.post(`${this.$announces}/save`, payload).then(({data}) => {
           this.successNotification(payload, "save","announce","announces","title")
-          // this.$store.commit('resetForm', true)
           this.initialize()
         })
       })
