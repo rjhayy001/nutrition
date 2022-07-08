@@ -12,7 +12,7 @@
         class="mb-2"
       >
         <div class="client-name text-center pt-5">
-          John Doe
+         {{client.full_name}}
         </div>
       </v-flex>
       <v-flex
@@ -33,8 +33,11 @@
           <div
             class="font-weight-bold"
             style="font-size: x-large;"
-          >51</div>
-          <div style="font-size: smaller; font-weight: 200;">12/21/71</div>
+          >
+            {{basic_info.age}}</div>
+          <div style="font-size: smaller; font-weight: 200;">
+            {{defaultDate(basic_info.birth_date) || 0}}
+          </div>
         </v-card>
       </v-flex>
       <v-flex
@@ -55,7 +58,7 @@
                 class="font-weight-bold"
                 style="font-size: x-large;"
               >
-                110
+                {{basic_info.weight || 0}}
               </div>
               <div style="font-size: smaller; font-weight: 200;">
                 Debut
@@ -69,7 +72,7 @@
                 class="font-weight-bold"
                 style="font-size: x-large;"
               >
-                92
+                {{basic_info.weight || 0}}
               </div>
               <div style="font-size: smaller; font-weight: 200;">
                 Actuelan
@@ -83,7 +86,7 @@
                 class="font-weight-bold"
                 style="font-size: x-large;"
               >
-                72
+                {{basic_info.target_weight || 0}}
               </div>
               <div style="font-size: smaller; font-weight: 200;">
                 Objectif
@@ -101,7 +104,9 @@
           <div
             class="font-weight-bold"
             style="font-size: x-large;"
-          >51</div>
+          >
+            {{basic_info.height || 0}}
+          </div>
           <div style="font-size: smaller; font-weight: 200;">cm</div>
         </v-card>
       </v-flex>
@@ -110,11 +115,33 @@
 </template>
 <script>
 export default {
-   props:{
-    hide_status:{
+  props: {
+    hide_status: {
       type: Boolean,
-      default:false
+      default: false
     },
+  },
+  data(){
+    return {
+      client:{},
+      basic_info:{}
+    }
+  },
+  mounted () {
+    this.initalize()
+  },
+  methods: {
+    initalize () {
+      this.$axios
+        .get(
+          `${this.$clients}/${this.$route.params.id}/edit?relations=activeSubscription.client_info`
+        )
+        .then(({ data }) => {
+          console.log(data, 'newwww')
+          this.client = data;
+          this.basic_info = data.active_subscription ? data.active_subscription[0].client_info : {}
+        });
+    }
   }
 }
 </script>
@@ -126,7 +153,7 @@ export default {
   width: 100%;
   height: 90px;
 }
-.client-name{
+.client-name {
   font-weight: 600;
   font-size: 21px;
   letter-spacing: 3px;

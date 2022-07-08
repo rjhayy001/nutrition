@@ -17,8 +17,10 @@ export default {
 </script>
 <style scoped>
 .loading_image {
+  text-align: center;
   position: absolute;
-  top: 40%;
-  left: 50%;
+  left: 55%;
+  top: 60%;
+  transform: translate(-50%,-50%);
 }
 </style>

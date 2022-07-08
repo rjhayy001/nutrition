@@ -14,7 +14,13 @@ export default {
     clientInfo,
     menuTabs,
     feedBackForm,
-  }
+  },
+  data(){
+    return {
+      client:{},
+      active_subscription:{}
+    }
+  },
 
 }
 </script>

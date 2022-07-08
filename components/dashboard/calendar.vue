@@ -52,6 +52,7 @@
         class="text-center pt-8"
       >
         <v-date-picker
+        class="datePicker"
           small
           v-model="picker"
           color="primary"
@@ -70,6 +71,12 @@ export default {
   }
 }
 </script>
+<style>
+  .datePicker input{
+    height:10px;
+    width: 10px;
+  }
+</style>
 <style scoped>
 .v-select {
   width: 400px;

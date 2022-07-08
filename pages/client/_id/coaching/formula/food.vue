@@ -1,28 +1,24 @@
 <template>
   <div>
     <v-container>
-      <v-row>
+      <v-row  v-if="!loading">
         <v-flex
-          xs9
+          xs8
           class="px-2"
         >
-          <v-card min-height="540" class="pa-4">
-            <div
-              v-for="(food, index) in foods"
-              :key="food+index"
-              class="mb-2"
-            >
-              <span class="formula-text text-capitalize">
-                {{index}}:
-              </span>
-              <span class="text-capitalize font-weight-bold">
-                {{food}}
-              </span>
-            </div>
+          <v-card min-height="500" class="pa-4">
+           <div class="d-flex mb-2 list-holder" v-for="(list, index) of lists" :key="index">
+                <div class="type-title mr-5 overline" style="width:40% !important;">
+                  {{list.text}} :
+                </div>
+                <div class="font-weight-bold overline type-value">
+                 {{food_preference[list.value] || 'not specified'}}
+                </div>
+              </div>
           </v-card>
         </v-flex>
         <v-flex
-          xs3
+          xs4
           class="px-2"
         >
           <v-card min-height="250">
@@ -35,34 +31,155 @@
                 style="font-size:17px;"
               >une journee type</v-toolbar-title>
             </v-toolbar>
+             <div
+              class="px-4 pb-5"
+            >
+              <div class="d-flex mb-2" style="    justify-content: space-between;">
+                <div class="type-title mr-5 overline">
+                  Breakfast:
+                </div>
+                <div class="font-weight-bold overline type-value">
+                 {{food_preference.typical_day_food.breakfast || 'not specified'}}
+                </div>
+              </div>
+              <div class="d-flex mb-2" style="    justify-content: space-between;">
+                <div class="type-title mr-5 overline">
+                  Morning snack :
+                </div>
+                <div class="font-weight-bold overline type-value">
+                  {{food_preference.typical_day_food.morning_snack || 'not specified'}}
+                </div>
+              </div>
+              <div class="d-flex mb-2" style="    justify-content: space-between;">
+                <div class="type-title mr-5 overline">
+                  Lunch :
+                </div>
+                <div class="font-weight-bold overline type-value">
+                    {{food_preference.typical_day_food.lunch || 'not specified'}}
+                </div>
+              </div>
+              <div class="d-flex mb-2" style="    justify-content: space-between;">
+                <div class="type-title mr-5 overline">
+                  Afternoon snack:
+                </div>
+                <div class="font-weight-bold overline type-value">
+                    {{food_preference.typical_day_food.afternoon_snack || 'not specified'}}
+                </div>
+              </div>
+              <div class="d-flex mb-2" style="    justify-content: space-between;">
+                <div class="type-title mr-5 overline">
+                  Dinner :
+                </div>
+                <div class="font-weight-bold overline type-value">
+                    {{food_preference.typical_day_food.dinner  || 'not specified'}}
+                </div>
+              </div>
+            </div>
           </v-card>
         </v-flex>
+      </v-row>
+      <v-row v-else>
+        <loader></loader>
       </v-row>
     </v-container>
   </div>
 </template>
 <script>
+import loader from '~/components/loader/default_loader.vue'
 export default {
+  components:{
+    loader
+  },
   data () {
     return {
-      foods: {
-        'préférence alimentaire' : 'Méditerranéenne',
-        'nombre de regas par jour': 4,
-        'régime drastique': 'Oui',
-        'Si oui, lequel (possibilité de dire lequel dans autre)': "Hypocalorique",
-        "Il y'a combien de temps ": "Il y'a 1 an / 2ans  ",
-        "Si aujourd'hui tu traques tes calories, quel est le total journalier": 4,
-        "Est-ce que tu as des allergies alimentaires ": 4,
-        "Est-ce que tu as des intolérances alimentaires ": 4,
-        "Est-ce que tu as des adaptations de ton alimentaion liées à une religion ou culture ou conviction ?": 4,
-        "Combien d'eau bois-tu par jour ": 4,
-        "Bois-tu d'autres boissons que de l'eau pour rester hydrater ?": 4,
-        "Combien de café bois-tu par jour ?": 4,
-        "Combien de fois bois-tu de l'alcool par semaine": 4,
-        "Prends-tu des suppléments alimentaires (oméga 3, protéine en poudre, probotiques, enzymes digestives, calcium, créatine, BCAA, pre/post workout, multivitamines ?": 4,
-        "Peux-tu me décrire une journée type de ton repas de la veille ?": 4,
-      }
+      loading:true,
+       client:{},
+      food_preference:{},
+      lists:[
+        {
+          text: 'food preference',
+          value: 'food_preference'
+        },
+        {
+          text: 'meals per day',
+          value: 'meals_per_day'
+        },
+        {
+          text: 'follow drastic diet',
+          value: 'follow_drastic_diet'
+        },
+        {
+          text: 'calories today',
+          value: 'calories_today'
+        },
+        {
+          text: 'allergies',
+          value: 'allergies'
+        },
+        {
+          text: 'food intolerances',
+          value: 'intolerances'
+        },
+        {
+          text: 'cultural adaptations diet',
+          value: 'cultural_adaptations_diet'
+        },
+        {
+          text: 'water per day',
+          value: 'water_per_day'
+        },
+        {
+          text: 'drinks other than water',
+          value: 'drink_other_than_water'
+        },
+        {
+          text: 'coffe per day',
+          value: 'coffee_per_day'
+        },
+        {
+          text: 'alcohol per week',
+          value: 'alcohol_per_week'
+        },
+        {
+          text: 'food supplement',
+          value: 'food_supplement'
+        },
+      ]
+    }
+  },
+  mounted () {
+    this.initalize()
+  },
+  methods: {
+    initalize () {
+      this.loading = true
+      this.$axios
+        .get(
+          `${this.$clients}/${this.$route.params.id}/edit?relations=activeSubscription.food_preference`
+        )
+        .then(({ data }) => {
+          console.log(data, 'fooodsds')
+          this.client = data;
+          this.food_preference = data.active_subscription ? data.active_subscription[0].food_preference : {}
+          this.loading = false
+        });
+
     }
   }
 }
 </script>
+<style scoped>
+.type-title{
+  opacity:0.6 !important;
+  width:230px !important;
+  line-height: 20px !important;
+    margin-top: 6px !important;
+}
+.type-value{
+     line-height: 20px !important;
+    margin-top: 6px !important;
+}
+.list-holder:hover{
+  background: whitesmoke !important;
+}
+</style>

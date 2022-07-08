@@ -16,18 +16,7 @@
       RUN YOUR LIFE ADMINISTRATION
     </p>
     <v-spacer />
-    <div style="width: 400px;">
-      <v-autocomplete
-        auto-select-first
-        clearable
-        filled
-        rounded
-        hide-details=""
-        :placeholder="this.$t('header.search')"
-        dense
-        append-icon="mdi-magnify"
-      ></v-autocomplete>
-    </div>
+   <search></search>
     <v-btn
       @click="changeView"
       icon
@@ -101,12 +90,14 @@
 </template>
 <script>
 import customList from '~/components/ui/list.vue'
+import search from '~/components/layout/search.vue'
 import notification from '~/components/layout/notification.vue'
 export default {
   name: 'DefaultLayout',
   components: {
     customList,
-    notification
+    notification,
+    search
   },
   data () {
     return {

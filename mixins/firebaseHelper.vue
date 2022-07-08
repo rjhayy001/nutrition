@@ -13,11 +13,10 @@ export default {
     },
     activateNotification(){
       const messaging = getMessaging()
-
       onMessage(messaging, (payload) => {
-        console.log('Message from clients:', payload)
-        // alert(payload.notification.title)
-        this.count = this.count + 1
+        console.log(payload)
+        this.initialize()
+        // this.saveCoachNotification(payload)
       })
     },
     saveCoachToken(token){
@@ -27,6 +26,16 @@ export default {
       }
       this.$axios.post(`set-token`, payload).then(({data}) => {
         console.log(data)
+      })
+    },
+    saveCoachNotification(data){
+       let payload = {
+        coach_id : this.$auth.user.id,
+        data: data.data
+      }
+       this.$axios.post(`${this.$coaches}/add-notification`, payload).then(({data}) => {
+        console.log(data, 'nots')
+        this.initialize()
       })
     }
   }

@@ -7,6 +7,9 @@ export default {
     frFormat(date){
       return this.$moment(date).format('ddd, DD MMM YYYY hh:mm:ss')
     },
+    fromDate(date){
+       return this.$moment(date).fromNow()
+    },
     defaultDate(date){
       return this.$moment(date).format('DD MMM YYYY')
     },

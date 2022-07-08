@@ -40,7 +40,8 @@
           xs3
           class="px-2 pr-3 "
         >
-          <v-card
+        <new-subscribers></new-subscribers>
+          <!-- <v-card
             class="mt-2 d-flex"
             height="690"
           >
@@ -72,7 +73,7 @@
             </div>
             </transition>
 
-          </v-card>
+          </v-card> -->
         </v-flex>
       </v-row>
     </v-container>
@@ -80,6 +81,7 @@
 </template>
 <script>
 import tracker from '~/components/dashboard/subscribers_tracker.vue'
+import newSubscribers from '~/components/dashboard/new_subscribers.vue'
 import calendar from '~/components/dashboard/calendar.vue'
 export default {
   data: () => ({
@@ -91,7 +93,8 @@ export default {
   }),
   components: {
     tracker,
-    calendar
+    calendar,
+    newSubscribers
   },
   methods: {
     addWeight(){

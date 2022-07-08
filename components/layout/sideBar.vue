@@ -127,14 +127,14 @@ export default {
               title: this.$t('subSidebar.usefulLinks'),
               to: 'settings-links'
             },
-            {
-              title: this.$t('subSidebar.photos'),
-              to: 'settings-photos'
-            },
-            {
-              title:'Formation',
-              to: 'settings-formations'
-            },
+            // {
+            //   title: this.$t('subSidebar.photos'),
+            //   to: 'settings-photos'
+            // },
+            // {
+            //   title:'Formation',
+            //   to: 'settings-formations'
+            // },
             {
               title: this.$t('subSidebar.coaches'),
               to: 'settings-coaches'

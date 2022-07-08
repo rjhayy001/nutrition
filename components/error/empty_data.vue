@@ -1,7 +1,8 @@
 <template>
     <div class="no-data">
-        <img src="/images/Frame.png" alt="">
-        <p>aucun données disponible</p>
+
+        <img style="width:76%;"  src="/images/Frame.png" alt="">
+        <!-- <div class="test">aucun données disponible</div> -->
     </div>
 </template>
 <script>
@@ -15,7 +16,7 @@ export default {
 }
 </script>
 <style scoped>
-    p {
+    .test {
         color: #C1C1C1;
         font-size: 30px;
         text-transform: uppercase;

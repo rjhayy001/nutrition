@@ -22,7 +22,7 @@ export default {
           title: this.$t('clients.profile'),
           icon: 'mdi-account-multiple-outline',
           to: 'client-id-profile',
-          total_records: '5'
+          // total_records: '5'
         },
         {
           title: 'Coaching',
@@ -64,6 +64,7 @@ export default {
           title: 'Chat',
           icon: 'mdi-chat-plus-outline',
           to: 'client-id-chat',
+          // total_records: '5'
         },
         {
           title: 'Documents',
@@ -81,7 +82,6 @@ export default {
           title: 'Profile',
           icon: 'mdi-account-multiple-outline',
           to: 'client-id-profile',
-          total_records: '5'
         },
       ]
     }
