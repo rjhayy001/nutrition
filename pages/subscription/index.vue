@@ -1,14 +1,19 @@
 <template>
   <v-container>
-    <subscription-form :drawerStatus="drawer" @closeDrawer="drawer = false" @addRecord="addSubscription($event)"
-      :selectedItem="selectedItem" />
+    <subscription-form 
+      :drawerStatus="drawer" 
+      @closeDrawer="drawer = false" 
+      @addRecord="addSubscription($event)"
+      :selectedItem="selectedItem" 
+    />
 
     <data-table
       :options="options"
+      :currentUrl="url"
       :title="title"
       :headers="headers"
       :data="data"
-      :currentUrl="url"
+      :sort-desc.sync="isDescending"
       class="custom-table"
       @addRecord="addRecord"
       @deleteRecord="deleteRecord($event)"
@@ -151,6 +156,7 @@ export default {
       data: [],
       drawer: false,
       selectedItem: {},
+      isDescending: true,
       url: '',
       statuses: [
         {

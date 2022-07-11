@@ -1,6 +1,8 @@
 <template>
   <fragment>
-    <sub-sidebar :submenus="submenus"></sub-sidebar>
+    <div class="main_sidemenus">
+      <sub-sidebar :submenus="submenus"></sub-sidebar>
+    </div>
     <v-container>
       <Nuxt />
     </v-container>
@@ -20,16 +22,6 @@ export default {
           to:'settings-coaches-id-profile',
           total_records:'5'
         },
-        // {
-        //   title: 'Objectives',
-        //   icon: 'mdi-store-outline',
-        //   to:'settings-coaches-id-objectives',
-        // },
-        // {
-        //   title: 'Abonnement',
-        //   icon: 'mdi-account-reactivate-outline',
-        //   to:'new-client-subscription',
-        // },
         {
           title: 'Ressources',
           icon: 'mdi-image-multiple',
