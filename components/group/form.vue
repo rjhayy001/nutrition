@@ -67,7 +67,7 @@ export default {
     }
   },
   props: {
-    drawerStatus: {
+    groupDrawer: {
       type:Boolean,
       default: () => false
     },
@@ -95,7 +95,7 @@ export default {
     }
   },
   watch: {
-    drawerStatus(val) {
+    groupDrawer(val) {
       if(val) this.drawer = val
     },
     drawer(val) {

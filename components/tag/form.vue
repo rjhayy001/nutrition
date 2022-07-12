@@ -134,6 +134,9 @@ export default {
       if(this.originalPayload) {
         this.tagPayload = this.cloneVariable(this.originalPayload)
       }
+      if(!val) {
+        this.$emit("closeDrawer")
+      }
       console.log(val,'tag drawer')
     },
     selectedItem: {

@@ -39,6 +39,7 @@
           </template>
         </v-list-item>
         <v-list-group
+          class="dropdown_menu"
           :key="index"
           v-else
           no-action
