@@ -21,7 +21,7 @@
             <v-flex xs12 class="mb-2">
               <div class="d-flex align-center py-2 data-table-cus">
                 <p class="title mr-1">
-                  {{ payload.id ? this.$t('clients.profile') : this.$t('coaches.createCoach') }} COACH
+                  {{ payload.id ? this.$t('coaches.profile') : this.$t('coaches.createCoach') }}
                 </p>
                 <!-- <v-spacer></v-spacer>
                 <v-btn class="mr-1" small @click="$router.go('-1')">
@@ -454,53 +454,29 @@
                     <div v-if="this.enableEdit">
                       <v-btn v-if="this.enableEdit" @click="cancelBtn">
                         <v-icon>mdi-content-save-outline</v-icon>
-                        cancel
+                        {{ this.$t('global.cancel') }}
                       </v-btn>
                       <v-btn v-if="this.enableEdit" class="success ml-5" type="submit">
                         <v-icon>mdi-content-save-outline</v-icon>
-                        update
+                        {{ this.$t('global.update') }}
                       </v-btn>
                     </div>
                     <div v-else>
                       <v-btn class="success" @click="editBtn">
                         <v-icon>mdi-content-save-outline</v-icon>
-                        edit
+                        {{ this.$t('global.edit') }}
                       </v-btn>
                     </div>
                   </div>
                   <div v-else>
                     <v-btn class="success" type="submit">
                       <v-icon>mdi-content-save-outline</v-icon>
-                      save
+                      {{ this.$t('global.save') }}
                     </v-btn>
                   </div>
                 </v-flex>
               </v-layout>
             </v-flex>
-            <div v-if="headerEdit">
-              <div v-if="this.enableEdit" class="form-footer d-flex justify-end">
-                <v-btn v-if="this.enableEdit" @click="cancelBtn">
-                  <v-icon>mdi-content-save-outline</v-icon>
-                  {{ this.$t('global.cancel') }}
-                </v-btn>
-                <v-btn v-if="this.enableEdit" class="success ml-5" type="submit">
-                  <v-icon>mdi-content-save-outline</v-icon>
-                  {{ this.$t('global.update') }}
-                </v-btn>
-              </div>
-              <div v-else class="form-footer d-flex justify-end">
-                <v-btn class="success" @click="editBtn">
-                  <v-icon>mdi-content-save-outline</v-icon>
-                  {{ this.$t('global.edit') }}
-                </v-btn>
-              </div>
-            </div>
-            <div v-else class="form-footer d-flex justify-end">
-              <v-btn class="success" @click="saveForm">
-                <v-icon>mdi-content-save-outline</v-icon>
-                {{ payload.id ? this.$t('global.update') : this.$t('global.save') }}
-              </v-btn>
-            </div>
           </v-layout>
         </v-container>
       </v-form>

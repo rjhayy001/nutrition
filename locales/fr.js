@@ -138,7 +138,8 @@ const messages = {
 
   //coaches
   "coaches": {
-    "createCoach": "Créer un nouvel entraîneur",
+    "profile": "Profil",
+    "createCoach": "CRÉER UN NOUVEL ENTRAÎNEUR",
     "editCoach": "Editer le coach",
     "totalCoaches": "Total des entraîneurs",
     "totalActive": "Total actif",
@@ -161,6 +162,8 @@ const messages = {
     "incompleteCancelled": "Incomplet annulé",
     "onTrial": "En essai",
     "unpaid": "Impayé",
+    "price": "Prix",
+    "selectPrice": "Selectionner un prix"
   },
 
   //payment

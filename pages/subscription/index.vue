@@ -2,10 +2,40 @@
   <v-container>
     <subscription-form 
       :drawerStatus="drawer" 
+      :selectedItem="selectedItem" 
       @closeDrawer="drawer = false" 
       @addRecord="addSubscription($event)"
-      :selectedItem="selectedItem" 
     />
+    <v-dialog v-model="dialog" max-width="500px" style="z-index=100">
+      <v-card>
+        <v-card-title class="font-weight-light">
+          Confirmation
+        </v-card-title>
+        <v-card-text>
+          <div class="my-5">
+            <p class="font-weight-light" style="color:#000;font-size: 17px;">
+              Are you sure, you want to continue, your previous subscription will be deleted?
+            </p>
+          </div>
+        </v-card-text>
+        <v-card-actions class="justify-end">
+          <v-btn
+            color="red"
+            text
+            @click="dialog = false"
+          >
+            Close
+          </v-btn>
+          <v-btn
+            color="green"
+            text
+            @click="confirmSubscribe()"
+          >
+            Yes
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <data-table
       :options="options"
@@ -15,12 +45,13 @@
       :data="data"
       :sort-desc.sync="isDescending"
       class="custom-table"
-      @addRecord="addRecord"
+      @addRecord="drawer = true"
       @deleteRecord="deleteRecord($event)"
       @reloadtable="initialize()"
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
     >
+
 
       <template v-slot:status="{ item }">
         <v-chip outlined label :color="statuses[item.status].color" v-if="statuses[item.status]">
@@ -155,6 +186,7 @@ export default {
       ],
       data: [],
       drawer: false,
+      dialog: false,
       selectedItem: {},
       isDescending: true,
       url: '',
@@ -204,18 +236,26 @@ methods: {
   initialize() {
     this.$axios.get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client,coach`).then(({ data }) => {
       this.data = data.data
-      console.log(this.data,"data")
       this.options = data.options
       this.url = `${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client,coach`
     })
   },
-  addRecord() {
-    this.drawer = true
-  },
   addSubscription(payload) {
-      this.$axios.post(`${this.$subscriptions}`, payload)
-      this.drawer = false
-      this.initialize()
+    this.$axios.post(`${this.$subscriptions}`, payload).then(({ data }) => {
+      if(data=='sad') {
+        this.dialog=true
+      }else{
+        this.initialize()
+        this.successNotification(payload,"create","subscription","subscriptions","full_name");
+        this.drawer = false
+      }
+
+    });
+      // this.$axios.post(`${this.$subscriptions}`, payload)
+  },
+  confirmSubscribe() {
+    alert("create")
+    this.dialog=false
   },
   deleteRecord(items) {
     this.$root.dialog(
