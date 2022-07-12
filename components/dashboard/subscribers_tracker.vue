@@ -89,7 +89,7 @@
                   class="mt-4 pr-3"
                 >
                   <div class="text-right">
-                    <v-icon >mdi-message-text-outline</v-icon>
+                    <v-icon @click="goTo('client-id-chat', {id: subscription.client_id})">mdi-message-text-outline</v-icon>
                   </div>
                 </div>
               </v-card>

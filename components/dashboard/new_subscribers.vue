@@ -87,7 +87,7 @@
                   class="mt-4 pr-3"
                 >
                   <div class="text-right">
-                    <v-icon>mdi-message-text-outline</v-icon>
+                    <v-icon @click="goTo('client-id-chat', {id: subscription.client_id})">mdi-message-text-outline</v-icon>
                     <br>
                   </div>
                   <div style="position: absolute; bottom: 0;">
@@ -95,8 +95,15 @@
                       class="font-weight-bold  overline underline pointer"
                       style="font-size:10px !important"
                       @click="startCoaching(subscription.id)"
+                      v-if="subscription.form_status"
                     >
                       <u>start coaching</u>
+                    </p>
+                    <p v-else
+                      class="font-weight-bold  overline underline pointer"
+                      style="font-size:8px !important; color:red;"
+                    >
+                      <u>form not completed</u>
                     </p>
                   </div>
                 </div>

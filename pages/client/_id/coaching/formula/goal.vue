@@ -22,7 +22,7 @@
                 {{list.text}} :
               </div>
               <div class="font-weight-bold overline type-value">
-                {{goal[list.value] || 'not specified'}}
+                {{ goal ? goal[list.value] : 'not specified'}}
               </div>
             </div>
           </v-card>
@@ -57,7 +57,7 @@
                 </div>
                 <div class="font-weight-bold overline type-value">
                   <!-- {{goal.hindrances['what_to_eat']}} -->
-                  {{goal.goal_hindrances[hindrance.value] || 0}}
+                  {{ goal ? goal.goal_hindrances[hindrance.value] : 0}}
                 </div>
               </div>
             </div>
