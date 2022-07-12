@@ -26,29 +26,37 @@ export default {
           showSubmenu:false,
           submenus:[
             {
-              title:'Global',
-              to: 'settings-coaches-id-global'
+              title:'Client',
+              to: 'settings-coaches-id-client'
             },
             {
-              title:'Formulaire',
-              to: 'settings-coaches-id-formula'
+              title:'Documents',
+              to: 'settings-coaches-id-documents'
             },
-            {
-              title:'Mesures',
-              to: 'settings-coaches-id-measure'
-            },
-            {
-              title:'Tracking',
-              to: 'settings-coaches-id-tracking'
-            },
-            {
-              title:'Photos',
-              to: 'settings-coaches-id-photos'
-            },
-            {
-              title:'Feedback',
-              to: 'settings-coaches-id-feedback'
-            },
+            // {
+            //   title:'Global',
+            //   to: 'settings-coaches-id-global'
+            // },
+            // {
+            //   title:'Formulaire',
+            //   to: 'settings-coaches-id-formula'
+            // },
+            // {
+            //   title:'Mesures',
+            //   to: 'settings-coaches-id-measure'
+            // },
+            // {
+            //   title:'Tracking',
+            //   to: 'settings-coaches-id-tracking'
+            // },
+            // {
+            //   title:'Photos',
+            //   to: 'settings-coaches-id-photos'
+            // },
+            // {
+            //   title:'Feedback',
+            //   to: 'settings-coaches-id-feedback'
+            // },
           ],
         },
         {

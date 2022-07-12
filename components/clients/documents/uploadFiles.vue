@@ -218,7 +218,6 @@ import iconHelper from '@/mixins/iconHelper'
           }
         },
         submit(){
-        
           var ctr = 0;
           this.File.forEach((value, index) => {
             this.$axios
@@ -231,6 +230,7 @@ import iconHelper from '@/mixins/iconHelper'
                   }
               )
               .then(({ data }) => {
+
                   ctr++;
                   if(ctr==this.File.length){
                     this.showDialog = false;

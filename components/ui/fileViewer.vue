@@ -299,7 +299,7 @@ export default {
   border: solid 1px;
 }
 #video-preview{
-  width: 120px;
+  width: 100%;
   height: 100px;
   object-fit: fill;
 }
@@ -307,7 +307,7 @@ export default {
   background-color: #ebebeb;
 }
 #imgfile{
-  width: 120px;
+  width: 100%;
   height: 100px;
   object-fit: contain;
 }

@@ -80,11 +80,10 @@ export default {
     }
   },
   methods:{
- 
     submit(){
       this.payload.type = this.feedback_type;
       this.$axios
-        .post(`${this.$clients}/addFeedback/`, this.payload)
+        .post(`feedback/addFeedback/`, this.payload)
         .then(({ data }) => {
           this.$store.commit('updateFeedbackFlag', true)
           if(data.message == 'added success'){
