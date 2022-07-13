@@ -19,6 +19,7 @@
         v-for="(item, index) in items"
         :key="index"
         dense
+        @click="goTo(item.route)"
       >
         <v-list-item-icon>
           <v-icon v-text="item.icon"></v-icon>

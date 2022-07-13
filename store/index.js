@@ -4,6 +4,7 @@ export const state = () => ({
   resetForm: false,
   feedbackFlag: false,
   trackingFlag:false,
+  profileDrawer:false
 })
 
 export const mutations = {
@@ -29,7 +30,10 @@ export const mutations = {
   },
   updateTrackingFlag (state, value) {
     state.trackingFlag = value
-  }
+  },
+updateprofileDrawer (state, value) {
+  state.profileDrawer = value
+},
 }
 
 export const getters = {
@@ -44,5 +48,8 @@ export const getters = {
   },
   trackingFlag (state) {
     return state.trackingFlag
+  },
+  profileDrawer (state) {
+    return state.profileDrawer
   }
 }

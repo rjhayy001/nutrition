@@ -1,17 +1,19 @@
 <template>
   <div>
-    <tag-form-drawer :drawerStatus="tagDrawer"
+    <tag-form-drawer 
+      :tagDrawer="tagDrawer"
+      @closeDrawer="tagDrawer =false"
       @addRecord="addTagRecord($event)"
       @updateRecord="updateRecord($event)"
       :selectedItem="selectedItem"
-    >
-    </tag-form-drawer>
-    <group-form-drawer :drawerStatus="groupDrawer"
+    ></tag-form-drawer>
+    <group-form-drawer 
+      :groupDrawer="groupDrawer"
+      @closeDrawer="groupDrawer =false"
       @addRecord="addGroupRecord($event)"
       @updateRecord="updateRecord($event)"
       :selectedItem="selectedItem"
-    >
-    </group-form-drawer>
+    ></group-form-drawer>
     <ValidationObserver ref="form">
       <v-form class="form-box" @submit.prevent="saveForm">
         <v-container grid-list-md fluid>
@@ -19,19 +21,19 @@
             <v-flex xs12 class="mb-2">
               <div class="d-flex align-center py-2 data-table-cus">
                 <p class="title mr-1">
-                  {{headerEdit ? this.$t('clients.profile') : ( payload.id ? this.$t('coaches.editCoach') : this.$t('coaches.createCoach')) }}
+                  {{ payload.id ? this.$t('coaches.profile') : this.$t('coaches.createCoach') }}
                 </p>
-                <v-spacer></v-spacer>
+                <!-- <v-spacer></v-spacer>
                 <v-btn class="mr-1" small @click="$router.go('-1')">
                   <v-icon>mdi-arrow-left</v-icon>
                   {{ this.$t('global.back') }}
-                </v-btn>
+                </v-btn> -->
               </div>
               <hr />
             </v-flex>
           </v-layout>
-          <v-layout row wrap class="form-content" gap>
-            <v-flex xs6>
+          <v-layout row wrap gap>
+            <v-flex xs6 px-5>
               <v-layout row wrap>
                 <v-flex xs12>
                   <p class="subtitle-1 font-weight-medium">INFORMATIONS</p>
@@ -49,36 +51,42 @@
                         {{ $t('clients.firstName') }}
                       </p>
                       <v-text-field
-                      class="text-capitalize"
-                        filled
                         flat
                         dense
-                        :disabled="!enableEdit"
-                        v-model="payload.first_name"
-                        name="first_name"
-                        :placeholder="$t('clients.typeFirstName')"
-                        hide-details="auto"
+                        filled
                         type="text"
+                        name="first_name"
+                        hide-details="auto"
+                        class="text-capitalize"
+                        v-model="payload.first_name"
+                        :disabled="!enableEdit"
                         :error-messages="errors"
+                        :placeholder="$t('clients.typeFirstName')"
                       ></v-text-field>
                     </div>
                   </ValidationProvider>
                 </v-flex>
                 <v-flex xs6>
-                  <ValidationProvider slim>
+                  <ValidationProvider
+                    slim
+                    name="last_name"
+                    rules="required"
+                    v-slot="{ errors }"
+                  >
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">{{ $t('clients.lastName') }}</p>
                       <v-text-field
-                        filled
                         flat
                         dense
-                        :disabled="!enableEdit"
+                        filled
+                        type="text"
+                        name="last_name"
+                        hide-details="auto"
                         class="text-capitalize"
                         v-model="payload.last_name"
-                        name="last_name"
+                        :disabled="!enableEdit"
+                        :error-messages="errors"
                         :placeholder="$t('clients.typeLastName')"
-                        hide-details="auto"
-                        type="text"
                       ></v-text-field>
                     </div>
                   </ValidationProvider>
@@ -91,15 +99,15 @@
                         {{ $t('clients.phone') }} #1
                       </p>
                       <v-text-field
-                        filled
                         flat
                         dense
-                        :disabled="!enableEdit"
-                        v-model="payload.phone_1"
-                        name="phone_1"
-                        :placeholder="$t('clients.typeYourMobile')"
-                        hide-details="auto"
+                        filled
                         type="text"
+                        name="phone_1"
+                        hide-details="auto"
+                        v-model="payload.phone_1"
+                        :disabled="!enableEdit"
+                        :placeholder="$t('clients.typeYourMobile')"
                       ></v-text-field>
                     </div>
                   </ValidationProvider>
@@ -109,15 +117,15 @@
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">{{ $t('clients.phone') }} #2</p>
                       <v-text-field
-                        filled
                         flat
                         dense
-                        :disabled="!enableEdit"
-                        v-model="payload.phone_2"
-                        name="phone_2"
-                        :placeholder="$t('clients.typeYourMobile')"
-                        hide-details="auto"
+                        filled
                         type="text"
+                        name="phone_2"
+                        hide-details="auto"
+                        v-model="payload.phone_2"
+                        :disabled="!enableEdit"
+                        :placeholder="$t('clients.typeYourMobile')"
                       ></v-text-field>
                     </div>
                   </ValidationProvider>
@@ -130,15 +138,15 @@
                         {{ $t('clients.email') }}
                       </p>
                       <v-text-field
-                        filled
                         flat
                         dense
-                        :disabled="!enableEdit"
-                        v-model="payload.email"
-                        name="email_1"
-                        :placeholder="$t('clients.typeYourEmail')"
-                        hide-details="auto"
+                        filled
                         type="text"
+                        name="email_1"
+                        hide-details="auto"
+                        v-model="payload.email"
+                        :disabled="!enableEdit"
+                        :placeholder="$t('clients.typeYourEmail')"
                       ></v-text-field>
                     </div>
                   </ValidationProvider>
@@ -150,23 +158,24 @@
                         {{ $t('clients.birthday') }}
                       </p>
                       <v-dialog
+                        persistent
                         ref="dialog"
+                        width="290px"
                         v-model="modal"
                         :return-value.sync="payload.birthday"
-                        persistent
-                        width="290px"
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
-                            :disabled="!enableEdit"
-                            v-model="payload.birthday"
-                            solo
                             flat
-                            :label="$t('clients.chooseDateOfBirth')"
-                            prepend-inner-icon="mdi-calendar"
+                            dense
+                            filled
                             readonly
-                            v-bind="attrs"
                             v-on="on"
+                            v-bind="attrs"
+                            v-model="payload.birthday"
+                            prepend-inner-icon="mdi-calendar"
+                            :disabled="!enableEdit"
+                            :placeholder="$t('clients.chooseDateOfBirth')"
                           ></v-text-field>
                         </template>
 
@@ -197,15 +206,15 @@
                         {{ $t('clients.email') }}/{{ $t('clients.username') }}
                       </p>
                       <v-text-field
-                        filled
                         flat
                         dense
-                        :disabled="!enableEdit"
-                        v-model="payload.email"
-                        name="email_2"
-                        :placeholder="$t('clients.typeEmailOrUsername')"
-                        hide-details="auto"
+                        filled
                         type="text"
+                        name="email_2"
+                        hide-details="auto"
+                        v-model="payload.email"
+                        :disabled="!enableEdit"
+                        :placeholder="$t('clients.typeEmailOrUsername')"
                       ></v-text-field>
                     </div>
                   </ValidationProvider>
@@ -215,19 +224,17 @@
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">Password</p>
                       <v-text-field
-                        filled
                         flat
                         dense
-                        :disabled="!enableEdit"
-                        v-model="payload.password"
+                        filled
                         name="password"
-                        :append-icon="
-                          viewPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'
-                        "
-                        :placeholder="$t('clients.typeYourPassword')"
                         hide-details="auto"
-                        :type="viewPassword ? 'text' : 'password'"
+                        v-model="payload.password"
                         @click:append="viewPassword = !viewPassword"
+                        :disabled="!enableEdit"
+                        :type="viewPassword ? 'text' : 'password'"
+                        :placeholder="$t('clients.typeYourPassword')"
+                        :append-icon="viewPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
                       ></v-text-field>
                     </div>
                   </ValidationProvider>
@@ -243,15 +250,15 @@
                         {{ $t('clients.address') }}
                       </p>
                       <v-text-field
-                        filled
                         flat
                         dense
-                        :disabled="!enableEdit"
-                        v-model="payload.address_1"
-                        name="address_1"
-                        :placeholder="$t('clients.typeYourAddress')"
-                        hide-details="auto"
+                        filled
                         type="text"
+                        name="address_1"
+                        hide-details="auto"
+                        v-model="payload.address_1"
+                        :disabled="!enableEdit"
+                        :placeholder="$t('clients.typeYourAddress')"
                       ></v-text-field>
                     </div>
                   </ValidationProvider>
@@ -263,16 +270,16 @@
                         {{ $t('clients.additionalAddress') }}
                       </p>
                       <v-textarea
-                        filled
                         flat
                         dense
-                        :disabled="!enableEdit"
-                        v-model="payload.address_2"
-                        name="address_2"
-                        :placeholder="$t('clients.typeYourAddAddress')"
-                        hide-details="auto"
-                        type="text"
+                        filled
                         rows="2"
+                        type="text"
+                        name="address_2"
+                        hide-details="auto"
+                        v-model="payload.address_2"
+                        :disabled="!enableEdit"
+                        :placeholder="$t('clients.typeYourAddAddress')"
                       ></v-textarea>
                     </div>
                   </ValidationProvider>
@@ -285,16 +292,16 @@
                         {{ $t('clients.city') }}
                       </p>
                       <v-combobox
-                        filled
                         flat
                         dense
-                        :disabled="!enableEdit"
-                        v-model="payload.city_id"
-                        :items="cities"
-                        hide-details="auto"
+                        filled
+                        item-value="id"
                         deletable-chips
                         item-text="name"
-                        item-value="id"
+                        hide-details="auto"
+                        v-model="payload.city_id"
+                        :items="cities"
+                        :disabled="!enableEdit"
                       ></v-combobox>
                     </div>
                   </ValidationProvider>
@@ -302,17 +309,20 @@
                 <v-flex xs6>
                   <ValidationProvider slim>
                     <div class="mb-1">
-                      <p class="subtitle-2 font-weight-regular mb-2">{{ $t('clients.zipcode') }}</p>
+                      <p class="subtitle-2 font-weight-regular mb-2">
+                        <span :hidden="!enableEdit">*</span>
+                        {{ $t('clients.zipcode') }}
+                      </p>
                       <v-combobox
-                        filled
                         flat
                         dense
-                        :disabled="!enableEdit"
+                        filled
+                        item-value="id"
+                        item-text="code"
+                        hide-details="auto"
                         v-model="payload.zipcode_id"
                         :items="zipcodes"
-                        hide-details="auto"
-                        item-text="code"
-                        item-value="id"
+                        :disabled="!enableEdit"
                       ></v-combobox>
                     </div>
                   </ValidationProvider>
@@ -325,23 +335,23 @@
                         {{ $t('clients.country') }}
                       </p>
                       <v-combobox
-                        filled
                         flat
                         dense
-                        :disabled="!enableEdit"
-                        v-model="payload.country_id"
-                        :items="countries"
+                        filled
                         name="country"
+                        item-value="id"
                         hide-details="auto"
                         item-text="short_name"
-                        item-value="id"
+                        v-model="payload.country_id"
+                        :items="countries"
+                        :disabled="!enableEdit"
                       ></v-combobox>
                     </div>
                   </ValidationProvider>
                 </v-flex>
               </v-layout>
             </v-flex>
-            <v-flex xs6 class="py-0 px-7">
+            <v-flex xs6 class="py-0 px-5" style="position:relative">
               <v-layout row wrap>
                 <v-flex xs12>
                   <p class="subtitle-1 font-weight-medium">{{ $t('clients.profile') }}</p>
@@ -357,21 +367,21 @@
                       ></v-img>
                     </div>
                     <v-btn
-                      v-if="this.enableEdit"
-                      color="success"
                       small
                       outlined
+                      color="success"
+                      :disabled="!enableEdit"
                       @click="handleFileImport"
                     >
                       <v-icon>mdi-upload-outline</v-icon>
                       {{ $t('global.uploadPhoto') }}
                     </v-btn>
                     <input
-                      accept="image/png, image/gif, image/jpeg"
-                      ref="uploader"
                       type="file"
-                      @change="onFileChange"
+                      ref="uploader"
                       class="d-none"
+                      accept="image/png, image/gif, image/jpeg"
+                      @change="onFileChange"
                     />
                   </div>
                 </v-flex>
@@ -380,19 +390,20 @@
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">Tags</p>
                       <v-autocomplete
-                        filled
                         flat
                         dense
-                        :disabled="!enableEdit"
-                        v-model="payload.taggable"
-                        :items="tagsOption"
-                        :label="$t('clients.selectTags')"
+                        filled
+                        multiple
+                        item-value="id"
+                        item-text="name"
                         hide-details="auto"
                         prepend-inner-icon="mdi-plus"
-                        @click:prepend-inner.stop="tagDrawer = !tagDrawer"
-                        item-text="name"
-                        item-value="id"
-                        multiple
+                        placeholder="Select tags ..."
+                        v-model="payload.taggable"
+                        :items="tagsOption"
+                        :disabled="!enableEdit"
+                        :label="$t('clients.selectTags')"
+                        @click:prepend-inner.stop="tagDrawer = true"
                       ></v-autocomplete>
                     </div>
                   </ValidationProvider>
@@ -402,19 +413,19 @@
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">{{ $t('clients.groups') }}</p>
                       <v-autocomplete
-                        filled
                         flat
                         dense
-                        :disabled="!enableEdit"
+                        filled
+                        multiple
+                        item-value="id"
+                        item-text="name"
+                        hide-details="auto"
+                        prepend-inner-icon="mdi-plus"
                         v-model="payload.groupable"
                         :items="groupsOption"
-                        hide-details="auto"
-                        @click:prepend-inner.stop="groupDrawer = !groupDrawer"
-                        item-text="name"
-                        item-value="id"
-                        :label="$t('clients.selectGroups')"
-                        prepend-inner-icon="mdi-plus"
-                        multiple
+                        :disabled="!enableEdit"
+                        :placeholder="$t('clients.selectGroups')"
+                        @click:prepend-inner.stop="groupDrawer = true"
                       >
                       </v-autocomplete>
                     </div>
@@ -425,45 +436,47 @@
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">{{ $t('clients.status') }}</p>
                       <v-select
-                        filled
                         flat
                         dense
-                        :disabled="!enableEdit"
-                        v-model="payload.status"
-                        :items="statusOptions"
+                        filled
                         item-value="id"
                         item-text="name"
                         hide-details="auto"
+                        v-model="payload.status"
+                        :items="statusOptions"
+                        :disabled="!enableEdit"
                       ></v-select>
                     </div>
                   </ValidationProvider>
                 </v-flex>
+                <v-flex xs12 style="position:absolute; bottom:0; right:25px">
+                  <div v-if="payload.id">
+                    <div v-if="this.enableEdit">
+                      <v-btn v-if="this.enableEdit" @click="cancelBtn">
+                        <v-icon>mdi-content-save-outline</v-icon>
+                        {{ this.$t('global.cancel') }}
+                      </v-btn>
+                      <v-btn v-if="this.enableEdit" class="success ml-5" type="submit">
+                        <v-icon>mdi-content-save-outline</v-icon>
+                        {{ this.$t('global.update') }}
+                      </v-btn>
+                    </div>
+                    <div v-else>
+                      <v-btn class="success" @click="editBtn">
+                        <v-icon>mdi-content-save-outline</v-icon>
+                        {{ this.$t('global.edit') }}
+                      </v-btn>
+                    </div>
+                  </div>
+                  <div v-else>
+                    <v-btn class="success" type="submit">
+                      <v-icon>mdi-content-save-outline</v-icon>
+                      {{ this.$t('global.save') }}
+                    </v-btn>
+                  </div>
+                </v-flex>
               </v-layout>
             </v-flex>
-            <div v-if="headerEdit">
-              <div v-if="this.enableEdit" class="form-footer d-flex justify-end">
-                <v-btn v-if="this.enableEdit" @click="cancelBtn">
-                  <v-icon>mdi-content-save-outline</v-icon>
-                  {{ this.$t('global.cancel') }}
-                </v-btn>
-                <v-btn v-if="this.enableEdit" class="success ml-5" type="submit">
-                  <v-icon>mdi-content-save-outline</v-icon>
-                  {{ this.$t('global.update') }}
-                </v-btn>
-              </div>
-              <div v-else class="form-footer d-flex justify-end">
-                <v-btn class="success" @click="editBtn">
-                  <v-icon>mdi-content-save-outline</v-icon>
-                  {{ this.$t('global.edit') }}
-                </v-btn>
-              </div>
-            </div>
-            <div v-else class="form-footer d-flex justify-end">
-              <v-btn class="success" @click="saveForm">
-                <v-icon>mdi-content-save-outline</v-icon>
-                {{ payload.id ? this.$t('global.update') : this.$t('global.save') }}
-              </v-btn>
-            </div>
           </v-layout>
         </v-container>
       </v-form>
@@ -473,9 +486,10 @@
 <script>
 import tagFormDrawer from "~/components/tag/form.vue";
 import groupFormDrawer from "~/components/group/form.vue";
+import tableHelper from "~/mixins/tableHelper.vue";
 export default {
   components: {tagFormDrawer, groupFormDrawer},
-
+  mixins:[tableHelper],
   data() {
     return {
       payload: {
@@ -497,8 +511,6 @@ export default {
         groupable: [],
       },
       modal: false,
-      loading: false,
-      errorMessage: "",
       viewPassword: false,
       originalPayload: {},
       statusOptions: [
@@ -512,30 +524,16 @@ export default {
       countries: [],
       cities: [],
       zipcodes: [],
-      tagsSelected: [],
       enableEdit: '',
     };
   },
   props: {
-    drawerStatus: {
-      type: Boolean,
-      default: () => false,
-    },
     selectedItem: {
       type: Object,
       default: () => {},
     },
-    headerEdit: {
-      type: Boolean,
-      default: () => {},
-    }
   },
   watch: {
-    drawerStatus: {
-      handler(val) {
-        console.log(val, "status");
-      },
-    },
     selectedItem: {
       handler(val) {
         if (!this.originalPayload) {
@@ -543,55 +541,36 @@ export default {
         }
         if (!val) return;
         this.payload = this.cloneVariable(val);
+        this.enableEdit=false
       },
       deep: true,
       immediate: true,
     },
-    tagsSelected: {
-      handler(val) {
-        // this.tagsSelected = val;
-        this.tagsSelected = val;
-      }
-    },
-    headerEdit: {
-      handler(val) {
-        this.headerEdit=this.enableEdit
-      }
-    }
-  },
-  created() {
-    this.getAllCountries();
-    this.getAllZipcodes();
-    this.getAllCities();
-    this.getAllTags();
-    this.getAllGroups();
   },
   mounted() {
-    if(this.headerEdit=='' || this.headerEdit== null) {
+    this.initialize();
+    
+    if(!this.payload.id) {
       this.enableEdit=true
     }
   },
   methods: {
     saveForm() {
-      alert("sad")
       this.$refs.form.validate().then((result) => {
         if (!result) return;
-        if(this.headerEdit==true) {
-          // if (this.payload.id) {
-            this.$emit("updateRecord", this.payload);
-            this.goTo("settings-coaches-id");
-            this.enableEdit=false
-          // } else {
-          //   this.$emit("addRecord", this.payload);
-          // }
-        }else{
-          if (this.payload.id) {
-            this.$emit("updateRecord", this.payload);
-          } else {
-            this.$emit("addRecord", this.payload);
-          }
+        if (this.payload.id) {
+          this.$emit("updateRecord", this.payload);
+        } else {
+          this.$emit("addRecord", this.payload);
         }
       });
+    },
+    initialize() {
+      this.getAllCountries();
+      this.getAllZipcodes();
+      this.getAllCities();
+      this.getAllTags();
+      this.getAllGroups();
     },
     handleFileImport() {
       window.addEventListener("focus", () => {}, { once: true });
@@ -612,19 +591,31 @@ export default {
       }
     },
     getAllCountries() {
-      this.$store.dispatch("address/FETCH_COUNTRIES").then(({ data }) => {
-        this.countries = data;
-      });
+      this.$axios.get(`${this.$countries}??no-paginate=''`).then(({data}) => {
+        this.countries = data.data
+      })
+
+      // this.$store.dispatch("address/FETCH_COUNTRIES").then(({ data }) => {
+      //   this.countries = data;
+      // });
     },
     getAllZipcodes() {
-      this.$store.dispatch("address/FETCH_ZIPCODES").then(({ data }) => {
-        this.zipcodes = data;
-      });
+      this.$axios.get(`${this.$zipcodes}??no-paginate=''`).then(({data}) => {
+        this.zipcodes = data.data
+      })
+
+      // this.$store.dispatch("address/FETCH_ZIPCODES").then(({ data }) => {
+      //   console.log(data,"zip")
+      // });
     },
     getAllCities() {
-      this.$store.dispatch("address/FETCH_CITIES").then(({ data }) => {
-        this.cities = data;
-      });
+      this.$axios.get(`${this.$cities}?no-paginate=''`).then(({data}) => {
+        this.cities = data.data
+      })
+
+      // this.$store.dispatch("address/FETCH_CITIES").then(({ data }) => {
+      //   this.cities = data;
+      // });
     },
     getAllTags() {
       this.$axios.get(`${this.$tags}?no-paginate=''`).then(({data}) => {
@@ -656,21 +647,8 @@ export default {
       this.enableEdit=true
     },
     cancelBtn() {
-      this.enableEdit=false
+      this.$emit('reload')
     }
   },
 };
 </script>
-
-
-
-<style scoped>
-.v-text-field >>> .v-input__slot::before  { 
-  border-color: transparent !important; 
-}
-
-.form-box.v-input__slot {
-  border: 0px solid #d7d2d2!important;
-}
-
-</style>

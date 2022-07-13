@@ -12,7 +12,7 @@
                   {{list.text}} :
                 </div>
                 <div class="font-weight-bold overline type-value">
-                 {{food_preference[list.value] || 'not specified'}}
+                 {{ food_preference ?[list.value] : 'not specified'}}
                 </div>
               </div>
           </v-card>
@@ -39,7 +39,7 @@
                   Breakfast:
                 </div>
                 <div class="font-weight-bold overline type-value">
-                 {{food_preference.typical_day_food.breakfast || 'not specified'}}
+                 {{ food_preference ? food_preference.typical_day_food.breakfast : 'not specified'}}
                 </div>
               </div>
               <div class="d-flex mb-2" style="    justify-content: space-between;">
@@ -47,7 +47,7 @@
                   Morning snack :
                 </div>
                 <div class="font-weight-bold overline type-value">
-                  {{food_preference.typical_day_food.morning_snack || 'not specified'}}
+                  {{ food_preference ? food_preference.typical_day_food.morning_snack : 'not specified'}}
                 </div>
               </div>
               <div class="d-flex mb-2" style="    justify-content: space-between;">
@@ -55,7 +55,7 @@
                   Lunch :
                 </div>
                 <div class="font-weight-bold overline type-value">
-                    {{food_preference.typical_day_food.lunch || 'not specified'}}
+                    {{ food_preference ? food_preference.typical_day_food.lunch : 'not specified'}}
                 </div>
               </div>
               <div class="d-flex mb-2" style="    justify-content: space-between;">
@@ -63,7 +63,7 @@
                   Afternoon snack:
                 </div>
                 <div class="font-weight-bold overline type-value">
-                    {{food_preference.typical_day_food.afternoon_snack || 'not specified'}}
+                    {{ food_preference ? food_preference.typical_day_food.afternoon_snack : 'not specified'}}
                 </div>
               </div>
               <div class="d-flex mb-2" style="    justify-content: space-between;">
@@ -71,7 +71,7 @@
                   Dinner :
                 </div>
                 <div class="font-weight-bold overline type-value">
-                    {{food_preference.typical_day_food.dinner  || 'not specified'}}
+                    {{ food_preference ? food_preference.typical_day_food.dinner  : 'not specified'}}
                 </div>
               </div>
             </div>

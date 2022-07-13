@@ -128,6 +128,11 @@ export default {
         name: 'forgot_password',
         path: '/forgot_password',
         component: resolve(__dirname, 'pages/authentication/forgot_password.vue')
+      }),
+      routes.push({
+        name: 'reset_password',
+        path: '/reset_password',
+        component: resolve(__dirname, 'pages/authentication/reset_password.vue')
       })
     }
   },

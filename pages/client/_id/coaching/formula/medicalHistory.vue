@@ -22,7 +22,7 @@
                 {{list.text}} :
               </div>
               <div class="font-weight-bold overline type-value">
-                {{medical_history[list.value] || 'not specified'}}
+                {{ medical_history ? medical_history[list.value] : 'not specified'}}
               </div>
             </div>
           </v-card>
@@ -52,7 +52,7 @@
                   {{women_list.text}} :
                 </div>
                 <div class="font-weight-bold overline type-value">
-                  {{medical_history[women_list.value] || 'not specified'}}
+                  {{ medical_history ? medical_history[women_list.value] : 'not specified'}}
                 </div>
               </div>
             </div>

@@ -109,6 +109,64 @@ button {
   }
 
 }
+.forgotPassword-form {
+  .theme--light.v-text-field > .v-input__control > .v-input__slot:before  {
+    border: none !important;
+  }
+
+  .right-background {
+    .footer {
+      display: block;
+      position: absolute;
+      box-sizing: border-box;
+      height: 833px;
+      background-color: #7c94de;
+      z-index: 99;
+      bottom: 0;
+      -webkit-clip-path: ellipse(78% 100% at 22% 100%);
+      clip-path: ellipse(150% 100% at -50% 100%);
+      width: 70%;
+    }
+    .header-log {
+      display: block;
+      position: absolute;
+      box-sizing: border-box;
+      height: 1200px;
+      background-color: #9aaadb;
+      bottom: 0;
+      -webkit-clip-path: ellipse(78% 100% at 22% 100%);
+      clip-path: ellipse(150% 100% at -50% 100%);
+      width: 70%;
+    }
+  }
+
+  .right-background {
+    background-size: cover;
+    background-position: -25px;
+  }
+
+  .v-btn {
+    height: 45px !important;
+  }
+
+  .sm7{
+    height: 100%;
+  }
+
+  .forgotPassword-content {
+    background-color: white !important;
+    padding: 10rem 10rem 0rem 10rem;
+  }
+
+  .forgotPassword-content h1 {
+    margin-bottom: 3rem;
+  }
+
+  .subtitle-1 {
+    margin-bottom: 2rem! important;
+    font-size: 20px !important;
+  }
+}
 
 /*
 * PROFILE CSS
@@ -271,6 +329,10 @@ button {
 
   .v-list-group__header {
     padding: 0 26px !important;
+  }
+
+  .dropdown_menu .v-list-group__header {
+    padding: 0 0 0 10px !important;
   }
 
   .v-list-group__header__prepend-icon {

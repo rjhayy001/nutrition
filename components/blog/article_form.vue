@@ -21,11 +21,11 @@
               <p class="title mr-1">
                 {{ payload.id ? "EDIT" : "CREATE NEW" }} BLOG
               </p>
-              <v-spacer></v-spacer>
+              <!-- <v-spacer></v-spacer>
               <v-btn class="mr-1" small @click="$router.go('-1')">
                 <v-icon>mdi-arrow-left</v-icon>
                 BACK
-              </v-btn>
+              </v-btn> -->
             </div>
             <hr />
           </v-flex>

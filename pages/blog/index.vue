@@ -178,7 +178,7 @@ export default {
       })
     },
     addRecord() {
-      this.goTo("blog-form");
+      this.goTo("blog-form-article_form");
     },
     deleteRecord(items) {
       this.delete().then(() => {

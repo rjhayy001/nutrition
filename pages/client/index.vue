@@ -19,7 +19,7 @@
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
       @searchRecords="searchRecords($event)"
-      @editRecord="editRecord($event)"
+      @editRecord="showRecord($event)"
     >
       <!-- full_name -->
       <template v-slot:full_name="{ item }">
@@ -57,7 +57,7 @@
         {{ item.birthday ? formatDate(item.birthday) : "..." }}
       </template>
       <!-- taggable -->
-      <!-- <template v-slot:taggable="{ item }">
+      <template v-slot:taggable="{ item }">
         <template v-if="!item.taggable.length"> ... </template>
         <common-dialog
           v-else
@@ -65,9 +65,9 @@
           :default_limit="default_limit"
           @delete="deleteTaggable"
         />
-      </template> -->
+      </template>
       <!-- groupable -->
-      <!-- <template v-slot:groupable="{ item }">
+      <template v-slot:groupable="{ item }">
         <template v-if="!item.groupable.length"> ... </template>
         <common-dialog
           v-else
@@ -75,7 +75,7 @@
           :default_limit="default_limit"
           @delete="deleteGroupable"
         />
-      </template> -->
+      </template>
       <!-- create_at -->
       <template v-slot:created_at="{ item }">
         {{ formatDate(item.created_at) }}
@@ -106,7 +106,7 @@ export default {
       options: {},
       title: "Clients",
       headers: [
-{
+        {
           text: "#",
           value: "id",
           width: "1%",
@@ -254,6 +254,9 @@ export default {
     showRecord(item){
       this.goTo("client-id-profile", { id: item.id });
     },
+    // editRecord(item) {
+    //   this.goTo("client-id-profile", { id: item.id });
+    // },
     addRecord() {
       this.goTo('client-create')
     },
@@ -270,9 +273,6 @@ export default {
           );
           this.initialize();
         });
-    },
-    editRecord(item) {
-      this.goTo("client-edit-id", { id: item.id });
     },
     deleteRecord(items) {
       this.delete().then(() => {

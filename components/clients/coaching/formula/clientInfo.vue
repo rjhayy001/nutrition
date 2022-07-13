@@ -34,9 +34,9 @@
             class="font-weight-bold"
             style="font-size: x-large;"
           >
-            {{basic_info.age}}</div>
+            {{basic_info ? basic_info.age : 0}}</div>
           <div style="font-size: smaller; font-weight: 200;">
-            {{defaultDate(basic_info.birth_date) || 0}}
+            {{ basic_info ? defaultDate(basic_info.birth_date) : 0}}
           </div>
         </v-card>
       </v-flex>
@@ -58,7 +58,7 @@
                 class="font-weight-bold"
                 style="font-size: x-large;"
               >
-                {{basic_info.weight || 0}}
+                {{basic_info ? basic_info.weight : 0}}
               </div>
               <div style="font-size: smaller; font-weight: 200;">
                 Debut
@@ -72,7 +72,7 @@
                 class="font-weight-bold"
                 style="font-size: x-large;"
               >
-                {{basic_info.weight || 0}}
+                {{basic_info ? basic_info.weight : 0}}
               </div>
               <div style="font-size: smaller; font-weight: 200;">
                 Actuelan
@@ -86,7 +86,7 @@
                 class="font-weight-bold"
                 style="font-size: x-large;"
               >
-                {{basic_info.target_weight || 0}}
+                {{basic_info ? basic_info.target_weight : 0}}
               </div>
               <div style="font-size: smaller; font-weight: 200;">
                 Objectif
@@ -105,7 +105,7 @@
             class="font-weight-bold"
             style="font-size: x-large;"
           >
-            {{basic_info.height || 0}}
+            {{basic_info ? basic_info.height : 0}}
           </div>
           <div style="font-size: smaller; font-weight: 200;">cm</div>
         </v-card>

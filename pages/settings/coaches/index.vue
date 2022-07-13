@@ -1,8 +1,8 @@
 <template>
   <v-container fluid>
     <statistics-component
-     :statistics="formattedStatistics"
-     :title="title"
+      :statistics="formattedStatistics"
+      :title="title"
     />
     <data-table
       :options="options"
@@ -19,7 +19,7 @@
       @FilterBy="filterBy($event)"
       @updatePagenum="updatePagenum($event)"
       @searchRecords="searchRecords($event)"
-      @editRecord="editRecord($event)"
+      @editRecord="showRecord($event)"
     >
       <!-- full_name -->
       <template v-slot:full_name="{ item }">
@@ -253,7 +253,6 @@ export default {
           this.data = data.data;
           this.options = data.options;
           this.url = `${this.$coaches}?${this.urlQuery()}&relations=taggable,groupable,country,city,zipcode`
-          console.log(data, 'query fdaoajf')
         });
     },
     addRecord() {
@@ -276,9 +275,7 @@ export default {
     showRecord(item){
       this.goTo("settings-coaches-id-profile", { id: item.id });
     },
-    editRecord(item) {
-      this.goTo("settings-coaches-edit-id", { id: item.id });
-    },
+  
     deleteRecord(items) {
       this.delete().then(() => {
         let ids = this.getIds(items);
