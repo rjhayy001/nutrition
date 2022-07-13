@@ -53,11 +53,15 @@
 </template>
 <script>
 export default {
-  props: {
-    payloads: {
-      type: Object,
-    }
-  },
+  props: ['payloads','feedback_type'],
+  // props: {
+  //   payloads: {
+  //     type: Object,
+  //   },
+  //   feedback_type: {
+  //     type: String,
+  //   },
+  // },
   watch: {
     payloads: function(value) {
       this.menu = true;
@@ -77,10 +81,17 @@ export default {
   },
   methods:{
     submit(){
+      this.payload.type = this.feedback_type;
       this.$axios
-        .post(`${this.$clients}/addFeedback/`, this.payload)
+        .post(`feedback/addFeedback/`, this.payload)
         .then(({ data }) => {
           this.$store.commit('updateFeedbackFlag', true)
+          if(data.message == 'added success'){
+            this.successfeedbackNotification('added')
+          }
+          else{
+            this.successfeedbackNotification('update')
+          }
           this.menu= false
           this.payload.feedbackscol = ''
           this.payload.id = ''

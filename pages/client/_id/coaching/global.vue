@@ -86,7 +86,7 @@
           </v-card>
         </v-flex>
       </v-row>
-    <feed-back-form></feed-back-form>
+    <feed-back-form :feedback_type="type"></feed-back-form>
     </v-container>
   </div>
 </template>

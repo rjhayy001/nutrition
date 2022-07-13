@@ -39,18 +39,37 @@ export default {
           showSubmenu:false,
           submenus:[
             {
-              title:'Global',
-              to: 'settings-coaches-id-global'
-            },
-
-            {
-              title:'Photos',
-              to: 'settings-coaches-id-photos'
+              title:'Client',
+              to: 'settings-coaches-id-client'
             },
             {
-              title:'Feedback',
-              to: 'settings-coaches-id-feedback'
+              title:'Documents',
+              to: 'settings-coaches-id-documents'
             },
+            // {
+            //   title:'Global',
+            //   to: 'settings-coaches-id-global'
+            // },
+            // {
+            //   title:'Formulaire',
+            //   to: 'settings-coaches-id-formula'
+            // },
+            // {
+            //   title:'Mesures',
+            //   to: 'settings-coaches-id-measure'
+            // },
+            // {
+            //   title:'Tracking',
+            //   to: 'settings-coaches-id-tracking'
+            // },
+            // {
+            //   title:'Photos',
+            //   to: 'settings-coaches-id-photos'
+            // },
+            // {
+            //   title:'Feedback',
+            //   to: 'settings-coaches-id-feedback'
+            // },
           ],
         },
       ]
@@ -65,7 +84,7 @@ export default {
       if(this.$route.name.includes(parent)) {
         if (!menu.showSubmenu) menu.showSubmenu = true
         return 'subactive'
-      } 
+      }
     }
   },
   computed: {

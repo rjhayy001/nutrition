@@ -11,7 +11,7 @@
         <daily-view></daily-view>
       </v-expansion-panels>
     </v-row>
-    <feed-back-form></feed-back-form>
+    <feed-back-form :feedback_type="type"></feed-back-form>
   </v-container>
 </template>
 <script>
@@ -29,6 +29,7 @@ export default {
   data(){
     return{
       panel:0,
+      type:'tracking',
       selectedItem:{},
       drawer:false,
     }

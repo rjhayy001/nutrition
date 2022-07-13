@@ -1,46 +1,25 @@
 <template>
 <div>
-  <v-row v-if="!photos">
-    <v-col md="6" cols="12">
-      <h3>{{ this.$moment().format('MMMM YYYY') }}</h3>
-    </v-col>
-    <v-col md="6" cols="12">
-      <div class="tags d-flex justify-end">
-        <h4 class="active pa-2">All</h4>
-      </div>
-    </v-col>
-  </v-row>
-  <div
-  v-for="(value, index) in months.slice().reverse()"
-  :key="value.id"
-  >
-    <v-row class="my-2">
-      <v-col><h3>{{ value }}</h3></v-col>
-      <v-col v-if="index==0" md="6" cols="12">
-        <v-tabs
-        right>
-          <v-tab class="tags" @click="$emit('initialize')">All</v-tab>
-          <v-tab class="tags" v-for="tags in tags" :key="tags"
-          @click="getByTag(tags)">
-            #{{ tags }}
-          </v-tab>
-        </v-tabs>
-        <!-- <div class="tags d-flex justify-end">
-          <h4 class="active pa-1" @click="$emit('initialize')">All</h4>
-          <h4 class="pa-1" v-for="tags in tags" :key="tags"
-          @click="getByTag(tags)">
-          #{{ tags }}
-          </h4>
-        </div> -->
-      </v-col>
+  <div v-if="search1">
+    <v-row class="mb-6">
+      <v-subheader class="pr-0">
+        <h3>Search:</h3>
+      </v-subheader>
+      <v-chip
+        class="ma-2"
+        close
+        color="primary"
+        @click:close="closeSearch"
+      >
+        {{ this.search1 }}
+      </v-chip>
     </v-row>
-    <v-layout>
+    <v-layout v-if="searchPhotos.length">
       <v-flex
-        v-for="photo in photos.slice().reverse()"
+        v-for="photo in searchPhotos.slice().reverse()"
         :key="photo.id"
         xs1
         class="d-flex child-flex "
-        v-if="value==$moment(photo.created_at).format('MMMM YYYY')"
       >
         <div class="image-holder" @click="$emit('openDetails', photo)">
           <div class="image-options text-center py-1">
@@ -95,6 +74,116 @@
         </div>
       </v-flex>
     </v-layout>
+    <v-layout v-else>
+      <v-progress-linear
+        v-if="loading"
+        indeterminate
+        color="primary"
+        class="mx-5"
+      ></v-progress-linear>
+      <div v-else class="mx-auto">
+        <v-alert
+          color="primary"
+          text
+          type="info"
+        >
+          Search not found for "<strong>{{ search1 }}</strong>"
+        </v-alert>
+      </div>
+    </v-layout>
+  </div>
+  <div v-else>
+    <v-row v-if="!photos">
+      <v-col md="6" cols="12">
+        <h3>{{ this.$moment().format('MMMM YYYY') }}</h3>
+      </v-col>
+      <v-col md="6" cols="12">
+        <div class="tags d-flex justify-end">
+          <h4 class="active pa-2">All</h4>
+        </div>
+      </v-col>
+    </v-row>
+    <div
+    v-for="(value, index) in months.slice().reverse()"
+    :key="value.id"
+    >
+      <v-row class="my-2">
+        <v-col><h3>{{ value }}</h3></v-col>
+        <v-col v-if="index==0" md="6" cols="12">
+          <v-tabs
+          v-model="active_tab"
+          right>
+            <v-tab class="tags" @click="allTags" key="all">All</v-tab>
+            <v-tab class="tags" v-for="tags in tags" :key="tags"
+            active-class="tags"
+            @click="getByTag(tags)">
+              #{{ tags }}
+            </v-tab>
+          </v-tabs>
+        </v-col>
+      </v-row>
+      <v-layout>
+        <v-flex
+          v-for="photo in images.slice().reverse()"
+          :key="photo.id"
+          xs1
+          class="d-flex child-flex "
+          v-if="value==$moment(photo.created_at).format('MMMM YYYY')"
+        >
+          <div class="image-holder" @click="$emit('openDetails', photo)">
+            <div class="image-options text-center py-1">
+              <v-icon
+                dark
+                small
+                @click="$emit('openDetails', photo)"
+              >
+                mdi-note-edit-outline
+              </v-icon>
+              <v-icon
+                dark
+                small
+                @click="$emit('download', photo)"
+              >
+                mdi-download
+              </v-icon>
+              <v-icon
+                dark
+                small
+              >
+                mdi-message-processing
+              </v-icon>
+            </div>
+            <div v-if="photo.comment!=0" class="commented">
+              <v-icon
+                dark
+                small
+              >
+                mdi-message-processing
+              </v-icon>
+            </div>
+            <v-img
+              :src="imageUrl('clients',id, photo.file_name)"
+              :lazy-src="`https://picsum.photos/10/6?image=${photo.id}`"
+              aspect-ratio="1"
+              class="grey lighten-2"
+            >
+              <template v-slot:placeholder>
+                <v-row
+                  class="fill-height ma-0"
+                  align="center"
+                  justify="center"
+                >
+                  <v-progress-circular
+                    indeterminate
+                    color="grey lighten-5"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
+            </v-img>
+          </div>
+        </v-flex>
+      </v-layout>
+    </div>
   </div>
 </div>
 </template>
@@ -104,35 +193,87 @@ export default {
     photos: {
       type: Array,
       default: () => false
-    }
+    },
+    month: {},
+    search: {}
   },
   data () {
     return {
       id: 0,
+      active_tab: '',
+      awaitingSearch: false,
+      search1: '',
       months: [],
       counter: null,
       tags: [],
       images: [],
-      shortTag: []
+      searchPhotos: [],
+      shortTag: [],
+      loading: true
     }
   },
   created () {
     this.initialize()
   },
   mounted(){
+    this.images = this.photos
     this.getMonths()
     this.getTags()
+    console.log(this.images)
   },
   methods: {
-    getByTag(val){
-      // console.log(val,'afajfksd')
-      this.$emit('getByTag',val)
-    },
     initialize () {
       this.id = this.$route.params.id
     },
-    getTags(){
+    getByTag(val){
+      let filtered = []
       this.photos.forEach(element => {
+        element.taggable.forEach(tag => {
+          if(val==tag.name){
+            filtered.push(element)
+          }
+        });
+      });
+      this.images = filtered
+      this.getMonths()
+    },
+    allTags(){
+      if(this.month==null){
+        this.images = this.photos
+        this.getMonths()
+      }else {
+        this.getMonths(this.month)
+      }
+      this.getTags()
+    },
+    getMonths(val){
+      this.months = []
+      if(val==null){
+        this.images.forEach(element => {
+          let month = this.$moment(element.created_at).format('MMMM YYYY')
+          if(!this.months.includes(month)){
+            this.months.push(month)
+          }
+        });
+      }else{
+        let filtered = []
+        let month = this.$moment(val).format('MMMM YYYY')
+        this.months.push(month)
+        this.photos.forEach(element => {
+          let photoMonth = this.$moment(element.created_at).format('MMMM YYYY')
+          if(month==photoMonth){
+            filtered.push(element)
+          }
+        });
+        this.images = filtered
+        this.getTags()
+      }
+      
+      // this.regroupImage()
+    },
+    getTags(){
+      this.tags = []
+      this.images.forEach(element => {
         element.taggable.forEach(val => {
           let tag = val.name
           if(!this.tags.includes(tag)){
@@ -140,38 +281,54 @@ export default {
           }
         });
       });
+      this.active_tab = 0
     },
-    getMonths(){
-      this.months = []
-      this.photos.forEach(element => {
-        let month = this.$moment(element.created_at).format('MMMM YYYY')
-        if(!this.months.includes(month)){
-          this.months.push(month)
+    closeSearch() {
+      this.search1 = null
+      this.searchPhotos = []
+      this.$emit('clearSearch')
+    },
+    getBySearch() {
+      this.loading = true
+      let query = this.search1
+      this.$axios.get(`${this.$clients}/${this.id}/photos?&search=${query}`).then(({data}) => {
+        this.searchPhotos = data
+        if(!data.legnth){
+          setTimeout(() => {
+            this.loading = false
+          }, 1000);
         }
-      });
-      // this.regroupImage()
-    },
-    regroupImage(){
-      this.months.forEach((element, index) => {
-        let newArr = []
-        this.photos.forEach(val => {
-          if(element==this.$moment(val.created_at).format('MMMM YYYY')){
-            newArr.push(val)
-          }
-        });
-        this.images.push({month: element, data: newArr})
-      });
-    },
-    restock(){
-      this.photos = this.constant
+      })
     }
   },
   watch: {
     photos(val){
       if(val){
+        this.images = this.photos
         this.getMonths()
       }
+      console.log(this.images)
     },
+    month(val){
+      if(val){
+        this.getMonths(val)
+        return val
+      }
+    },
+    search(val){
+      this.search1 = val
+      this.loading = true
+      this.searchPhotos = []
+      if(val){
+        if (!this.awaitingSearch) {
+          setTimeout(() => {
+            this.getBySearch()
+            this.awaitingSearch = false;
+          }, 1500); // 1.5 sec delay
+        }
+        this.awaitingSearch = true;
+      }
+    }
   }
 }
 </script>
@@ -191,6 +348,7 @@ export default {
 .image-holder {
   transition: 0.5s;
   position: relative;
+  border: 1px solid #e6e6e6 !important;
 }
 .tags{
   min-width: 60px !important;
@@ -204,23 +362,6 @@ export default {
 .tags:hover{
   border-bottom: 2px solid #7c94de !important;
 }
-/* .tags h4{
-  transition: .2s ease-in-out;
-  padding-bottom: 4px !important;
-  min-width: 50px;
-  text-align: center;
-  margin-right: 4px;
-  border-bottom: 4px solid transparent;
-}
-.tags h4:hover{
-  cursor: pointer;
-  border-bottom: 4px solid #7c94de;
-  background: #ECEFF1;
-}
-.tags .active{
-  pointer-events: none;
-  border-bottom: 4px solid #7c94de;
-} */
 .image-options {
   position: absolute;
   bottom: 0px;

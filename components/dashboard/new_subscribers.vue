@@ -3,6 +3,7 @@
     <v-card
       class="mt-2"
       height="690"
+      style="overflow:overlay;"
     >
       <v-toolbar
         dense

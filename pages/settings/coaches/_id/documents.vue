@@ -1,11 +1,10 @@
 <template>
-   <!-- <v-container grid-list-md class="main-container" @contextmenu.prevent="show" > -->
    <v-container grid-list-md class="main-container" >
     <v-layout row wrap >
       <v-flex xs12 class="mb-4">
         <div class="d-flex align-center py-2 data-table-cus">
           <p class="title mr-1">
-            Documents
+            Coach Documents
           </p>
           <v-spacer></v-spacer>
           <div style="width: 400px;">
@@ -189,7 +188,7 @@ export default {
     },
     getDocuments () {
       this.$axios
-        .get(`documents/`+this.$auth.user.id
+        .get(`documents/`+`${this.$route.params.id}`
          )
         .then(({ data }) => {
           this.File =data;
@@ -210,7 +209,6 @@ export default {
       this.getDocuments();
     },
     searchFilter(){
-
       if(this.param.search == null && this.param.idfilter == ''){
         this.getDocuments();
         return;
@@ -220,7 +218,7 @@ export default {
             search : this.param.search,
             type : this.param.idfilter,
             client_id:`${this.$route.params.id}`,
-            coach_id:this.$auth.user.id,
+            coach_id:`${this.$route.params.id}`,
           }
         )
         .then(({ data }) => {
