@@ -37,7 +37,7 @@
               </v-list>
               <v-divider></v-divider>
               <v-list>
-                <v-list-item v-for="filter in filters">
+                <v-list-item v-for="filter in filters" :key="filter">
                   <v-switch v-model="payload.filterBy" :label="filter" :value="filter" @click="getData()">
                   </v-switch>
                 </v-list-item>
