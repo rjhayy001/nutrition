@@ -122,7 +122,7 @@ export default {
     return {
       admin: {
         email: 'CoachQonvex@dev.com',
-        password: 'password'
+        password: 'taneopassword'
       },
       loading: false,
       errorMessage: ''

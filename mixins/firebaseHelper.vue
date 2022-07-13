@@ -5,16 +5,17 @@ export default {
   methods: {
     async getDeviceToken () {
       const token = await getToken(messaging, {
-        vapidKey: 'BA05bzDvT5zoKxBTRXgMFAwa9W5dilZDmYIlQJ2_s6o35MF58cNhbWMN9gItetw909xLK8uhhZHMsUwqMqslRFE'
+        vapidKey: 'BHnXE_zRn1BnMmgFgsPf23A7jhYEde31WDcaSq8pQLbRw1mR_JbvDl9Dfb2v22YCtOKsddN0fwRSut-qWcayL7Q'
       })
       if (token) {
+        console.log(token, 'tolkeeee')
        this.saveCoachToken(token)
       }
     },
     activateNotification(){
       const messaging = getMessaging()
       onMessage(messaging, (payload) => {
-        console.log(payload)
+        alert('recieved')
         this.initialize()
         // this.saveCoachNotification(payload)
       })
