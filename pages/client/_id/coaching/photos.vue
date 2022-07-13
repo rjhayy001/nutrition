@@ -59,7 +59,7 @@
        <v-flex xs12 v-else>
           <empty-data></empty-data>
         </v-flex>
-         <feed-back-form></feed-back-form>
+         <feed-back-form :feedback_type="type"></feed-back-form>
     </v-container>
   </div>
 </template>
@@ -82,6 +82,7 @@ export default {
     data(){
     return {
       search:'',
+      type:'photos',
       awaitingSearch: false,
       default_view:true,
       drawer1:false,

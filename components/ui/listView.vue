@@ -14,12 +14,12 @@
         <template v-slot:item.id="{ item }">
             <template  style="padding:10px;">
                 <img v-if="checkFile(item.file_type)  == 'image'"
-                :src="imageUrl2('documents/coach', $auth.user.id, item.file_name)"
+                :src="imageUrl2('documents/coach', $auth.user.id, item.file_path)"
                 class="ma-auto file mt-2"
                 id="imgfile"
               >
-              <video id="video-preview" class="mt-2" v-else-if="checkFile(item.file_type) == 'video'" controls :src="imageUrl2('documents/coach', $auth.user.id, item.file_name)"/>
-              <a target="_blank" v-else-if="checkFile(item.file_type)  == 'link'" :href="item.file_name">
+              <video id="video-preview" class="mt-2" v-else-if="checkFile(item.file_type) == 'video'" controls :src="imageUrl2('documents/coach', $auth.user.id, item.file_path)"/>
+              <a target="_blank" v-else-if="checkFile(item.file_type)  == 'link'" :href="item.file_path">
                 <img 
                   :src="iconSelector(item)"
 
@@ -37,12 +37,21 @@
           </template>
           <template v-slot:item.actions="{ item }">
                 <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-icon class="ml-2" @click="deleteList(item.id)" v-on="on"
-                    >mdi-trash-can
-                  </v-icon>
-                </template>
-                <span >Delete</span>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon class="ml-2" @click.stop="editlist(item)" v-on="on"
+                      >mdi-pencil
+                    </v-icon>
+                  </template>
+                  <span >Edit</span>
+              </v-tooltip>
+              |
+               <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon class="ml-2" @click.stop="deleteList(item.id)" v-on="on"
+                      >mdi-trash-can
+                    </v-icon>
+                  </template>
+                  <span >Delete</span>
               </v-tooltip>
           </template>
           <template v-slot:item.file_name="{ item }">
@@ -96,15 +105,15 @@
               <v-container>
                 <div id="cont-wrapper"> 
                   <img v-if="checkFile(dialogdata[0].file_type)  == 'image'"
-                  :src="imageUrl2('documents/coach', $auth.user.id, dialogdata[0].file_name)"
+                  :src="imageUrl2('documents/coach', $auth.user.id, dialogdata[0].file_path)"
                   @contextmenu.stop="show"
                   class="ma-auto file"
                   id="imgfile"
                   >
-                  <video id="video-preview" v-if="checkFile(dialogdata[0].file_type) == 'video'" controls :src="imageUrl2('documents/coach', $auth.user.id, dialogdata[0].file_name)"/>
+                  <video id="video-preview" v-if="checkFile(dialogdata[0].file_type) == 'video'" controls :src="imageUrl2('documents/coach', $auth.user.id, dialogdata[0].file_path)"/>
                  <!-- <embed src="http://localhost:9292/documents/coach/1/1_84.pdf" width="100%" height="100%"> -->
 
-                 <iframe :src="imageUrl2('documents/coach', $auth.user.id, dialogdata[0].file_name)"  v-if="checkFile(dialogdata[0].file_type) == 'application'"  width="500" height="500" />
+                 <iframe :src="imageUrl2('documents/coach', $auth.user.id, dialogdata[0].file_path)"  v-if="checkFile(dialogdata[0].file_type) == 'application'"  width="500" height="500" />
                 </div>
               </v-container>
             </v-card-text>
@@ -112,7 +121,34 @@
           </v-card>
         </v-dialog>
     </v-row>
-     
+    
+     <v-dialog width="400" v-model="editFile" persistent>
+        <v-card>
+          <v-toolbar class="text-h5 grey lighten-2" flat dense>
+            <v-btn small @click="editFile=false, newname=''">cancel</v-btn>
+            <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
+            <span class="subtitle-1  font-weight-normal">Edit name</span>
+          </v-toolbar>
+          <v-card-text class="pa-2">
+              <v-card-text class="px-4 py-2">
+              <v-form ref="form" lazy-validation>
+                  <div>
+                    <v-text-field
+                    type="text"
+                    v-model="newname"
+                    label="New file name"
+                    :rules="nameRules"
+                    ></v-text-field>
+                  </div>
+              </v-form>
+          </v-card-text>
+          </v-card-text>
+          <v-toolbar class="text-h5 grey lighten-2 d-flex justify-end" flat dense>
+              <v-btn small @click="saveNewName()">Save</v-btn>
+          </v-toolbar>
+        </v-card>
+    </v-dialog>
  
   </div>
 </template>
@@ -129,6 +165,13 @@ import iconHelper from '@/mixins/iconHelper'
          showAction: '',
          deletedialog: false,
          dialog:false,
+         dialogdata:[],
+         index:'',
+         editFile:false,
+         newname:'',
+         nameRules: [
+           v => !!v || 'Name is required',
+         ],
          dialogdata:[],
          headers: [
         {
@@ -202,17 +245,25 @@ import iconHelper from '@/mixins/iconHelper'
     },
     deleteList(id){
       this.deletedialog = true;
+      this.index = id;
     },
     confirmDelete(){
       this.deletedialog = true;
 
       this.$axios
-      .delete(`documents/`+this.showAction
+      .delete(`documents/`+this.index
       )
       .then(({ data }) => {
-         this.$emit('showDocument');
-         this.deletedialog = false;
+        this.deletedialog = false;
+        this.$emit('showDocument');
+        this.successdocumentsNotification("delete");
       });
+    },
+    editlist(item){
+      this.editFile = true;
+      this.index = item.id;
+      this.newname =item.file_name;
+      this.editFile = true;
     },
     showdialog(item){
       const thiss = this;
@@ -222,7 +273,25 @@ import iconHelper from '@/mixins/iconHelper'
             thiss.dialog = true;
           },500, this);
       }
-    }
+    },
+    saveNewName(){
+        if(this.$refs.form.validate() == false){
+          return;
+        }
+     this.$axios
+        .post(`documents/renameFile`,{
+            id : this.index,
+            name : this.newname,
+            }
+        )
+        .then(({ data }) => {
+          this.editFile = false;
+          this.newname='';
+          this.$emit('getDocuments')   
+          this.successdocumentsNotification("update");
+
+        });
+    },
   }
   }
   
@@ -236,14 +305,9 @@ import iconHelper from '@/mixins/iconHelper'
   width: 220px;
 
 }
-/* .is_active .file{
-  background: #c3bcbc !important;
-  border: solid 1px;
-} */
 
 .is_active{
-  /* color: white; */
-  /* background:#7c94de; */
+
   border: solid 1px;
 }
 #video-preview{

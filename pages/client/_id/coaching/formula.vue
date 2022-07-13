@@ -2,7 +2,7 @@
   <div>
     <client-info></client-info>
     <menu-tabs></menu-tabs>
-    <feed-back-form></feed-back-form>
+    <feed-back-form :feedback_type="type"></feed-back-form>
   </div>
 </template>
 <script>

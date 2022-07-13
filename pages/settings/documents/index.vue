@@ -1,7 +1,55 @@
 <template>
    <!-- <v-container grid-list-md class="main-container" @contextmenu.prevent="show" > -->
    <v-container grid-list-md class="main-container" >
-    <v-layout row wrap>
+    <v-layout row wrap >
+      <v-flex xs12 class="mb-4">
+        <div class="d-flex align-center py-2 data-table-cus">
+          <p class="title mr-1">
+            Documents
+          </p>
+          <v-spacer></v-spacer>
+          <div style="width: 400px;">
+          <v-text-field
+            clearable
+            filled
+            @input="findDocuments"
+            rounded
+            hide-details=""
+            outlined
+            placeholder="Search"
+            dense
+            v-model="param.search"
+            append-icon="mdi-magnify"
+          ></v-text-field>
+          </div>
+          <div style="width: 200px;" id="types">
+            <v-select
+              @change="getSelectedFilter"
+              rounded
+              :items="type"
+              label="type"
+              item-text="type"
+              item-value="id"
+              clearable
+              dense
+              outlined
+              hide-details ="true"
+              v-model="param.idfilter"
+            ></v-select>
+            
+          </div>
+           <v-icon
+              class="mx-2"
+              @click="default_view = !default_view"
+            >
+              {{!default_view ? 'mdi-view-grid-outline' : 'mdi-format-list-bulleted'}}
+            </v-icon>
+            <v-icon class="mx-2" @click="show">mdi-plus</v-icon>
+        </div>
+        <hr />
+      </v-flex>
+    </v-layout>
+    <!-- <v-layout row wrap>
       <v-flex xs12 class="pb-5">
         <div class="toolbar-container">
           <v-toolbar  dense id="header_toolbar" >
@@ -35,26 +83,24 @@
                 ></v-select>
                 
              </div>
-            <!-- <v-icon class="mx-2">mdi-format-list-checkbox</v-icon> -->
             <v-icon
               class="mx-2"
               @click="default_view = !default_view"
             >
               {{!default_view ? 'mdi-view-grid-outline' : 'mdi-format-list-bulleted'}}
             </v-icon>
-            <!-- <v-icon class="mx-2">mdi-phone-outline</v-icon>
-            <v-icon class="mx-2">mdi-video-outline</v-icon> -->
             <v-icon class="mx-2" @click="show">mdi-plus</v-icon>
-            <!-- <pinned-messages/> -->
           </v-toolbar>
         </div>
       </v-flex>
-    </v-layout>
+    </v-layout> -->
     <input type="file" multiple ref="file_input" class="d-none">
     <file-viewer v-if="default_view == false"
       :files="Files"
+      @deleteDoc= "deleteDoc"
+      @getDocuments= "getDocuments"
     />
-    <list-view v-if="default_view == true"  :files="Files" @showDocument ="showDocument"/>
+    <list-view v-if="default_view == true"  :files="Files" @showDocument ="showDocument" @getDocuments = "getDocuments"/>
     <select-menu
       :dialog="showMenu"
       :options="menu_options"
@@ -96,62 +142,6 @@ export default {
         y:0,
         in_item_click:false
       },
-      // files:[
-      //   {
-      //     type: 'folder',
-      //     link: 'folder1/',
-      //     name: 'folderasdasdjasldjasl;kdjasl;djasl;djasl;djasl;djasl;dj',
-      //     data: '',
-      //   },
-      //   {
-      //     type: 'image',
-      //     link: 'folder1/',
-      //     name: 'image1',
-      //     data: 'https://assets-global.website-files.com/5ec7dad2e6f6295a9e2a23dd/621367c9ae7ebd6cf845847c_upwork-profile-examples.jpeg',
-      //   },
-      //   {
-      //     type: 'pdf',
-      //     link: '',
-      //     name: 'pdf',
-      //     data: '',
-      //   },
-      //    {
-      //     type: 'txt',
-      //     link: '',
-      //     name: 'text',
-      //     data: '',
-      //   },
-      //   {
-      //     type: 'docx',
-      //     link: '',
-      //     name: 'docs',
-      //     data: '',
-      //   },
-      //   {
-      //     type: 'zip',
-      //     link: '',
-      //     name: 'zip',
-      //     data: '',
-      //   },
-      //   {
-      //     type: 'html',
-      //     link: '',
-      //     name: 'html',
-      //     data: '',
-      //   },
-      //   {
-      //     type: 'mp3',
-      //     link: '',
-      //     name: 'mp3',
-      //     data: '',
-      //   },
-      //   {
-      //     type: 'ppt',
-      //     link: 'folder1/',
-      //     name: 'unverified',
-      //     data: 'https://assets-global.website-files.com/5ec7dad2e6f6295a9e2a23dd/621367c9ae7ebd6cf845847c_upwork-profile-examples.jpeg',
-      //   },
-      // ],
       default_view:false,
       showUploadForm:false,
       showAddurl:false,
@@ -179,9 +169,11 @@ export default {
     },
     showDocument(){
       this.getDocuments();
+      this.showAddurl = false;
     },
     findDocuments(){
-      this.searchFilter(this.search);
+
+      this.searchFilter();
     },
     getSelectedFilter(){
      this.searchFilter(this.idfilter);
@@ -203,13 +195,23 @@ export default {
           this.File =data;
         });
     },
+    deleteDoc (id) {
+      this.$axios
+        .delete(`documents/`+id
+         )
+        .then(({ data }) => {
+        this.getDocuments();
+        this.successDeleteNotification("delete");
+      });
+    },
     hideForm() {
       this.showUploadForm = false;
       
       this.getDocuments();
     },
-    searchFilter(data){
-      if(this.param.search == null || this.param.idfilter == ''){
+    searchFilter(){
+
+      if(this.param.search == null && this.param.idfilter == ''){
         this.getDocuments();
         return;
       }
@@ -222,6 +224,7 @@ export default {
           }
         )
         .then(({ data }) => {
+          console.log('test');
           this.File =data;
         });
     }
@@ -234,7 +237,7 @@ export default {
 }
 #types{
   position: relative;
-  top: 12px;
+  top: -3px;
   margin-left: 18px;
 }
 #header_toolbar{

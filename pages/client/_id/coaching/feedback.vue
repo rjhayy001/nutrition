@@ -3,34 +3,38 @@
     grid-list-md
     fluid
   >
-    <v-layout
-      row
-      wrap
-    >
-      <v-flex
-        xs12
-        class="mb-4"
-      >
+    <v-layout row wrap>
+      <v-flex xs12 class="mb-4">
         <div class="d-flex align-center py-2 data-table-cus">
           <p class="title mr-1">
             Historique des feedback
           </p>
           <v-spacer></v-spacer>
+           <div style="width: 300px;" id="types">
+                <v-select
+                  clearable
+                  rounded
+                  :items="filter_type"
+                  label="Filter by type"
+                  dense
+                  outlined
+                  v-model="f_type"
+                  hide-details="true"
+                  @change="searchList"
+                ></v-select>
+           </div>
         </div>
         <hr />
       </v-flex>
     </v-layout>
-    <v-layout
-      row
-      wrap
-      id="wrapper_feedback"
-    >
+    <v-layout row wrap id="wrapper_feedback">
       <v-flex xs8 v-if="data.length != 0">
         <div
           v-for="(items, index) in data"
           :key="index"
-        >
-          <div class="mb-3 font-weight-bold">{{weeklyFormat(getDateByWeekNumber(index))}}</div>
+        style="width:90%">
+            <p class="title mb-2 font-weight-medium">{{weeklyFormat(getDateByWeekNumber(index))}}</p>
+          <!-- <div class="mb-3 font-weight-bold">{{weeklyFormat(getDateByWeekNumber(index))}}</div> -->
           <div v-for="(item, key) in items" :key="item.id" class=" feedback-holder pa-2">
           <!-- <div
             v-for="item in items"
@@ -57,19 +61,38 @@
           </div>
         </div>
       </v-flex>
-      <div class="pa-2 mt-50 _nofeedback" v-else>
-          <v-icon class="mx-2" style="font-size: 100px;">mdi-alert</v-icon>
-          <p class="title mr-1">
-            No feedback
-          </p>
-      </div>
-      <!-- <v-flex xs4>
-        asdsa
-      </v-flex> -->
-    </v-layout>
+      <v-flex xs8 v-else>
+        <div class="pa-2 mt-50 _nofeedback">
+            <v-icon class="mx-2" style="font-size: 100px;">mdi-alert</v-icon>
+            <p class="title mr-1">
+              No feedback
+            </p>
+        </div>
+      </v-flex>
+      <v-flex xs4>
+        <v-layout row wrap class="clients-statistics-wrapper">
+          <v-flex xs10>
+            <p class="title mb-2 font-weight-medium">Feedback Summary</p>
+          </v-flex>
+          <v-flex xs10 class="ml-4" v-for="(count, keys) in feedbackCount" :key="keys">
+            <v-card class="mb-4"  @mouseover="onHover2(keys)">
+              <v-card-text>
+                 <div class="float-right" id="actions"  v-if="hover2 == keys">
+                    <v-icon @click="filter(count.feedback_type)" color="green">mdi-eye</v-icon>
+                  </div>
+                <span class="display-1 text--primary">
+                  <span>{{count.total}}</span>
+                </span><br />
+                <span class="subtitle-1">Total From {{count.feedback_type}}</span>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-flex>
+      </v-layout>
     <div>
       <!-- <feed-back-create @submitFeedback="submitFeedback"></feed-back-create> -->
-      <feed-back-form :payloads="editdata"></feed-back-form>
+      <feed-back-form :payloads="editdata" :feedback_type="type"></feed-back-form>
     </div>
 
     <v-dialog
@@ -122,14 +145,21 @@ export default {
     return {
       data: [],
       hover:'',
+      hover2:'',
       class:'',
       deletedialog:false,
       deleteId:'',
+      feedbackCount:[],
+      f_type:'',
       editdata:{},
+      type:'feedback',
+      filter_type: ['all','global', 'formulaire', 'measure', 'tracking','photos','feedback'],
     };
   },
   mounted () {
     this.getFeedback();
+    this.getFeedbackCount();
+    console.log( this.$store)
   },
   computed: {
     flag () {
@@ -155,6 +185,15 @@ export default {
           this.data = data;
         });
     },
+    getFeedbackCount () {
+      this.$axios
+        .get(
+          `${this.$clients}/getFeedbackCount/${this.$route.params.id}`
+        )
+        .then(({ data }) => {
+         this.feedbackCount = data;
+        });
+    },
     submitFeedback () {
       this.getFeedback();
     },
@@ -164,6 +203,9 @@ export default {
     },
     onHover(index){
      this.hover = index;
+    },
+    onHover2(index){
+     this.hover2 = index;
     },
     showDeleteDialog(id){
         this.deleteId = id;
@@ -175,18 +217,39 @@ export default {
           `${this.$clients}/deleteFeedback/`+this.deleteId
         )
         .then(({ data }) => {
-         this.getFeedback();
+        if(this.f_type != 'all' || this.f_type != null){
+          this.searchList();
+        }
+        else{
+          this.getFeedback();
+        }
          this.deletedialog = false;
+         this.successfeedbackNotification('delete')
         });
     },
     ediFeedback(item){
         this.editdata = item;
+    },
+    filter(item){
+        this.f_type = item;
+        this.searchList()
+    },
+    searchList(){
+      if(this.f_type == 'all' || this.f_type == null){
+        this.getFeedback();
+        return;
+      }
+      this.$axios
+        .get(
+          `${this.$clients}/filterFeedback/`+this.f_type
+        )
+        .then(({ data }) => {
+          this.data = data;
+        });
     }
   },
 };
-
 </script>
-
 
 <style scoped>
 /* .feedback-holder:hover .feedback-text {
@@ -205,9 +268,6 @@ export default {
   padding: 20px 16px;
 }
 
-/* #wrapper_feedback{
-    padding: 0px 10rem !important;
-} */
 #wrapper-comment {
   position: fixed;
   right: 57px;
@@ -230,4 +290,9 @@ export default {
 #actions button:hover{
   transform: scale(1.1);
 }
+#wrapper_feedback .xs4{
+  padding: 0 50px;
+  border-left: solid 1px #c2c2c2;
+}
+
 </style>
