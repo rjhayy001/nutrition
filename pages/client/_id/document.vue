@@ -1,217 +1,226 @@
 <template>
  <v-container grid-list-md class="main-container" >
-    <v-layout row wrap>
-      <v-flex xs12 class="pb-5">
-        <!-- <div class="toolbar-container">
-          <v-toolbar  dense >
-            <v-toolbar-title class="title-header">Documents</v-toolbar-title>
-          </v-toolbar>
-        </div> -->
-         <div class="d-flex align-center py-2 data-table-cus">
-          <p class="title mr-1">
-            Documents
-          </p>
-          <v-spacer></v-spacer>
-        </div>
-        <hr />
-      </v-flex>
-    </v-layout>
-
-    <v-layout d-flex id="drag_container" >
-      <div class="_container"  id="dragover" >
-         <v-card color="grey lighten-4" flat tile >
-            <v-toolbar dense id="header_toolbar">
-              <v-toolbar-title>Shared resources</v-toolbar-title>
-              <v-spacer></v-spacer>
-                <div style="width: 180px;">
-              <v-text-field
-                clearable
-                filled
-                rounded
-                hide-details=""
-                placeholder="Search"
-                dense
-                v-model="shrdr.search1"
-                append-icon="mdi-magnify"
-                @input="searchList('sharedfield')"
-              ></v-text-field>
-             </div>
-             <div style="width: 150px;" id="types">
-                <v-select
-                  clearable
-                  rounded
-                  :items="type"
-                  label="type"
-                  dense
-                  outlined
-                  v-model="shrdr.shared_rtype"
-                  @change="searchList('sharedfield')"
-                ></v-select>
-             </div>
+    <div v-if="loader==false">
+      <v-layout row wrap>
+        <v-flex xs12 class="pb-5">
+          <!-- <div class="toolbar-container">
+            <v-toolbar  dense >
+              <v-toolbar-title class="title-header">Documents</v-toolbar-title>
             </v-toolbar>
-        </v-card>
-        <v-card tile style="border-top: solid 1px #d8cfcf; height: 100%;position:relative">
-          <div v-if="startdrag" id="overlay" @dragenter.prevent="DragActive" @dragleave.prevent="deleteDragActive" @dragover.prevent @drop="onDrop" ></div>
-          <div id="item-drag-wrapper"  :class="dragactive?'drag-active':''" >
-
-              <ul class="list" v-if="sharedFiles.length > 0">
-                    <li class="top:card small:left:card bottom:margin-2" v-for="(item, index) in sharedFiles" :key="index">
-                      <figure class="card-figure" >
-                          <img :src="imageUrl2('documents/coach', $auth.user.id, item.documents.file_path)" v-if="checkFile(item.documents.file_type) == 'image'" draggable="false">
-                          <a target="_blank" v-else-if="checkFile(item.documents.file_type)  == 'link'" :href="item.documents.file_path" draggable="false">
-                              <img  :src="iconSelector(item.documents)" @contextmenu.stop="show" class="ma-auto file" contain id="imgfile" draggable="false">
-                          </a>
-                          <video draggable="false" id="video-preview" v-else-if="checkFile(item.documents.file_type) == 'video'" controls :src="imageUrl2('documents/coach', $auth.user.id, item.documents.file_path)"/>
-                          <img draggable="false" v-else :src="iconSelector(item.documents)" @contextmenu.stop="show" class="ma-auto file" contain id="imgfile">
-
-                          <figcaption class="card-caption" >{{item.documents.file_name}}</figcaption>
-
-                          <v-icon id="deleteShare" @click="deleteShare(item.documents.id)">mdi-delete</v-icon>
-                      </figure>
-                    </li>
-              </ul>
-
-          <div class="pa-2 mt-50 _nofeedback" v-else>
-                <v-icon class="mx-2" style="font-size: 100px;">mdi-alert</v-icon>
-                <p class="title mr-1">
-                  No Shared documents
-                </p>
-            </div>
-            <v-progress-circular v-if="showloader" :size="100" color="primary" indeterminate id="loader"></v-progress-circular>
-
+          </div> -->
+          <div class="d-flex align-center py-2 data-table-cus">
+            <p class="title mr-1">
+              Documents
+            </p>
+            <v-spacer></v-spacer>
           </div>
-        </v-card>
-      </div>
-      <div class="_container">
+          <hr />
+        </v-flex>
+      </v-layout>
+      <v-layout d-flex id="drag_container" >
+        <div class="_container"  id="dragover" >
           <v-card color="grey lighten-4" flat tile >
-            <v-toolbar dense id="header_toolbar">
-              <v-toolbar-title>All resources</v-toolbar-title>
-              <v-spacer></v-spacer>
-                <div style="width: 150px;">
-              <v-text-field
-                clearable
-                filled
-                rounded
-                hide-details=""
-                placeholder="Search"
-                dense
-                v-model="allr.search2"
-                @input="searchList('allrfield')"
-                append-icon="mdi-magnify"
-              ></v-text-field>
-             </div>
-             <div style="width: 150px;" id="types">
-                <v-select
-                  ref="searchAllfr"
+              <v-toolbar dense id="header_toolbar">
+                <v-toolbar-title>Shared resources</v-toolbar-title>
+                <v-spacer></v-spacer>
+                  <div style="width: 180px;">
+                <v-text-field
                   clearable
+                  filled
                   rounded
-                  :items="type"
-                  label="type"
+                  hide-details=""
+                  placeholder="Search"
                   dense
-                  v-model="allr.all_rtype"
-                  outlined
-                  @change="searchList('allrfield')"
-                ></v-select>
-             </div>
+                  v-model="shrdr.search1"
+                  append-icon="mdi-magnify"
+                  @input="searchList('sharedfield')"
+                ></v-text-field>
+              </div>
+              <div style="width: 150px;" id="types">
+                  <v-select
+                    clearable
+                    rounded
+                    :items="type"
+                    label="type"
+                    dense
+                    outlined
+                    v-model="shrdr.shared_rtype"
+                    @change="searchList('sharedfield')"
+                  ></v-select>
+              </div>
+              </v-toolbar>
+          </v-card>
+          <v-card tile style="border-top: solid 1px #d8cfcf; height: 100%;position:relative">
+            <div v-if="startdrag" id="overlay" @dragenter.prevent="DragActive" @dragleave.prevent="deleteDragActive" @dragover.prevent @drop="onDrop" ></div>
+            <div id="item-drag-wrapper"  :class="dragactive?'drag-active':''" >
 
-            </v-toolbar>
-        </v-card>
-        <v-card tile style="border-top: solid 1px #d8cfcf; height: 100%;" >
-            <div id="item-drag-wrapper">
-              <ul class="list" v-if="files.length > 0">
-               <li class="top:card small:left:card bottom:margin-2" v-for="(item, index) in files" :key="index">
-                    <figure class="card-figure" @click="showdialog(true, item)">
-                        <v-tooltip left v-if="item.share_documents.length">
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-icon  id="isHared" color="green" v-on="on" v-bind="attrs">mdi-check-circle</v-icon>
-                          </template>
-                          <span>Shared</span>
-                        </v-tooltip>
-                        <img :src="imageUrl2('documents/coach', $auth.user.id, item.file_path)" v-if="checkFile(item.file_type) == 'image'" :draggable="item.share_documents.length== 0? true:false" @dragstart="onDragStart()" @dragend="onDragEnd(item.id)">
-                        <video id="video-preview" :draggable="item.share_documents.length== 0? true:false"  @dragstart="onDragStart()" @dragend="onDragEnd(item.id)" v-else-if="checkFile(item.file_type) == 'video'" controls :src="imageUrl2('documents/coach', $auth.user.id, item.file_path)"/>
-                        <a target="_blank" v-else-if="checkFile(item.file_type)  == 'link'" :href="item.file_path"  :draggable="item.share_documents.length== 0? true:false">
-                          <img  :src="iconSelector(item)" @contextmenu.stop="show" class="ma-auto file" contain id="imgfile" :draggable="item.share_documents.length== 0? true:false" @dragstart="onDragStart()" @dragend="onDragEnd(item.id)">
-                        </a>
-                        <img v-else :src="iconSelector(item)" @contextmenu.stop="show" class="ma-auto file" contain id="imgfile" :draggable="item.share_documents.length== 0? true:false" @dragstart="onDragStart()" @dragend="onDragEnd(item.id)">
-                       <figcaption class="card-caption" >{{item.file_name}}</figcaption>
-                    </figure>
-                </li>
-            </ul>
+                <ul class="list" v-if="sharedFiles.length > 0">
+                      <li class="top:card small:left:card bottom:margin-2" v-for="(item, index) in sharedFiles" :key="index">
+                        <figure class="card-figure" >
+                            <img :src="imageUrl2('documents/coach', $auth.user.id, item.documents.file_path)" v-if="checkFile(item.documents.file_type) == 'image'" draggable="false">
+                            <a target="_blank" v-else-if="checkFile(item.documents.file_type)  == 'link'" :href="item.documents.file_path" draggable="false">
+                                <img  :src="iconSelector(item.documents)" @contextmenu.stop="show" class="ma-auto file" contain id="imgfile" draggable="false">
+                            </a>
+                            <video draggable="false" id="video-preview" v-else-if="checkFile(item.documents.file_type) == 'video'" controls :src="imageUrl2('documents/coach', $auth.user.id, item.documents.file_path)"/>
+                            <img draggable="false" v-else :src="iconSelector(item.documents)" @contextmenu.stop="show" class="ma-auto file" contain id="imgfile">
+
+                            <figcaption class="card-caption" >{{item.documents.file_name}}</figcaption>
+
+                            <v-icon id="deleteShare" @click="deleteShare(item.documents.id)">mdi-delete</v-icon>
+                        </figure>
+                      </li>
+                </ul>
+
             <div class="pa-2 mt-50 _nofeedback" v-else>
-              <v-icon class="mx-2" style="font-size: 100px;">mdi-alert</v-icon>
-              <p class="title mr-1">
-                No  documents found
-              </p>
-            </div>
-            </div>
-        </v-card>
-      </div>
-      <v-dialog v-model="deletedialog" max-width="500px">
-        <v-card>
-          <v-card-title class="font-weight-light">
-            Delete Confirmation
-          </v-card-title>
-          <v-card-text>
-            <div class="my-5">
-              <p class="font-weight-light" style="color:#000;font-size: 17px;">
-                Are you sure to delete this shared documents?
-              </p>
-            </div>
-          </v-card-text>
-          <v-card-actions class="justify-end">
-            <v-btn
-              color="green"
-              text
-              @click="deletedialog = false"
-            >
-              Close
-            </v-btn>
-            <v-btn
-              color="red"
-              text
-              @click="confirmDelete()"
-            >
-              Yes
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+                  <!-- <v-icon class="mx-2" style="font-size: 100px;">mdi-alert</v-icon>
+                  <p class="title mr-1">
+                    No Shared documents
+                  </p> -->
+                  <empty/>
+              </div>
+              <v-progress-circular v-if="showloader" :size="100" color="primary" indeterminate id="loader"></v-progress-circular>
 
-    </v-layout>
-       <v-row justify="center" v-if ="dialogdata.length > 0">
-      <v-dialog v-model="dialog" persistent :max-width="checkFile(dialogdata[0].file_type) == 'application'?1300:800">
-          <v-card  :height="checkFile(dialogdata[0].file_type) == 'application'?1000:''" :id="checkFile(dialogdata[0].file_type) == 'application'?'v-card-wrapper':''">
-            <v-toolbar class="text-h5 grey lighten-2 " flat dense d-flex>
-                 <v-btn small  @click="dialog=false, dialogdata=[]">back</v-btn>
-              <v-spacer></v-spacer>
-              <span class="subtitle-1 text-capitalize font-weight-bold">{{dialogdata[0].file_name}}</span>
-            </v-toolbar>
-            <v-card-text class="pa-0" id="v-card-text-wrraper" :style="checkFile(dialogdata[0].file_type) == 'application'?'height:100%':''">
-              <v-container>
-                <div id="cont-wrapper">
-                  <img v-if="checkFile(dialogdata[0].file_type)  == 'image'"
-                  :src="imageUrl2('documents/coach', $auth.user.id, dialogdata[0].file_path)"
-                  @contextmenu.stop="show"
-                  class="ma-auto file"
-                  id="imgfile"
-                  >
-                  <video id="video-preview" v-if="checkFile(dialogdata[0].file_type) == 'video'" controls :src="imageUrl2('documents/coach', $auth.user.id, dialogdata[0].file_path)"/>
-                 <iframe :src="imageUrl2('documents/coach', $auth.user.id, dialogdata[0].file_path)"  v-if="checkFile(dialogdata[0].file_type) == 'application'"  width="500" height="500" />
-                </div>
-              </v-container>
+            </div>
+          </v-card>
+        </div>
+        <div class="_container">
+            <v-card color="grey lighten-4" flat tile >
+              <v-toolbar dense id="header_toolbar">
+                <v-toolbar-title>All resources</v-toolbar-title>
+                <v-spacer></v-spacer>
+                  <div style="width: 150px;">
+                <v-text-field
+                  clearable
+                  filled
+                  rounded
+                  hide-details=""
+                  placeholder="Search"
+                  dense
+                  v-model="allr.search2"
+                  @input="searchList('allrfield')"
+                  append-icon="mdi-magnify"
+                ></v-text-field>
+              </div>
+              <div style="width: 150px;" id="types">
+                  <v-select
+                    ref="searchAllfr"
+                    clearable
+                    rounded
+                    :items="type"
+                    label="type"
+                    dense
+                    v-model="allr.all_rtype"
+                    outlined
+                    @change="searchList('allrfield')"
+                  ></v-select>
+              </div>
+
+              </v-toolbar>
+          </v-card>
+          <v-card tile style="border-top: solid 1px #d8cfcf; height: 100%;" >
+              <div id="item-drag-wrapper">
+                <ul class="list" v-if="files.length > 0">
+                <li class="top:card small:left:card bottom:margin-2" v-for="(item, index) in files" :key="index">
+                      <figure class="card-figure" @click="showdialog(true, item)">
+                          <v-tooltip left v-if="item.share_documents.length">
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-icon  id="isHared" color="green" v-on="on" v-bind="attrs">mdi-check-circle</v-icon>
+                            </template>
+                            <span>Shared</span>
+                          </v-tooltip>
+                          <img :src="imageUrl2('documents/coach', $auth.user.id, item.file_path)" v-if="checkFile(item.file_type) == 'image'" :draggable="item.share_documents.length== 0? true:false" @dragstart="onDragStart()" @dragend="onDragEnd(item.id)">
+                          <video id="video-preview" :draggable="item.share_documents.length== 0? true:false"  @dragstart="onDragStart()" @dragend="onDragEnd(item.id)" v-else-if="checkFile(item.file_type) == 'video'" controls :src="imageUrl2('documents/coach', $auth.user.id, item.file_path)"/>
+                          <a target="_blank" v-else-if="checkFile(item.file_type)  == 'link'" :href="item.file_path"  :draggable="item.share_documents.length== 0? true:false">
+                            <img  :src="iconSelector(item)" @contextmenu.stop="show" class="ma-auto file" contain id="imgfile" :draggable="item.share_documents.length== 0? true:false" @dragstart="onDragStart()" @dragend="onDragEnd(item.id)">
+                          </a>
+                          <img v-else :src="iconSelector(item)" @contextmenu.stop="show" class="ma-auto file" contain id="imgfile" :draggable="item.share_documents.length== 0? true:false" @dragstart="onDragStart()" @dragend="onDragEnd(item.id)">
+                        <figcaption class="card-caption" >{{item.file_name}}</figcaption>
+                      </figure>
+                  </li>
+              </ul>
+              <div class="pa-2 mt-50 _nofeedback" v-else>
+                  <empty/>
+              </div>
+              </div>
+          </v-card>
+        </div>
+        <v-dialog v-model="deletedialog" max-width="500px">
+          <v-card>
+            <v-card-title class="font-weight-light">
+              Delete Confirmation
+            </v-card-title>
+            <v-card-text>
+              <div class="my-5">
+                <p class="font-weight-light" style="color:#000;font-size: 17px;">
+                  Are you sure to delete this shared documents?
+                </p>
+              </div>
             </v-card-text>
-
+            <v-card-actions class="justify-end">
+              <v-btn
+                color="green"
+                text
+                @click="deletedialog = false"
+              >
+                Close
+              </v-btn>
+              <v-btn
+                color="red"
+                text
+                @click="confirmDelete()"
+              >
+                Yes
+              </v-btn>
+            </v-card-actions>
           </v-card>
         </v-dialog>
-    </v-row>
-   </v-container>
+
+      </v-layout>
+      <v-row justify="center" v-if ="dialogdata.length > 0">
+        <v-dialog v-model="dialog" persistent :max-width="checkFile(dialogdata[0].file_type) == 'application'?1300:800">
+            <v-card  :height="checkFile(dialogdata[0].file_type) == 'application'?1000:''" :id="checkFile(dialogdata[0].file_type) == 'application'?'v-card-wrapper':''">
+              <v-toolbar class="text-h5 grey lighten-2 " flat dense d-flex>
+                  <v-btn small  @click="dialog=false, dialogdata=[]">back</v-btn>
+                <v-spacer></v-spacer>
+                <span class="subtitle-1 text-capitalize font-weight-bold">{{dialogdata[0].file_name}}</span>
+              </v-toolbar>
+              <v-card-text class="pa-0" id="v-card-text-wrraper" :style="checkFile(dialogdata[0].file_type) == 'application'?'height:100%':''">
+                <v-container>
+                  <div id="cont-wrapper">
+                    <img v-if="checkFile(dialogdata[0].file_type)  == 'image'"
+                    :src="imageUrl2('documents/coach', $auth.user.id, dialogdata[0].file_path)"
+                    @contextmenu.stop="show"
+                    class="ma-auto file"
+                    id="imgfile"
+                    >
+                    <video id="video-preview" v-if="checkFile(dialogdata[0].file_type) == 'video'" controls :src="imageUrl2('documents/coach', $auth.user.id, dialogdata[0].file_path)"/>
+                  <iframe :src="imageUrl2('documents/coach', $auth.user.id, dialogdata[0].file_path)"  v-if="checkFile(dialogdata[0].file_type) == 'application'"  width="500" height="500" />
+                  </div>
+                </v-container>
+              </v-card-text>
+
+            </v-card>
+          </v-dialog>
+      </v-row>
+    </div>
+    <div v-else>
+      <loading/>
+    </div>
+ </v-container>
+
 </template>
 <script>
 
 import iconHelper from '@/mixins/iconHelper'
+import empty from '@/components/error/empty_data.vue'
+import loading from '@/components/loader/default_loader.vue'
 
 export default {
   mixins: [iconHelper],
+  components: {
+      empty,
+      loading
+  },
   data(vm){
     return {
       showMenu: false,
@@ -228,6 +237,7 @@ export default {
       dialog:false,
       dialogdata:[],
       todeleteid:'',
+      loader:true,
       shrdr:{
         shared_rtype:'',
         search1:'',
@@ -266,6 +276,7 @@ export default {
       )
       .then(({ data }) => {
         this.files =data;
+        this.loader = false;
       });
     },
 

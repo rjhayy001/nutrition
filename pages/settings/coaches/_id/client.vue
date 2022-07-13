@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-md fluid>
-    <v-layout row wrap>
+    <v-layout row wrap v-if="loads==true">
       <v-flex xs12 class="mb-4">
           <v-card-title>
             Coach Client
@@ -61,14 +61,23 @@
         </v-data-table>
       </v-flex>
     </v-layout>
+    <v-layout v-else>
+        <loading></loading>
+    </v-layout>
   </v-container>
 </template>
 <script>
+import loading from '@/components/loader/default_loader.vue'
+
   export default {
+    components:{
+      loading
+    },
     data () {
       return {
         datalist:[],
         search: '',
+        loads:false,
         switch1: true,
         headers: [
           { text: 'Full Name', value: 'client.full_name' },
@@ -89,8 +98,8 @@
         .get(`coaches/getClient/`+`${this.$route.params.id}`
          )
         .then(({ data }) => {
-          console.log(data);
           this.datalist = data;
+          this.loads=true;
         });
       },
       changeStatus(payload){

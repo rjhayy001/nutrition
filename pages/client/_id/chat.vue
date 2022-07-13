@@ -1,6 +1,6 @@
 <template>
   <v-container grid-list-md>
-    <v-layout row wrap>
+    <v-layout row wrap v-if="loads == true">
       <v-flex xs12 class="pb-0">
         <div class="toolbar-container">
           <v-toolbar flat dense color="#f5f5f5">
@@ -16,23 +16,19 @@
       </v-flex>
 
       <v-flex xs12>
-        
-        <div class="scrollable-element" id="scrollable-element" ref="chat">
+        <div class="scrollable-element" id="scrollable-element" ref="chat" v-if="chatList!=''">
           <!-- <div v-for="item in chatList"  :key="item.id"> -->
           <div v-for="(item, index) in chatList" :key="item.id">
             <div class="date-divider ">
               <p class="px-2">{{ChangeDateformat(index)}}</p>
             </div>
             <v-list-item id="datalist" v-for="(listChat, key) in item" :key="listChat.id">
-              <v-list-item-avatar
-                size="30"
-              >
+              <v-list-item-avatar size="30">
                 <v-img v-if="listChat.logo != ''" :src="listChat.logo?listChat.logo:default_profile" ></v-img>
                 <v-img v-else  src='https://cdn.vuetifyjs.com/images/lists/1.jpg' ></v-img>
                 <!-- <v-img :src="'https://cdn.vuetifyjs.com/images/lists/1.jpg'" ></v-img> -->
-                
               </v-list-item-avatar>
-              <v-list-item-content>
+              <v-list-item-content  @mouseenter="hoverInd = key" @mouseleave="hoverInd = null">
                 <v-list-item-title class="subtitle-2">{{listChat.fullname}}</v-list-item-title>
                 <v-list-item-subtitle v-if="listChat.type == 'text'" class="pt-1" style="font-size:13px;">
                  {{listChat.message}}
@@ -83,12 +79,12 @@
                     </v-list-item-group>
                   </v-list>
                 </v-card>
-                <v-tooltip top>
-                  <template v-slot:activator="{ on, attrs }">
-                    <button @click.stop = "showMore(key)" v-on="on" rel="1" class="morebtn"> <v-icon class="mr-1">mdi-dots-horizontal</v-icon></button>
-                  </template>
-                  <span>More</span>
-                </v-tooltip>
+                  <v-tooltip left >
+                    <template v-slot:activator="{ on, attrs }" >
+                      <button @click.stop = "showMore(key)" v-on="on" rel="1" class="morebtn" > <v-icon class="mr-1">mdi-dots-horizontal</v-icon></button>
+                    </template>
+                    <span>More</span>
+                  </v-tooltip>
             </v-list-item>
               
             <!-- <v-list-item>
@@ -105,7 +101,10 @@
               </v-list-item-content>
             </v-list-item> -->
           </div>
-    
+       
+        </div>
+        <div class="scrollable-element" id="scrollable-element" ref="chat" v-else>
+            <empty></empty>
         </div>
         <div class="text-field-container">
           <div v-if="image_selecteds.length > 0">
@@ -180,6 +179,44 @@
       </template>
     </v-snackbar>
     </v-layout>
+    <v-layout v-else>
+      <loading/>
+    </v-layout>
+
+    
+    <v-dialog
+        v-model="deletedialog"
+        max-width="500px"
+      >
+        <v-card>
+          <v-card-title class="font-weight-light">
+            Delete Confirmation
+          </v-card-title>
+          <v-card-text>
+            <div class="my-5">
+              <p class="font-weight-light" style="color:#000;font-size: 17px;">
+              Are you sure to delete this chat?
+              </p>
+            </div>
+          </v-card-text>
+          <v-card-actions class="justify-end">
+            <v-btn
+              color="green"
+              text
+              @click="deletedialog = false"
+            >
+              Close
+            </v-btn>
+            <v-btn
+              color="red"
+              text
+              @click="deleteChat()"
+            >
+              Yes
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+    </v-dialog>
   </v-container>
 </template>
 <script>
@@ -189,14 +226,20 @@
   import pinnedMessages from '@/components/clients/chats/pinnedMessages.vue'
   import default_profile from "@/static/images/empty_person.png";
   import iconHelper from '@/mixins/iconHelper'
+  import empty from '@/components/error/empty_data.vue'
+  import loading from '@/components/loader/default_loader.vue'
+
   import moment from 'moment'
   export default {
     mixins: [iconHelper],
     components: {
       coach,
+      empty,
       pinnedMessages,
       userPhotos,
       confirmPhotos,
+      loading
+
     },
     data(){
       return {
@@ -207,7 +250,9 @@
         is_pinned : null,
         chatList : [],
         snackbar: false,
+        deletedialog: false,
         text: '',
+        loads:false,
         timeout: 2000,
         pinMessages: [],
         default_profile,
@@ -221,6 +266,8 @@
           value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
         ],
         sdata:[],
+        ddata:'',
+        hoverInd :'',
       }
     },
     created(){
@@ -266,7 +313,6 @@
         }, 100, this);
       },
       send(data){
-
         this.$axios
           .post(`chat/addChatDocuments/`,{
               client_id : `${this.$route.params.id}`,
@@ -274,7 +320,7 @@
               sender_id : this.$auth.user.id,
               sender_type : 'coach',
               selected : 'coach',
-              type : 'image'
+              type : 'file'
               }
           )
           .then(({ data }) => {
@@ -314,7 +360,7 @@
               }
           )
           .then(({ data }) => {
-            // this.chatList = data;
+            this.chatList = data;
             this.message ='';
             this.getPinnedMessage();
             this.getChats();
@@ -329,7 +375,7 @@
               sender_id : this.$auth.user.id,
               sender_type : 'coach',
               selected : 'coach',
-              type : 'image'
+              type : 'file'
               }
           )
           .then(({ data }) => {
@@ -348,22 +394,25 @@
          )
         .then(({ data }) => {
           thiss.is_pinned = null;
-          thiss.snackbar = true;
           thiss.getPinnedMessage();
-          thiss.text = 'pinned message successfully';
+          this.chatNotification('pinned', 'Chat')
         });
       },
       deleteMessage(item){
+        this.deletedialog = true;
+        this.ddata = item;
+      },
+      deleteChat(){
         const thiss = this;
         this.$axios
-        .delete(`chat/deleteMessage/`+item.id
+        .delete(`chat/deleteMessage/`+this.ddata.id
          )
         .then(({ data }) => {
           thiss.is_pinned = null;
-          thiss.snackbar = true;
           thiss.getChats();
           thiss.getPinnedMessage();
-          thiss.text = 'delete message successfully';
+          this.chatNotification('deleted','Chat')
+          this.deletedialog = false;
         });
       },
       getChats(){
@@ -371,10 +420,10 @@
         .get(`chat/getChat/`+`${this.$route.params.id}`
          )
         .then(({ data }) => {
-          console.log(data);
           this.chatList = data.data;
           this.client_name = data.name;
-         
+          this.loads = true;
+
             //  var container = document.querySelector("#chats25");
             //  container.focus();
         });
