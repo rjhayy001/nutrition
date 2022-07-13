@@ -86,7 +86,7 @@
     methods: {
       getClientlist(){
         this.$axios
-        .get(`coaches/`+`${this.$route.params.id}`
+        .get(`coaches/getClient/`+`${this.$route.params.id}`
          )
         .then(({ data }) => {
           console.log(data);
