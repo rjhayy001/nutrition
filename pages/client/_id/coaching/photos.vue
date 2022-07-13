@@ -43,13 +43,15 @@
       <template v-if="data.length">
         <default-view
           v-if="default_view"
-          :data="data"
+          @getByTag="getByTag"
+          @initialize="initialize"
+          :photos="data"
           @openDetails="openDetails"
           @download="downloadImage"
         />
         <list-view
           v-else
-          :data="data"
+          :photos="variable"
           @openDetails="openDetails"
           @download="downloadImage"
         />
@@ -85,8 +87,9 @@ export default {
       drawer1:false,
       selectedItem:{},
       data:[],
+      constant: [],
       comment: [],
-      isEdit2: false
+      isEdit2: false,
     }
   },
   watch: {
@@ -118,7 +121,19 @@ export default {
       this.$axios.get(`${this.$clients}/${this.id}/photos`).then(({data}) => {
 
         this.data = data
+        this.constant = data
       })
+    },
+    getByTag(tag){
+      let filtered = []
+      this.constant.forEach(element => {
+        element.taggable.forEach(val => {
+          if(tag==val.name){
+            filtered.push(element)
+          }
+        });
+      });
+      this.data = filtered
     },
     searchPhotos(){
       console.log('test')
