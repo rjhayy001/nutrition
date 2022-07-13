@@ -90,7 +90,7 @@
 </template>
 <script>
 import customList from '~/components/ui/list.vue'
-import search from '~/components/layout/search.vue'
+import search from '~/components/ui/search.vue'
 import notification from '~/components/layout/notification.vue'
 export default {
   name: 'DefaultLayout',
@@ -106,7 +106,8 @@ export default {
       accountLinks: [
         {
           title: 'Profile',
-          icon: 'mdi-account'
+          icon:'mdi-account',
+          route: 'profile-change_password'
         },
         { title: 'Click Me' },
       ],
