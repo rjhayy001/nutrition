@@ -80,9 +80,6 @@
             <v-progress-circular v-if="showloader" :size="100" color="primary" indeterminate id="loader"></v-progress-circular>
         
           </div>
-          
-         
-
         </v-card>
       </div>
       <div class="_container">
@@ -121,7 +118,6 @@
         </v-card>
         <v-card tile style="border-top: solid 1px #d8cfcf; height: 100%;" >
             <div id="item-drag-wrapper">
-
               <ul class="list" v-if="files.length > 0">
                <li class="top:card small:left:card bottom:margin-2" v-for="(item, index) in files" :key="index">
                     <figure class="card-figure" @click="showdialog(true, item)">

@@ -8,6 +8,7 @@ import zipIcon from '@/assets/icons/zip.png'
 import htmlIcon from '@/assets/icons/html.png'
 import mp3Icon from '@/assets/icons/mp3.png'
 import urlIcon from '@/assets/icons/url.png'
+import mp4Icon from '@/assets/icons/mp4.png'
 export default {
   data(){
     return {
@@ -19,6 +20,7 @@ export default {
       zipIcon,
       htmlIcon,
       mp3Icon,
+      mp4Icon,
       urlIcon
     }
   },
@@ -56,6 +58,10 @@ export default {
         {
           type:'mp3',
           icon:this.mp3Icon
+        },
+        {
+          type:'mp4',
+          icon:this.mp4Icon
         },
         {
           type:'url',

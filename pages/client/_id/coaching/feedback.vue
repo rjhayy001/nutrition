@@ -75,7 +75,7 @@
             <p class="title mb-2 font-weight-medium">Feedback Summary</p>
           </v-flex>
           <v-flex xs10 class="ml-4" v-for="(count, keys) in feedbackCount" :key="keys">
-            <v-card class="mb-4"  @mouseover="onHover2(keys)">
+            <v-card class="mb-2"  @mouseover="onHover2(keys)" @mouseleave="hover2 = null">
               <v-card-text>
                  <div class="float-right" id="actions"  v-if="hover2 == keys">
                     <v-icon @click="filter(count.feedback_type)" color="green">mdi-eye</v-icon>
@@ -178,17 +178,17 @@ export default {
     getFeedback () {
       this.$axios
         .get(
-          `${this.$clients}/getFeedback/${this.$route.params.id}`
+          `feedback/getFeedback/${this.$route.params.id}`
         )
         .then(({ data }) => {
-          console.log(data);
           this.data = data;
+          this.getFeedbackCount();
         });
     },
     getFeedbackCount () {
       this.$axios
         .get(
-          `${this.$clients}/getFeedbackCount/${this.$route.params.id}`
+          `feedback/getFeedbackCount/${this.$route.params.id}`
         )
         .then(({ data }) => {
          this.feedbackCount = data;
@@ -214,17 +214,18 @@ export default {
     deleteSingleFeecback(){
        this.$axios
         .delete(
-          `${this.$clients}/deleteFeedback/`+this.deleteId
+          `feedback/deleteFeedback/`+this.deleteId
         )
         .then(({ data }) => {
-        if(this.f_type != 'all' || this.f_type != null){
+        if(this.f_type != 'all' && this.f_type != ''){
           this.searchList();
         }
         else{
           this.getFeedback();
         }
-         this.deletedialog = false;
-         this.successfeedbackNotification('delete')
+        this.deletedialog = false;
+        this.getFeedbackCount();
+        this.successfeedbackNotification('delete')
         });
     },
     ediFeedback(item){
@@ -240,8 +241,7 @@ export default {
         return;
       }
       this.$axios
-        .get(
-          `${this.$clients}/filterFeedback/`+this.f_type
+        .get(`feedback/filterFeedback/`+this.f_type
         )
         .then(({ data }) => {
           this.data = data;
@@ -250,10 +250,7 @@ export default {
   },
 };
 </script>
-
 <style scoped>
-/* .feedback-holder:hover .feedback-text {
-} */
 #wrapper-feedback {
   width: 50%;
   padding: 0 16px;
@@ -282,7 +279,6 @@ export default {
   transform: scale(1.004);
 }
 </style>
-
 <style >
 #wrapper-feedback button span.v-btn__content {
   text-transform: initial !important;
@@ -294,5 +290,4 @@ export default {
   padding: 0 50px;
   border-left: solid 1px #c2c2c2;
 }
-
 </style>

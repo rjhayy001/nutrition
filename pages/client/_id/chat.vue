@@ -30,6 +30,7 @@
                 <v-img v-if="listChat.logo != ''" :src="listChat.logo?listChat.logo:default_profile" ></v-img>
                 <v-img v-else  src='https://cdn.vuetifyjs.com/images/lists/1.jpg' ></v-img>
                 <!-- <v-img :src="'https://cdn.vuetifyjs.com/images/lists/1.jpg'" ></v-img> -->
+                
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title class="subtitle-2">{{listChat.fullname}}</v-list-item-title>
@@ -38,8 +39,25 @@
                 </v-list-item-subtitle>
                 <v-list-item-subtitle v-else class="pt-1" style="font-size:13px;">
                 <div class="imagemesssage">
-                  <div v-for="(image, key) in decodeMessage(listChat.message)" :key="image.id">
-                      <img :src="image" style="height:150px; width:150px;"/>
+                  <div v-for="(image, key) in decodeMessage(listChat.message)" :key="image.id" id="file-holder">
+                      <img :src="image" style="height:auto; width:120px;" v-if="checkFile(image) == 'data:image'"/>
+                      <video id="video-preview" v-else-if="checkFile(image) == 'data:video'" controls :src="image" style="height:auto; width:150px;"/>
+                      <v-img v-else
+                        :src="iconSelector(image)" contain id="imgfile"
+                        style="height:auto; width:120px;" 
+                      > 
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on, attrs }">
+                              <a :href="image" download v-bind="attrs" @click.stop
+                              v-on="on">
+                                <v-icon class="mx-2" style="width:100%">
+                                mdi-download
+                                </v-icon>
+                              </a>
+                          </template>
+                          <span>Download</span>
+                        </v-tooltip>
+                       </v-img>
                   </div>
                 </div>
                 </v-list-item-subtitle>
@@ -67,7 +85,7 @@
                 </v-card>
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <button @click = "showMore(key)" v-on="on" rel="1" class="morebtn"> <v-icon class="mr-1">mdi-dots-horizontal</v-icon></button>
+                    <button @click.stop = "showMore(key)" v-on="on" rel="1" class="morebtn"> <v-icon class="mr-1">mdi-dots-horizontal</v-icon></button>
                   </template>
                   <span>More</span>
                 </v-tooltip>
@@ -94,7 +112,13 @@
             <div class="d-flex flex-row g-10" id="img-wrapper">
               <div id="img-holder"  class="d-flex flex-column"  v-for="(selectedFile, index) in image_selecteds" :key="selectedFile.id">
                   <v-icon id="deleteImg" @click="removeSelectedImg(selectedFile, index)">mdi-delete</v-icon>
-                  <img :src="selectedFile.image">
+                  <img :src="selectedFile.image" v-if="checkFile(selectedFile.image) == 'data:image'"/>
+                  <video id="video-preview" v-else-if="checkFile(selectedFile.image) == 'data:video'" controls :src="selectedFile.image" style="height:120px; width:120px;"/>
+                  <v-img v-else
+                    :src="iconSelector(selectedFile.image)" contain id="imgfile"
+                    style="height:100px; width:100px;" 
+                  > 
+                  </v-img>
                   <span>{{selectedFile.name | truncate(12, '')}}</span>
               </div>
             </div>
@@ -110,14 +134,14 @@
             <template v-slot:prepend-inner>
               <v-icon class="mr-1"  @click="handleFileImport">mdi-upload</v-icon>
               <input
-                    accept="image/png, image/gif, image/jpeg"
+                    accept="image/png, image/gif, image/jpeg, video/*, application/pdf"
                     ref="uploader"
                     type="file"
                     @change="onFileChange"
                     class="d-none"
                     multiple
               />
-              <user-photos @confirm="confirmPhotos"></user-photos>
+              <user-photos @confirm="confirmPhotos" :sdata="sdata"></user-photos>
               <v-divider vertical class="mx-2"></v-divider>
             </template>
             <template v-slot:append>
@@ -164,8 +188,10 @@
   import coach from '@/components/clients/chats/coach.vue'
   import pinnedMessages from '@/components/clients/chats/pinnedMessages.vue'
   import default_profile from "@/static/images/empty_person.png";
+  import iconHelper from '@/mixins/iconHelper'
   import moment from 'moment'
   export default {
+    mixins: [iconHelper],
     components: {
       coach,
       pinnedMessages,
@@ -194,6 +220,7 @@
         rules: [
           value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
         ],
+        sdata:[],
       }
     },
     created(){
@@ -208,6 +235,9 @@
         if (event.keyCode === 27) { 
            thiss.is_pinned = null;
         }
+      });
+      window.addEventListener('click', function(event) {
+           thiss.is_pinned = null;
       });
       this.getChats();
       this.getPinnedMessage();
@@ -235,8 +265,26 @@
           objDiv.scrollTop = objDiv.scrollHeight;
         }, 100, this);
       },
-      send(){
-        alert('test')
+      send(data){
+
+        this.$axios
+          .post(`chat/addChatDocuments/`,{
+              client_id : `${this.$route.params.id}`,
+              message : data,
+              sender_id : this.$auth.user.id,
+              sender_type : 'coach',
+              selected : 'coach',
+              type : 'image'
+              }
+          )
+          .then(({ data }) => {
+
+            this.sdata = data;
+            this.getPinnedMessage();
+            this.message ='';
+            this.getChats();
+            this.confirm_photos_dialog = false;
+          });
       },
       confirmPhotos(photos){
         this.tobe_sent_photos = photos
@@ -256,7 +304,7 @@
       sendMessage(){
         if(this.message !=''){
           this.$axios
-          .post(`${this.$clients}/addChat/`,{
+          .post(`chat/addChat/`,{
               client_id : `${this.$route.params.id}`,
               message : this.message,
               sender_id : this.$auth.user.id,
@@ -275,7 +323,7 @@
         }
         if(this.image_selecteds.length > 0 ){
           this.$axios
-          .post(`${this.$clients}/addChat/`,{
+          .post(`chat/addChat/`,{
               client_id : `${this.$route.params.id}`,
               message : this.image_selecteds,
               sender_id : this.$auth.user.id,
@@ -296,7 +344,7 @@
       pinMessage(item){
         const thiss = this;
         this.$axios
-        .put(`${this.$clients}/pinMessage/`+item.id+'?to=1'
+        .put(`chat/pinMessage/`+item.id+'?to=1'
          )
         .then(({ data }) => {
           thiss.is_pinned = null;
@@ -308,7 +356,7 @@
       deleteMessage(item){
         const thiss = this;
         this.$axios
-        .delete(`${this.$clients}/deleteMessage/`+item.id
+        .delete(`chat/deleteMessage/`+item.id
          )
         .then(({ data }) => {
           thiss.is_pinned = null;
@@ -320,15 +368,29 @@
       },
       getChats(){
         this.$axios
-        .get(`${this.$clients}/getChat/`+`${this.$route.params.id}`
+        .get(`chat/getChat/`+`${this.$route.params.id}`
          )
         .then(({ data }) => {
+          console.log(data);
           this.chatList = data.data;
           this.client_name = data.name;
          
             //  var container = document.querySelector("#chats25");
             //  container.focus();
         });
+      },
+      checkFile(base64Data){
+        var type = base64Data.split(';')[0].split('/');
+        return type[0];
+      },
+      iconSelector(item){
+        var gettype = item.split(';')[0].split('/');
+
+        let srcIcon = this.types.find(type => type.type == gettype[1])
+        if(item.type =='image'){
+          return item.data
+        }
+        return srcIcon ? srcIcon.icon : this.unverifyIcon
       },
       ChangeDateformat(date){
        var currentDate = new Date();
@@ -346,9 +408,10 @@
       getPinnedMessage(){
       const thiss = this;
         this.$axios
-        .get(`${this.$clients}/getPinnedMessage/`
+        .get(`chat/getPinnedMessage/`
          )
         .then(({ data }) => {
+          console.log(data);
           this.pinMessages = data;
         });
       },
@@ -406,7 +469,17 @@
   }
 
 </script>
-
+<style>
+#file-holder div#imgfile div.v-responsive__content a{
+  display: flex !important;
+  height:100%;
+  width: 100%;
+  text-decoration: none;
+}
+#file-holder div#imgfile div.v-responsive__content a:hover{
+  transform:scale(1.2)
+}
+</style>
 <style scoped>
 .scrollable-element {
     -ms-overflow-style: none; /* for Internet Explorer, Edge */
