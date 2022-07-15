@@ -26,7 +26,7 @@
         </v-flex>
       </v-layout>
       <v-layout row wrap id="wrapper_feedback">
-        <v-flex xs8 v-if="data.length != 0">
+        <v-flex xs7 v-if="data.length != 0" id="cont-wrapper">
           <div
             v-for="(items, index) in data"
             :key="index"
@@ -41,8 +41,8 @@
             > -->
               <v-card class="pt-2" @mouseover="onHover(item.id)" @mouseleave="hover = ''" :class="hover==item.id?'onHover':''">
                 <div class="float-right" id="actions"  v-if="hover==item.id">
-                  <v-icon @click="ediFeedback(item)" color="green">mdi-pencil</v-icon>
-                  <v-icon @click="showDeleteDialog(item.id)" color="red">mdi-delete</v-icon>
+                  <v-icon @click="ediFeedback(item)" color="green" size="20">mdi-pencil</v-icon>
+                  <v-icon @click="showDeleteDialog(item.id)" color="red" size="20">mdi-delete</v-icon>
                 </div>
                 <div class="feedback-text text-lowercase ml-4 overline"
                 style="font-size:15px !important;"
@@ -59,12 +59,12 @@
             </div>
           </div>
         </v-flex>
-        <v-flex xs8 v-else>
+        <v-flex xs7 v-else>
           <div class="pa-2 mt-50 _nofeedback">
             <empty/>
           </div>
         </v-flex>
-        <v-flex xs4 v-if="feedbackCount.length != 0">
+        <v-flex xs4 v-if="feedbackCount.length != 0" id="cont-wrapper">
           <v-layout row wrap class="clients-statistics-wrapper">
             <v-flex xs10>
               <p class="title mb-2 font-weight-medium">Feedback Summary</p>
@@ -73,7 +73,7 @@
               <v-card class="mb-2"  @mouseover="onHover2(keys)" @mouseleave="hover2 = null">
                 <v-card-text>
                   <div class="float-right" id="actions"  v-if="hover2 == keys">
-                      <v-icon @click="filter(count.feedback_type)" color="green">mdi-eye</v-icon>
+                      <v-icon @click="filter(count.feedback_type)" color="green" size="20">mdi-eye</v-icon>
                     </div>
                   <span class="display-1 text--primary">
                     <span>{{count.total}}</span>
@@ -294,4 +294,31 @@ export default {
   padding: 0 50px;
   border-left: solid 1px #c2c2c2;
 }
+#wrapper_feedback{
+  justify-content: space-between !important;
+}
+#cont-wrapper{
+  max-height: 740px !important;
+  overflow: hidden !important;
+}
+#cont-wrapper:hover{
+  overflow: auto !important;
+}
+/* width */
+#cont-wrapper::-webkit-scrollbar {
+  width: 15px;
+}
+
+/* Track */
+#cont-wrapper::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+
+/* Handle */
+#cont-wrapper::-webkit-scrollbar-thumb {
+  background: rgb(195, 195, 204); 
+  border-radius: 10px;
+}
+
 </style>

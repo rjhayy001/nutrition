@@ -18,7 +18,8 @@ export default {
   data(){
     return {
       client:{},
-      active_subscription:{}
+      active_subscription:{},
+      type:'measures',
     }
   },
 

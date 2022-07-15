@@ -73,7 +73,7 @@
                       <v-list-item >
                        <p id="pinMessage" class="d-flex justify-space-between" @click = "pinMessage(listChat)" style="width:100%;">Pin Message<v-icon class="ml-2">mdi-pin</v-icon></p>
                       </v-list-item>
-                      <v-list-item >
+                      <v-list-item v-if="listChat.sender_type == 'coach'">
                       <p id="pinMessage" class="d-flex justify-space-between" @click = "deleteMessage(listChat)" style="width:100%;">Delete Message<v-icon class="ml-2">mdi-delete</v-icon></p>
                       </v-list-item>
                     </v-list-item-group>
@@ -313,6 +313,7 @@
         }, 100, this);
       },
       send(data){
+     
         this.$axios
           .post(`chat/addChatDocuments/`,{
               client_id : `${this.$route.params.id}`,
@@ -324,7 +325,6 @@
               }
           )
           .then(({ data }) => {
-
             this.sdata = data;
             this.getPinnedMessage();
             this.message ='';
@@ -360,11 +360,10 @@
               }
           )
           .then(({ data }) => {
-            this.chatList = data;
             this.message ='';
             this.getPinnedMessage();
             this.getChats();
-             this.image_selecteds = [];
+            this.image_selecteds = [];
           });
         }
         if(this.image_selecteds.length > 0 ){

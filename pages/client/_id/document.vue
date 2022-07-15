@@ -66,7 +66,7 @@
 
                             <figcaption class="card-caption" >{{item.documents.file_name}}</figcaption>
 
-                            <v-icon id="deleteShare" @click="deleteShare(item.documents.id)">mdi-delete</v-icon>
+                            <v-icon id="deleteShare" @click="deleteShare(item.documents.id)" size="20">mdi-delete</v-icon>
                         </figure>
                       </li>
                 </ul>
@@ -421,7 +421,7 @@ export default {
 
 ._container{
   width: 100%;
-    height: 600px;
+  height: 600px;
 }
 ._container div#item-drag-wrapper{
   height: 100%;
