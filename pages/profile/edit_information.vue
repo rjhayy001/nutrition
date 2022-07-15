@@ -1,207 +1,224 @@
 <template>
-  <div class="main-wrapper pt-6">
-    <validationObserver ref="form">
-      <v-form ref="form" @submit.prevent="saveForm()">
-        <div class="mb-6">
-          <v-row>
+  <div class="mt-6">
+    <ValidationObserver ref="form">
+      <v-form class="form-box" @submit.prevent="saveForm">
+        <v-container grid-list-md fluid>
+          <v-layout row wrap gap>
+            <v-flex xs6 px-5>
+              <v-layout row wrap>
+                <v-flex xs12>
+                  <p class="subtitle-1 font-weight-medium">INFORMATIONS</p>
+                </v-flex>
+                <v-flex xs6>
+                  <ValidationProvider slim name="first_name" rules="required" v-slot="{ errors }">
+                    <div class="mb-1">
+                      <p class="subtitle-2 font-weight-regular mb-2">
+                        <span>* First Name</span>
+                      </p>
+                      <v-text-field flat dense filled type="text" name="first_name" hide-details="auto"
+                        class="text-capitalize" v-model="payload.first_name" :error-messages="errors"></v-text-field>
+                    </div>
+                  </ValidationProvider>
+                </v-flex>
+                <v-flex xs6>
+                  <ValidationProvider slim name="last_name" rules="required" v-slot="{ errors }">
+                    <div class="mb-1">
+                      <p class="subtitle-2 font-weight-regular mb-2">Last Name</p>
+                      <v-text-field flat dense filled type="text" name="last_name" hide-details="auto"
+                        class="text-capitalize" v-model="payload.last_name" :error-messages="errors"></v-text-field>
+                    </div>
+                  </ValidationProvider>
+                </v-flex>
+                <v-flex xs6>
+                  <ValidationProvider slim>
+                    <div class="mb-1">
+                      <p class="subtitle-2 font-weight-regular mb-2">
+                        <span>* Phone #1</span>
+                      </p>
+                      <v-text-field flat dense filled type="text" name="phone_1" hide-details="auto"
+                        v-model="payload.phone_1"></v-text-field>
+                    </div>
+                  </ValidationProvider>
+                </v-flex>
+                <v-flex xs6>
+                  <ValidationProvider slim>
+                    <div class="mb-1">
+                      <p class="subtitle-2 font-weight-regular mb-2">Phone #2</p>
+                      <v-text-field flat dense filled type="text" name="phone_2" hide-details="auto"
+                        v-model="payload.phone_2"></v-text-field>
+                    </div>
+                  </ValidationProvider>
+                </v-flex>
+                <v-flex xs6>
+                  <ValidationProvider slim>
+                    <div class="mb-1">
+                      <p class="subtitle-2 font-weight-regular mb-2">
+                        <span>* Email</span>
+                      </p>
+                      <v-text-field flat dense filled type="text" name="email" hide-details="auto"
+                        v-model="payload.email"></v-text-field>
+                    </div>
+                  </ValidationProvider>
+                </v-flex>
+                <v-flex xs6>
+                  <ValidationProvider slim>
+                    <div class="mb-1">
+                      <p class="subtitle-2 font-weight-regular mb-2">
+                        {{ $t('clients.birthday') }}
+                      </p>
+                      <v-dialog persistent ref="dialog" width="290px" v-model="modal"
+                        :return-value.sync="payload.birthday">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field flat dense filled readonly v-on="on" v-bind="attrs" v-model="payload.birthday"
+                            prepend-inner-icon="mdi-calendar" :placeholder="$t('clients.chooseDateOfBirth')">
+                          </v-text-field>
+                        </template>
+                        <v-date-picker v-model="payload.birthday" scrollable>
+                          <v-spacer></v-spacer>
+                          <v-btn text color="primary" @click="modal = false">
+                            {{ this.$t('global.cancel') }}
+                          </v-btn>
+                          <v-btn text color="primary" @click="$refs.dialog.save(payload.birthday)">
+                            OK
+                          </v-btn>
+                        </v-date-picker>
+                      </v-dialog>
+                    </div>
+                  </ValidationProvider>
+                </v-flex>
+                <v-flex xs12>
+                  <p class="subtitle-1 font-weight-medium">Address</p>
+                </v-flex>
+                <v-flex xs12>
+                  <ValidationProvider slim>
+                    <div class="mb-1">
+                      <p class="subtitle-2 font-weight-regular mb-2">
+                        <span>* Address</span>
+                      </p>
+                      <v-text-field flat dense filled type="text" name="address_1" hide-details="auto"
+                        v-model="payload.address_1"></v-text-field>
+                    </div>
+                  </ValidationProvider>
+                </v-flex>
+                <v-flex xs12>
+                  <ValidationProvider slim>
+                    <div class="mb-1">
+                      <p class="subtitle-2 font-weight-regular mb-2">
+                        * Additional Address
+                      </p>
+                      <v-textarea flat dense filled rows="2" type="text" name="address_2" hide-details="auto"
+                        v-model="payload.address_2"></v-textarea>
+                    </div>
+                  </ValidationProvider>
+                </v-flex>
+                <v-flex xs6>
+                  <ValidationProvider slim>
+                    <div class="mb-1">
+                      <p class="subtitle-2 font-weight-regular mb-2">
+                        <span>* City</span>
+                      </p>
+                      <v-combobox flat dense filled item-value="id" deletable-chips item-text="name" hide-details="auto"
+                        v-model="payload.city" :items="cities"></v-combobox>
+                    </div>
+                  </ValidationProvider>
+                </v-flex>
+                <v-flex xs6>
+                  <ValidationProvider slim>
+                    <div class="mb-1">
+                      <p class="subtitle-2 font-weight-regular mb-2">
+                        <span>* Zipcode</span>
+                      </p>
+                      <v-combobox flat dense filled item-value="id" item-text="code" hide-details="auto"
+                        v-model="payload.zipcode" :items="zipcodes"></v-combobox>
+                    </div>
+                  </ValidationProvider>
+                </v-flex>
+                <v-flex xs12 class="mb-8">
+                  <ValidationProvider slim>
+                    <div class="mb-1">
+                      <p class="subtitle-2 font-weight-regular mb-2">
+                        <span>* Country</span>
+                      </p>
+                      <v-combobox flat dense filled name="country" item-value="id" hide-details="auto"
+                        item-text="short_name" v-model="payload.country" :items="countries">
+                      </v-combobox>
+                    </div>
+                  </ValidationProvider>
+                </v-flex>
+              </v-layout>
+            </v-flex>
+            <v-flex xs6 class="py-0 px-5" style="position:relative">
+              <v-layout row wrap>
+                <v-flex xs12>
+                  <p class="subtitle-1 font-weight-medium">{{ $t('clients.profile') }}</p>
+                </v-flex>
+                <v-flex xs12>
+                  <div class="profile-box">
+                    <div class="mb-2">
+                      <v-img height="200px" width="200px" class="my-0 mx-auto"
+                        :src="payload.logo || '/images/empty_person.png'"></v-img>
+                    </div>
+                    <v-btn small outlined color="success" @click="handleFileImport">
+                      <v-icon>mdi-upload-outline</v-icon>
+                      {{ $t('global.uploadPhoto') }}
+                    </v-btn>
+                    <input type="file" ref="uploader" class="d-none" accept="image/png, image/gif, image/jpeg"
+                      @change="onFileChange" />
+                  </div>
+                </v-flex>
+                <v-flex xs12>
+                  <ValidationProvider slim>
+                    <div class="mb-1">
+                      <p class="subtitle-2 font-weight-regular mb-2">Tags</p>
+                      <v-autocomplete flat dense filled multiple item-value="id" item-text="name" hide-details="auto"
+                        prepend-inner-icon="mdi-plus" v-model="payload.taggable" :items="tagsOption"
+                        :placeholder="$t('clients.selectTags')"></v-autocomplete>
+                    </div>
+                  </ValidationProvider>
+                </v-flex>
+                <v-flex xs12>
+                  <ValidationProvider slim>
+                    <div class="mb-1">
+                      <p class="subtitle-2 font-weight-regular mb-2">{{ $t('clients.groups') }}</p>
+                      <v-autocomplete flat dense filled multiple item-value="id" item-text="name" hide-details="auto"
+                        prepend-inner-icon="mdi-plus" v-model="payload.groupable" :items="groupsOption"
+                        :placeholder="$t('clients.selectGroups')">
+                      </v-autocomplete>
+                    </div>
+                  </ValidationProvider>
+                </v-flex>
+                <v-flex xs12>
+                  <ValidationProvider slim>
+                    <div class="mb-1">
+                      <p class="subtitle-2 font-weight-regular mb-2">{{ $t('clients.status') }}</p>
+                      <v-select flat dense filled item-value="id" item-text="name" hide-details="auto"
+                        v-model="payload.status" :items="statusOptions"></v-select>
+                    </div>
+                  </ValidationProvider>
+                </v-flex>
+              </v-layout>
+            </v-flex>
             <v-flex xs12>
-              <h2>PROFILE INFORMATIONS</h2>
-            </v-flex>
-          </v-row>
-        </div>
-        <!-- Upper Section -->
-        <div class="upper-section-wrapper">
-          <v-row>
-            <!-- First Column of Upper Section -->
-            <v-flex xs4>
-              <div class="pr-1">
-                <!-- First Name -->
-                <validationProvider name="First Name" rules="required" v-slot="{ errors }">
-                  <div class="mb-2">
-                    <span class="field-title">First Name:</span>
-                  </div>
-                  <v-text-field class="mb-4" v-model="payload.first_name" hide-details="auto" outlined
-                    :error-messages="errors">
-                  </v-text-field>
-                </validationProvider>
-                <!-- Phone 1 -->
-                <validationProvider name="Phone 1" rules="required" v-slot="{ errors }">
-                  <div class="mb-2">
-                    <span class="field-title">Phone #1:</span>
-                  </div>
-                  <v-text-field class="mb-4" v-model="payload.phone_1" hide-details="auto" outlined
-                    :error-messages="errors">
-                  </v-text-field>
-                </validationProvider>
-                <!-- Email  -->
-                <validationProvider name="Email" rules="required" v-slot="{ errors }">
-                  <div class="mb-2">
-                    <span class="field-title">Email:</span>
-                  </div>
-                  <v-text-field class="mb-4" v-model="payload.email" hide-details="auto" outlined
-                    :error-messages="errors">
-                  </v-text-field>
-                </validationProvider>
+              <div class="float-right mr-4">
+                <v-btn class="success" type="submit">
+                  <v-icon>mdi-content-save-outline</v-icon>
+                  {{ this.$t('global.save') }}
+                </v-btn>
               </div>
             </v-flex>
-            <!-- Second Column of Upper Section -->
-            <v-flex xs4>
-              <div class="pr-1">
-                <!-- Last Name -->
-                <validationProvider name="Last Name" rules="required" v-slot="{ errors }">
-                  <div class="mb-2">
-                    <span class="field-title">Last Name:</span>
-                  </div>
-                  <v-text-field class="mb-4" v-model="payload.last_name" hide-details="auto" outlined
-                    :error-messages="errors">
-                  </v-text-field>
-                </validationProvider>
-                <!-- Phone 2 -->
-                <validationProvider name="Phone 2" rules="required" v-slot="{ errors }">
-                  <div class="mb-2">
-                    <span class="field-title">Phone #2:</span>
-                  </div>
-                  <v-text-field class="mb-4" v-model="payload.phone_2" hide-details="auto" outlined
-                    :error-messages="errors">
-                  </v-text-field>
-                </validationProvider>
-                <!-- Birthday -->
-                <validationProvider name="Birthday" rules="required" v-slot="{ errors }">
-                  <div class="mb-2">
-                    <span class="field-title">Date of Birth:</span>
-                  </div>
-                  <v-dialog ref="dialog" v-model="modal" :return-value.sync="payload.birthday" persistent width="290px">
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field v-model="payload.birthday" outlined label="Choose date of birth"
-                        prepend-inner-icon="mdi-calendar" readonly v-bind="attrs" v-on="on"></v-text-field>
-                    </template>
-                    <v-date-picker v-model="payload.birthday" scrollable>
-                      <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="modal = false">
-                        Cancel
-                      </v-btn>
-                      <v-btn text color="primary" @click="$refs.dialog.save(payload.birthday)">
-                        OK
-                      </v-btn>
-                    </v-date-picker>
-                  </v-dialog>
-                </validationProvider>
-              </div>
-            </v-flex>
-            <!-- Third Column of Upper Section -->
-            <v-flex xs4>
-              <div class="ml-4 pt-6">
-                <!-- Profile Picture -->
-                <div class="profile-box pt-3">
-                  <div class="mb-2">
-                    <v-img height="200px" width="200px" class="my-0 mx-auto"
-                      :src="payload.logo || '/images/empty_person.png'" style="border: 1px solid black">
-                    </v-img>
-                  </div>
-                  <v-btn color="success" outlined @click="handleFileImport" class="ml-2" width="205">
-                    <v-icon>mdi-upload-outline</v-icon>
-                    upload photo
-                  </v-btn>
-                  <input accept="image/png, image/gif, image/jpeg" ref="uploader" type="file" @change="onFileChange"
-                    class="d-none" />
-                </div>
-              </div>
-            </v-flex>
-          </v-row>
-        </div>
-        <!-- End of Upper Section -->
-        <!-- Lower Section -->
-        <div class="lower-section-wrapper">
-          <!-- Address 1, 2 -->
-          <div>
-            <v-row>
-              <v-flex xs12>
-                <!-- Address 1 -->
-                <validationProvider name="Address 1" rules="required" v-slot="{ errors }">
-                  <div class="mb-2">
-                    <span class="field-title">Address #1:</span>
-                  </div>
-                  <v-text-field class="mb-4" v-model="payload.address_1" hide-details="auto" outlined
-                    :error-messages="errors">
-                  </v-text-field>
-                </validationProvider>
-                <!-- Address 2 -->
-                <validationProvider name="Address 2" rules="required" v-slot="{ errors }">
-                  <div class="mb-2">
-                    <span class="field-title">Address #2:</span>
-                  </div>
-                  <v-text-field class="mb-4" v-model="payload.address_2" hide-details="auto" outlined
-                    :error-messages="errors">
-                  </v-text-field>
-                </validationProvider>
-              </v-flex>
-            </v-row>
-          </div>
-          <!-- City, Zipcode -->
-          <div>
-            <v-row>
-              <v-flex xs6>
-                <!-- City -->
-                <validationProvider name="City" rules="required" v-slot="{ errors }">
-                  <div class="mb-2">
-                    <span class="field-title">City:</span>
-                  </div>
-                  <v-combobox class="mb-4" v-model="payload.city" :items="cities" hide-details="auto" outlined
-                    deletable-chips item-text="name" item-value="id">
-                  </v-combobox>
-                </validationProvider>
-              </v-flex>
-              <v-flex xs6>
-                <!-- Zipcode -->
-                <validationProvider name="Zipcode" rules="required" v-slot="{ errors }">
-                  <div class="mb-2">
-                    <span class="field-title">Zipcode:</span>
-                  </div>
-                  <v-combobox class="mb-4" v-model="payload.zipcode" :items="zipcodes" hide-details="auto" outlined
-                    deletable-chips item-text="code" item-value="id">
-                  </v-combobox>
-                </validationProvider>
-              </v-flex>
-            </v-row>
-          </div>
-          <!-- Country -->
-          <div>
-            <v-row>
-              <v-flex xs12>
-                <!-- Coutry -->
-                <validationProvider name="Country" rules="required" v-slot="{ errors }">
-                  <div class="mb-2">
-                    <span class="field-title">Country:</span>
-                  </div>
-                  <v-combobox class="mb-4" v-model="payload.country" :items="countries" hide-details="auto" outlined
-                    deletable-chips item-text="short_name" item-value="id">
-                  </v-combobox>
-                </validationProvider>
-              </v-flex>
-            </v-row>
-          </div>
-        </div>
-        <!-- Submit Button -->
-        <div>
-          <v-row>
-            <v-flex xs12>
-              <v-btn class="mt-2 mb-2 save-btn" color="success" type="submit">
-                <v-icon class="pr-1 icon">
-                  mdi-content-save-outline
-                </v-icon>
-                Save Changes
-              </v-btn>
-            </v-flex>
-          </v-row>
-        </div>
+          </v-layout>
+        </v-container>
       </v-form>
-    </validationObserver>
+    </ValidationObserver>
   </div>
 </template>
 <script>
-import { tsParenthesizedType } from '@babel/types'
-
+import tagFormDrawer from "~/components/tag/form.vue";
+import groupFormDrawer from "~/components/group/form.vue";
+import { tSMethodSignature } from "@babel/types";
 export default {
+  components: { tagFormDrawer, groupFormDrawer },
+
   data() {
     return {
       payload: {
@@ -209,39 +226,61 @@ export default {
         last_name: "",
         phone_1: "",
         phone_2: "",
-        email: "",
         birthday: "",
+        email: "",
+        password: "",
+        logo: "",
         address_1: "",
         address_2: "",
         city: "",
         zipcode: "",
         country: "",
-        logo: ""
+        status: 1,
+        taggable: [],
+        groupable: [],
       },
       modal: false,
+      originalPayload: {},
+      statusOptions: [
+        { id: 1, name: this.$t('global.active') },
+        { id: 0, name: this.$t('global.inActive') },
+      ],
+      tagDrawer: false,
+      groupDrawer: false,
+      tagsOption: [],
+      groupsOption: [],
+      countries: [],
       cities: [],
       zipcodes: [],
-      countries: [],
-    }
+    };
   },
-  created() {
-    this.getAllCountries()
-    this.getAllZipcodes()
-    this.getAllCities()
-    this.getCoachInfo()
+  mounted() {
+    this.initialize();
   },
   methods: {
     saveForm() {
+      this.payload.city_id = this.payload.city.id
+      this.payload.zipcode_id = this.payload.zipcode.id
+       this.payload.country_id = this.payload.country.id
+      console.log(this.payload)
       this.$refs.form.validate().then((result) => {
         if (!result) return;
         if (result) {
           this.$axios
             .put(`${this.$coaches}/${this.$auth.user.id}`, this.payload)
             .then(({ data }) => {
-              this.fullNotification('Success')
+              this.fullNotification('')
             });
         }
       });
+    },
+    initialize() {
+      this.getAllCountries();
+      this.getAllZipcodes();
+      this.getAllCities();
+      this.getAllTags();
+      this.getAllGroups();
+      this.getCoachInfo();
     },
     getCoachInfo() {
       this.$axios
@@ -250,22 +289,8 @@ export default {
         )
         .then(({ data }) => {
           this.payload = data;
+          console.log(this.payload)
         });
-    },
-    getAllCountries() {
-      this.$store.dispatch("address/FETCH_COUNTRIES").then(({ data }) => {
-        this.countries = data;
-      });
-    },
-    getAllZipcodes() {
-      this.$store.dispatch("address/FETCH_ZIPCODES").then(({ data }) => {
-        this.zipcodes = data;
-      });
-    },
-    getAllCities() {
-      this.$store.dispatch("address/FETCH_CITIES").then(({ data }) => {
-        this.cities = data;
-      });
     },
     handleFileImport() {
       window.addEventListener("focus", () => { }, { once: true });
@@ -285,59 +310,54 @@ export default {
         reader.readAsDataURL(file);
       }
     },
-  }
-}
+    getAllCountries() {
+      this.$axios.get(`${this.$countries}??no-paginate=''`).then(({ data }) => {
+        this.countries = data.data
+      })
+    },
+    getAllZipcodes() {
+      this.$axios.get(`${this.$zipcodes}??no-paginate=''`).then(({ data }) => {
+        this.zipcodes = data.data
+      })
+    },
+    getAllCities() {
+      this.$axios.get(`${this.$cities}?no-paginate=''`).then(({ data }) => {
+        this.cities = data.data
+        console.log(this.cities)
+      })
+    },
+    getAllTags() {
+      this.$axios.get(`${this.$tags}?no-paginate=''`).then(({ data }) => {
+        this.tagsOption = data.data
+      })
+    },
+    getAllGroups() {
+      this.$axios.get(`${this.$groups}?no-paginate=''`).then(({ data }) => {
+        this.groupsOption = data.data
+      })
+    },
+    addTagRecord(payload) {
+      this.create().then(() => {
+        this.$axios.post(`${this.$tags}`, payload).then(({ data }) => {
+          this.Notification(data, 'added', '', '', 'name')
+          this.getAllTags()
+        })
+      })
+    },
+    addGroupRecord(payload) {
+      this.create().then(() => {
+        this.$axios.post(`${this.$groups}`, payload).then(({ data }) => {
+          this.successNotification(data, 'added', '', '', 'name')
+          this.getAllGroups()
+        })
+      })
+    },
+    editBtn() {
+      this.enableEdit = true
+    },
+    cancelBtn() {
+      this.$emit('reload')
+    }
+  },
+};
 </script>
-<style scoped>
-.main-wrapper {
-  display: flex;
-  justify-content: center;
-}
-
-.field-title {
-  font-size: 1.2rem;
-}
-
-.save-btn {
-  width: 180px;
-  height: 50px !important;
-  float: right;
-  border-radius: 0% !important;
-}
-
-</style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
