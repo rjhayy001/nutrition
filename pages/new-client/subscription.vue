@@ -62,41 +62,41 @@ export default {
           sortType:null,
           filterValue:''
         },
-        { 
-          text: "Last name", 
+        {
+          text: "Last name",
           value: "last_name",
           filterable:true,
           sortType:null,
           filterValue:''
         },
-        { 
-          text: "Email", 
+        {
+          text: "Email",
           value: "email",
           filterable:true,
           sortType:null,
           filterValue:'',
         },
-        { 
-          text: "Status", 
+        {
+          text: "Status",
           value: "status",
         },
-        { 
-          text: "Phone 1", 
+        {
+          text: "Phone 1",
           value: "phone_1",
           filterable:true,
           sortType:null,
           filterValue:''
         },
-        { 
-          text: "Phone 2", 
+        {
+          text: "Phone 2",
           value: "phone_1",
           filterable:true,
           sortType:null,
           filterValue:''
         },
-        { 
-          text: "Action", 
-          value: "action" 
+        {
+          text: "Action",
+          value: "action"
         },
       ],
       data: [],

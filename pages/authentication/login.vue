@@ -1,105 +1,48 @@
 <template>
   <v-app class="login-form">
-    <v-container
-      fluid
-      fill-height
-      class="pa-0"
-    >
+    <v-container fluid fill-height class="pa-0">
       <v-layout justify-center>
-        <v-flex
-          class="right-background"
-          xs12
-          sm7
-        >
+        <v-flex class="right-background" xs12 sm7>
           <div class="footer"></div>
           <div class="header-log"></div>
         </v-flex>
-        <v-flex
-          xs12
-          sm5
-          class="login-content"
-        >
+        <v-flex xs12 sm5 class="login-content">
           <v-card class="elevation-0">
             <v-card-text>
               <h1 class="display-1">Hello ! Welcome back.</h1>
               <p class="subtitle-1">Login with your admin account that you entered during registration.</p>
               <ValidationObserver ref="form">
-                <v-form
-                  class="form-box"
-                  @submit.prevent="login"
-                >
+                <v-form class="form-box" @submit.prevent="login">
                   <div>
-                    <v-alert
-                      dense
-                      outlined
-                      v-if="errorMessage"
-                      tile
-                      type="error"
-                    >
-                      {{errorMessage}}
+                    <v-alert dense outlined v-if="errorMessage" tile type="error">
+                      {{ errorMessage }}
                     </v-alert>
                   </div>
-                  <ValidationProvider
-                    slim
-                    name="email"
-                    rules="required|min:1|max:100"
-                    v-slot="{ errors }"
-                  >
+                  <ValidationProvider slim name="email" rules="required|min:1|max:100" v-slot="{ errors }">
                     <div class="mb-5">
                       <p class="mb-2">Email Address</p>
-                      <v-text-field
-                        append-icon="mdi-account-key-outline"
-                        name="login"
-                        placeholder="Type your email ..."
-                        type="text"
-                        hide-details="auto"
-                        solo
-                        :error-messages="errors"
-                        v-model="admin.email"
-                      ></v-text-field>
+                      <v-text-field append-icon="mdi-account-key-outline" name="login" placeholder="Type your email ..."
+                        type="text" hide-details="auto" solo :error-messages="errors" v-model="admin.email">
+                      </v-text-field>
                     </div>
                   </ValidationProvider>
-                  <ValidationProvider
-                    slim
-                    name="password"
-                    rules="required|min:1|max:100"
-                    v-slot="{ errors }"
-                  >
+                  <ValidationProvider slim name="password" rules="required|min:1|max:100" v-slot="{ errors }">
                     <div class="mb-5">
                       <p class="d-flex  justify-space-between mb-2">
                         <span>Password</span>
                         <span>
-                          <p
-                            text
-                            @click="goTo('forgot_password')"
-                            color="primary"
-                            style="cursor:pointer; color:#7c94de;"
-                            dense
-                          >Forgot Password ?</p>
+                          <p text @click="goTo('forgot_password')" color="primary"
+                            style="cursor:pointer; color:#7c94de;" dense>Forgot Password ?</p>
                         </span>
                       </p>
-                      <v-text-field
-                        id="password"
-                        append-icon="mdi-eye-off-outline"
-                        name="password"
-                        placeholder="Type your password ..."
-                        solo
-                        hide-details="auto"
-                        :error-messages="errors"
-                        v-model="admin.password"
-                        type="password"
-                      ></v-text-field>
+                      <v-text-field id="password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                        :type="showPassword ? 'text' : 'password'" @click:append="showPassword = !showPassword"
+                        name="password" placeholder="Type your password ..." solo hide-details="auto"
+                        :error-messages="errors" v-model="admin.password"></v-text-field>
                     </div>
                   </ValidationProvider>
                   <div>
-                    <v-btn
-                      block
-                      tile
-                      color="primary"
-                      rounded
-                      type="submit"
-                      :loading="loading"
-                    >
+                    <v-btn block tile color="primary" rounded type="submit" :loading="loading">
                       Login
                     </v-btn>
                   </div>
@@ -120,6 +63,7 @@ export default {
   },
   data () {
     return {
+      showPassword: false,
       admin: {
         email: 'CoachQonvex@dev.com',
         password: 'taneopassword'

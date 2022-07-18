@@ -153,47 +153,7 @@
                 </v-flex>
                 <v-flex xs6>
                   <ValidationProvider slim>
-                    <div class="mb-1">
-                      <p class="subtitle-2 font-weight-regular mb-2">
-                        {{ $t('clients.birthday') }}
-                      </p>
-                      <v-dialog
-                        persistent
-                        ref="dialog"
-                        width="290px"
-                        v-model="modal"
-                        :return-value.sync="payload.birthday"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            flat
-                            dense
-                            filled
-                            readonly
-                            v-on="on"
-                            v-bind="attrs"
-                            v-model="payload.birthday"
-                            prepend-inner-icon="mdi-calendar"
-                            :disabled="!enableEdit"
-                            :placeholder="$t('clients.chooseDateOfBirth')"
-                          ></v-text-field>
-                        </template>
-
-                        <v-date-picker v-model="payload.birthday" scrollable>
-                          <v-spacer></v-spacer>
-                          <v-btn text color="primary" @click="modal = false">
-                            {{ this.$t('global.cancel') }}
-                          </v-btn>
-                          <v-btn
-                            text
-                            color="primary"
-                            @click="$refs.dialog.save(payload.birthday)"
-                          >
-                            OK
-                          </v-btn>
-                        </v-date-picker>
-                      </v-dialog>
-                    </div>
+                    <custom-datepicker @birthday="birthday" :birthday="payload.birthday" :disable="enableEdit"></custom-datepicker>
                   </ValidationProvider>
                 </v-flex>
                 <v-flex xs12>
@@ -487,8 +447,9 @@
 import tagFormDrawer from "~/components/tag/form.vue";
 import groupFormDrawer from "~/components/group/form.vue";
 import tableHelper from "~/mixins/tableHelper.vue";
+import customDatepicker from '~/components/ui/custom-datepicker.vue'
 export default {
-  components: {tagFormDrawer, groupFormDrawer},
+  components: {tagFormDrawer, groupFormDrawer, customDatepicker},
   mixins:[tableHelper],
   data() {
     return {

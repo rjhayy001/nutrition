@@ -1,9 +1,9 @@
 <template>
   <v-container>
-    <subscription-form 
-      :drawerStatus="drawer" 
-      :selectedItem="selectedItem" 
-      @closeDrawer="drawer = false" 
+    <subscription-form
+      :drawerStatus="drawer"
+      :selectedItem="selectedItem"
+      @closeDrawer="drawer = false"
       @addRecord="addSubscription($event)"
     />
     <v-dialog v-model="dialog" max-width="500px" style="z-index=100">
@@ -37,6 +37,7 @@
       </v-card>
     </v-dialog>
 
+      <!-- :hide="['add']" -->
     <data-table
       :options="options"
       :currentUrl="url"

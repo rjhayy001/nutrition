@@ -11,7 +11,7 @@
           :placeholder="this.$t('global.search')" dense append-icon="mdi-magnify"
           @keydown.enter="searchRecords(searchKeyword)"></v-text-field>
       </div>
-      <v-btn class="mr-1 success" small @click="addNewRecord">
+      <v-btn class="mr-1 success" small @click="addNewRecord" v-if="!hide.includes('add')">
         <v-icon>mdi-plus</v-icon>
         {{ this.$t('global.add') }}
       </v-btn>
@@ -140,6 +140,12 @@ export default {
     };
   },
   props: {
+    hide: {
+      type: Array,
+      default: () => {
+        return [];
+      },
+    },
     currentUrl:{
       type: String
     },
@@ -264,14 +270,14 @@ export default {
         this.$axios
           .get(`${this.realUrl}`)
           .then(({ data }) => {
-            this.currentdata = data.data;     
+            this.currentdata = data.data;
             this.currentoptions = data.options;
           });
       }else{
         this.$axios
           .get(`${this.realUrl}&sort=${toSort}`)
           .then(({ data }) => {
-            this.currentdata = data.data;     
+            this.currentdata = data.data;
             this.currentoptions = data.options;
           });
       }
@@ -316,7 +322,7 @@ export default {
     },
     data: {
       handler(val) {
-        this.currentdata=val 
+        this.currentdata=val
         if (val.length > -1 && this.loaded == 0) {
           setTimeout(() => {
             this.loaded = 2;

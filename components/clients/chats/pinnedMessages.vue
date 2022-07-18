@@ -67,53 +67,57 @@
             </v-card>
           </div>
         </v-container >
-         <div class="pa-2 mt-50 _nopinmsg" v-else>
-            <v-icon class="mx-2" style="font-size: 50px;">mdi-alert</v-icon>
-            <p class="mr-1">
-              No pin Message
-            </p>
+         <div class="pa-10 mt-50 _nopinmsg" v-else>
+            <img data-v-0c6d4504="" src="/images/Frame.png" alt="" style="width: 40%;">
         </div>
       </v-card>
     </v-menu>
+     <v-dialog
+        v-model="deletedialog"
+        max-width="500px"
+      >
+        <v-card>
+          <v-card-title class="font-weight-light">
+            Delete Confirmation
+          </v-card-title>
+          <v-card-text>
+            <div class="my-5">
+              <p class="font-weight-light" style="color:#000;font-size: 17px;">
+              Are you sure to delete this pinned messages?
+              </p>
+            </div>
+          </v-card-text>
+          <v-card-actions class="justify-end">
+            <v-btn
+              color="green"
+              text
+              @click="deletedialog = false"
+            >
+              Close
+            </v-btn>
+            <v-btn
+              color="red"
+              text
+              @click="deletePinMessage()"
+            >
+              Yes
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
-  // export default {
-  //   props: ["pinned"],
-  //   data: () => ({
-  //     items: [
-  //       { title: 'Click Me' },
-  //       { title: 'Click Me' },
-  //       { title: 'Click Me' },
-  //       { title: 'Click Me 2' },
-  //     ],
-  //   return {
-  //     pinMessagelist: this.pinned,
-    
-  //   };
-    
-  //   }),
-  //   // mounted(){
-  //   //   this.getPinnedMessage();
-  //   // },
-  //   // methods: {
-  //   //    getPinnedMessage(){
-  //   //     const thiss = this;
-  //   //     this.$axios
-  //   //     .get(`${this.$clients}/getPinnedMessage`
-  //   //      )
-  //   //     .then(({ data }) => {
-  //   //       this.pinMessagelist = data;
-  //   //     });
-  //   //   },
-  //   // }
-  // }
+
   import default_profile from "@/static/images/empty_person.png";
   import iconHelper from '@/mixins/iconHelper'
+    import empty from '@/components/error/empty_data.vue'
 
   export default {
   mixins: [iconHelper],
-
+    components: {
+      empty,
+    },
   props: {
     pinned: {
       type: Array,
@@ -121,30 +125,29 @@
       required: true
     }
   },
-  // watch: {
-  //     // whenever question changes, this function will run
-  //     pinned(newQuestion, oldQuestion) {
-  //     alert('test');
-  //      this.pinMessagelist = newQuestion;
-  //     }
-  //   },
+
   data() {
     return {
       pinMessagelist:[],
       default_profile,
+      deletedialog : false,
+      d_id : '',
     };
   },
    methods: {
-       deletePin(id){
-        // console.log(id);
-        // return;
+      deletePin(id){
+        this.d_id = id;
+        this.deletedialog = true;
+      },
+      deletePinMessage(){
         const thiss = this;
         this.$axios
-        .put(`chat/pinMessage/`+id+'?to=0'
+        .put(`chat/pinMessage/`+this.d_id +'?to=0'
          )
         .then(({ data }) => {
-          
           this.$emit('getPinnedMessage')
+          this.chatNotification('deleted','Pinned message')
+          this.deletedialog = false;
         });
       },
       decodeMessage(message) {
