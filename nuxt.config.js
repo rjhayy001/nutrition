@@ -2,7 +2,11 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   ssr: false,
-  target: 'static',
+  target: 'server',
+  server: {
+    port: 9696,
+    host: "0.0.0.0" // default: 3000,
+  },
   head: {
     titleTemplate: '',
     title: 'Nutrition',
