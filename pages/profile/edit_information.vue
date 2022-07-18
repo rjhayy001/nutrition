@@ -62,28 +62,7 @@
                 </v-flex>
                 <v-flex xs6>
                   <ValidationProvider slim>
-                    <div class="mb-1">
-                      <p class="subtitle-2 font-weight-regular mb-2">
-                        {{ $t('clients.birthday') }}
-                      </p>
-                      <v-dialog persistent ref="dialog" width="290px" v-model="modal"
-                        :return-value.sync="payload.birthday">
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field flat dense filled readonly v-on="on" v-bind="attrs" v-model="payload.birthday"
-                            prepend-inner-icon="mdi-calendar" :placeholder="$t('clients.chooseDateOfBirth')">
-                          </v-text-field>
-                        </template>
-                        <v-date-picker v-model="payload.birthday" scrollable>
-                          <v-spacer></v-spacer>
-                          <v-btn text color="primary" @click="modal = false">
-                            {{ this.$t('global.cancel') }}
-                          </v-btn>
-                          <v-btn text color="primary" @click="$refs.dialog.save(payload.birthday)">
-                            OK
-                          </v-btn>
-                        </v-date-picker>
-                      </v-dialog>
-                    </div>
+                    <custom-datepicker @birthday="birthday" :birthday="date" :disable="true"></custom-datepicker>
                   </ValidationProvider>
                 </v-flex>
                 <v-flex xs12>
@@ -213,14 +192,13 @@
   </div>
 </template>
 <script>
-import tagFormDrawer from "~/components/tag/form.vue";
-import groupFormDrawer from "~/components/group/form.vue";
-import { tSMethodSignature } from "@babel/types";
+import customDatepicker from '~/components/ui/custom-datepicker.vue'
 export default {
-  components: { tagFormDrawer, groupFormDrawer },
+  components: { customDatepicker },
 
   data() {
     return {
+      date: '',
       payload: {
         first_name: "",
         last_name: "",
@@ -245,8 +223,6 @@ export default {
         { id: 1, name: this.$t('global.active') },
         { id: 0, name: this.$t('global.inActive') },
       ],
-      tagDrawer: false,
-      groupDrawer: false,
       tagsOption: [],
       groupsOption: [],
       countries: [],
@@ -261,7 +237,7 @@ export default {
     saveForm() {
       this.payload.city_id = this.payload.city.id
       this.payload.zipcode_id = this.payload.zipcode.id
-       this.payload.country_id = this.payload.country.id
+      this.payload.country_id = this.payload.country.id
       console.log(this.payload)
       this.$refs.form.validate().then((result) => {
         if (!result) return;
@@ -289,7 +265,7 @@ export default {
         )
         .then(({ data }) => {
           this.payload = data;
-          console.log(this.payload)
+          this.date = data.birthday;
         });
     },
     handleFileImport() {
@@ -323,7 +299,6 @@ export default {
     getAllCities() {
       this.$axios.get(`${this.$cities}?no-paginate=''`).then(({ data }) => {
         this.cities = data.data
-        console.log(this.cities)
       })
     },
     getAllTags() {
@@ -357,6 +332,9 @@ export default {
     },
     cancelBtn() {
       this.$emit('reload')
+    },
+    birthday(date) {
+      this.payload.birthday = date;
     }
   },
 };
