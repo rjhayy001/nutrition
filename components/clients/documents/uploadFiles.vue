@@ -9,43 +9,101 @@
       <v-toolbar class="text-h5 grey lighten-2 mb-5" flat dense>
         <v-btn small  @click="dialog(false)">back</v-btn>
       </v-toolbar>
-        <v-card-text class="pa-0">
-          <v-container @dragover.prevent @drop.prevent id="drag_drop">
-            <div @drop="dragFile" id="drag_drops" @click="SelecteFile"> 
-                <ul class="list">
-                   <li class="top:card small:left:card bottom:margin-2" v-for="(item, index) in File" :key="index">
-                        <v-card class="card-figure pa-1 text-center">
-                          <v-icon class="mx-2" id="check" v-if="value[index] == false">mdi-check-circle</v-icon>
-                            <img :src="item.file" v-if="checkFile(item.type) == 'image'">
-                            <video id="video-preview" v-if="checkFile(item.type) == 'video'" controls :src="item.file"/>
-                            <audio id="audio" controls v-if="checkFile(item.type) == 'audio'">
-                              <source :src="item.file" id="src" />
-                            </audio>
-                            <figcaption class="card-caption" >{{formatBytes(item.size)}} </figcaption>
-                              <v-progress-circular id="barprogress" v-if="value[index] == true"
-                                indeterminate
-                                color="primary" 
-                              > {{ progressBar(index) }}</v-progress-circular>
-                        </v-card>
-                    </li>
-                </ul>
-                <div id="tips" v-if="File.length==0">
-                    <span><strong>Drop Files</strong></span>
-                    <span>or click to upload</span>
-                </div>
-                <input type="file" multiple ref="file_input" class="d-none" accept="image/*, video/*, application/pdf" @change="getFiles">
-            </div>
-          </v-container>
-        </v-card-text>
+      <v-card-text class="pa-0">
+        <v-container @dragover.prevent @drop.prevent id="drag_drop">
+          <div @drop="dragFile" id="drag_drops" @click="SelecteFile"> 
+              <ul class="list">
+                  <li class="top:card small:left:card bottom:margin-2" v-for="(item, index) in File" :key="index">
+                      <v-card class="card-figure pa-1 ">
+                        <v-icon class="mx-2" id="check" v-if="value[index] == false">mdi-check-circle</v-icon>
+                          <img :src="item.file" v-if="checkFile(item.type) == 'image'">
+                          <video id="video-preview" v-else-if="checkFile(item.type) == 'video'" controls :src="item.file"/>
+                           <img v-else
+                              :src="iconSelector(item)"
+                              @contextmenu.stop="show"
+                              class="ma-auto file"
+                              contain
+                              id="imgfile"
+                            >
+                          <figcaption class="card-caption ml-1" >{{item.name| truncate(9, '...')}}</figcaption>
+                          <!-- <figcaption class="card-caption" >{{formatBytes(item.size)}} </figcaption> -->
+                            <v-menu
+                              top
+                              :close-on-content-click="closeOnContentClick"
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                 <v-icon  v-bind="attrs"
+                                  v-on="on" id="actionGroup">mdi-dots-vertical</v-icon>
+                              </template>
+
+                              <v-list id="v-list-wrapper">
+                                <v-list-item
+                                  v-for="(action, key) in items"
+                                  :key="key"
+                                  link
+                                >
+                                  <v-list-item-title @click="groupAction(action.id, index, item)">{{ action.title }}</v-list-item-title>
+                                </v-list-item>
+                              </v-list>
+                            </v-menu>
+                            <v-progress-circular id="barprogress" v-if="value[index] == true"
+                              indeterminate
+                              color="primary" 
+                            > {{ progressBar(index) }}</v-progress-circular>
+                      </v-card>
+                  </li>
+              </ul>
+              <div id="tips" v-if="File.length==0">
+                  <span><strong>Drop Files</strong></span>
+                  <span>or click to upload</span>
+              </div>
+              <input type="file" multiple ref="file_input" class="d-none" accept="image/*, video/*, application/pdf" @change="getFiles">
+          </div>
+        </v-container>
+      </v-card-text>
+      <v-toolbar class="text-h5 grey lighten-2 text-end d-flex justify-end" flat dense>
+        <v-btn small  @click="submit" :disabled="saveDoc">save</v-btn>
+      </v-toolbar>
       </v-card>
+    </v-dialog>
+     <v-dialog width="400" v-model="editFile" persistent>
+        <v-card>
+          <v-toolbar class="text-h5 grey lighten-2" flat dense>
+            <v-btn small @click="editFile=false, newname=''">cancel</v-btn>
+            <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
+            <span class="subtitle-1  font-weight-normal">Edit name</span>
+          </v-toolbar>
+          <v-card-text class="pa-4 ">
+            <v-form ref="form" lazy-validation>
+              <div>
+                <v-text-field
+                type="text"
+                v-model="newname"
+                label="New file name"
+                :rules="nameRules"
+                ></v-text-field>
+              </div>
+            </v-form>
+          </v-card-text>
+           <v-toolbar class="text-h5 grey lighten-2 d-flex justify-end" flat dense>
+              <v-btn small @click="saveNewName()" >Save</v-btn>
+          </v-toolbar>
+          <!-- <v-card-actions class="justify-end">
+              <v-btn small @click="save()">Save</v-btn>
+          </v-card-actions> -->
+        </v-card>
     </v-dialog>
   </v-row>
 </template>
 
 <script>
 import { returnStatement } from '@babel/types';
+import iconHelper from '@/mixins/iconHelper'
 
   export default {
+   mixins: [iconHelper],
+
     props: {
         showUploadForm:{
             type:Boolean,
@@ -54,29 +112,39 @@ import { returnStatement } from '@babel/types';
     data(){
         return{
             showDialog :false,
+            editFile :false,
+            saveDoc:true,
             File:[],
             preview:[],
             value: [],
+            newname:'',
+            editindex:'',
+            items: [
+              { id:1,title: 'Edit' },
+              { id:2, title: 'Delete' },
+            ],
+            closeOnContentClick: true,
+            nameRules: [
+              v => !!v || 'New Name is required',
+            ],
         }
     },
     watch: {
       showUploadForm: function(value) {
         this.showDialog = this.showUploadForm;
         },
-        // File: {
-        //   handler(value) {
-        //     value.forEach((item,index) => {
-        //       this.submit(item, index).then(
-        //       )
-        //     });
-        //   }
-        // }
-        // File: function(value) {
-        //   console.log(value);
-        // }
     },
     mounted(){
         this.showDialog = this.showUploadForm;
+    },
+    filters: {
+        truncate: function (text, length, suffix) {
+            if (text.length > length) {
+                return text.substring(0, length) + suffix;
+            } else {
+                return text;
+            }
+        },
     },
     methods: {
         dialog(bool){
@@ -107,10 +175,12 @@ import { returnStatement } from '@babel/types';
             this.$refs.file_input.click()
         },
         progressBar(index) {
+          this.saveDoc = true;
           const thiss = this;
             setTimeout(function(scope) {
                thiss.value.splice(index, 1);
                thiss.value.splice(index, 0, false);
+                thiss.saveDoc = false;
                return;
             },2000, this);
         },
@@ -141,25 +211,73 @@ import { returnStatement } from '@babel/types';
                     data['file'] = e.target.result,
                     this.value.push(val);
                     this.File.push(data);
-                    this.submit(data);
+                    // this.submit(data);
                   };
                   reader.readAsDataURL(input.files[i]);
               }
           }
         },
-        submit(value){
-          this.$axios
-          .post(`documents`,{
-              coach_id :  this.$auth.user.id,
-              file : value.file,
-              file_type : value.type,
-              file_size : value.size,
-              }
-          )
-          .then(({ data }) => {
-              console.log(data);
+        submit(){
+          var ctr = 0;
+          this.File.forEach((value, index) => {
+            this.$axios
+              .post(`documents`,{
+                  coach_id :  this.$auth.user.id,
+                  file : value.file,
+                  file_type : value.type,
+                  file_size : value.size,
+                  file_name : value.name,
+                  }
+              )
+              .then(({ data }) => {
+
+                  ctr++;
+                  if(ctr==this.File.length){
+                    this.showDialog = false;
+                    this.$emit('hideForm',false);
+                    this.File =[];
+                    this.successdocumentsNotification("added");
+                  }               
+              });
           });
-        }
+        },
+        groupAction(id,index, item){
+          if(id ==2){
+            this.File.splice(index, 1);
+          }
+          else{
+            this.editindex = index;
+            this.editFile = true;
+            this.newname = item.name;
+          }
+        },
+        saveNewName(){
+          if(this.$refs.form.validate() == false){
+            return;
+          }
+          var data = {
+              type : this.File[this.editindex]['type'],
+              size : this.File[this.editindex]['size'],
+              name : this.newname,
+              file : this.File[this.editindex]['file'],
+           }
+          this.successdocumentsNotification("update");
+          this.File[this.editindex] =data ;
+          this.editFile = false;
+          this.newname = '';
+        },
+        iconSelector(item){
+     
+          const getype = item.type.split("/");
+          console.log(this.types);
+          // let srcIcon = this.types.find(type => type.type == item.type)
+          let srcIcon = this.types.find(type => type.type == getype[1])
+          if(item.type =='image'){
+            return item.data
+          }
+          return srcIcon ? srcIcon.icon : this.unverifyIcon
+        },
+        
     }
   }
 </script>
@@ -197,7 +315,7 @@ import { returnStatement } from '@babel/types';
      width: 120px;
     height: 100px;
     border-radius: 4px;
-    object-fit: cover;
+    object-fit: contain;
 }
 figcaption.card-caption{
     /* position: absolute;
@@ -241,5 +359,14 @@ ul.list li{
   width: 120px;
   height: 100px;
   object-fit: fill;
+}
+#actionGroup{
+    float: right;
+    position: absolute;
+    bottom: 4px;
+    right: 0;
+}
+#v-list-wrapper .v-list-item {
+  min-height: 30px !important;
 }
 </style>

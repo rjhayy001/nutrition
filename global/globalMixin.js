@@ -1,9 +1,9 @@
 import Vue from 'vue'
 Vue.mixin({
-    data(){
-      return {
-        select_addOn:  { name: 'All', id:0}
-      }
+    data() {
+        return {
+            select_addOn: { name: 'All', id: 0 }
+        }
     },
     methods: {
         getIds(items) {
@@ -20,6 +20,20 @@ Vue.mixin({
                 this.$awn.success(`Successfully ${action} ${suffixSingular} <strong>${selectedItem[key]}</strong>.`)
             }
         },
+        successDeleteNotification(action = '') {
+            this.$awn.success(`Successfully ${action} <strong> documents </strong> `)
+        },
+        successdocumentsNotification(message = '') {
+            this.$awn.success(`Successfully ${message} <strong> documents </strong> `)
+        },
+        successfeedbackNotification(message = '') {
+            this.$awn.success(`Successfully ${message} <strong> feedback </strong> `)
+        },
+
+        chatNotification(message = '', name = '') {
+            this.$awn.success(`${name} Successfully ${message}`)
+        },
+
         errorNotification(error) {
             this.$awn.alert(`Failed: ${error}`)
         },

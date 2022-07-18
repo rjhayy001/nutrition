@@ -86,7 +86,7 @@
           </v-card>
         </v-flex>
       </v-row>
-    <feed-back-form></feed-back-form>
+    <feed-back-form :feedback_type="type"></feed-back-form>
     </v-container>
   </div>
 </template>
@@ -111,6 +111,7 @@ export default {
     return {
       client: {},
       loading: false,
+      type:'global',
       active_subscription: {
         coaching_started:0,
       },
@@ -194,7 +195,6 @@ export default {
           `${this.$clients}/${this.$route.params.id}/edit?relations=country,city,zipcode,subscriptions`
         )
         .then(({ data }) => {
-          console.log(data, 'test')
           this.client = data;
           this.active_subscription = data.active_subscription ? data.active_subscription[0] : {}
           console.log(this.active_subscription, 'subs')

@@ -34,9 +34,10 @@
           <template v-if="subscriptions.length">
             <v-flex
               xs6
-              class="px-3 py-2"
+              class="px-3 py-2 pointer"
               v-for="subscription in subscriptions"
               :key="subscription.id"
+              @click="toFormula(subscription)"
             >
               <v-card
                 height="90"
@@ -52,7 +53,7 @@
                       tile
                       size="50"
                       color="#f8f8f8"
-                      @click="editRecord(subscription.client)"
+                      @click.stop="editRecord(subscription.client)"
                     >
                       <v-img
                         contain
@@ -89,7 +90,7 @@
                   class="mt-4 pr-3"
                 >
                   <div class="text-right">
-                    <v-icon @click="goTo('client-id-chat', {id: subscription.client_id})">mdi-message-text-outline</v-icon>
+                    <v-icon @click.stop="goTo('client-id-chat', {id: subscription.client_id})">mdi-message-text-outline</v-icon>
                   </div>
                 </div>
               </v-card>
@@ -159,6 +160,9 @@ export default {
     editRecord(item) {
       this.goTo("client-id-profile", { id: item.id });
     },
+    toFormula(item){
+      this.goTo("client-id-coaching-formula-food", {id: item.client_id})
+    }
   }
 }
 </script>

@@ -1,11 +1,10 @@
 <template>
-   <!-- <v-container grid-list-md class="main-container" @contextmenu.prevent="show" > -->
    <v-container grid-list-md class="main-container" >
     <v-layout row wrap >
       <v-flex xs12 class="mb-4">
         <div class="d-flex align-center py-2 data-table-cus">
           <p class="title mr-1">
-            Documents
+            Coach Documents
           </p>
           <v-spacer></v-spacer>
           <div style="width: 400px;">
@@ -49,6 +48,51 @@
         <hr />
       </v-flex>
     </v-layout>
+    <!-- <v-layout row wrap>
+      <v-flex xs12 class="pb-5">
+        <div class="toolbar-container">
+          <v-toolbar  dense id="header_toolbar" >
+            <v-toolbar-title class="title-header">Documents</v-toolbar-title>
+            <v-spacer></v-spacer>
+             <div style="width: 400px;">
+              <v-text-field
+                clearable
+                filled
+                @input="findDocuments"
+                rounded
+                hide-details=""
+                placeholder="Search"
+                dense
+                v-model="param.search"
+                append-icon="mdi-magnify"
+              ></v-text-field>
+             </div>
+             <div style="width: 200px;" id="types">
+                <v-select
+                  @change="getSelectedFilter"
+                  rounded
+                  :items="type"
+                  label="type"
+                  item-text="type"
+                  item-value="id"
+                  clearable
+                  dense
+                  outlined
+                  v-model="param.idfilter"
+                ></v-select>
+                
+             </div>
+            <v-icon
+              class="mx-2"
+              @click="default_view = !default_view"
+            >
+              {{!default_view ? 'mdi-view-grid-outline' : 'mdi-format-list-bulleted'}}
+            </v-icon>
+            <v-icon class="mx-2" @click="show">mdi-plus</v-icon>
+          </v-toolbar>
+        </div>
+      </v-flex>
+    </v-layout> -->
     <input type="file" multiple ref="file_input" class="d-none">
     <file-viewer v-if="default_view == false"
       :files="Files"
@@ -144,7 +188,7 @@ export default {
     },
     getDocuments () {
       this.$axios
-        .get(`documents/`+this.$auth.user.id
+        .get(`documents/`+`${this.$route.params.id}`
          )
         .then(({ data }) => {
           this.File =data;
@@ -152,7 +196,7 @@ export default {
     },
     deleteDoc (id) {
       this.$axios
-        .delete(`documents/`+id +'?coach_id='+this.$auth.user.id
+        .delete(`documents/`+id
          )
         .then(({ data }) => {
         this.getDocuments();
@@ -165,7 +209,6 @@ export default {
       this.getDocuments();
     },
     searchFilter(){
-
       if(this.param.search == null && this.param.idfilter == ''){
         this.getDocuments();
         return;
@@ -175,7 +218,7 @@ export default {
             search : this.param.search,
             type : this.param.idfilter,
             client_id:`${this.$route.params.id}`,
-            coach_id:this.$auth.user.id,
+            coach_id:`${this.$route.params.id}`,
           }
         )
         .then(({ data }) => {
