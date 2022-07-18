@@ -11,7 +11,8 @@
       <v-layout row wrap>
         <v-flex xs12 class="pb-5">
         <div class="toolbar-container">
-          <v-toolbar  flat outlined color="primary" dark>
+          <!-- <v-toolbar  flat outlined color="primary" dark> -->
+          <v-toolbar  flat  color="none" >
             <v-toolbar-title class="title-header">Photos</v-toolbar-title>
             <v-spacer></v-spacer>
             <div style="width: 400px;">
@@ -104,6 +105,8 @@
             <!-- <pinned-messages/> -->
           </v-toolbar>
         </div>
+          <hr />
+
         </v-flex>
 
       </v-layout>
