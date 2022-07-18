@@ -50,7 +50,13 @@ export default {
         .then(({ data }) => {
           console.log(data, 'tessst')
           this.initalize()
-        });
+        })
+        .finally(() => {
+          this.$axios.get(`${this.$subscriptions}/start_coaching/${payload.subscription_id}`).then(({ data }) => {
+          this.fullNotification(data)
+          this.$store.commit('updateTrackingFlag', true)
+          })
+        })
     },
     initalize () {
       this.loading = true

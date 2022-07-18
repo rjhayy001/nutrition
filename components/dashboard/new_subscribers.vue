@@ -95,7 +95,7 @@
                      <p
                       class="font-weight-bold  overline underline pointer"
                       style="font-size:10px !important"
-                      @click="startCoaching(subscription.id)"
+                      @click="startCoaching(subscription)"
                       v-if="subscription.form_status"
                     >
                       <u>start coaching</u>
@@ -162,12 +162,13 @@ export default {
     editRecord (item) {
       this.goTo("client-id-profile", { id: item.id });
     },
-    startCoaching(id){
-      this.$axios.get(`${this.$subscriptions}/start_coaching/${id}`).then(({ data }) => {
-        this.fullNotification(data)
-        this.$store.commit('updateTrackingFlag', true)
-        this.initialize()
-      })
+    startCoaching(subs){
+      this.goTo("client-id-coaching-tracking", {id: subs.client_id})
+      // this.$axios.get(`${this.$subscriptions}/start_coaching/${id}`).then(({ data }) => {
+      //   this.fullNotification(data)
+      //   this.$store.commit('updateTrackingFlag', true)
+      //   this.initialize()
+      // })
     }
   }
 }

@@ -31,7 +31,8 @@
               @click="$emit('openDrawer')"
             >
               <v-icon left>mdi-plus</v-icon>
-              modifier les macros
+                    {{active_subs.coach_macros ? active_subs.coach_macros.length ? 'modifier les macros' : 'Définir des macros' : ''}}
+
             </v-btn>
           </div>
         </v-flex>
