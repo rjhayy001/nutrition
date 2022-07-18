@@ -7,25 +7,29 @@
     </v-flex>
     <v-flex xs4 class="pl-3">
       <v-select flat dense filled :items="months" item-text="short_name" item-value="value"
-        placeholder="Please choose a month..." v-model="payload.month" @change="change()"></v-select>
+        placeholder="Please choose a month..." v-model="payload.month" @change="change()" :disabled="!disable"></v-select>
     </v-flex>
     <v-flex xs4>
-      <v-select flat dense filled :items="days" placeholder="Please choose a month..." v-model="payload.day" @change="change()">
+      <v-select flat dense filled :items="days" placeholder="Please choose a month..." v-model="payload.day" @change="change()" :disabled="!disable">
       </v-select>
     </v-flex>
     <v-flex xs4 class="pr-3">
       <v-select flat dense filled :items="years" placeholder="Please choose a month..." v-model="payload.year"
-        @change="change()">
+        @change="change()" :disabled="!disable">
       </v-select>
     </v-flex>
   </v-row>
 </template>
 <script>
+
 export default {
   props: {
     birthday: {
       type: String,
     },
+    disable: {
+      type: Boolean
+    }
   },
   data() {
     return {
@@ -62,19 +66,21 @@ export default {
       if (!this.days.includes(this.payload.day)) {
         this.payload.day = this.days[0]
       }
-      this.$emit('birthday', this.payload);
+      let formattedBday = this.payload.year + '-' + this.payload.month + '-' + this.payload.day;
+      this.$emit('birthday', formattedBday);
     },
     today() {
+      console.log(this.disable)
       let date = this.birthday ? this.birthday : new Date().toISOString().slice(0, 10);;
       let stringDateToArray = date.split('-');
       this.payload.day = stringDateToArray[2];
       this.payload.month = stringDateToArray[1];
       this.payload.year = stringDateToArray[0];
-      this.day(this.payload.month, this.payload.year, this.payload.day);
+      this.day(this.payload.year, this.payload.month, this.payload.day);
     },
-    day(month, year, day) {
+    day(year, month, day) {
       var days = []
-      var numOfDays = new Date(month, year, 0).getDate();
+      var numOfDays = new Date(year,month, 0).getDate();
       for (var i = numOfDays; i >= 1; i--) {
         days.push(i)
       }

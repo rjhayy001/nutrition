@@ -62,7 +62,7 @@
                 </v-flex>
                 <v-flex xs6>
                   <ValidationProvider slim>
-                    <custom-datepicker @birthday="birthday" :birthday="date"></custom-datepicker>
+                    <custom-datepicker @birthday="birthday" :birthday="date" :disable="true"></custom-datepicker>
                   </ValidationProvider>
                 </v-flex>
                 <v-flex xs12>
@@ -334,8 +334,7 @@ export default {
       this.$emit('reload')
     },
     birthday(date) {
-      let formattedBday = date.year + '-' + date.month + '-' + date.day;
-      this.payload.birthday = formattedBday;
+      this.payload.birthday = date;
     }
   },
 };
