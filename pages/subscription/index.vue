@@ -251,6 +251,7 @@ methods: {
       this.url = `${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client,coach`
     })
   },
+  
   addSubscription(payload) {
     console.log(payload,"add")
     this.$axios.post(`${this.$subscriptions}`, payload).then(({ data }) => {
