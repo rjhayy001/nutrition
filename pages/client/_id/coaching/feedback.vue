@@ -8,18 +8,18 @@
               Historique des feedback
             </p>
             <v-spacer></v-spacer>
-            <div style="width: 300px;" id="types">
-                  <v-select
-                    clearable
-                    rounded
-                    :items="filter_type"
-                    label="Filter by type"
-                    dense
-                    outlined
-                    v-model="f_type"
-                    hide-details="true"
-                    @change="searchList"
-                  ></v-select>
+            <div style="width: 200px;" id="types">
+              <v-select
+                :items="filter_type"
+                placeholder="Filter by type"
+                v-model="f_type"
+                filled
+                solo
+                dense
+                rounded
+                hide-details="true"
+                @change="searchList"
+              ></v-select>
             </div>
           </div>
           <hr />
@@ -153,10 +153,10 @@ export default {
       deletedialog:false,
       deleteId:'',
       feedbackCount:[],
-      f_type:'',
+      f_type:'all',
       editdata:{},
       type:'feedback',
-      filter_type: ['all','global', 'formulaire', 'measure', 'tracking','photos','feedback'],
+      filter_type: ['all','global', 'formulaire', 'measures', 'tracking','photos','feedback'],
     };
   },
   mounted () {
@@ -311,13 +311,13 @@ export default {
 
 /* Track */
 #cont-wrapper::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey; 
+  box-shadow: inset 0 0 5px grey;
   border-radius: 10px;
 }
 
 /* Handle */
 #cont-wrapper::-webkit-scrollbar-thumb {
-  background: rgb(195, 195, 204); 
+  background: rgb(195, 195, 204);
   border-radius: 10px;
 }
 

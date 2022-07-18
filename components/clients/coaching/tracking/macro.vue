@@ -46,6 +46,7 @@
                   <v-toolbar
                     dense
                     flat
+                    class="mb-3"
                   >
                     <v-toolbar-title class="font-weight-medium text-capitalize">son tracking (MACRO)</v-toolbar-title>
                     <v-spacer></v-spacer>
@@ -56,6 +57,7 @@
                       :return-value.sync="dates"
                       transition="scale-transition"
                       offset-y
+                      left
                       min-width="auto"
                     >
                       <template v-slot:activator="{ on, attrs }">
@@ -64,8 +66,10 @@
                           label="Picker in menu"
                           prepend-icon="mdi-calendar"
                         ></v-text-field> -->
-                         <div class="mb-1">
+                         <div class="mb-1" style="width:230px;">
                           <v-text-field
+                            outlined
+                            dense
                             v-model="textDateValue"
                             placeholder="Choose Date..."
                             type="text"
@@ -101,6 +105,7 @@
                       </v-date-picker>
                     </v-menu>
                   </v-toolbar>
+                  <!-- <v-divider class="my-4"></v-divider> -->
                   <line-chart :height="360" :chartData="chart_data"></line-chart>
                 </v-card>
               </v-flex>
@@ -177,6 +182,13 @@ export default {
       },
     }
   },
+  props: {
+    active_subs: {
+      type: Object,
+      default: () => {
+      },
+    },
+  },
   computed: {
     textDateValue() {
      return this.dates.join(' ~ ')
@@ -185,22 +197,22 @@ export default {
       return [
         {
           title: 'Protein',
-          value: 0,
+          value: this.active_subs.set_macro ? this.active_subs.set_macro.protein : 0,
           type: 'number'
         },
         {
           title: 'Lipides',
-          value: 1,
+          value: this.active_subs.set_macro ? this.active_subs.set_macro.lipid : 0,
           type: 'number'
         },
         {
           title: 'Glucides',
-          value: 2,
+          value: this.active_subs.set_macro ? this.active_subs.set_macro.carbohydrate : 0,
           type: 'number'
         },
         {
           title: 'Legumes',
-          value: 3,
+          value: this.active_subs.set_macro ? this.active_subs.set_macro.vegetable : 0,
           type: 'number'
         },
       ]

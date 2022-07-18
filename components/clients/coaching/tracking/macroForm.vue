@@ -234,10 +234,10 @@ export default {
       payload: {
         type:'portions',
         date:new Date().toISOString().substr(0, 10),
-        protein: 0,
+        protein: 1,
         lipid: 1,
-        carbohydrate: 2,
-        vegetable: 3,
+        carbohydrate: 1,
+        vegetable: 1,
       },
       DefaultOptions: [
         { value: 'portions', text: "Portions" },
@@ -254,6 +254,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    active_subs: {
+      type: Object,
+      default: () => {},
+    },
   },
   methods: {
     reset() {
@@ -262,6 +266,8 @@ export default {
     saveForm() {
       this.$refs.form.validate().then((result) => {
         if (!result) return;
+        this.payload['subscription_id'] = this.active_subs.id
+        this.payload['coach_id'] = this.active_subs.coach_id
         if (this.payload.id) {
           this.$emit("updateRecord", this.payload);
         } else {

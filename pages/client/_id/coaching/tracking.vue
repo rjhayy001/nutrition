@@ -4,10 +4,11 @@
         @addRecord="addRecord($event)"
         @updateRecord="updateRecord($event)"
         :selectedItem="selectedItem"
+        :active_subs="active_subscription"
       />
     <v-row justify="center">
       <v-expansion-panels accordion  v-model="panel">
-        <macro-view @openDrawer="drawer =! drawer"></macro-view>
+        <macro-view @openDrawer="drawer =! drawer" :active_subs="active_subscription"></macro-view>
         <daily-view></daily-view>
       </v-expansion-panels>
     </v-row>
@@ -32,7 +33,39 @@ export default {
       type:'tracking',
       selectedItem:{},
       drawer:false,
+      loading:false,
+      client:{},
+      active_subscription:{
+        id:0
+      }
     }
   },
+  mounted(){
+    this.initalize()
+  },
+  methods:{
+    addRecord(payload){
+      this.$axios
+        .post(`${this.$macros}`, payload)
+        .then(({ data }) => {
+          console.log(data, 'tessst')
+          this.initalize()
+        });
+    },
+    initalize () {
+      this.loading = true
+      this.$axios
+        .get(
+          `${this.$clients}/${this.$route.params.id}/edit?relations=activeSubscription`
+        )
+        .then(({ data }) => {
+          this.client = data
+          this.active_subscription = data.active_subscription[0]
+          console.log(data.active_subscription[0], 'macro')
+          this.loading = false
+        });
+
+    }
+  }
 }
 </script>
