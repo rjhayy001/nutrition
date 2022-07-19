@@ -60,7 +60,6 @@ Vue.mixin({
             return url;
         },
         download(data, payload) {
-
             const url = window.URL.createObjectURL(new Blob([data]));
             const link = document.createElement('a');
             link.href = url;
@@ -72,7 +71,7 @@ Vue.mixin({
         downloadClientPhoto(data, payload) {
 
             const getExt = payload.file_name.split(".");
-            const url = window.URL.createObjectURL(new Blob([data]));
+            const url = window.URL.createObjectURL(new Blob([data.data]));
             const link = document.createElement('a');
             link.href = url;
             // link.setAttribute('download', payload.file_name);

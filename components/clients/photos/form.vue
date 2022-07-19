@@ -127,7 +127,7 @@
                     dense
                     v-model="photoPayload.taggable"
                     :items="tagsItem"
-                    :label="this.$t('clients.selectGroups')"
+                    :label="this.$t('clients.selectTags')"
                     hide-details="auto"
                     prepend-inner-icon="mdi-plus"
                     @click:prepend-inner.stop="tagDrawer = !tagDrawer"
@@ -159,6 +159,7 @@
           outlined
           small
           color="primary"
+          @click="$emit('download', selectedItem)"
           >
             <v-icon color="primary">mdi-download</v-icon>
           </v-btn>

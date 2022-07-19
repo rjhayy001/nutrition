@@ -5,6 +5,7 @@
         @addRecord="addRecord($event)"
         @updateRecord="updateRecord($event)"
         @addComment="addComment"
+        @download="downloadImage"
         @updateComment="updateComment"
         :selectedItem="selectedItem"
       />
@@ -230,16 +231,20 @@ export default {
       this.selectedItem = this.cloneVariable(item)
       this.drawer1 = true
     },
-    // openDetails(item={}){
-    //   this.drawer1 = !this.drawer1
-    //   this.selectedItem = this.cloneVariable(item)
-    // },
     downloadImage(payload){
-      payload['client_id'] = this.$route.params.id
-      this.$axios.post(`${this.$images}/download`, payload).then(({data}) => {
-        console.log(data)
-        this.download(data, payload)
-      })
+      this.$axios({
+          url: `images/download?&client=${payload.pivot.imagable_id}&file=${payload.pivot.images_id}`,
+          method: 'GET',
+          responseType: 'blob',
+      }).then((response) => {
+        this.downloadClientPhoto(response, payload)
+          // const url = window.URL.createObjectURL(new Blob([response.data]));
+          // const link = document.createElement('a');
+          // link.href = url;
+          // link.setAttribute('download', payload.file_name); //or any other extension
+          // document.body.appendChild(link);
+          // link.click();
+      });
     },
     addComment(payload){
       this.$axios.post(`coaches/add-comment`, payload).then(({data}) => {
