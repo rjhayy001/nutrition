@@ -139,16 +139,21 @@
             v-model="message"
           >
             <template v-slot:prepend-inner>
-              <v-icon class="mr-1"  @click="handleFileImport">mdi-upload</v-icon>
-              <input
-                    accept="image/png, image/gif, image/jpeg, video/*, application/pdf"
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon class="mr-1" v-bind="attrs" v-on="on"  @click="handleFileImport">mdi-upload</v-icon>
+                </template>
+                <span>Upload</span>
+              </v-tooltip>
+              <input accept="image/png, image/gif, image/jpeg, video/*, application/pdf"
                     ref="uploader"
                     type="file"
                     @change="onFileChange"
                     class="d-none"
                     multiple
               />
-              <user-photos @confirm="confirmPhotos" :sdata="sdata"></user-photos>
+                <user-photos @confirm="confirmPhotos"  :sdata="sdata"></user-photos>
+             
               <v-divider vertical class="mx-2"></v-divider>
             </template>
             <template v-slot:append>
@@ -345,6 +350,7 @@
               }
           )
           .then(({ data }) => {
+           
             this.sdata = data;
             this.getPinnedMessage();
             this.message ='';
