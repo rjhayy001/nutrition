@@ -5,6 +5,7 @@
       offset-y
       v-model="menu"
       :close-on-click="false"
+      :transition="false"
       :close-on-content-click="false"
     >
       <template v-slot:activator="{ on, attrs }">
@@ -79,6 +80,11 @@ export default {
       menu: false
     }
   },
+  mounted(){
+    setTimeout(() =>{
+      this.menu = true
+    }, 300);
+  },
   methods:{
     submit(){
       this.payload.type = this.feedback_type;
@@ -92,7 +98,6 @@ export default {
           else{
             this.successfeedbackNotification('update')
           }
-          this.menu= false
           this.payload.feedbackscol = ''
           this.payload.id = ''
         })
