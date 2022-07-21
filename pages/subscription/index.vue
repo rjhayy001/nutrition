@@ -2,9 +2,10 @@
   <v-container>
     <subscription-form
       :drawerStatus="drawer"
-      :selectedItem="selectedItem"
-      @closeDrawer="drawer = false"
       @addRecord="addSubscription($event)"
+      @closeDrawer="drawer = false"
+      :reload="reload"
+      @reloadFalse="reload = false"
     />
     <v-dialog v-model="dialog" max-width="500px" style="z-index=100">
       <v-card>
@@ -198,6 +199,7 @@ export default {
       dialog: false,
       selectedItem: {},
       isDescending: true,
+      reload: false,
       datapayload: [],
       url: '',
       statuses: [
@@ -245,7 +247,6 @@ mounted() {
 methods: {
   initialize() {
     this.$axios.get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client,coach`).then(({ data }) => {
-      console.log(data.data,"dadadadadaa")
       this.data = data.data
       this.options = data.options
       this.url = `${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client,coach`
@@ -253,20 +254,19 @@ methods: {
   },
   
   addSubscription(payload) {
-    console.log(payload,"add")
     this.$axios.post(`${this.$subscriptions}`, payload).then(({ data }) => {
       if(data=='client_exist'){
         this.dialog=true
       }else{
+        this.drawer=false
         this.successNotification(payload,"create","subscription","subscriptions","full_name");
         this.initialize()
-        this.drawer=false
       }
     });
   },
   close() {
     this.dialog = false
-    this.drawer = false
+    this.drawer=true
   },
   updatePlan(payload) {
     console.log(payload,"update")
@@ -299,6 +299,7 @@ methods: {
     ).then(() => {
       let ids = items.id
       this.$axios.delete(`${this.$subscriptions}/${ids}`).then(({ data }) => {
+        this.reload=true
         this.successNotification(items.client, 'annulé', 'abonnement', 'abonnements', 'full_name')
         this.initialize()
       }).catch((error) => {
@@ -313,7 +314,7 @@ methods: {
       "restaurer"
     ).then(() => {
       this.$axios.patch(`${this.$subscriptions}/${item.id}/restore`).then(({ data }) => {
-
+        this.reload=true
         this.successNotification(item.client, 'réstauré', 'abonnement', 'abonnements', 'full_name')
         console.log(item.client,"itemsssss")
         this.initialize()

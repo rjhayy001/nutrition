@@ -29,15 +29,15 @@
                                         Client
                                     </p>
                                     <v-autocomplete 
-                                        clearable 
-                                        :label="$t('subscription.selectClient')" 
-                                        :items="clients" 
-                                        item-value="id" 
-                                        v-model="payload.client_id" 
-                                        :filter="filterClients" 
-                                        hide-details="auto" 
                                         solo
+                                        clearable 
+                                        item-value="id" 
+                                        hide-details="auto" 
+                                        v-model="payload.client_id" 
+                                        :items="clients" 
+                                        :filter="filterClients"
                                         :error-messages="errors"
+                                        :label="$t('subscription.selectClient')" 
                                     >
                                         <template v-slot:item="{ item, on, attrs }">
                                             <v-list-item v-on="on" v-bind="attrs">
@@ -62,6 +62,9 @@
                                             </v-flex>
                                         </template>
                                     </v-autocomplete>
+                                    <span v-if="active_status" class="error--text v-messages v-messages__message">
+                                        This user has already have active subscription
+                                    </span>
                                 </ValidationProvider>
                             </v-flex>
 
@@ -76,15 +79,15 @@
                                         {{ $t('global.coach') }}
                                     </p>
                                     <v-autocomplete 
-                                        clearable 
-                                        :label="$t('subscription.selectCoach')" 
-                                        :items="coaches" 
-                                        item-value="id" 
-                                        v-model="payload.coach_id" 
-                                        :filter="filterClients" 
-                                        hide-details="auto" 
                                         solo
+                                        clearable 
+                                        item-value="id" 
+                                        hide-details="auto" 
+                                        v-model="payload.coach_id" 
+                                        :items="coaches" 
+                                        :filter="filterClients" 
                                         :error-messages="errors"
+                                        :label="$t('subscription.selectCoach')" 
                                     >
                                         <template v-slot:item="{ item, on, attrs }">
                                             <v-list-item v-on="on" v-bind="attrs">
@@ -185,6 +188,7 @@
                                         <template v-slot:item="{ item, on, attrs }">
                                             <v-list-item v-on="on" v-bind="attrs">
                                                 <v-list-item-content>
+                                            
                                                     <v-list-item-title>
                                                         {{ item | computePlanPrice }}
                                                     </v-list-item-title>
@@ -250,6 +254,7 @@ export default {
             drawer:false,
             originalPayload: null,
             loading:true,
+            active_status:false,
         }
     },
     props: {
@@ -257,53 +262,75 @@ export default {
             type: Boolean,
             default: () => false,
         },
-
-        selectedItem: {
-            type:Object,
-            default:() => {}
-        }
+        reload: {
+            type: Boolean,
+            default: () => false,
+        },
     },
 
     mounted() {
-        this.fetchPlans()
-        this.fetchClients()
-        this.fetchCoaches()
+        this.initialize()
     },
     watch: {
         drawerStatus(val) {
             this.drawer = val;
+            this.initialize()
         },
         drawer(val) {
-            console.log(val)
             if (!val) {
                 this.$emit("closeDrawer");
                 this.loading=true
             }
-            
         },
         "payload.plan_id": {
             handler(val) {
                 if(val) {
                     let dataplan=this.plans.find(plan => plan.id === this.payload.plan_id);
-                        if(dataplan.prices.length!=0){
-                            this.price_id = 1;
-                            let dataprice = dataplan.prices
-                            this.payload.price_id = dataprice[0].id;
-                        }
+                    if(dataplan.prices.length!=0){
+                        this.price_id = 1;
+                        let dataprice = dataplan.prices
+                        this.payload.price_id = dataprice[0].id;
                     }
+                }
             },
         },
+        "payload.client_id": {
+            handler(val) {
+                this.active_status=false
+                let dataset=this.clients.find(client =>  client.id == this.payload.client_id)
+                if(val){
+                    if(dataset.active_subscription.length!=0) {
+                        this.active_status=true
+                    }else{
+                        this.active_status=false
+                    }
+                }
+            }
+        },
+        reload(val) {
+            if(val) {
+                this.reset()
+                this.$emit("reloadFalse")
+            }
+        }
     },
 
     methods: {
         async saveForm () {
-            this.loading=false
-            this.$refs.form.validate().then((result) => {
-                if (!result) return;
-                this.$emit('addRecord', this.payload)
-                // this.$refs.form.resetValidation();
-                this.reset()
-            });
+            if(!this.active_status) {
+                this.$refs.form.validate().then((result) => {
+                    if (!result) return;
+                    this.loading=false
+                    this.$emit('addRecord', this.payload)
+                    this.reset()
+                });
+            }
+        },
+
+        initialize() {
+            this.fetchPlans()
+            this.fetchClients()
+            this.fetchCoaches()
         },
 
         async reset() {
@@ -313,8 +340,6 @@ export default {
                 plan_id: null,
                 price_id:null,
             }
-            this.errors.clear()
-            this.$refs.form.resetValidation();
         },
 
         async fetchClients() {
