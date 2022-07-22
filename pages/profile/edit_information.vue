@@ -210,9 +210,9 @@ export default {
         logo: "",
         address_1: "",
         address_2: "",
-        city: "",
-        zipcode: "",
-        country: "",
+        city_id: "",
+        zipcode_id: "",
+        country_id: "",
         status: 1,
         taggable: [],
         groupable: [],
@@ -238,14 +238,14 @@ export default {
       this.payload.city_id = this.payload.city.id
       this.payload.zipcode_id = this.payload.zipcode.id
       this.payload.country_id = this.payload.country.id
-      console.log(this.payload)
       this.$refs.form.validate().then((result) => {
         if (!result) return;
         if (result) {
           this.$axios
             .put(`${this.$coaches}/${this.$auth.user.id}`, this.payload)
             .then(({ data }) => {
-              this.fullNotification('')
+              console.log(data)
+              this.fullNotification('Your Changes have been succesfuly saved!')
             });
         }
       });

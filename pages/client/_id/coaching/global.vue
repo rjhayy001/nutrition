@@ -8,85 +8,43 @@
     {{active_subscription}} -->
     <v-container class="mt-4">
       <v-row>
-        <v-flex
-          xs4
-          class="px-3"
-        >
-          <subscription-info
-            :client="client"
-            :active_subscription="active_subscription"
-            @reload="initialize"
-          >
+        <v-flex xs4 class="px-3">
+          <subscription-info :client="client" :active_subscription="active_subscription" @reload="initialize">
           </subscription-info>
         </v-flex>
         <v-flex xs4>
-          <calls-feedback
-            :client="client"
-            :loading="loading"
-            :active_subscription="active_subscription"
-          ></calls-feedback>
+          <calls-feedback :client="client" :loading="loading" :active_subscription="active_subscription">
+          </calls-feedback>
         </v-flex>
-        <v-flex
-          xs4
-        >
-          <calls-feedback
-            :client="client"
-            :loading="loading"
-            :active_subscription="active_subscription"
-          ></calls-feedback>
+        <v-flex xs4>
+          <calls-feedback :client="client" :loading="loading" :active_subscription="active_subscription">
+          </calls-feedback>
         </v-flex>
-        <v-flex
-          xs6
-          class="mt-4 px-2"
-        >
-          <v-card
-            style="overflow:auto"
-            height="450"
-            class="pa-3"
-          >
-            <v-toolbar
-              flat
-              dense
-            >
-              <v-toolbar-title class="font-weight-medium">Dernier feedback il y a 7 jours</v-toolbar-title>
-            </v-toolbar>
-            <v-data-table
-              :headers="headers"
-              :items="desserts"
-              hide-default-footer
-              hide-default-header
-              :items-per-page="-1"
-              class="elevation-1 stripe-table"
-            ></v-data-table>
+        <v-flex xs6 class="mt-4 px-2">
+          <v-toolbar flat dense>
+            <v-toolbar-title class="font-weight-medium">Dernier feedback il y a 7 jours</v-toolbar-title>
+          </v-toolbar>
+          <v-card style="overflow:auto" height="450" class="pa-3">
+
+            <v-data-table :headers="headers" :items="histories" hide-default-footer hide-default-header
+              :items-per-page="-1" class="elevation-1 stripe-table">
+              <template v-slot:item.created_at="{ item }">
+                {{defaultDate(item.created_at)}}
+              </template>
+            </v-data-table>
           </v-card>
         </v-flex>
-         <v-flex
-          xs6
-          class="mt-4 px-2"
-        >
-          <v-card
-            style="overflow:auto"
-            height="450"
-            class="pa-3"
-          >
-            <v-toolbar
-              flat
-              dense
-            >
-              <v-toolbar-title class="font-weight-medium">Tous les points hebdomadaires</v-toolbar-title>
-            </v-toolbar>
-            <v-data-table
-              :headers="headers"
-              :items="desserts"
-              hide-default-footer
-              hide-default-header
-              :items-per-page="-1"
-              class="elevation-1 stripe-table"
-            ></v-data-table>
+        <v-flex xs6 class="mt-4 px-2">
+          <v-toolbar flat dense>
+            <v-toolbar-title class="font-weight-medium">Tous les points hebdomadaires</v-toolbar-title>
+          </v-toolbar>
+          <v-card style="overflow:auto" height="450" class="pa-3">
+            <v-data-table :headers="headers" hide-default-footer hide-default-header :items-per-page="-1"
+              class="elevation-1 stripe-table"></v-data-table>
           </v-card>
         </v-flex>
       </v-row>
-    <feed-back-form :feedback_type="type"></feed-back-form>
+      <feed-back-form :feedback_type="type" @reload="initialize"></feed-back-form>
     </v-container>
   </div>
 </template>
@@ -107,88 +65,26 @@ export default {
     priceHelperVue,
     dateHelper
   ],
-  data () {
+  data() {
     return {
       client: {},
       loading: false,
-      type:'global',
+      type: 'global',
       active_subscription: {
-        coaching_started:0,
+        coaching_started: 0,
       },
       headers: [
-        {
-          text: 'Dessert (100g serving)',
-          align: 'start',
-          sortable: false,
-          value: 'name',
-        },
-        { text: 'Calories', value: 'calories' },
+        { text: 'Action', value: 'logs' },
+        { text: 'Date', value: 'created_at' },
       ],
-      desserts: [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: '1%',
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: '1%',
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: '7%',
-        },
-        {
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: '8%',
-        },
-        {
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: '16%',
-        },
-        {
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: '0%',
-        },
-        {
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: '2%',
-        },
-      ],
+      histories: [],
     }
   },
-  mounted () {
+  mounted() {
     this.initialize();
   },
   methods: {
-    initialize () {
+    initialize() {
       this.loading = true
       this.$axios
         .get(
@@ -199,6 +95,15 @@ export default {
           this.active_subscription = data.active_subscription ? data.active_subscription[0] : {}
           console.log(this.active_subscription, 'subs')
           this.loading = false
+          this.getHistory();
+        });
+    },
+    getHistory() {
+      this.$axios
+        .get(`${this.$history}/${this.active_subscription.id}`)
+        .then(({ data }) => {
+          this.histories = data
+          console.log(data, 'data')
         });
     },
   }

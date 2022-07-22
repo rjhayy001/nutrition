@@ -43,7 +43,7 @@
             color="primary"
             @click="submit"
             :disabled="!payload.feedbackscol"
-          >
+            >
             submit
           </v-btn>
         </div>
@@ -95,6 +95,7 @@ export default {
           this.menu= false
           this.payload.feedbackscol = ''
           this.payload.id = ''
+          this.$emit('reload')
         })
     },
     hideForm(bool){
