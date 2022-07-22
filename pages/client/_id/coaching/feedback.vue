@@ -180,6 +180,7 @@ export default {
   data () {
     return {
       data: [],
+      message:'',
       hover:'',
       hover2:'',
       class:'',

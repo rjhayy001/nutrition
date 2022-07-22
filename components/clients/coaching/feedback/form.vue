@@ -97,16 +97,11 @@ export default {
       this.$axios
         .post(`feedback/addFeedback/`, this.payload)
         .then(({ data }) => {
+          console.log(data)
           this.$store.commit('updateFeedbackFlag', true)
-          if(data.message == 'added success'){
-            this.successfeedbackNotification('added')
-          }
-          else{
-            this.successfeedbackNotification('update')
-          }
+          this.successfeedbackNotification(data.message)
           this.payload.feedbackscol = ''
           this.payload.id = ''
-          localStorage.setItem('id_'+this.$route.params.id);
           this.$emit('reload')
         })
     },

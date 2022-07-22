@@ -1,14 +1,14 @@
 <template>
-    <v-navigation-drawer 
-        temporary 
-        right 
-        fixed 
-        v-model="drawer" 
+    <v-navigation-drawer
+        temporary
+        right
+        fixed
+        v-model="drawer"
         width="50%"
     >
         <div v-show="loading">
             <p class="pa-2 title font-weight-regular text-uppercase d-flex justify-space-between">
-                {{ !payload.id ? this.$t('subscription.addSubscription') : this.$t('subscription.updateSubscription') }} 
+                {{ !payload.id ? this.$t('subscription.addSubscription') : this.$t('subscription.updateSubscription') }}
                 <v-btn icon small @click="$emit('closeDrawer')">
                     <v-icon>mdi-close</v-icon>
                 </v-btn>
@@ -28,16 +28,16 @@
                                     <p class="subtitle-2 font-weight-regular mb-2">
                                         Client
                                     </p>
-                                    <v-autocomplete 
+                                    <v-autocomplete
                                         solo
-                                        clearable 
-                                        item-value="id" 
-                                        hide-details="auto" 
-                                        v-model="payload.client_id" 
-                                        :items="clients" 
+                                        clearable
+                                        item-value="id"
+                                        hide-details="auto"
+                                        v-model="payload.client_id"
+                                        :items="clients"
                                         :filter="filterClients"
                                         :error-messages="errors"
-                                        :label="$t('subscription.selectClient')" 
+                                        :label="$t('subscription.selectClient')"
                                     >
                                         <template v-slot:item="{ item, on, attrs }">
                                             <v-list-item v-on="on" v-bind="attrs">
@@ -78,16 +78,16 @@
                                     <p class="subtitle-2 font-weight-regular mb-2">
                                         {{ $t('global.coach') }}
                                     </p>
-                                    <v-autocomplete 
+                                    <v-autocomplete
                                         solo
-                                        clearable 
-                                        item-value="id" 
-                                        hide-details="auto" 
-                                        v-model="payload.coach_id" 
-                                        :items="coaches" 
-                                        :filter="filterClients" 
+                                        clearable
+                                        item-value="id"
+                                        hide-details="auto"
+                                        v-model="payload.coach_id"
+                                        :items="coaches"
+                                        :filter="filterClients"
                                         :error-messages="errors"
-                                        :label="$t('subscription.selectCoach')" 
+                                        :label="$t('subscription.selectCoach')"
                                     >
                                         <template v-slot:item="{ item, on, attrs }">
                                             <v-list-item v-on="on" v-bind="attrs">
@@ -125,14 +125,14 @@
                                     <p class="subtitle-2 font-weight-regular mb-2">
                                         {{ $t('global.subscription') }}
                                     </p>
-                                    <v-autocomplete 
-                                        clearable 
-                                        :label="$t('subscription.selectSubscription')" 
-                                        v-model="payload.plan_id" 
-                                        :items="plans" 
-                                        item-text="name" 
-                                        item-value="id" 
-                                        hide-details="auto" 
+                                    <v-autocomplete
+                                        clearable
+                                        :label="$t('subscription.selectSubscription')"
+                                        v-model="payload.plan_id"
+                                        :items="plans"
+                                        item-text="name"
+                                        item-value="id"
+                                        hide-details="auto"
                                         solo
                                         :error-messages="errors"
                                     >
@@ -174,21 +174,21 @@
                                     <p class="subtitle-2 font-weight-regular mb-2">
                                         {{ $t('subscription.price') }}
                                     </p>
-                                    <v-autocomplete 
-                                        clearable 
-                                        :label="$t('subscription.selectPrice')" 
-                                        :items="selectedPlan.prices" 
-                                        item-text="name" 
-                                        item-value="id" 
-                                        v-model="payload.price_id" 
-                                        hide-details="auto" 
+                                    <v-autocomplete
+                                        clearable
+                                        :label="$t('subscription.selectPrice')"
+                                        :items="selectedPlan.prices"
+                                        item-text="name"
+                                        item-value="id"
+                                        v-model="payload.price_id"
+                                        hide-details="auto"
                                         solo
                                         :error-messages="errors"
                                     >
                                         <template v-slot:item="{ item, on, attrs }">
                                             <v-list-item v-on="on" v-bind="attrs">
                                                 <v-list-item-content>
-                                            
+
                                                     <v-list-item-title>
                                                         {{ item | computePlanPrice }}
                                                     </v-list-item-title>
@@ -296,8 +296,10 @@ export default {
         },
         "payload.client_id": {
             handler(val) {
+              console.log(this.clients, 'clientss')
                 this.active_status=false
-                let dataset=this.clients.find(client =>  client.id == this.payload.client_id)
+                let dataset=this.clients.find(client =>  client.id === this.payload.client_id)
+                console.log(dataset, 'sttt', this.payload.client_id)
                 if(val){
                     if(dataset.active_subscription.length!=0) {
                         this.active_status=true
@@ -342,9 +344,11 @@ export default {
             }
         },
 
-        async fetchClients() {
-            const { data: response } = await this.$axios.get(`${this.$clients}?no-paginate=true`)
-            this.clients = response.data
+         fetchClients() {
+            this.$axios.get(`${this.$clients}?no-paginate=true`).then(({data}) => {
+              console.log(data, 'tesst clietns')
+              this.clients = data.data
+            })
         },
 
         async fetchCoaches() {
