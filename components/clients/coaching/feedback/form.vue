@@ -45,7 +45,7 @@
             color="primary"
             @click="submit"
             :disabled="!payload.feedbackscol"
-          >
+            >
             submit
           </v-btn>
         </div>
@@ -106,7 +106,8 @@ export default {
           }
           this.payload.feedbackscol = ''
           this.payload.id = ''
-           localStorage.setItem('id_'+this.$route.params.id);
+          localStorage.setItem('id_'+this.$route.params.id);
+          this.$emit('reload')
         })
     },
     hideForm(bool){
