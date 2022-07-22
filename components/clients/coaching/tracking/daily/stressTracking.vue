@@ -8,7 +8,7 @@
         stress
       </div>
       <div>
-        <bar-chart :chartData="chartData" ></bar-chart>
+        <bar-chart :chartData="chartData"></bar-chart>
       </div>
     </div>
   </v-card>
@@ -16,18 +16,18 @@
 <script>
 import barChart from "@/components/common/charts/barChart.vue";
 export default {
-  props:['date'],
-  components:{
+  props: ['date'],
+  components: {
     barChart
   },
-   watch: {
-    date(val) {
+  watch: {
+    date (val) {
       alert(val)
     },
   },
-  data(){
+  data () {
     return {
-       chartData: {
+      chartData: {
         labels: [
           'January',
           'February',
@@ -47,11 +47,11 @@ export default {
       },
     }
   },
-  mounted(){
+  mounted () {
     this.initialize()
   },
   methods: {
-    initialize(){
+    initialize () {
       alert('sad')
     }
   }

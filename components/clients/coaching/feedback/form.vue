@@ -78,7 +78,7 @@ export default {
         id:'',
         client_id: this.$route.params.id
       },
-      menu: true
+      menu: false
     }
   },
   mounted(){
