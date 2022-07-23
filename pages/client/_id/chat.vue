@@ -61,15 +61,15 @@
                 <v-list-item-subtitle v-else class="pt-1" style="font-size:13px;">
                 <div class="imagemesssage">
                   <div v-for="(image, key) in decodeMessage(listChat.message)" :key="image.id" id="file-holder">
-                      <img :src="image" style="height:auto; width:120px;" v-if="checkFile(image) == 'data:image'"/>
-                      <video id="video-preview" v-else-if="checkFile(image) == 'data:video'" controls :src="image" style="height:auto; width:150px;"/>
+                      <img :src="image.file" style="height:auto; width:120px; margin:auto;" v-if="checkFile(image.file) == 'data:image'"/>
+                      <video id="video-preview" v-else-if="checkFile(image.file) == 'data:video'" controls :src="image.file" style="height:auto; width:150px;"/>
                       <v-img v-else
-                        :src="iconSelector(image)" contain id="imgfile"
+                        :src="iconSelector(image.file)" contain id="imgfile"
                         style="height:auto; width:120px;" 
                       > 
                         <v-tooltip bottom>
                           <template v-slot:activator="{ on, attrs }">
-                              <a :href="image" download v-bind="attrs" @click.stop
+                              <a :href="image.file" download v-bind="attrs" @click.stop
                               v-on="on">
                                 <v-icon class="mx-2" style="width:100%">
                                 mdi-download
@@ -79,6 +79,7 @@
                           <span>Download</span>
                         </v-tooltip>
                        </v-img>
+                       <p v-if="image.file.length > 0 && checkFile(image.file) =='data:application'" class="text-center mt-1">{{image.file_name}}</p>
                   </div>
                 </div>
                 </v-list-item-subtitle>
@@ -119,14 +120,14 @@
             <div class="d-flex flex-row g-10" id="img-wrapper">
               <div id="img-holder"  class="d-flex flex-column"  v-for="(selectedFile, index) in image_selecteds" :key="selectedFile.id">
                   <v-icon id="deleteImg" @click="removeSelectedImg(selectedFile, index)">mdi-delete</v-icon>
-                  <img :src="selectedFile.image" v-if="checkFile(selectedFile.image) == 'data:image'"/>
-                  <video id="video-preview" v-else-if="checkFile(selectedFile.image) == 'data:video'" controls :src="selectedFile.image" style="height:120px; width:120px;"/>
+                  <img :src="selectedFile.file" v-if="checkFile(selectedFile.file) == 'data:image'"/>
+                  <video id="video-preview" v-else-if="checkFile(selectedFile.file) == 'data:video'" controls :src="selectedFile.file" style="height:120px; width:120px;"/>
                   <v-img v-else
-                    :src="iconSelector(selectedFile.image)" contain id="imgfile"
+                    :src="iconSelector(selectedFile.file)" contain id="imgfile"
                     style="height:100px; width:100px;" 
                   > 
                   </v-img>
-                  <span>{{selectedFile.name | truncate(12, '')}}</span>
+                  <span>{{selectedFile.name | truncate(13, '')}}</span>
               </div>
             </div>
           </div>
@@ -252,7 +253,6 @@
       userPhotos,
       confirmPhotos,
       loading
-
     },
     data(){
       return {
@@ -273,7 +273,7 @@
         msg :'',
         image_selected : {
           name:'',
-          image:'',
+          file:'',
         },
         f : {
           type:'',
@@ -350,7 +350,7 @@
               }
           )
           .then(({ data }) => {
-           
+        
             this.sdata = data;
             this.getPinnedMessage();
             this.message ='';
@@ -386,6 +386,7 @@
               }
           )
           .then(({ data }) => {
+           
             this.message ='';
             this.getPinnedMessage();
             this.getChats();
@@ -445,12 +446,10 @@
         .get(`chat/getChat/`+`${this.$route.params.id}`
          )
         .then(({ data }) => {
+       
           this.chatList = data.data;
           this.client_name = data.name;
           this.loads = true;
-
-            //  var container = document.querySelector("#chats25");
-            //  container.focus();
         });
       },
       checkFile(base64Data){
@@ -477,7 +476,6 @@
         else{
             return moment(date).format('MMM DD YYYY');
         }
-
       },
       getPinnedMessage(){
       const thiss = this;
@@ -507,7 +505,7 @@
           var image = e.target.result;
           this.image_selected ={
             name:file['name'],
-            image: image
+            file: image
           }
            this.image_selecteds.push(this.image_selected);
           // this.image_selected[index] =image;
@@ -558,6 +556,10 @@
 
 </script>
 <style>
+#file-holder{
+  display: flex;
+  flex-direction: column;
+}
 #file-holder div#imgfile div.v-responsive__content a{
   display: flex !important;
   height:100%;
