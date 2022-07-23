@@ -2,7 +2,8 @@
     <v-card height="208">
       <div class="client-info text-center pt-6">
         <h2 class="font-weight-bold mb-4">{{client.full_name}}</h2>
-        <div v-if="active_subscription.coaching_started === 1">
+        <!-- v-if="active_subscription.coaching_started === 1" -->
+        <div >
           <div class="caption">
             registered since
             <span class="font-weight-bold">{{frFormat(client.created_at)}}</span>
@@ -16,7 +17,7 @@
             <span class="font-weight-bold"> {{ active_subscription ?  computePlanPrice2(active_subscription.price) : 'none'}}</span>
           </div>
         </div>
-        <div
+        <!-- <div
           class="text-center mt-6"
           v-else
         >
@@ -25,7 +26,7 @@
             large
             @click="startCoaching"
           >start coaching</v-btn>
-        </div>
+        </div> -->
       </div>
     </v-card>
 </template>

@@ -1,18 +1,25 @@
 <template>
   <div class="text-center">
+  
     <v-menu
       offset-y
       tile
       top
       :close-on-content-click="false"
     >
-      <template v-slot:activator="{ on, attrs }">
-        <v-icon
-          v-bind="attrs"
-          v-on="on"
-        >
-          mdi-plus-circle
-        </v-icon>
+      <template v-slot:activator="{ on: onMenu, attrs }">
+        <v-tooltip top>
+          <template v-slot:activator="{ on: onTooltip, attrs }">
+            <v-icon
+              v-bind="attrs"
+              v-on="{ ...onMenu, ...onTooltip }"
+            >
+              mdi-plus-circle
+            </v-icon>
+          </template>
+          <span>Choose from documents</span>
+        </v-tooltip>
+
       </template>
       <v-card width="450px" height="400px" style="overflow-y:auto;" class="scrollable-element">
         <div class="toolbar-container">
@@ -34,14 +41,20 @@
             <v-spacer></v-spacer>
             <span class="subtitle-2 ml-2" v-if="photos.length">{{photos.length}} selected</span>
             <v-spacer></v-spacer>
-            <v-icon
-              v-if="photos.length > 0"
-              color="#7c94de"
-              @click="confirmPhoto"
-              :disabled="!photos.length"
-            >
-              mdi-check
-            </v-icon>
+            <v-tooltip top v-if="photos.length > 0">
+              <template v-slot:activator="{ on}">
+                <v-icon
+                v-on="on"
+                  
+                  color="#7c94de"
+                  @click="confirmPhoto"
+                  :disabled="!photos.length"
+                >
+                  mdi-check
+                </v-icon>
+              </template>
+              <span>Send documents</span>
+            </v-tooltip>
          </v-toolbar>
         </div>
         <v-container>
@@ -115,11 +128,8 @@
             
           </v-row>
           <div class="pa-2 mt-50 _nofeedback" v-else>
-            <v-icon class="mx-2" style="font-size: 60px;">mdi-alert</v-icon>
-            <p class="title mr-1">
-              No documents
-            </p>
-        </div>
+            <empty/>
+          </div>
         </v-container>
       </v-card>
     </v-menu>
@@ -128,10 +138,14 @@
 <script>
 import arrayHelper from "@/mixins/arrayHelper.vue";
 import iconHelper from '@/mixins/iconHelper'
+import empty from '@/components/error/empty_data.vue'
 
   export default {
     mixins: [arrayHelper,iconHelper],
     props:['sdata'],
+    components: {
+      empty,
+    },
     data(){
       return {
         photos:[],

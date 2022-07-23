@@ -1,6 +1,7 @@
 <template>
   <v-container>
-    <v-row v-if="active_subscription.coaching_started == 1">
+     <!-- v-if="active_subscription.coaching_started == 1" -->
+    <v-row>
       <v-flex
         xs12
         class="mb-2 px-2"
@@ -39,14 +40,14 @@
         </v-card>
       </v-flex>
     </v-row>
-    <v-row v-else>
+    <!-- <v-row v-else>
       <v-flex xs12
           class="px-3">
         <v-card height="208">
           <empty-data></empty-data>
         </v-card>
       </v-flex>
-    </v-row>
+    </v-row> -->
   </v-container>
 </template>
 <script>

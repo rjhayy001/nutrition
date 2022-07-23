@@ -2,19 +2,20 @@
   <v-container>
     <subscription-form
       :drawerStatus="drawer"
-      :selectedItem="selectedItem"
-      @closeDrawer="drawer = false"
       @addRecord="addSubscription($event)"
+      @closeDrawer="drawer = false"
+      :reload="reload"
+      @reloadFalse="reload = false"
     />
     <v-dialog v-model="dialog" max-width="500px" style="z-index=100">
       <v-card>
         <v-card-title class="font-weight-light">
-          Confirmation
+          Alert subscription
         </v-card-title>
         <v-card-text>
           <div class="my-5">
             <p class="font-weight-light" style="color:#000;font-size: 17px;">
-              Are you sure, you want to continue, your previous subscription will be deleted?
+              This client has a subscription.
             </p>
           </div>
         </v-card-text>
@@ -22,17 +23,17 @@
           <v-btn
             color="red"
             text
-            @click="dialog = false"
+            @click="close"
           >
             Close
           </v-btn>
-          <v-btn
+          <!-- <v-btn
             color="green"
             text
             @click="confirmSubscribe()"
           >
             Yes
-          </v-btn>
+          </v-btn> -->
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -112,6 +113,14 @@
             </template>
             <span>Restaurer</span>
           </v-tooltip>
+          <v-tooltip  left v-if="item.plan_id == 1 && item.status == 1">
+            <template v-slot:activator="{ on }">
+              <v-btn icon color="green" small @click.stop="updatePlan(item)" v-on="on">
+                <v-icon>mdi-arrow-up-bold-circle-outline</v-icon>
+              </v-btn>
+            </template>
+            <span>Upgrade</span>
+          </v-tooltip>
         </div>
       </template>
 
@@ -190,6 +199,8 @@ export default {
       dialog: false,
       selectedItem: {},
       isDescending: true,
+      reload: false,
+      datapayload: [],
       url: '',
       statuses: [
         {
@@ -241,22 +252,44 @@ methods: {
       this.url = `${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client,coach`
     })
   },
+  
   addSubscription(payload) {
     this.$axios.post(`${this.$subscriptions}`, payload).then(({ data }) => {
-      if(data=='sad') {
+      if(data=='client_exist'){
         this.dialog=true
       }else{
-        this.initialize()
+        this.drawer=false
         this.successNotification(payload,"create","subscription","subscriptions","full_name");
-        this.drawer = false
+        this.initialize()
       }
-
     });
-      // this.$axios.post(`${this.$subscriptions}`, payload)
   },
-  confirmSubscribe() {
-    alert("create")
-    this.dialog=false
+  close() {
+    this.dialog = false
+    this.drawer=true
+  },
+  updatePlan(payload) {
+    console.log(payload,"update")
+      this.$axios
+        .put(`${this.$subscriptions}/${payload.id}/updatePlan`, payload)
+        .then(({ data }) => {
+          this.upgradeSubscription(payload)
+        });
+  },
+
+  upgradeSubscription(payload) {
+    console.log(payload,"upgrade")
+    let data = {
+      client_id : payload.client_id,
+      plan_id : 2,
+      price_id : payload.price_id,
+      coach_id : payload.coach_id,
+    }
+    console.log(payload,"create subs")
+    this.$axios.post(`${this.$subscriptions}/upgradePlan`, data).then(({ data }) => {
+      this.successNotification(payload.client,"create","subscription","subscriptions","full_name");
+      this.initialize()
+    });
   },
   deleteRecord(items) {
     this.$root.dialog(
@@ -266,7 +299,8 @@ methods: {
     ).then(() => {
       let ids = items.id
       this.$axios.delete(`${this.$subscriptions}/${ids}`).then(({ data }) => {
-        this.successNotification(items, 'annulé', 'abonnement', 'abonnements')
+        this.reload=true
+        this.successNotification(items.client, 'annulé', 'abonnement', 'abonnements', 'full_name')
         this.initialize()
       }).catch((error) => {
         this.errorNotification(error)
@@ -280,10 +314,10 @@ methods: {
       "restaurer"
     ).then(() => {
       this.$axios.patch(`${this.$subscriptions}/${item.id}/restore`).then(({ data }) => {
-
-        this.successNotification(item.client, 'réstauré', 'abonnement', 'first_name')
+        this.reload=true
+        this.successNotification(item.client, 'réstauré', 'abonnement', 'abonnements', 'full_name')
         console.log(item.client,"itemsssss")
-        this.initalize()
+        this.initialize()
       }).catch((error) => {
         this.errorNotification(error)
       })
