@@ -29,19 +29,13 @@ export default {
     return {
       chartData: {
         labels: [
-          'January',
-          'February',
-          'March',
-          'April',
-          'May',
-          'June',
-          'July',
+          'Stress',
         ],
         datasets: [
           {
             label: 'Stress',
-            backgroundColor: ["#e7e7e7", "#e7e7e7", "#e7e7e7", "#e7e7e7", "#e7e7e7", "#e7e7e7", '#7C94DE'],
-            data: [40, 20, 12, 39, 10, 40, 39]
+            backgroundColor: ['#7C94DE'],
+            data: [39]
           }
         ]
       },
@@ -52,7 +46,7 @@ export default {
   },
   methods: {
     initialize () {
-      alert('sad')
+      // alert('sad')
     }
   }
 }

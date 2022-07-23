@@ -40,9 +40,9 @@
               class=" feedback-holder pa-2"
             > -->
               <v-card class="pt-2" @mouseover="onHover(item.id)" @mouseleave="hover = ''" :class="hover==item.id?'onHover':''">
-                <div class="float-right" id="actions"  v-if="hover==item.id">
-                  <v-icon @click="ediFeedback(item)" color="green" size="20">mdi-pencil</v-icon>
-                  <v-icon @click="showDeleteDialog(item.id)" color="red" size="20">mdi-delete</v-icon>
+                <div class="float-right pr-2" id="actions"  v-if="hover==item.id">
+                  <v-icon @click="ediFeedback(item)" color="green" size="20">mdi-pencil-outline</v-icon>
+                  <v-icon @click="showDeleteDialog(item.id)" color="red" size="20">mdi-delete-outline</v-icon>
                 </div>
                 <div class="feedback-text text-lowercase ml-4 overline"
                 style="font-size:15px !important;"
@@ -73,8 +73,8 @@
               <v-card class="mb-2"  @mouseover="onHover2(keys)" @mouseleave="hover2 = null">
                 <v-card-text>
                   <div class="float-right" id="actions"  v-if="hover2 == keys">
-                      <v-icon @click="filter(count.feedback_type)" color="green" size="20">mdi-eye</v-icon>
-                      <v-icon @click="deleteFilterFeedback(count.feedback_type)" color="red" size="20">mdi-delete</v-icon>
+                      <v-icon @click="filter(count.feedback_type)" color="green" size="20">mdi-eye-outline</v-icon>
+                      <v-icon @click="deleteFilterFeedback(count.feedback_type)" color="red" size="20">mdi-delete-outline</v-icon>
                     </div>
                   <span class="display-1 text--primary">
                     <span>{{count.total}}</span>
