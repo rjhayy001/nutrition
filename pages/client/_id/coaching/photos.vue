@@ -5,13 +5,15 @@
         @addRecord="addRecord($event)"
         @updateRecord="updateRecord($event)"
         @addComment="addComment"
+        @download="downloadImage"
         @updateComment="updateComment"
         :selectedItem="selectedItem"
       />
       <v-layout row wrap>
         <v-flex xs12 class="pb-5">
         <div class="toolbar-container">
-          <v-toolbar  flat outlined color="primary" dark>
+          <!-- <v-toolbar  flat outlined color="primary" dark> -->
+          <v-toolbar  flat  color="none" >
             <v-toolbar-title class="title-header">Photos</v-toolbar-title>
             <v-spacer></v-spacer>
             <div style="width: 400px;">
@@ -100,10 +102,12 @@
                 </v-dialog>
               </v-list>
             </v-menu>
-            <v-icon class="mx-2" @click="newPhoto">mdi-plus</v-icon>
+            <!-- <v-icon class="mx-2" @click="newPhoto">mdi-plus</v-icon> -->
             <!-- <pinned-messages/> -->
           </v-toolbar>
         </div>
+          <hr />
+
         </v-flex>
 
       </v-layout>
@@ -227,16 +231,20 @@ export default {
       this.selectedItem = this.cloneVariable(item)
       this.drawer1 = true
     },
-    // openDetails(item={}){
-    //   this.drawer1 = !this.drawer1
-    //   this.selectedItem = this.cloneVariable(item)
-    // },
     downloadImage(payload){
-      payload['client_id'] = this.$route.params.id
-      this.$axios.post(`${this.$images}/download`, payload).then(({data}) => {
-        console.log(data)
-        this.download(data, payload)
-      })
+      this.$axios({
+          url: `images/download?&client=${payload.pivot.imagable_id}&file=${payload.pivot.images_id}`,
+          method: 'GET',
+          responseType: 'blob',
+      }).then((response) => {
+        this.downloadClientPhoto(response, payload)
+          // const url = window.URL.createObjectURL(new Blob([response.data]));
+          // const link = document.createElement('a');
+          // link.href = url;
+          // link.setAttribute('download', payload.file_name); //or any other extension
+          // document.body.appendChild(link);
+          // link.click();
+      });
     },
     addComment(payload){
       this.$axios.post(`coaches/add-comment`, payload).then(({data}) => {

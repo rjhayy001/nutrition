@@ -3,12 +3,37 @@
     <v-layout row wrap v-if="loads == true">
       <v-flex xs12 class="pb-0">
         <div class="toolbar-container">
-          <v-toolbar flat dense color="#f5f5f5">
+          <v-toolbar flat dense color="#f5f5f5" id="header_toolbar">
             <v-toolbar-title class="title-header">@ {{client_name}}</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-icon class="mx-2">mdi-magnify</v-icon>
-            <v-icon class="mx-2">mdi-phone-outline</v-icon>
-            <v-icon class="mx-2">mdi-video-outline</v-icon>
+            <!-- <v-icon class="mx-2">mdi-magnify</v-icon> -->
+            <!-- <v-icon class="mx-2">mdi-phone-outline</v-icon>
+            <v-icon class="mx-2">mdi-video-outline</v-icon> -->
+            <div style="width: 300px;">
+                <v-text-field
+                clearable
+                filled
+                rounded
+                hide-details=""
+                placeholder="Search"
+                dense
+                v-model="f.msg"
+                @input="searchMessage"
+                append-icon="mdi-magnify"
+              ></v-text-field>
+            </div>
+            <div style="width: 150px;" id="types">
+                <v-select
+                  clearable
+                  rounded
+                  :items="type"
+                  label="type"
+                  dense
+                  outlined
+                  v-model="f.type"
+                  @change="searchMessage"
+                ></v-select>
+            </div>
 
             <pinned-messages @getPinnedMessage="getPinnedMessage" :pinned="pinMessages"/>
           </v-toolbar>
@@ -36,15 +61,15 @@
                 <v-list-item-subtitle v-else class="pt-1" style="font-size:13px;">
                 <div class="imagemesssage">
                   <div v-for="(image, key) in decodeMessage(listChat.message)" :key="image.id" id="file-holder">
-                      <img :src="image" style="height:auto; width:120px;" v-if="checkFile(image) == 'data:image'"/>
-                      <video id="video-preview" v-else-if="checkFile(image) == 'data:video'" controls :src="image" style="height:auto; width:150px;"/>
+                      <img :src="image.file" style="height:auto; width:120px; margin:auto;" v-if="checkFile(image.file) == 'data:image'"/>
+                      <video id="video-preview" v-else-if="checkFile(image.file) == 'data:video'" controls :src="image.file" style="height:auto; width:150px;"/>
                       <v-img v-else
-                        :src="iconSelector(image)" contain id="imgfile"
+                        :src="iconSelector(image.file)" contain id="imgfile"
                         style="height:auto; width:120px;" 
                       > 
                         <v-tooltip bottom>
                           <template v-slot:activator="{ on, attrs }">
-                              <a :href="image" download v-bind="attrs" @click.stop
+                              <a :href="image.file" download v-bind="attrs" @click.stop
                               v-on="on">
                                 <v-icon class="mx-2" style="width:100%">
                                 mdi-download
@@ -54,14 +79,11 @@
                           <span>Download</span>
                         </v-tooltip>
                        </v-img>
+                       <p v-if="image.file.length > 0 && checkFile(image.file) =='data:application'" class="text-center mt-1">{{image.file_name}}</p>
                   </div>
                 </div>
                 </v-list-item-subtitle>
-                <!-- <v-list-item-subtitle class="pt-1" style="font-size:13px;" v-else>
-                 <img
-                    :src="default_profile"
-                  />
-                </v-list-item-subtitle> -->
+               
               </v-list-item-content>
                 <v-card ref="cardShowMore"
                   class="mx-auto moreCard"
@@ -86,20 +108,7 @@
                     <span>More</span>
                   </v-tooltip>
             </v-list-item>
-              
-            <!-- <v-list-item>
-              <v-list-item-avatar
-                size="30"
-              >
-                <v-img :src="'https://cdn.vuetifyjs.com/images/lists/2.jpg'" ></v-img>
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title class="subtitle-2">John Doe2</v-list-item-title>
-                <v-list-item-subtitle class="pt-1">
-                 Secret !
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item> -->
+           
           </div>
        
         </div>
@@ -111,14 +120,14 @@
             <div class="d-flex flex-row g-10" id="img-wrapper">
               <div id="img-holder"  class="d-flex flex-column"  v-for="(selectedFile, index) in image_selecteds" :key="selectedFile.id">
                   <v-icon id="deleteImg" @click="removeSelectedImg(selectedFile, index)">mdi-delete</v-icon>
-                  <img :src="selectedFile.image" v-if="checkFile(selectedFile.image) == 'data:image'"/>
-                  <video id="video-preview" v-else-if="checkFile(selectedFile.image) == 'data:video'" controls :src="selectedFile.image" style="height:120px; width:120px;"/>
+                  <img :src="selectedFile.file" v-if="checkFile(selectedFile.file) == 'data:image'"/>
+                  <video id="video-preview" v-else-if="checkFile(selectedFile.file) == 'data:video'" controls :src="selectedFile.file" style="height:120px; width:120px;"/>
                   <v-img v-else
-                    :src="iconSelector(selectedFile.image)" contain id="imgfile"
+                    :src="iconSelector(selectedFile.file)" contain id="imgfile"
                     style="height:100px; width:100px;" 
                   > 
                   </v-img>
-                  <span>{{selectedFile.name | truncate(12, '')}}</span>
+                  <span>{{selectedFile.name | truncate(13, '')}}</span>
               </div>
             </div>
           </div>
@@ -131,16 +140,21 @@
             v-model="message"
           >
             <template v-slot:prepend-inner>
-              <v-icon class="mr-1"  @click="handleFileImport">mdi-upload</v-icon>
-              <input
-                    accept="image/png, image/gif, image/jpeg, video/*, application/pdf"
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon class="mr-1" v-bind="attrs" v-on="on"  @click="handleFileImport">mdi-upload</v-icon>
+                </template>
+                <span>Upload</span>
+              </v-tooltip>
+              <input accept="image/png, image/gif, image/jpeg, video/*, application/pdf"
                     ref="uploader"
                     type="file"
                     @change="onFileChange"
                     class="d-none"
                     multiple
               />
-              <user-photos @confirm="confirmPhotos" :sdata="sdata"></user-photos>
+                <user-photos @confirm="confirmPhotos"  :sdata="sdata"></user-photos>
+             
               <v-divider vertical class="mx-2"></v-divider>
             </template>
             <template v-slot:append>
@@ -239,7 +253,6 @@
       userPhotos,
       confirmPhotos,
       loading
-
     },
     data(){
       return {
@@ -257,10 +270,16 @@
         pinMessages: [],
         default_profile,
         client_name :'',
+        msg :'',
         image_selected : {
           name:'',
-          image:'',
+          file:'',
         },
+        f : {
+          type:'',
+          msg:'',
+        },
+        type: ['all','text', 'files',],
         image_selecteds : [],
         rules: [
           value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
@@ -288,8 +307,6 @@
       });
       this.getChats();
       this.getPinnedMessage();
-      this.scrollInto();
-     
     },
 
     watch: {
@@ -308,12 +325,20 @@
       },
       scrollInto(){
         setTimeout(function() {
-          var objDiv = document.getElementById("scrollable-element");
-          objDiv.scrollTop = objDiv.scrollHeight;
-        }, 100, this);
+         if(document.getElementById("scrollable-element")){
+            var objDiv = document.getElementById("scrollable-element");
+            objDiv.scrollTop = objDiv.scrollHeight;
+          }
+        }, 500, this);
+        // var intVal = setInterval(function() {
+        //   if(document.getElementById("scrollable-element")){
+        //     var objDiv = document.getElementById("scrollable-element");
+        //     objDiv.scrollTop = objDiv.scrollHeight + 20;
+        //     clearInterval(intVal);
+        //   }
+        // }, 500);
       },
       send(data){
-     
         this.$axios
           .post(`chat/addChatDocuments/`,{
               client_id : `${this.$route.params.id}`,
@@ -321,10 +346,11 @@
               sender_id : this.$auth.user.id,
               sender_type : 'coach',
               selected : 'coach',
-              type : 'file'
+              type : 'files'
               }
           )
           .then(({ data }) => {
+        
             this.sdata = data;
             this.getPinnedMessage();
             this.message ='';
@@ -360,6 +386,7 @@
               }
           )
           .then(({ data }) => {
+           
             this.message ='';
             this.getPinnedMessage();
             this.getChats();
@@ -374,7 +401,7 @@
               sender_id : this.$auth.user.id,
               sender_type : 'coach',
               selected : 'coach',
-              type : 'file'
+              type : 'files'
               }
           )
           .then(({ data }) => {
@@ -419,12 +446,10 @@
         .get(`chat/getChat/`+`${this.$route.params.id}`
          )
         .then(({ data }) => {
+       
           this.chatList = data.data;
           this.client_name = data.name;
           this.loads = true;
-
-            //  var container = document.querySelector("#chats25");
-            //  container.focus();
         });
       },
       checkFile(base64Data){
@@ -451,15 +476,13 @@
         else{
             return moment(date).format('MMM DD YYYY');
         }
-
       },
       getPinnedMessage(){
       const thiss = this;
         this.$axios
-        .get(`chat/getPinnedMessage/`
+        .get(`chat/getPinnedMessage/?client_id=`+`${this.$route.params.id}`
          )
         .then(({ data }) => {
-          console.log(data);
           this.pinMessages = data;
         });
       },
@@ -482,7 +505,7 @@
           var image = e.target.result;
           this.image_selected ={
             name:file['name'],
-            image: image
+            file: image
           }
            this.image_selecteds.push(this.image_selected);
           // this.image_selected[index] =image;
@@ -502,6 +525,21 @@
         // alert(scrollHeight);
         // alert(container.scrollTop);
         container.scrollTo({ top:container.scrollHeight, behavior: 'smooth'});
+      },
+      searchMessage(){
+        if(this.f.msg == '' && (this.f.type =='' || this.f.type =='all')){
+          this.getChats();
+          return;
+        }
+        this.$axios
+        .post(`chat/searchChat`,{
+            types : this.f,
+            client_id : +`${this.$route.params.id}`,
+            }
+        )
+        .then(({ data }) => {
+          this.chatList = data.data;
+        });
       }
 
     },
@@ -518,6 +556,10 @@
 
 </script>
 <style>
+#file-holder{
+  display: flex;
+  flex-direction: column;
+}
 #file-holder div#imgfile div.v-responsive__content a{
   display: flex !important;
   height:100%;
@@ -654,4 +696,13 @@ font-size: 18px !important;
   right: 15px;
 }
 
+#header_toolbar{
+    height: unset !important;
+    padding: 5px !important;
+}
+#types{
+  position: relative;
+  top: 12px;
+  margin-left: 8px;
+}
 </style>

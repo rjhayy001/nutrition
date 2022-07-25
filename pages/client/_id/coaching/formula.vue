@@ -19,7 +19,7 @@ export default {
     return {
       client:{},
       active_subscription:{},
-      type:'measures',
+      type:'formula',
     }
   },
 

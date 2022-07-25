@@ -127,8 +127,8 @@ export default {
     }
   },
   watch: {
-    pickerDate (newval,oldval) {
-      console.log(newval, oldval);
+    picker (newval,oldval) {
+      console.log(newval, oldval, 'date');
     },
   },
   methods:{

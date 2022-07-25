@@ -40,7 +40,7 @@
           </div>
            <v-icon
               class="mx-2"
-              @click="default_view = !default_view"
+              @click.stop="defaultView"
             >
               {{!default_view ? 'mdi-view-grid-outline' : 'mdi-format-list-bulleted'}}
             </v-icon>
@@ -54,8 +54,9 @@
       :files="Files"
       @deleteDoc= "deleteDoc"
       @getDocuments= "getDocuments"
+
     />
-    <list-view v-if="default_view == true"  :files="Files" @showDocument ="showDocument" @getDocuments = "getDocuments"/>
+    <list-view v-if="default_view == true"  ref="fileViewer" :files="Files" :loaders ="loader" @showDocument ="showDocument" @getDocuments = "getDocuments"/>
     <select-menu
       :dialog="showMenu"
       :options="menu_options"
@@ -63,7 +64,7 @@
       @addDocuments="addDocuments"
       @addUrl="addUrl"
     />
-    <upload-form :showUploadForm="showUploadForm" @hideForm="hideForm"></upload-form>
+    <upload-form :showUploadForm="showUploadForm" @hideForm="hideForm" ></upload-form>
     <add-url
       :showAddurl="showAddurl"
       @close="showAddurl=false"
@@ -90,6 +91,7 @@ export default {
   data(){
     return{
       showMenu: false,
+      loader: true,
       File: [],
       Files: [],
       menu_options:{
@@ -162,6 +164,15 @@ export default {
     hideForm() {
       this.showUploadForm = false;
       
+      this.getDocuments();
+    },
+    defaultView() {
+      if(this.default_view){
+        this.default_view = false;
+      }
+      else{
+         this.default_view = true;
+      }
       this.getDocuments();
     },
     searchFilter(){
