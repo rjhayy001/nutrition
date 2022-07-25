@@ -5,7 +5,9 @@
       offset-y
       v-model="menu"
       :close-on-click="false"
+      :transition="false"
       :close-on-content-click="false"
+      id="test"
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
@@ -36,7 +38,7 @@
         <div class="text-overline mb-4">
           Feedback de la semaine
         </div>
-        <v-textarea solo v-model="payload.feedbackscol"></v-textarea>
+        <v-textarea solo v-model="payload.feedbackscol" @input="saveInput"></v-textarea>
         <div class="text-right">
           <v-btn
             class="font-weight-bold"
@@ -64,7 +66,7 @@ export default {
   // },
   watch: {
     payloads: function(value) {
-      this.menu = true;
+      // this.menu = true;
       this.payload.feedbackscol = value.feedbackscol
       this.payload.id = value.id
     }
@@ -79,20 +81,25 @@ export default {
       menu: false
     }
   },
+  mounted(){
+    if(localStorage.getItem('id_'+this.$route.params.id) != ''){
+      this.payload.feedbackscol = localStorage.getItem('id_'+this.$route.params.id);
+    }
+  },
+  mounted(){
+    setTimeout(() =>{
+      this.menu = true
+    }, 300);
+  },
   methods:{
     submit(){
       this.payload.type = this.feedback_type;
       this.$axios
         .post(`feedback/addFeedback/`, this.payload)
         .then(({ data }) => {
+          console.log(data)
           this.$store.commit('updateFeedbackFlag', true)
-          if(data.message == 'added success'){
-            this.successfeedbackNotification('added')
-          }
-          else{
-            this.successfeedbackNotification('update')
-          }
-          this.menu= false
+          this.successfeedbackNotification(data.message)
           this.payload.feedbackscol = ''
           this.payload.id = ''
           this.$emit('reload')
@@ -102,13 +109,15 @@ export default {
       this.menu = bool;
       this.payload.feedbackscol = ''
       this.payload.id = ''
+    },
+    saveInput(){
+      localStorage.setItem('id_'+this.$route.params.id ,this.payload.feedbackscol);
     }
   }
 }
 </script>
 <style scoped>
 .form-container {
-  z-index: 99 !important;
   position: fixed;
   right: 30px;
   bottom: 50px;

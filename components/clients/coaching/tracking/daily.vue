@@ -6,7 +6,10 @@
     <v-expansion-panel-content>
       <v-container>
         <v-row>
-          <v-flex xs12 class="mb-4">
+          <v-flex
+            xs12
+            class="mb-4"
+          >
             <v-toolbar
               flat
               dense
@@ -22,7 +25,10 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <div style="display:flex;">
-                    <v-icon @click="prevDay" color="primary">mdi-arrow-left-bold-circle</v-icon>
+                    <v-icon
+                      @click="prevDay"
+                      color="primary"
+                    >mdi-arrow-left-bold-circle</v-icon>
                     <p
                       v-bind="attrs"
                       v-on="on"
@@ -30,7 +36,10 @@
                     >
                       {{frFormat(date)}}
                     </p>
-                    <v-icon @click="nextDay" color="primary">mdi-arrow-right-bold-circle</v-icon>
+                    <v-icon
+                      @click="nextDay"
+                      color="primary"
+                    >mdi-arrow-right-bold-circle</v-icon>
                   </div>
                 </template>
                 <v-date-picker
@@ -53,6 +62,9 @@
               class="mx-2 mb-2 pa-3"
               height="196"
             >
+              <div class="ml-2 text-capitalize font-weight-medium">
+                smoke
+              </div>
               <v-progress-circular
                 :rotate="360"
                 :size="100"
@@ -67,7 +79,9 @@
               class="mx-2 mt-2 pa-3"
               height="196"
             >
-              sasd
+              <div class="ml-2 text-capitalize font-weight-medium">
+                alcohol
+              </div>
             </v-card>
           </v-flex>
           <v-flex
@@ -78,13 +92,17 @@
               class="mx-2 mb-2 pa-3"
               height="80"
             >
-              sasd
+              <div class="ml-2 text-capitalize font-weight-medium">
+                medication
+              </div>
             </v-card>
             <v-card
               class="mx-2 mb-2 pa-3"
               height="80"
             >
-              sasd
+              <div class="ml-2 text-capitalize font-weight-medium">
+                complement(s) alimentaires(s)
+              </div>
             </v-card>
           </v-flex>
           <v-flex
@@ -95,7 +113,9 @@
               class="mx-2 mb-2 pa-3"
               height="168"
             >
-              sasd
+              <div class="ml-2 text-capitalize font-weight-medium">
+                training
+              </div>
             </v-card>
           </v-flex>
         </v-row>
@@ -109,29 +129,29 @@ import stressTracking from '@/components/clients/coaching/tracking/daily/stressT
 import sleepTracking from '@/components/clients/coaching/tracking/daily/sleepTracking.vue'
 import dateHelper from "~/mixins/dateHelper.vue";
 export default {
-  mixins:[dateHelper],
-  components:{
+  mixins: [dateHelper],
+  components: {
     stressTracking,
     sleepTracking
   },
   data () {
     return {
-      value:0,
+      value: 0,
       date_menu: false,
       date: moment().format("YYYY-MM-DD"),
     }
   },
-  created(){
-    setTimeout(() =>{
+  created () {
+    setTimeout(() => {
       this.value = 40
     }, 2000);
   },
   methods: {
-    nextDay(){
+    nextDay () {
       this.date = moment(this.date).add(1, 'days').format("YYYY-MM-DD");
       this.value += 10
     },
-    prevDay() {
+    prevDay () {
       this.date = moment(this.date).subtract(1, 'days').format("YYYY-MM-DD");
       this.value -= 10
     }

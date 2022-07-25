@@ -1,5 +1,6 @@
 <template>
   <v-layout row wrap id="test">
+
       <v-layout v-if="files.length != 0 && loads==true">
         <v-flex xs1 class="pb-0 flex-wrap" v-for="(item,index) in files" :key="index" >
           <v-card class="text-center mx-auto pa-1" @click="showdialog(true, item)"> 
@@ -155,7 +156,7 @@ import empty from '@/components/error/empty_data.vue'
 import loading from '@/components/loader/default_loader.vue'
 export default {
   mixins: [iconHelper],
-  props:['files'],
+  props:['files','loaders'],
   components:{
     selectMenu,
     UploadFiles,
@@ -198,7 +199,9 @@ export default {
           }
       },
   },
-
+  // mounted(){
+  //    this.loads = true;
+  // },
   watch: {
       files: function(value) {
        this.loads = true;
@@ -268,6 +271,9 @@ export default {
     confirmDelete(){
       this.$emit('deleteDoc', this.deleteId);
       this.deletedialog = false;
+    },
+    alertme(){
+      alert('test');
     },
     showdialog(bool, item=''){
         const thiss = this;

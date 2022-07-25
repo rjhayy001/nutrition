@@ -22,17 +22,17 @@ export default {
           to:'settings-coaches-id-profile',
           total_records:'5'
         },
-        {
-          title: 'Ressources',
-          icon: 'mdi-image-multiple',
-          to:'settings-coaches-id-resource',
-          total_records:'10'
-        },
-        {
-          title: 'Chat',
-          icon: 'mdi-chat-plus-outline',
-          to:'settings-coaches-id-chat',
-        },
+        // {
+        //   title: 'Ressources',
+        //   icon: 'mdi-image-multiple',
+        //   to:'settings-coaches-id-resource',
+        //   total_records:'10'
+        // },
+        // {
+        //   title: 'Chat',
+        //   icon: 'mdi-chat-plus-outline',
+        //   to:'settings-coaches-id-chat',
+        // },
         {
           title: 'Coaching',
           icon: 'mdi-account-multiple-outline',

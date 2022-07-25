@@ -40,9 +40,9 @@
               class=" feedback-holder pa-2"
             > -->
               <v-card class="pt-2" @mouseover="onHover(item.id)" @mouseleave="hover = ''" :class="hover==item.id?'onHover':''">
-                <div class="float-right" id="actions"  v-if="hover==item.id">
-                  <v-icon @click="ediFeedback(item)" color="green" size="20">mdi-pencil</v-icon>
-                  <v-icon @click="showDeleteDialog(item.id)" color="red" size="20">mdi-delete</v-icon>
+                <div class="float-right pr-2" id="actions"  v-if="hover==item.id">
+                  <v-icon @click="ediFeedback(item)" color="green" size="20">mdi-pencil-outline</v-icon>
+                  <v-icon @click="showDeleteDialog(item.id)" color="red" size="20">mdi-delete-outline</v-icon>
                 </div>
                 <div class="feedback-text text-lowercase ml-4 overline"
                 style="font-size:15px !important;"
@@ -73,7 +73,8 @@
               <v-card class="mb-2"  @mouseover="onHover2(keys)" @mouseleave="hover2 = null">
                 <v-card-text>
                   <div class="float-right" id="actions"  v-if="hover2 == keys">
-                      <v-icon @click="filter(count.feedback_type)" color="green" size="20">mdi-eye</v-icon>
+                      <v-icon @click="filter(count.feedback_type)" color="green" size="20">mdi-eye-outline</v-icon>
+                      <v-icon @click="deleteFilterFeedback(count.feedback_type)" color="red" size="20">mdi-delete-outline</v-icon>
                     </div>
                   <span class="display-1 text--primary">
                     <span>{{count.total}}</span>
@@ -122,6 +123,39 @@
             </v-card-actions>
           </v-card>
       </v-dialog>
+      <v-dialog
+          v-model="deletedialogFilter"
+          max-width="500px"
+        >
+          <v-card>
+            <v-card-title class="font-weight-light">
+              Delete Confirmation
+            </v-card-title>
+            <v-card-text>
+              <div class="my-5">
+                <p class="font-weight-light" style="color:#000;font-size: 17px;">
+                {{message}}
+                </p>
+              </div>
+            </v-card-text>
+            <v-card-actions class="justify-end">
+              <v-btn
+                color="green"
+                text
+                @click="deletedialogFilter = false"
+              >
+                Close
+              </v-btn>
+              <v-btn
+                color="red"
+                text
+                @click="deleteFeecbackFilter()"
+              >
+                Yes
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+      </v-dialog>
     </div>
     <div v-else>
       <loading/>
@@ -146,14 +180,17 @@ export default {
   data () {
     return {
       data: [],
+      message:'',
       hover:'',
       hover2:'',
       class:'',
       loads:false,
       deletedialog:false,
+      deletedialogFilter:false,
       deleteId:'',
       feedbackCount:[],
       f_type:'all',
+      filterToDelete:'',
       editdata:{},
       type:'feedback',
       filter_type: ['all','global', 'formulaire', 'measures', 'tracking','photos','feedback'],
@@ -232,12 +269,35 @@ export default {
         this.successfeedbackNotification('delete')
         });
     },
+    deleteFeecbackFilter(){
+       this.$axios
+        .delete(
+          `feedback/deleteFeedbackFilter/`+this.filterToDelete
+        )
+        .then(({ data }) => {
+        if(this.f_type != 'all' && this.f_type != ''){
+          this.searchList();
+        }
+        else{
+          this.getFeedback();
+        }
+        this.deletedialogFilter = false;
+        this.filterToDelete = '';
+        this.getFeedbackCount();
+        this.successfeedbackNotification('delete')
+        });
+    },
     ediFeedback(item){
         this.editdata = item;
     },
     filter(item){
         this.f_type = item;
         this.searchList()
+    },
+    deleteFilterFeedback(name){
+        this.filterToDelete = name;
+        this.message = 'Are you sure you want to delete this feedback from ' + name +'?';
+        this.deletedialogFilter = true;
     },
     searchList(){
       if(this.f_type == 'all' || this.f_type == null){
@@ -300,6 +360,8 @@ export default {
 #cont-wrapper{
   max-height: 740px !important;
   overflow: hidden !important;
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
 }
 #cont-wrapper:hover{
   overflow: auto !important;
@@ -307,6 +369,7 @@ export default {
 /* width */
 #cont-wrapper::-webkit-scrollbar {
   width: 15px;
+  display: none;  /* Safari and Chrome */
 }
 
 /* Track */

@@ -1,7 +1,12 @@
 <template>
   <v-container>
-    <form-drawer :drawerStatus="drawer" @closeDrawer="drawer = !drawer" @addRecord="addRecord($event)"
-      @updateRecord="updateRecord($event)" :selectedItem="selectedItem">
+    <form-drawer 
+      :drawerStatus="drawer"
+      :selectedItem="selectedItem"
+      @closeDrawer="drawer = false"
+      @addRecord="addRecord($event)"
+      @updateRecord="updateRecord($event)" 
+    >
     </form-drawer>
     <data-table :options="options" :title="title" :headers="headers" :data="data"
       searchPlaceholder="Short name, Long name, Code" class="custom-table" @addRecord="drawer = !drawer"
@@ -90,9 +95,10 @@ export default {
     addRecord(payload) {
       this.create().then(() => {
         this.$axios.post(`${this.$plans}`, payload).then(({ data }) => {
-          this.successNotification(data, "added", "plan", "plans", "name");
+          // this.successNotification(data, "added", "plan", "plans", "name");
           this.initialize();
         });
+          this.drawer=false
       });
     },
     deleteRecord(items) {

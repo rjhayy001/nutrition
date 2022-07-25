@@ -21,18 +21,7 @@
           </calls-feedback>
         </v-flex>
         <v-flex xs6 class="mt-4 px-2">
-          <v-toolbar flat dense>
-            <v-toolbar-title class="font-weight-medium">Dernier feedback il y a 7 jours</v-toolbar-title>
-          </v-toolbar>
-          <v-card style="overflow:auto" height="450" class="pa-3">
-
-            <v-data-table :headers="headers" :items="histories" hide-default-footer hide-default-header
-              :items-per-page="-1" class="elevation-1 stripe-table">
-              <template v-slot:item.created_at="{ item }">
-                {{defaultDate(item.created_at)}}
-              </template>
-            </v-data-table>
-          </v-card>
+          <history :histories="histories"/>
         </v-flex>
         <v-flex xs6 class="mt-4 px-2">
           <v-toolbar flat dense>
@@ -54,12 +43,14 @@ import dateHelper from "@/mixins/dateHelper.vue";
 import subscriptionInfo from "~/components/clients/coaching/global/subscription_info.vue"
 import callsFeedback from "~/components/clients/coaching/global/calls_feedback.vue"
 import feedBackForm from "~/components/clients/coaching/feedback/form.vue"
+import history from "~/components/clients/coaching/global/history.vue"
 export default {
   name: 'Global',
   components: {
     feedBackForm,
     subscriptionInfo,
-    callsFeedback
+    callsFeedback,
+    history
   },
   mixins: [
     priceHelperVue,
@@ -72,6 +63,9 @@ export default {
       type: 'global',
       active_subscription: {
         coaching_started: 0,
+        price:{
+          price:0
+        }
       },
       headers: [
         { text: 'Action', value: 'logs' },

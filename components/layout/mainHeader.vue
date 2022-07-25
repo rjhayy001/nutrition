@@ -109,7 +109,6 @@ export default {
           icon:'mdi-account',
           route: 'profile-change_password'
         },
-        { title: 'Click Me' },
       ],
       language: [
         {
