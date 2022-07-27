@@ -345,7 +345,7 @@
                     />
                   </div>
                 </v-flex>
-                <v-flex xs12>
+                <!-- <v-flex xs12>
                   <ValidationProvider slim>
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">Tags</p>
@@ -367,8 +367,8 @@
                       ></v-autocomplete>
                     </div>
                   </ValidationProvider>
-                </v-flex>
-                <v-flex xs12>
+                </v-flex> -->
+                <!-- <v-flex xs12>
                   <ValidationProvider slim>
                     <div class="mb-1">
                       <p class="subtitle-2 font-weight-regular mb-2">{{ $t('clients.groups') }}</p>
@@ -390,7 +390,7 @@
                       </v-autocomplete>
                     </div>
                   </ValidationProvider>
-                </v-flex>
+                </v-flex> -->
                 <v-flex xs12>
                   <ValidationProvider slim>
                     <div class="mb-1">

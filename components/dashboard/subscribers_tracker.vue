@@ -44,8 +44,8 @@
                 class="d-flex"
               >
                 <div
-                  style="display:grid; width:42%; "
-                  class="mx-4 my-2 text-center"
+                  style="display:grid; width:33%; "
+                  class="my-2 text-center"
                 >
                   <div>
                     <v-avatar
@@ -65,11 +65,11 @@
                   <span
                     class="font-weight-bold  overline"
                     style="font-size:10px !important"
-                  >{{defaultDate(subscription.start_date)}}</span>
+                  >{{defaultNumberDate(subscription.start_date)}}</span>
                 </div>
                 <div
                   class="mt-4"
-                  style=" width:46%;line-height:0;white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                  style=" width:37%;line-height:0;white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
                 >
                   <span
                     class="overline font-weight-bold mb-0"
@@ -86,12 +86,16 @@
                   </div>
                 </div>
                 <div
-                  style="width: 27% !important;"
-                  class="mt-4 pr-3"
+                  style="width: 30% !important; display:grid;"
+                  class="mt-2 pr-3"
                 >
-                  <div class="text-right">
+                  <div class="text-right" style="height: 50px">
                     <v-icon @click.stop="goTo('client-id-chat', {id: subscription.client_id})">mdi-message-text-outline</v-icon>
                   </div>
+                  <span
+                    class="font-weight-bold  overline"
+                    style="font-size:10px !important"
+                  >1 day ago</span>
                 </div>
               </v-card>
             </v-flex>

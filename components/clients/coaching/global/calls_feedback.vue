@@ -20,8 +20,12 @@
         class="px-2"
       >
         <v-card height="100">
-          <div class="center-number">51</div>
-          <div class="center-desc">Photos</div>
+          <v-btn width="100%" height="100%">
+            <span style="text-transform: capitalize; font-weight: bold">
+              Faire un<br>
+              feedback
+            </span>
+          </v-btn>
         </v-card>
       </v-flex>
       <v-flex xs4>

@@ -35,7 +35,7 @@
           <template v-if="subscriptions.length">
             <v-flex
               xs12
-              class="px-3 py-2"
+              class="px-5 py-2"
               v-for="subscription in subscriptions"
               :key="subscription.id"
             >
@@ -44,8 +44,8 @@
                 class="d-flex"
               >
                 <div
-                  style="display:grid; width:42%; "
-                  class="mx-4 my-2 text-center"
+                  style="display:grid; width:28%; "
+                  class="my-2 text-center"
                 >
                   <div>
                     <v-avatar
@@ -65,11 +65,11 @@
                   <span
                     class="font-weight-bold  overline"
                     style="font-size:10px !important"
-                  >{{defaultDate(subscription.start_date)}}</span>
+                  >{{defaultNumberDate(subscription.start_date)}}</span>
                 </div>
                 <div
                   class="mt-4"
-                  style=" width:30%;line-height:0;white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                  style=" width:32%;line-height:0;white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
                 >
                   <span
                     class="overline font-weight-bold mb-0"
@@ -84,7 +84,7 @@
                   </div> -->
                 </div>
                 <div
-                  style="width: 43% !important; position: relative;"
+                  style="width: 40% !important; position: relative;"
                   class="mt-4 pr-3"
                 >
                   <div class="text-right">

@@ -6,3 +6,14 @@
 .main_sidemenus .left-sidebar .v-navigation-drawer__content {
   height: 93vh;
 }
+
+.client_index {
+  .clients-statistics-wrapper{
+    .flex {
+      .v-card {
+        margin: auto;
+        max-width: 420px!important;
+      }
+    }
+  }
+}

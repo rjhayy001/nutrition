@@ -20,8 +20,8 @@
         class="mb-2"
         v-if="!hide_status"
       >
-        <v-card class="custom-card">
-          homme celibataire pas d'enfants
+        <v-card class="custom-card text-center mr-auto ml-auto">
+          homme celibataire <br>pas d'enfants
         </v-card>
       </v-flex>
       <v-flex

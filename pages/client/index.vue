@@ -1,6 +1,7 @@
 <template>
   <v-container fluid>
     <statistics-component
+      class="client_index"
       :statistics="formattedStatistics"
       :title="title"
     />
@@ -212,23 +213,8 @@ export default {
           type: 'number'
         },
         {
-          title: this.$t('clients.totalActive'),
-          value: this.statistics.totalActiveClient,
-          type: 'number'
-        },
-        {
-          title: this.$t('clients.totalInactive'),
-          value: this.statistics.totalInactive,
-          type: 'number'
-        },
-        {
-          title: this.$t('clients.totalWithCoach'),
-          value: this.statistics.totalWithCoach,
-          type: 'number'
-        },
-        {
-          title: this.$t('clients.totalWithoutCoach'),
-          value: this.statistics.totalWithOutCoach,
+          title: 'Total avec suivi',
+          value: this.statistics.totalClientPack100,
           type: 'number'
         },
         {
@@ -236,6 +222,21 @@ export default {
           value: this.statistics.totalActiveClient,
           type: 'number'
         },
+        // {
+        //   title: this.$t('clients.totalWithCoach'),
+        //   value: this.statistics.totalWithCoach,
+        //   type: 'number'
+        // },
+        // {
+        //   title: this.$t('clients.totalWithoutCoach'),
+        //   value: this.statistics.totalWithOutCoach,
+        //   type: 'number'
+        // },
+        // {
+        //   title: this.$t('clients.totalActive'),
+        //   value: this.statistics.totalActiveClient,
+        //   type: 'number'
+        // },
       ]
     }
   },
@@ -330,6 +331,7 @@ export default {
     getStatistics() {
       this.$axios.get(`${this.$clients}/statistic`)
       .then(({ data }) => {
+        console.log(data,"dadatdtatdt")
         this.statistics = data
       });
     },
