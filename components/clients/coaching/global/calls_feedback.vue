@@ -20,7 +20,7 @@
         class="px-2"
       >
         <v-card height="100">
-          <v-btn width="100%" height="100%">
+          <v-btn width="100%" height="100%" @click="$emit('openFeedBack')">
             <span style="text-transform: capitalize; font-weight: bold">
               Faire un<br>
               feedback

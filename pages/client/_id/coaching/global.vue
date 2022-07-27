@@ -13,7 +13,7 @@
           </subscription-info>
         </v-flex>
         <v-flex xs4>
-          <calls-feedback :client="client" :loading="loading" :active_subscription="active_subscription">
+          <calls-feedback @openFeedBack="form_value=true" :client="client" :loading="loading" :active_subscription="active_subscription">
           </calls-feedback>
         </v-flex>
         <!-- <v-flex xs4>
@@ -33,7 +33,7 @@
           </v-card>
         </v-flex>
       </v-row>
-      <feed-back-form :feedback_type="type" @reload="initialize"></feed-back-form>
+      <feed-back-form :form_value="form_value" @close="form_value=false" :feedback_type="type" @reload="initialize"></feed-back-form>
     </v-container>
   </div>
 </template>
@@ -58,6 +58,7 @@ export default {
   ],
   data() {
     return {
+      form_value:false,
       client: {},
       loading: false,
       type: 'global',
