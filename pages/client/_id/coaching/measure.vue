@@ -4,6 +4,50 @@
     <v-container>
       <v-row>
         <v-flex xs12>
+          <v-toolbar
+            class="ma-2"
+            flat
+            dense
+          >
+            <v-spacer></v-spacer>
+            <div
+              width="150px"
+              class="mx-2"
+            >
+
+              <v-text-field
+                placeholder="from"
+                outlined
+                :hide-details="auto"
+                dense
+                append-icon="mdi-calendar-outline"
+              ></v-text-field>
+            </div>
+            <div
+              width="150px"
+              class="mx-2 mr-6"
+            >
+               <v-text-field
+                placeholder="to"
+                outlined
+                :hide-details="auto"
+                dense
+                append-icon="mdi-calendar-outline"
+              ></v-text-field>
+            </div>
+            <span class="overline">graph</span>
+            <v-switch
+              class="pl-5"
+              :hide-details="auto"
+              v-model="is_graph"
+              dense
+              inset
+            ></v-switch>
+            <span class="overline">table</span>
+          </v-toolbar>
+        </v-flex>
+
+        <v-flex xs12>
           <v-card class="mx-2 pa-3">
             <v-toolbar
               flat
@@ -55,7 +99,8 @@ export default {
   },
   data () {
     return {
-      type:'measure',
+      is_graph: false,
+      type: 'measure',
       kg_chart_data: {
         labels: [
           'Monday',
@@ -90,7 +135,7 @@ export default {
         datasets: [
           {
             label: 'Cm',
-           backgroundColor: '#a0fff5',
+            backgroundColor: '#a0fff5',
             fill: true,
             borderColor: '#8AECE0',
             data: [40, 39, 16, 40, 49, 80, 40],

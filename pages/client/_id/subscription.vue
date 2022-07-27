@@ -184,7 +184,7 @@ mounted() {
 },
 methods: {
   initalize() {
-    this.$axios.get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client,coach&find=${this.$route.params.id}`).then(({ data }) => {
+    this.$axios.get(`${this.$subscriptions}?${this.urlQuery()}&relations=price.plan,client,coach&client_id=${this.$route.params.id}`).then(({ data }) => {
       this.data = data.data
       console.log(this.data,"data")
       this.options = data.options

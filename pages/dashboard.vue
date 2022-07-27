@@ -27,20 +27,23 @@
       </v-row>
       <!--  Body for Dashboard -->
       <v-row>
-        <v-flex xs4>
+        <v-flex 
+          xs4 
+          class="px-2"
+        >
           <calendar></calendar>
         </v-flex>
         <v-flex
           xs5
-          class="px-2 pl-3"
+          class="px-2"
         >
           <tracker></tracker>
         </v-flex>
         <v-flex
           xs3
-          class="px-2 pr-3 "
+          class="px-2"
         >
-        <new-subscribers></new-subscribers>
+          <new-subscribers></new-subscribers>
           <!-- <v-card
             class="mt-2 d-flex"
             height="690"

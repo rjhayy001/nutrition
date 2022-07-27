@@ -8,7 +8,8 @@
               Historique des feedback
             </p>
             <v-spacer></v-spacer>
-            <div style="width: 200px;" id="types">
+            <v-btn color="primary" @click="form_value = true">give feedback</v-btn>
+            <!-- <div style="width: 200px;" id="types">
               <v-select
                 :items="filter_type"
                 placeholder="Filter by type"
@@ -20,13 +21,13 @@
                 hide-details="true"
                 @change="searchList"
               ></v-select>
-            </div>
+            </div> -->
           </div>
           <hr />
         </v-flex>
       </v-layout>
       <v-layout row wrap id="wrapper_feedback">
-        <v-flex xs7 v-if="data.length != 0" id="cont-wrapper">
+        <v-flex xs10 v-if="data.length != 0" id="cont-wrapper">
           <div
             v-for="(items, index) in data"
             :key="index"
@@ -39,12 +40,12 @@
               :key="item.id+'test'"
               class=" feedback-holder pa-2"
             > -->
-              <v-card class="pt-2" @mouseover="onHover(item.id)" @mouseleave="hover = ''" :class="hover==item.id?'onHover':''">
+              <div class="pt-2" @mouseover="onHover(item.id)" @mouseleave="hover = ''" :class="hover==item.id?'onHover':''">
                 <div class="float-right pr-2" id="actions"  v-if="hover==item.id">
                   <v-icon @click="ediFeedback(item)" color="green" size="20">mdi-pencil-outline</v-icon>
                   <v-icon @click="showDeleteDialog(item.id)" color="red" size="20">mdi-delete-outline</v-icon>
                 </div>
-                <div class="feedback-text text-lowercase ml-4 overline"
+                <div class="feedback-text text-lowercase ml-4 "
                 style="font-size:15px !important;"
                 >
                   {{item.feedbackscol}}
@@ -55,7 +56,7 @@
                 >
                   <p>{{frFormat(item.created_at)}}</p>
                 </div>
-              </v-card>
+              </div>
             </div>
           </div>
         </v-flex>
@@ -64,7 +65,7 @@
             <empty/>
           </div>
         </v-flex>
-        <v-flex xs4 v-if="feedbackCount.length != 0" id="cont-wrapper">
+        <!-- <v-flex xs4 v-if="feedbackCount.length != 0" id="cont-wrapper">
           <v-layout row wrap class="clients-statistics-wrapper">
             <v-flex xs10>
               <p class="title mb-2 font-weight-medium">Feedback Summary</p>
@@ -84,11 +85,11 @@
               </v-card>
             </v-flex>
           </v-layout>
-        </v-flex>
+        </v-flex> -->
       </v-layout>
       <div>
         <!-- <feed-back-create @submitFeedback="submitFeedback"></feed-back-create> -->
-        <feed-back-form :payloads="editdata" :feedback_type="type"></feed-back-form>
+        <feed-back-form :form_value="form_value" @close="form_value=false" :payloads="editdata" :feedback_type="type"></feed-back-form>
       </div>
       <v-dialog
           v-model="deletedialog"
@@ -179,6 +180,7 @@ export default {
   },
   data () {
     return {
+      form_value:false,
       data: [],
       message:'',
       hover:'',

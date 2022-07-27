@@ -1,21 +1,58 @@
 <template>
   <v-row>
-    <v-flex xs12 class="pl-3 pt-3">
+    <v-flex
+      xs12
+      class="pl-3 pt-3"
+    >
       <p class="subtitle-2 font-weight-regular">
         <span>* Date of Birth</span>
       </p>
     </v-flex>
-    <v-flex xs4 class="pl-3">
-      <v-select flat dense filled :items="months" item-text="short_name" item-value="value"
-        placeholder="Please choose a month..." v-model="payload.month" @change="change()" :disabled="!disable"></v-select>
-    </v-flex>
-    <v-flex xs4>
-      <v-select flat dense filled :items="days" placeholder="Please choose a month..." v-model="payload.day" @change="change()" :disabled="!disable">
+    <v-flex
+      xs4
+      class="pl-3"
+    >
+
+      <v-select
+        flat
+        dense
+        filled
+        :items="days"
+        placeholder="Please choose a month..."
+        v-model="payload.day"
+        @change="change()"
+        :disabled="!disable"
+      >
       </v-select>
     </v-flex>
-    <v-flex xs4 class="pr-3">
-      <v-select flat dense filled :items="years" placeholder="Please choose a month..." v-model="payload.year"
-        @change="change()" :disabled="!disable">
+    <v-flex xs4>
+      <v-select
+        flat
+        dense
+        filled
+        :items="months"
+        item-text="short_name"
+        item-value="value"
+        placeholder="Please choose a month..."
+        v-model="payload.month"
+        @change="change()"
+        :disabled="!disable"
+      ></v-select>
+    </v-flex>
+    <v-flex
+      xs4
+      class="pr-3"
+    >
+      <v-select
+        flat
+        dense
+        filled
+        :items="years"
+        placeholder="Please choose a month..."
+        v-model="payload.year"
+        @change="change()"
+        :disabled="!disable"
+      >
       </v-select>
     </v-flex>
   </v-row>
@@ -31,7 +68,7 @@ export default {
       type: Boolean
     }
   },
-  data() {
+  data () {
     return {
       months: [
         { name: 'January', short_name: 'Jan', value: '01' },
@@ -55,7 +92,7 @@ export default {
     }
   },
   methods: {
-    change() {
+    change () {
       var days = []
       var numOfDays = new Date(this.payload.year, this.payload.month, 0).getDate();
       for (var i = numOfDays; i >= 1; i--) {
@@ -69,7 +106,7 @@ export default {
       let formattedBday = this.payload.year + '-' + this.payload.month + '-' + this.payload.day;
       this.$emit('birthday', formattedBday);
     },
-    today() {
+    today () {
       console.log(this.disable)
       let date = this.birthday ? this.birthday : new Date().toISOString().slice(0, 10);;
       let stringDateToArray = date.split('-');
@@ -78,16 +115,16 @@ export default {
       this.payload.year = stringDateToArray[0];
       this.day(this.payload.year, this.payload.month, this.payload.day);
     },
-    day(year, month, day) {
+    day (year, month, day) {
       var days = []
-      var numOfDays = new Date(year,month, 0).getDate();
+      var numOfDays = new Date(year, month, 0).getDate();
       for (var i = numOfDays; i >= 1; i--) {
         days.push(i)
       }
-      this.days = days
+      this.days = days.reverse()
       this.payload.day = Number(day)
     },
-    year() {
+    year () {
       var max = new Date().getFullYear()
       var min = max - 100
       var years = []
@@ -100,7 +137,7 @@ export default {
   },
   watch: {
     birthday: {
-      handler(val) {
+      handler (val) {
         this.year();
         this.today();
       }, immediate: true
