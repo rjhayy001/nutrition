@@ -64,6 +64,9 @@ export default {
       type: Object,
       default: () => { }
     },
+    max_value: {
+      type: Number,
+    }
   },
   data () {
     return {
@@ -72,6 +75,7 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
+
           x: {
             grid: {
               display: false
@@ -80,7 +84,10 @@ export default {
           y: {
             grid: {
               display: false
-            }
+            },
+            ticks: {
+                  max: 10
+              }
           }
         }
       }
@@ -92,6 +99,10 @@ export default {
         display: false
       }
     }
+    if(this.max_value){
+      this.chartOptions.scales.y.max = this.max_value
+    }
+
   }
 }
 </script>

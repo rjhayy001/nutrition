@@ -1,20 +1,8 @@
 <template>
     <div class="no-data">
-
         <img style="width:76%;"  src="/images/Frame.png" alt="">
-        <!-- <div class="test">aucun données disponible</div> -->
     </div>
 </template>
-<script>
-export default {
-    data() {
-        return {
-
-
-        }
-    }
-}
-</script>
 <style scoped>
     .test {
         color: #C1C1C1;

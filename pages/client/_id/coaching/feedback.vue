@@ -193,7 +193,7 @@ export default {
       filterToDelete:'',
       editdata:{},
       type:'feedback',
-      filter_type: ['all','global', 'formulaire', 'measures', 'tracking','photos','feedback'],
+      filter_type: ['all','global', 'formulaire', 'measure', 'tracking','photos','feedback'],
     };
   },
   mounted () {

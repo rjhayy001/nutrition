@@ -81,5 +81,26 @@ Vue.mixin({
             link.click();
         },
 
+        colorStatus (value) {
+          switch (value) {
+            case '1':
+              // code block
+              return 'primary'
+              case '2':
+              // code block
+              return 'accent'
+              case '3':
+              // code block
+              return 'info'
+              case '4':
+              // code block
+              return 'warning'
+            case '5':
+              return 'error'
+            default:
+              return 'gray'
+          }
+        }
+
     }
 })

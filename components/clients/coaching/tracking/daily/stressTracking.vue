@@ -8,7 +8,7 @@
         stress
       </div>
       <div>
-        <bar-chart :chartData="chartData"></bar-chart>
+        <bar-chart :chartData="chartData" :max_value="10"></bar-chart>
       </div>
     </div>
   </v-card>
@@ -16,17 +16,19 @@
 <script>
 import barChart from "@/components/common/charts/barChart.vue";
 export default {
-  props: ['date'],
+  props: ['date', 'data'],
   components: {
     barChart
   },
   watch: {
-    date (val) {
-      alert(val)
+    data (val) {
+      this.curr_data = val
+      this.chartData.datasets[0].data = [this.curr_data.stress]
     },
   },
   data () {
     return {
+      curr_data:{},
       chartData: {
         labels: [
           'Stress',
@@ -35,7 +37,7 @@ export default {
           {
             label: 'Stress',
             backgroundColor: ['#7C94DE'],
-            data: [39]
+            data: [0]
           }
         ]
       },

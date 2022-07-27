@@ -16,7 +16,7 @@
         </v-flex>
         <v-flex xs4 class="px-2">
           <v-card min-height="500">
-            <v-toolbar dense flat>
+            <!-- <v-toolbar dense flat>
               <v-toolbar-title class="text-uppercase font-weight-medium" style="font-size:17px;">for women only
               </v-toolbar-title>
             </v-toolbar>
@@ -30,7 +30,8 @@
                   {{ 'not specified' }}
                 </div>
               </div>
-            </div>
+            </div> -->
+            <empty-data></empty-data>
           </v-card>
         </v-flex>
       </v-row>
