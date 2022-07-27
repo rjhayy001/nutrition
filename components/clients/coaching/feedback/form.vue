@@ -55,7 +55,7 @@
 </template>
 <script>
 export default {
-  props: ['payloads','feedback_type'],
+  props: ['payloads','feedback_type', 'form_value'],
   // props: {
   //   payloads: {
   //     type: Object,
@@ -69,6 +69,11 @@ export default {
       // this.menu = true;
       this.payload.feedbackscol = value.feedbackscol
       this.payload.id = value.id
+    },
+     form_value: function(value) {
+      if(value){
+        this.menu = true;
+      }
     }
   },
   data () {
@@ -109,6 +114,7 @@ export default {
       this.menu = bool;
       this.payload.feedbackscol = ''
       this.payload.id = ''
+      this.$emit('close')
     },
     saveInput(){
       localStorage.setItem('id_'+this.$route.params.id ,this.payload.feedbackscol);

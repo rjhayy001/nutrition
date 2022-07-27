@@ -31,7 +31,7 @@
               @click="$emit('openDrawer')"
             >
               <v-icon left>mdi-plus</v-icon>
-                    {{active_subs.coach_macros ? active_subs.coach_macros.length ? 'modifier les macros' : 'Définir des macros' : ''}}
+              {{active_subs.coach_macros ? active_subs.coach_macros.length ? 'modifier les macros' : 'Définir des macros' : ''}}
 
             </v-btn>
           </div>
@@ -51,7 +51,41 @@
                   >
                     <v-toolbar-title class="font-weight-medium text-capitalize">son tracking (MACRO)</v-toolbar-title>
                     <v-spacer></v-spacer>
-                    <v-menu
+                    <div
+                      width="150px"
+                      class="mx-2"
+                    >
+
+                      <v-text-field
+                        placeholder="from"
+                        outlined
+                        :hide-details="auto"
+                        dense
+                        append-icon="mdi-calendar-outline"
+                      ></v-text-field>
+                    </div>
+                    <div
+                      width="150px"
+                      class="mx-2 mr-6"
+                    >
+                      <v-text-field
+                        placeholder="to"
+                        outlined
+                        :hide-details="auto"
+                        dense
+                        append-icon="mdi-calendar-outline"
+                      ></v-text-field>
+                    </div>
+                    <span class="overline">graph</span>
+                    <v-switch
+                      class="pl-5"
+                      :hide-details="auto"
+                      v-model="is_graph"
+                      dense
+                      inset
+                    ></v-switch>
+                    <span class="overline">table</span>
+                    <!-- <v-menu
                       ref="menu"
                       v-model="menu"
                       :close-on-content-click="false"
@@ -62,12 +96,10 @@
                       min-width="auto"
                     >
                       <template v-slot:activator="{ on, attrs }">
-                        <!-- <v-text-field
-                          v-model="date"
-                          label="Picker in menu"
-                          prepend-icon="mdi-calendar"
-                        ></v-text-field> -->
-                         <div class="mb-1" style="width:230px;">
+                        <div
+                          class="mb-1"
+                          style="width:230px;"
+                        >
                           <v-text-field
                             outlined
                             dense
@@ -104,10 +136,13 @@
                           OK
                         </v-btn>
                       </v-date-picker>
-                    </v-menu>
+                    </v-menu> -->
                   </v-toolbar>
                   <!-- <v-divider class="my-4"></v-divider> -->
-                  <line-chart :height="360" :chartData="chart_data"></line-chart>
+                  <line-chart
+                    :height="360"
+                    :chartData="chart_data"
+                  ></line-chart>
                 </v-card>
               </v-flex>
             </v-row>
@@ -130,7 +165,8 @@ export default {
   data () {
     return {
       title: "",
-      dates:[],
+      dates: [],
+      is_graph:false,
       menu: false,
       chart_data: {
         labels: [
@@ -191,8 +227,8 @@ export default {
     },
   },
   computed: {
-    textDateValue() {
-     return this.dates.join(' ~ ')
+    textDateValue () {
+      return this.dates.join(' ~ ')
     },
     formattedStatistics () {
       return [
@@ -222,7 +258,4 @@ export default {
 }
 </script>
 <style scoped>
-.v-text-field{
-      width: 400px;
-}
 </style>
