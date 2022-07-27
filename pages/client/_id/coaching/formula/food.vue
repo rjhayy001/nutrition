@@ -12,7 +12,7 @@
                   {{list.text}} :
                 </div>
                 <div class="font-weight-bold overline type-value">
-                 {{ food_preference ?[list.value] : 'not specified'}}
+                 {{ food_preference ? food_preference[list.value] : 'not specified'}}
                 </div>
               </div>
           </v-card>

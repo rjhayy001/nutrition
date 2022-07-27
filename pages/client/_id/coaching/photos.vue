@@ -16,7 +16,7 @@
           <v-toolbar  flat  color="none" >
             <v-toolbar-title class="title-header">Photos</v-toolbar-title>
             <v-spacer></v-spacer>
-            <div style="width: 400px;">
+            <div style="width: 300px;">
               <v-text-field
                 clearable
                 filled
@@ -62,6 +62,7 @@
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
+                    class="pa-3"
                       v-model="date"
                       label="Filter by Month"
                       prepend-icon="mdi-calendar"
@@ -69,6 +70,8 @@
                       hide-details="true"
                       append-icon="mdi-refresh"
                       v-bind="attrs"
+                      outlined
+                      dense
                       v-on="on"
                       @click:append="$router.go()"
                     ></v-text-field>
@@ -91,11 +94,6 @@
                       color="primary"
                       @click="$refs.dialog.save(date),filterMonth(date)"
                     >
-                    <!-- <v-btn
-                      text
-                      color="primary"
-                      @click="$refs.dialog.save(date)"
-                    > -->
                       OK
                     </v-btn>
                   </v-date-picker>

@@ -41,23 +41,29 @@
                 style="font-size:17px;"
               >Goal hindrances</v-toolbar-title>
             </v-toolbar>
-            <div class="px-4 pt-2 pb-3 overline" >
-                1 : It was never an obstacle<br/>
-                5 : it is very often an obstacle
+            <div class="px-4 pt-2 pb-3 overline">
+              1 : It was never an obstacle<br />
+              5 : it is very often an obstacle
             </div>
             <v-divider></v-divider>
             <div class="px-4 pb-5 pt-2">
               <div
                 class="d-flex mb-2"
-                 v-for="(hindrance, index) of hindrances"
+                v-for="(hindrance, index) of hindrances"
                 :key="index+'hindrance'"
               >
                 <div class="type-title mr-5 overline">
                   {{hindrance.text}} :
                 </div>
                 <div class="font-weight-bold overline type-value">
-                  <!-- {{goal.hindrances['what_to_eat']}} -->
-                  {{ goal ? goal.goal_hindrances[hindrance.value] : 0}}
+                  <v-chip
+                    :color="colorStatus(goal.goal_hindrances[hindrance.value])"
+                    label
+                    dense
+                    small
+                  >
+                    {{ goal.goal_hindrances[hindrance.value] ? goal.goal_hindrances[hindrance.value] : 0}}
+                  </v-chip>
                 </div>
               </div>
             </div>
@@ -80,7 +86,7 @@ export default {
     return {
       loading: true,
       client: {},
-      goal:{},
+      goal: {},
       food_preference: {},
       lists: [
         {
@@ -170,7 +176,7 @@ export default {
           this.loading = false
         });
 
-    }
+    },
   }
 }
 </script>

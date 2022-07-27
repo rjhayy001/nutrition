@@ -8,7 +8,7 @@
         sleep
       </div>
       <div>
-        <bar-chart :chartData="chartData" ></bar-chart>
+        <bar-chart :chartData="chartData" :max_value="14" ></bar-chart>
       </div>
     </div>
   </v-card>
@@ -16,8 +16,16 @@
 <script>
 import barChart from "@/components/common/charts/barChart.vue";
 export default {
+  props: ['data'],
   components:{
     barChart
+  },
+   watch: {
+    data (val) {
+      console.log(val,'tess')
+      this.curr_data = val
+      this.chartData.datasets[0].data = [this.curr_data.sleep]
+    },
   },
   data(){
     return {
@@ -27,9 +35,9 @@ export default {
         ],
         datasets: [
           {
-            label: 'Stress',
+            label: 'Sleep',
             backgroundColor: ['#7C94DE'],
-            data: [40]
+            data: [0]
           }
         ]
       },

@@ -9,7 +9,7 @@
     <v-row justify="center">
       <v-expansion-panels accordion  v-model="panel">
         <macro-view @openDrawer="drawer =! drawer" :active_subs="active_subscription"></macro-view>
-        <daily-view></daily-view>
+        <daily-view :active_subs="active_subscription"></daily-view>
       </v-expansion-panels>
     </v-row>
     <feed-back-form :feedback_type="type"></feed-back-form>
