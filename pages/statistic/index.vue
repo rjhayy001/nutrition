@@ -4,13 +4,26 @@
       <v-flex>
         <v-layout>
           <v-flex>
-            <div v-if="showMonth" style="height:20px">
+            <div v-if="showMonth=='week'">
               <v-btn x-small icon @click="decrement">
                 <v-icon icon>
                   mdi-menu-left
                 </v-icon>
               </v-btn>
-              <span>{{current_month}}</span>
+              <span>{{start_week}} to {{end_week}}</span>
+              <v-btn x-small icon @click="increment">
+                <v-icon  icon >
+                  mdi-menu-right
+                </v-icon>
+              </v-btn>
+            </div>
+            <div v-else>
+              <v-btn x-small icon @click="decrement">
+                <v-icon icon>
+                  mdi-menu-left
+                </v-icon>
+              </v-btn>
+              <span>{{current_year}}</span>
               <v-btn x-small icon @click="increment">
                 <v-icon  icon >
                   mdi-menu-right
@@ -19,9 +32,9 @@
             </div>
           </v-flex>
           <v-flex class="d-flex flex-row-reverse my-auto">
-            <v-btn x-small @click="calendar('week')" >Week</v-btn>
-            <v-btn class="mx-2" x-small @click="calendar('month')">Month</v-btn>
-            <v-btn x-small @click="calendar('year')">Year</v-btn>
+            <v-btn x-small @click="calendar('week')">Weekly</v-btn>
+            <v-btn class="mx-2" x-small @click="calendar('year')">Yearly</v-btn>
+            <v-btn x-small @click="calendar('year')">Range</v-btn>
           </v-flex>
         </v-layout>
       </v-flex>
@@ -31,7 +44,7 @@
         <v-layout>
           <v-flex xs6 class="px-4 pb-4">
             <v-card elevation="2" class="px-4 py-2">
-              <bar-chart :chartData="subscription_chart" ></bar-chart>
+              <bar-chart :chartData="subscription_chart"></bar-chart>
             </v-card>
           </v-flex>
           <v-flex xs6 class="px-4 pb-4">
@@ -56,7 +69,7 @@
         <v-layout>
           <v-flex xs6 class="px-4 pb-4">
             <v-card elevation="2" class="px-4 py-2">
-              <bar-chart :chartData="chartData3" ></bar-chart>
+              <bar-chart :chartData="total_plan_payment" ></bar-chart>
             </v-card>
           </v-flex>
           <v-flex xs6 class="px-4 pb-4">
@@ -71,7 +84,7 @@
               <line-chart
                 :height="360"
                 :removeLabel="true"
-                :chartData="cm_chart_data2"
+                :chartData="payments_line"
               ></line-chart>
             </v-card>
           </v-flex>
@@ -91,8 +104,12 @@ export default {
   },
   data() {
     return {
-      showMonth:false,
-      current_month: moment().format('MMMM'),
+      showMonth:'week',
+      current_year: moment().format('YYYY'),
+      current_date : moment().format('YYYY-MM-DD'),
+      start_week: moment(this.current_date).startOf('week').format('MMMM-DD-YYYY'),
+      end_week: moment(this.current_date).endOf('week').format('MMMM-DD-YYYY'),
+      
       subscription_chart: {
         labels: [
           'Subscriber',
@@ -119,16 +136,17 @@ export default {
           }
         ]
       },
-      chartData3: {
+      total_plan_payment: {
         labels: [
-          'January',
-          'February',
+          'Macro Solo',
+          '100% Accompagne',
+          'Total Payments'
         ],
         datasets: [
           {
-            label: 'Clients',
+            label: 'Payments',
             backgroundColor: ["#e7e7e7", "#7C94DE"],
-            data: [40, 39]
+            data: [0,0]
           }
         ]
       },
@@ -153,77 +171,105 @@ export default {
             backgroundColor: '#a0fff5',
             fill: true,
             borderColor: '#8AECE0',
-            data: [],
+            data: [0,0,0,0,0,0,0,0,0,0,0,0],
             tension: 0.5
           },
         ]
       },
-      cm_chart_data2: {
-        labels: [
-          'Monday',
-          'Tuesday',
-          'Wednesday',
-          'Thursday',
-          'Friday',
-          'Saturday',
-          'Sunday'
-        ],
+      payments_line: {
+        labels: [],
         datasets: [
           {
-            label: 'Cm',
+            label: 'Payments',
             backgroundColor: '#a0fff5',
             fill: true,
             borderColor: '#8AECE0',
-            data: [40, 39, 16, 40, 49, 80, 40],
+            data: [0,0,0,0,0,0,0,0,0,0,0,0],
             tension: 0.5
           },
         ]
       },
     };
   },
+  watch: {
+    current_date: {
+      handler(val) {
+        this.current_year = moment(val).format('YYYY')
+      },
+    },
+  },
   mounted() {
     this.initialize()
   },
   methods: {
     initialize() {
-      this.calendar()
+      this.calendar('week')
     },
     checkSubscription(item) {
-      console.log(item)
-      this.$axios.get(`${this.$statistics}/subscription/${item.request_view}`,item).then(({data}) => {
-        console.log(data)
-        this.subscription_chart.datasets[0].data=data[0]
-        this.plan_chart.datasets[0].data=data[1]
+      this.$axios.post(`${this.$statistics}/subscription/${item.request_view}`,item).then(({data}) => {
+        this.subscription_chart.datasets[0].data= data[0];
+        this.plan_chart.datasets[0].data= data[1];
+        this.total_plan_payment.datasets[0].data = data[2];
+
+        this.subscription_line.labels=data[3][0];
+        this.subscription_line.datasets[0].data=data[3][1];
+
+        this.payments_line.labels=data[4][0];
+        this.payments_line.datasets[0].data=data[4][1];
+
       })
     },
     calendar(item) {
       if(item=='week') {
-        this.showMonth=false;
-        let itemMonth= {
+        this.showMonth='week'
+        let itemWeek= {
           request_view: 'week',
-          month_request: this.current_month,
+          week_request: {
+            start: moment(this.start_week).format('YYYY-MM-DD'),
+            end :  moment(this.end_week).format('YYYY-MM-DD'),
+          },
         };
-        this.checkSubscription(itemMonth)
+        this.checkSubscription(itemWeek)
       }
-      else if(item=='month'  || item==null) {
-        this.showMonth=true;
+      else if(item=='year') {
+        this.showMonth='year'
         let itemMonth= {
-          request_view: 'month',
-          month_request: this.current_month,
+          request_view: 'year',
+          month_request: this.current_date,
         };
         this.checkSubscription(itemMonth)
       }
       else {
-        this.showMonth=false;
         alert("year")
       }
     },
     increment() {
-      let addMonth = moment().add(1, 'M').format('MMMM');
-      this.current_month = addMonth;
+      if(this.showMonth=='week'){
+        this.current_date  = moment(this.current_date, 'YYYY-MM-DD').add('1', 'weeks');
+        this.start_week= moment(this.current_date).startOf('week').format('MMMM-DD-YYYY');
+        this.end_week= moment(this.current_date).endOf('week').format('MMMM-DD-YYYY');
+        this.calendar(this.showMonth)
+      } 
+      else if(this.showMonth=='year') {
+        let addMonth = moment(this.current_date, "YYYY-MM-DD").add(1, 'years').format('YYYY-MM-DD');
+        this.current_date = addMonth;
+        this.calendar(this.showMonth)
+      }
+      else {
+        alert('error')
+      }
     },
     decrement() {
-
+      if(this.showMonth=='week'){
+        this.current_date = moment(this.current_date, 'YYYY-MM-DD').subtract('1', 'weeks');
+        this.start_week= moment(this.current_date).startOf('week').format('MMMM-DD-YYYY');
+        this.end_week= moment(this.current_date).endOf('week').format('MMMM-DD-YYYY');
+      }
+      else if (this.showMonth=='year') {
+        let subtractMonth = moment(this.current_date, "YYYY-MM-DD").subtract(1, 'years').format('YYYY-MM-DD');
+        this.current_date = subtractMonth;
+      }
+      this.calendar(this.showMonth)
     }
   },
 };
