@@ -13,6 +13,9 @@ export default {
     defaultDate(date){
       return this.$moment(date).format('DD MMM YYYY')
     },
+    defaultNumberDate(date) {
+      return this.$moment(date).format('DD/MM/YYYY')
+    },
     weeklyFormat(date){
       if(this.currentWeek(date)){
         return 'Semaine en cours';

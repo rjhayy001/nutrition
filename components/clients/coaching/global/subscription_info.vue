@@ -1,7 +1,12 @@
 <template>
     <v-card height="208">
       <div class="client-info text-center pt-6">
-        <h2 class="font-weight-bold mb-4">{{client.full_name}}</h2>
+        <div class="d-flex justify-center position-relative">
+          <h2 class="font-weight-bold mb-4">{{client.full_name}}</h2>
+          <v-icon class="position-absolute" style="top:-20px; left: 10px">
+            mdi-diamond-outline
+          </v-icon>
+        </div>
         <!-- v-if="active_subscription.coaching_started === 1" -->
         <div >
           <div class="caption">

@@ -16,10 +16,10 @@
           <calls-feedback :client="client" :loading="loading" :active_subscription="active_subscription">
           </calls-feedback>
         </v-flex>
-        <v-flex xs4>
+        <!-- <v-flex xs4>
           <calls-feedback :client="client" :loading="loading" :active_subscription="active_subscription">
           </calls-feedback>
-        </v-flex>
+        </v-flex> -->
         <v-flex xs6 class="mt-4 px-2">
           <history :histories="histories"/>
         </v-flex>

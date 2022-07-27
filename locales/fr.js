@@ -91,7 +91,7 @@ const messages = {
 
     "firstName": "Prénom",
     "lastName": "Nom de famille",
-    "fullName": "Nom complet",
+    "fullName": "Prénom Nom",
     "birthday": "Anniversaire",
     "email": "E-mail",
     "phone": "Téléphone",
