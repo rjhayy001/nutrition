@@ -31,8 +31,9 @@
                 style="font-size:17px;"
               >une journee type</v-toolbar-title>
             </v-toolbar>
+            <v-divider></v-divider>
              <div
-              class="px-4 pb-5"
+              class="px-4 py-5"
             >
               <div class="d-flex mb-2" style="    justify-content: space-between;">
                 <div class="type-title mr-5 overline">

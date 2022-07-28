@@ -21,7 +21,7 @@
                 {{ sports ? sports['practice_sport'] : 'not specified'}}
               </div>
             </div>
-            <template v-if="sports.practice_sport === 'yes'">
+            <template v-if=" sports && sports.practice_sport === 'yes'">
               <div
                 class="d-flex mb-2 list-holder"
                 v-for="(list, index) of lists"
@@ -45,7 +45,7 @@
           class="px-2"
         >
           <v-card min-height="500">
-            <div v-if="sports.practice_sport === 'no'">
+            <div v-if=" sports && sports.practice_sport === 'no'">
               <v-toolbar
                 dense
                 flat
@@ -94,25 +94,28 @@
               </v-toolbar>
               <v-divider></v-divider>
               <div class="px-4 pb-5 pt-2">
-                <div
-                  class="d-flex mb-2"
-                  v-for="(type, index) of sports.sports_type"
-                  :key="index+'types'"
-                >
-                  <div class="type-title mr-5 overline">
-                    {{index+1+'. ' +type.name}}
+                <template v-if="sports && sports.sports_type.length">
+                  <div
+                    class="d-flex mb-2"
+                    v-for="(type, index) of sports.sports_type"
+                    :key="index+'types'"
+                  >
+                    <div class="type-title mr-5 overline">
+                      {{index+1+'. ' +type.name}}
+                    </div>
+                    <div class="font-weight-bold overline type-value">
+                      <v-chip
+                        :color="colorStatus(type.duration || 0)"
+                        label
+                        dense
+                        small
+                      >
+                        {{type.duration || 0}} hr
+                      </v-chip>
+                    </div>
                   </div>
-                  <div class="font-weight-bold overline type-value">
-                    <v-chip
-                      :color="colorStatus(type.duration || 0)"
-                      label
-                      dense
-                      small
-                    >
-                      {{type.duration || 0}} hr
-                    </v-chip>
-                  </div>
-                </div>
+                </template>
+                <empty-data v-else  />
               </div>
             </div>
           </v-card>

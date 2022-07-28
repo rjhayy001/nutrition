@@ -234,10 +234,10 @@ export default {
       payload: {
         type:'portions',
         date:new Date().toISOString().substr(0, 10),
-        protein: 0,
-        lipid: 0,
-        carbohydrate: 0,
-        vegetable: 0,
+        protein: '',
+        lipid: '',
+        carbohydrate: '',
+        vegetable: '',
       },
       DefaultOptions: [
         { value: 'portions', text: "Portions" },
