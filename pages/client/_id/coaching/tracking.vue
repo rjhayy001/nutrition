@@ -36,7 +36,8 @@ export default {
       loading:false,
       client:{},
       active_subscription:{
-        id:0
+        id:0,
+        coach_macros:[]
       }
     }
   },
