@@ -21,7 +21,7 @@
           xs4
           class="px-2"
         >
-          <v-card min-height="250">
+          <v-card min-height="500">
             <empty-data></empty-data>
           </v-card>
         </v-flex>

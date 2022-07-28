@@ -41,6 +41,8 @@
                 style="font-size:17px;"
               >Goal hindrances</v-toolbar-title>
             </v-toolbar>
+            <v-divider></v-divider>
+              <template v-if="goal && goal.goal_hindrances">
             <div class="px-4 pt-2 pb-3 overline">
               1 : It was never an obstacle<br />
               5 : it is very often an obstacle
@@ -67,6 +69,8 @@
                 </div>
               </div>
             </div>
+              </template>
+              <empty-data v-else/>
           </v-card>
         </v-flex>
       </v-row>

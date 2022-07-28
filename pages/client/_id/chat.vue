@@ -65,8 +65,8 @@
                       <video id="video-preview" v-else-if="checkFile(image.file) == 'data:video'" controls :src="image.file" style="height:auto; width:150px;"/>
                       <v-img v-else
                         :src="iconSelector(image.file)" contain id="imgfile"
-                        style="height:auto; width:120px;" 
-                      > 
+                        style="height:auto; width:120px;"
+                      >
                         <v-tooltip bottom>
                           <template v-slot:activator="{ on, attrs }">
                               <a :href="image.file" download v-bind="attrs" @click.stop
@@ -83,7 +83,7 @@
                   </div>
                 </div>
                 </v-list-item-subtitle>
-               
+
               </v-list-item-content>
                 <v-card ref="cardShowMore"
                   class="mx-auto moreCard"
@@ -108,9 +108,9 @@
                     <span>More</span>
                   </v-tooltip>
             </v-list-item>
-           
+
           </div>
-       
+
         </div>
         <div class="scrollable-element" id="scrollable-element" ref="chat" v-else>
             <empty></empty>
@@ -124,8 +124,8 @@
                   <video id="video-preview" v-else-if="checkFile(selectedFile.file) == 'data:video'" controls :src="selectedFile.file" style="height:120px; width:120px;"/>
                   <v-img v-else
                     :src="iconSelector(selectedFile.file)" contain id="imgfile"
-                    style="height:100px; width:100px;" 
-                  > 
+                    style="height:100px; width:100px;"
+                  >
                   </v-img>
                   <span>{{selectedFile.name | truncate(13, '')}}</span>
               </div>
@@ -154,7 +154,7 @@
                     multiple
               />
                 <user-photos @confirm="confirmPhotos"  :sdata="sdata"></user-photos>
-             
+
               <v-divider vertical class="mx-2"></v-divider>
             </template>
             <template v-slot:append>
@@ -197,7 +197,7 @@
       <loading/>
     </v-layout>
 
-    
+
     <v-dialog
         v-model="deletedialog"
         max-width="500px"
@@ -290,7 +290,6 @@
       }
     },
     created(){
-      this.initialize()
     },
     mounted(){
       const thiss = this;
@@ -298,13 +297,14 @@
         if (event.keyCode === 13) {
           thiss.sendMessage();
         }
-        if (event.keyCode === 27) { 
+        if (event.keyCode === 27) {
            thiss.is_pinned = null;
         }
       });
       window.addEventListener('click', function(event) {
            thiss.is_pinned = null;
       });
+      this.activateNotification()
       this.getChats();
       this.getPinnedMessage();
     },
@@ -317,6 +317,7 @@
     methods:{
       initialize(){
         console.log(this.$route.params.id)
+        this.getChats()
       },
       changeS(key){
         setTimeout(function(scope) {
@@ -350,7 +351,7 @@
               }
           )
           .then(({ data }) => {
-        
+
             this.sdata = data;
             this.getPinnedMessage();
             this.message ='';
@@ -386,7 +387,7 @@
               }
           )
           .then(({ data }) => {
-           
+
             this.message ='';
             this.getPinnedMessage();
             this.getChats();
@@ -446,7 +447,7 @@
         .get(`chat/getChat/`+`${this.$route.params.id}`
          )
         .then(({ data }) => {
-       
+
           this.chatList = data.data;
           this.client_name = data.name;
           this.loads = true;

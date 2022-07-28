@@ -15,6 +15,7 @@ export default {
     activateNotification(){
       const messaging = getMessaging()
       onMessage(messaging, (payload) => {
+        console.log(payload)
         this.initialize()
         // this.saveCoachNotification(payload)
       })

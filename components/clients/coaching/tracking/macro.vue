@@ -59,7 +59,7 @@
                       <v-text-field
                         placeholder="from"
                         outlined
-                        :hide-details="auto"
+                        hide-details="auto"
                         dense
                         append-icon="mdi-calendar-outline"
                       ></v-text-field>
@@ -71,7 +71,7 @@
                       <v-text-field
                         placeholder="to"
                         outlined
-                        :hide-details="auto"
+                        hide-details="auto"
                         dense
                         append-icon="mdi-calendar-outline"
                       ></v-text-field>
@@ -79,7 +79,7 @@
                     <span class="overline">graph</span>
                     <v-switch
                       class="pl-5"
-                      :hide-details="auto"
+                      hide-details="auto"
                       v-model="is_graph"
                       dense
                       inset
@@ -234,22 +234,22 @@ export default {
       return [
         {
           title: 'Protein',
-          value: this.active_subs.set_macro ? this.active_subs.set_macro.protein : 0,
+          value: this.active_subs.coach_macros ? this.active_subs.coach_macros[0].protein : 0,
           type: 'number'
         },
         {
           title: 'Lipides',
-          value: this.active_subs.set_macro ? this.active_subs.set_macro.lipid : 0,
+          value: this.active_subs.coach_macros ? this.active_subs.coach_macros[0].lipid : 0,
           type: 'number'
         },
         {
           title: 'Glucides',
-          value: this.active_subs.set_macro ? this.active_subs.set_macro.carbohydrate : 0,
+          value: this.active_subs.coach_macros ? this.active_subs.coach_macros[0].carbohydrate : 0,
           type: 'number'
         },
         {
           title: 'Legumes',
-          value: this.active_subs.set_macro ? this.active_subs.set_macro.vegetable : 0,
+          value: this.active_subs.coach_macros ? this.active_subs.coach_macros[0].vegetable : 0,
           type: 'number'
         },
       ]
