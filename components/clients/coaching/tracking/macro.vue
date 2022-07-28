@@ -31,7 +31,7 @@
               @click="$emit('openDrawer')"
             >
               <v-icon left>mdi-plus</v-icon>
-              {{active_subs.coach_macros ? active_subs.coach_macros.length ? 'modifier les macros' : 'Définir des macros' : ''}}
+              Définir des macros
 
             </v-btn>
           </div>
@@ -234,22 +234,22 @@ export default {
       return [
         {
           title: 'Protein',
-          value: this.active_subs.coach_macros ? this.active_subs.coach_macros[0].protein : 0,
+          value: this.active_subs.coach_macros.length ? this.active_subs.coach_macros[0].protein : 0,
           type: 'number'
         },
         {
           title: 'Lipides',
-          value: this.active_subs.coach_macros ? this.active_subs.coach_macros[0].lipid : 0,
+          value: this.active_subs.coach_macros.length ? this.active_subs.coach_macros[0].lipid : 0,
           type: 'number'
         },
         {
           title: 'Glucides',
-          value: this.active_subs.coach_macros ? this.active_subs.coach_macros[0].carbohydrate : 0,
+          value: this.active_subs.coach_macros.length ? this.active_subs.coach_macros[0].carbohydrate : 0,
           type: 'number'
         },
         {
           title: 'Legumes',
-          value: this.active_subs.coach_macros ? this.active_subs.coach_macros[0].vegetable : 0,
+          value: this.active_subs.coach_macros.length ? this.active_subs.coach_macros[0].vegetable : 0,
           type: 'number'
         },
       ]
