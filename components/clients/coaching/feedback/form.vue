@@ -101,7 +101,7 @@ export default {
           this.menu= false
           this.payload.feedbackscol = ''
           this.payload.id = ''
-           localStorage.setItem('id_'+this.$route.params.id);
+          localStorage.removeItem('id_'+this.$route.params.id);
         })
     },
     hideForm(bool){
