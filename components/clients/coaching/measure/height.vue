@@ -8,7 +8,7 @@
       <v-spacer></v-spacer>
     </v-toolbar>
     <line-chart
-      v-if="is_graph==false"
+      v-if="!is_graph"
       :height="360"
       :removeLabel="true"
       :chartData="cm_chart_data"
@@ -16,7 +16,7 @@
     <v-data-table
       v-else
       :headers="headers"
-      :items="measures"
+      :items="table_data"
       class="elevation-1 custom-table"
     ></v-data-table>
   </v-card>
@@ -33,12 +33,12 @@ export default {
       default: () => false,
     },
     measures: {
-      type:Array/Object,
       default:() => {}
     }
   },
   data() {
     return {
+      table_data:[],
       headers: [
         { text: 'Date', align: 'start', value: 'date', width: '150px'},
         { text: 'Neck', align: 'start', value: 'neck', width: '150px'},
@@ -51,7 +51,7 @@ export default {
         { text: 'Calf', align: 'start', value: 'calf', width: '150px'},
       ],
       cm_chart_data: {
-        labels: [],
+        labels: ['test'],
         datasets: [
           {
             label: 'Cm',
@@ -68,8 +68,14 @@ export default {
   watch: {
     measures: {
       handler(val) {
-        this.cm_chart_data.labels=val[0];
-        this.cm_chart_data.datasets[0].data=val[1];
+        if(!this.is_graph){
+          this.cm_chart_data.labels=val[0] ? this.cloneVariable(val[0]) : ['test'];
+          this.cm_chart_data.datasets[0].data=val[1];
+        }else{
+          console.log('graph', val)
+          this.table_data = val
+        }
+
       }
     }
   }

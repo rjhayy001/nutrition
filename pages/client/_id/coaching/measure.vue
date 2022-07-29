@@ -328,9 +328,8 @@ export default {
   watch: {
     is_graph: {
       handler(val) {
-        if(val) {
+
           this.requestForm()
-        }
       }
     }
   },
@@ -341,14 +340,14 @@ export default {
     initialize() {
       this.requestForm()
     },
-    getRecords(item) {
-      this.$axios.post(`${this.$measurements}/${item.request_view}`, item).then(({data}) => {
-        console.log(data,"measure")
+    async getRecords(item) {
+      await this.$axios.post(`${this.$measurements}/${item.request_view}`, item).then(({data}) => {
+        console.log(data,"measure",item.request_view)
         this.measures=data
       })
     },
     requestForm() {
-      if(this.is_graph==false) {
+      if(!this.is_graph) {
         let item= {
           request_view: 'line',
           week_request: {
