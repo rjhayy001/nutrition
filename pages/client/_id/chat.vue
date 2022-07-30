@@ -25,11 +25,11 @@
             <div style="width: 150px;" id="types">
                 <v-select
                   clearable
+                  filled
                   rounded
                   :items="type"
-                  label="type"
+                  placeholder="Type"
                   dense
-                  outlined
                   v-model="f.type"
                   @change="searchMessage"
                 ></v-select>
@@ -330,7 +330,7 @@
             var objDiv = document.getElementById("scrollable-element");
             objDiv.scrollTop = objDiv.scrollHeight;
           }
-        }, 500, this);
+        }, 700, this);
         // var intVal = setInterval(function() {
         //   if(document.getElementById("scrollable-element")){
         //     var objDiv = document.getElementById("scrollable-element");
@@ -484,6 +484,7 @@
         .get(`chat/getPinnedMessage/?client_id=`+`${this.$route.params.id}`
          )
         .then(({ data }) => {
+          console.log(data);
           this.pinMessages = data;
         });
       },
