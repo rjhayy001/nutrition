@@ -108,6 +108,7 @@ export default {
           this.payload.feedbackscol = ''
           this.payload.id = ''
           this.$emit('reload')
+          localStorage.removeItem('id_'+this.$route.params.id);
         })
     },
     hideForm(bool){

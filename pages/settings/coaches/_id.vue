@@ -46,6 +46,10 @@ export default {
               title:'Documents',
               to: 'settings-coaches-id-documents'
             },
+            {
+              title:'Coach Schedule',
+              to: 'settings-coaches-id-Coach_Schedule'
+            },
             // {
             //   title:'Global',
             //   to: 'settings-coaches-id-global'

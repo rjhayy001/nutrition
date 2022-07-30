@@ -30,6 +30,13 @@ Vue.mixin({
             this.$awn.success(`Successfully ${message} <strong> feedback </strong> `)
         },
 
+        successCoachSchedNotification(type = '', message = '') {
+            this.$awn.success(`Successfully ${type} ${message} `)
+        },
+        ErrorCoachSchedNotification(message = '') {
+            this.$awn.warning(` ${message} `)
+        },
+
         chatNotification(message = '', name = '') {
             this.$awn.success(`${name} Successfully ${message}`)
         },
