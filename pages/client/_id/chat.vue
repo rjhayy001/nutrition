@@ -25,11 +25,11 @@
             <div style="width: 150px;" id="types">
                 <v-select
                   clearable
+                  filled
                   rounded
                   :items="type"
-                  label="type"
+                  placeholder="Type"
                   dense
-                  outlined
                   v-model="f.type"
                   @change="searchMessage"
                 ></v-select>

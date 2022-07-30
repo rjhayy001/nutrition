@@ -37,8 +37,8 @@
                   ></v-text-field>
                 </template>
                 <v-date-picker
-                @change="requestForm"
-                color="primary"
+                  @change="requestForm"
+                  color="primary"
                   v-model="payload.from"
                   no-title
                   scrollable
@@ -123,7 +123,10 @@
           xs12
           class="mt-4"
         >
-          <height-form :measures="measures" :is_graph="is_graph"></height-form>
+          <height-form
+            :measures="measures"
+            :is_graph="is_graph"
+          ></height-form>
           <!-- <v-card class="mx-2 pa-3">
             <v-toolbar
               flat
@@ -172,7 +175,7 @@ export default {
       menu2: false,
       modal: false,
       payload: {
-        from: moment().subtract(1,'week').format('YYYY-MM-DD'),
+        from: moment().subtract(1, 'week').format('YYYY-MM-DD'),
         to: moment().format('YYYY-MM-DD'),
       },
       measures: [],
@@ -311,57 +314,72 @@ export default {
           },
         ]
       },
+      subs:[],
       headers: [
-        { text: 'Date', align: 'start', value: 'date', width: '150px'},
-        { text: 'Neck', align: 'start', value: 'neck', width: '150px'},
-        { text: 'Shoulder', align: 'start', value: 'shoulder', width: '150px'},
-        { text: 'Chest', align: 'start', value: 'chest', width: '150px'},
-        { text: 'Upper Arm', align: 'start', value: 'upper_arm', width: '150px'},
-        { text: 'Waist', align: 'start', value: 'waist', width: '150px'},
-        { text: 'Hips', align: 'start', value: 'hips', width: '150px'},
-        { text: 'Upper Thigh', align: 'start', value: 'upper_thigh', width: '150px'},
-        { text: 'Calf', align: 'start', value: 'calf', width: '150px'},
+        { text: 'Date', align: 'start', value: 'date', width: '150px' },
+        { text: 'Neck', align: 'start', value: 'neck', width: '150px' },
+        { text: 'Shoulder', align: 'start', value: 'shoulder', width: '150px' },
+        { text: 'Chest', align: 'start', value: 'chest', width: '150px' },
+        { text: 'Upper Arm', align: 'start', value: 'upper_arm', width: '150px' },
+        { text: 'Waist', align: 'start', value: 'waist', width: '150px' },
+        { text: 'Hips', align: 'start', value: 'hips', width: '150px' },
+        { text: 'Upper Thigh', align: 'start', value: 'upper_thigh', width: '150px' },
+        { text: 'Calf', align: 'start', value: 'calf', width: '150px' },
       ],
 
     }
   },
   watch: {
     is_graph: {
-      handler(val) {
+      handler (val) {
 
-          this.requestForm()
+        this.requestForm()
       }
     }
   },
-  mounted() {
-    this.initialize()
+  mounted () {
+    this.clientData()
   },
-  methods:{
-    initialize() {
-      this.requestForm()
+  methods: {
+    initialize () {
+        this.requestForm()
     },
-    async getRecords(item) {
-      await this.$axios.post(`${this.$measurements}/${item.request_view}`, item).then(({data}) => {
-        console.log(data,"measure",item.request_view)
-        this.measures=data
+    async getRecords (item) {
+      await this.$axios.post(`${this.$measurements}/${item.request_view}`, item).then(({ data }) => {
+        console.log(data, "measure", item.request_view)
+        this.measures = data
       })
     },
-    requestForm() {
-      if(!this.is_graph) {
-        let item= {
+
+    async clientData () {
+
+      await this.$axios
+        .get(
+          `${this.$clients}/${this.$route.params.id}/edit?relations=activeSubscription`
+        )
+        .then(({ data }) => {
+          this.subs = data.active_subscription ? data.active_subscription[0] : {}
+          this.requestForm()
+        });
+    },
+    requestForm () {
+      if (!this.is_graph) {
+        let item = {
           request_view: 'line',
+          subs_id:this.subs.id,
           week_request: {
             start: this.payload.from,
-            end :  this.payload.to,
+            end: this.payload.to,
           },
         };
         this.getRecords(item)
       } else {
-        let item= {
+        let item = {
           request_view: 'graph',
+          subs_id:this.subs.id,
           week_request: {
             start: this.payload.from,
-            end :  this.payload.to,
+            end: this.payload.to,
           },
         };
         this.getRecords(item)

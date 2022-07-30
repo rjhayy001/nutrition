@@ -10,7 +10,6 @@
     <line-chart
       v-if="!is_graph"
       :height="360"
-      :removeLabel="true"
       :chartData="cm_chart_data"
     ></line-chart>
     <v-data-table
@@ -33,22 +32,22 @@ export default {
       default: () => false,
     },
     measures: {
-      default:() => {}
+      default: () => { }
     }
   },
-  data() {
+  data () {
     return {
-      table_data:[],
+      table_data: [],
       headers: [
-        { text: 'Date', align: 'start', value: 'date', width: '150px'},
-        { text: 'Neck', align: 'start', value: 'neck', width: '150px'},
-        { text: 'Shoulder', align: 'start', value: 'shoulder', width: '150px'},
-        { text: 'Chest', align: 'start', value: 'chest', width: '150px'},
-        { text: 'Upper Arm', align: 'start', value: 'upper_arm', width: '150px'},
-        { text: 'Waist', align: 'start', value: 'waist', width: '150px'},
-        { text: 'Hips', align: 'start', value: 'hips', width: '150px'},
-        { text: 'Upper Thigh', align: 'start', value: 'upper_thigh', width: '150px'},
-        { text: 'Calf', align: 'start', value: 'calf', width: '150px'},
+        { text: 'Date', align: 'start', value: 'date', width: '150px' },
+        { text: 'Neck', align: 'start', value: 'neck', width: '150px' },
+        { text: 'Shoulder', align: 'start', value: 'shoulder', width: '150px' },
+        { text: 'Chest', align: 'start', value: 'chest', width: '150px' },
+        { text: 'Upper Arm', align: 'start', value: 'upper_arm', width: '150px' },
+        { text: 'Waist', align: 'start', value: 'waist', width: '150px' },
+        { text: 'Hips', align: 'start', value: 'hips', width: '150px' },
+        { text: 'Upper Thigh', align: 'start', value: 'upper_thigh', width: '150px' },
+        { text: 'Calf', align: 'start', value: 'calf', width: '150px' },
       ],
       cm_chart_data: {
         labels: ['test'],
@@ -67,12 +66,23 @@ export default {
   },
   watch: {
     measures: {
-      handler(val) {
-        if(!this.is_graph){
-          this.cm_chart_data.labels=val[0] ? this.cloneVariable(val[0]) : ['test'];
-          this.cm_chart_data.datasets[0].data=val[1];
-        }else{
-          console.log('graph', val)
+      handler (val) {
+        if (!this.is_graph) {
+          this.cm_chart_data.labels = val[0] ? this.cloneVariable(val[0]) : ['test'];
+          // this.cm_chart_data.datasets[0].data=val[1];
+          Object.values(this.measures[1]).forEach((value,index) => {
+            this.cm_chart_data.datasets[index] = {
+              label: value.name,
+              backgroundColor: value.color,
+              borderColor: value.color,
+              data: value.data,
+              tension: 0.3
+            }
+          })
+
+          // console.log(this.cm_chart_data.datasets, 'datasets')
+          console.log(val[1], 'dataaaaaa')
+        } else {
           this.table_data = val
         }
 
