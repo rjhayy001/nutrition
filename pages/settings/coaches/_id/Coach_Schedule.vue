@@ -112,6 +112,7 @@
                   class="date-picker"
                   multiple
                   elevation="5"
+                  :min="dateNow"
                   :allowed-dates="getDisableDates"
                   no-title
                 ></v-date-picker>
@@ -179,7 +180,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-         <v-dialog
+      <v-dialog
           v-model="deletedialog"
           max-width="500px"
         >
@@ -232,6 +233,7 @@ import moment from 'moment'
         search: '',
         loads:false,
         switch1: true,
+        dateNow:'',
         headers: [
           { text: 'Date', value: 'date' },
           { text: 'Day', value: 'day' },
@@ -261,6 +263,7 @@ import moment from 'moment'
     },
     mounted(){
         // this.getClientlist();
+        this.dateNow = moment().format('YYYY-MM-DD')
         this.getSchedule();
     },
     methods: {
@@ -323,7 +326,7 @@ import moment from 'moment'
         if(this.dates.length <= 0 || this.seletedTime.length <= 0){
           return this.ErrorCoachSchedNotification('Invalid time and date')
         }
-         if(!this.edit == false){
+         if(this.edit == false){
            this.dates.sort();
             this.$axios
             .post(`coachshedule`,{

@@ -86,15 +86,17 @@ export default {
       menu: false
     }
   },
-  mounted(){
-    if(localStorage.getItem('id_'+this.$route.params.id) != ''){
-      this.payload.feedbackscol = localStorage.getItem('id_'+this.$route.params.id);
-    }
-  },
+  // mounted(){
+   
+  // },
   mounted(){
     setTimeout(() =>{
       this.menu = true
     }, 300);
+    
+    if(localStorage.getItem('id_'+this.$route.params.id) != ''){
+      this.payload.feedbackscol = localStorage.getItem('id_'+this.$route.params.id);
+    }
   },
   methods:{
     submit(){
