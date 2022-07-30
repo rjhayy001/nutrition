@@ -58,11 +58,13 @@
           v-model="picker"
           color="primary"
           elevation="8"
+          :min="mindate"
           :picker-date.sync="pickerDate"
+          @change="getDateAppoint"
         ></v-date-picker>
         <v-card
           class="mt-8 pb-4"
-          style="overflow:auto;"
+          style="overflow:auto;height: 235px;"
           min-height="220"
           flat
         >
@@ -74,11 +76,23 @@
             hide-default-header
             :items-per-page="-1"
             class="elevation-1 stripe-table"
+            :loading="loader"
+            loading-text="Loading... Please wait"
           >
+            <template v-slot:item.name="{ item }">
+              <template>
+                  {{item.information.full_name}}
+              </template>
+            </template>
+            <template v-slot:item.time="{ item }">
+              <template>
+                  {{item.time}}
+              </template>
+            </template>
             <template v-slot:item.action="{ item }">
               <v-tooltip left>
                 <template v-slot:activator="{ on}">
-                  <v-icon v-on="on" @click="cancelCall(item)">
+                  <v-icon v-on="on" @click.stop="cancelCall(item)">
                     mdi-close-circle
                   </v-icon>
                 </template>
@@ -89,14 +103,54 @@
         </v-card>
       </v-card>
     </div>
+   
+       <v-dialog
+          v-model="confirmDelete"
+          max-width="500px"
+        >
+          <v-card>
+            <v-card-title class="font-weight-light">
+              Delete Confirmation
+            </v-card-title>
+            <v-card-text>
+              <div class="my-5">
+                <p class="font-weight-light" style="color:#000;font-size: 17px;">
+                  Are you sure you want to delete this call?
+                </p>
+              </div>
+            </v-card-text>
+            <v-card-actions class="justify-end">
+              <v-btn
+                color="green"
+                text
+                @click="confirmDelete = false"
+              >
+                Close
+              </v-btn>
+              <v-btn
+                color="red"
+                text
+                @click="confirmDeletecall()"
+              >
+                Yes
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+      </v-dialog>
   </div>
 </template>
 <script>
+import moment from 'moment'
+
 export default {
   data () {
     return {
       picker: '',
+      mindate: '',
       pickerDate: null,
+      loader: false,
+      datas: [],
+      confirmDelete: false,
       headers: [
         {
           text: 'Dessert (100g serving)',
@@ -117,23 +171,57 @@ export default {
           value: 'action',
         },
       ],
-      items: [
-        { name: 'Travis Howard', time: '9:00' },
-        { name: 'Travis Howard', time: '9:00' },
-        { name: 'Travis Howard', time: '9:00' },
-        { name: 'Travis Howard', time: '9:00' },
-
-      ],
+      items: [],
+      // items: [
+      //   { name: 'Travis Howards', time: '9:00' },
+      //   { name: 'Travis Howard', time: '9:00' },
+      //   { name: 'Travis Howard', time: '9:00' },
+      //   { name: 'Travis Howard', time: '9:00' },
+      // ],
     }
   },
+ 
   watch: {
     picker (newval,oldval) {
       console.log(newval, oldval, 'date');
     },
   },
+  mounted(){
+    // console.log(this.$auth.user.id)
+     this.picker = moment().format('YYYY-MM-DD')
+     this.mindate = moment().format('YYYY-MM-DD')
+     this.getAppointment();
+  },
   methods:{
     cancelCall(item){
-      alert('Call Canceled for '+ item.name)
+        this.confirmDelete = true;
+        this.datas = item;
+    },
+    confirmDeletecall(){
+        this.confirmDelete = false;
+        this.$axios
+        .delete(
+          `coachappointment/`+this.datas.id
+        )
+        .then(({ data }) => {
+          this.successDeleteCall('Call successfully deleted')
+          this.getAppointment();
+        });
+    },
+    getAppointment(){
+        this.loader = true;
+        this.items = [];
+        this.$axios
+        .get(
+          `coachappointment/getSchedule/`+this.picker
+        )
+        .then(({ data }) => {
+          this.items = data;
+          this.loader = false;
+        });
+    },
+    getDateAppoint(){
+       this.getAppointment();
     }
   }
 }
