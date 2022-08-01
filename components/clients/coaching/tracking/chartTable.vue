@@ -5,7 +5,7 @@
       :height="360"
       :chartData="chart_data"
     ></line-chart>
-    <v-data-table 
+    <v-data-table
       v-else
       :headers="headers"
       :items="table_data"
@@ -34,12 +34,12 @@ export default {
         { text: 'Date', align: 'start', value: 'date', width: '130px'},
         { text: 'Carbohydrate', align: 'start', value: 'carbohydrate', width: '130px'},
         { text: 'Lipid', align: 'start', value: 'lipid', width: '130px'},
-        { text: 'Protein', align: 'start', value: 'Protein', width: '130px'},
+        { text: 'Protein', align: 'start', value: 'protein', width: '130px'},
         { text: 'Vegetable', align: 'start', value: 'vegetable', width: '130px'},
         { text: 'Type', align: 'start', value: 'type', width: '130px'},
       ],
       table_data: [],
-      
+
       chart_data: {
         labels: [],
         datasets: [
