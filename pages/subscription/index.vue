@@ -39,92 +39,88 @@
     </v-dialog>
 
       <!-- :hide="['add']" -->
-    <data-table
-      :options="options"
-      :currentUrl="url"
-      :title="title"
-      :headers="headers"
-      :data="data"
-      :sort-desc.sync="isDescending"
-      class="custom-table"
-      @addRecord="drawer = true"
-      @deleteRecord="deleteRecord($event)"
-      @reloadtable="initialize()"
-      @FilterBy="filterBy($event)"
-      @updatePagenum="updatePagenum($event)"
-    >
-
-
-      <template v-slot:status="{ item }">
-        <v-chip outlined label :color="statuses[item.status].color" v-if="statuses[item.status]">
-          <v-icon left>mdi-{{ statuses[item.status].icon }}</v-icon>
-          {{ statuses[item.status].label }}
-        </v-chip>
-      </template>
-
-      <template v-slot:client="{ item }">
-        <v-chip color="primary" @click="$router.push({ path: `/client/${item.client.id}/coaching/global` })">
-          <v-avatar left size="md">
-            <v-img :src="item.client.logo" v-if="item.client.logo != null"></v-img>
-            <v-icon v-else>mdi-account-circle</v-icon>
-          </v-avatar>
-          {{ item.client.full_name }}
-        </v-chip>
-      </template>
-
-      <template v-slot:coach="{ item }">
-        <v-chip color="primary" @click="$router.push({ path: `/settings/coaches/${item.coach.id}/profile` })">
-          <v-avatar left size="md">
-            <v-img :src="item.coach.logo" v-if="item.coach.logo != null"></v-img>
-            <v-icon v-else>mdi-account-circle</v-icon>
-          </v-avatar>
-          {{ item.coach.full_name }}
-        </v-chip>
-      </template>
-
-      <template v-slot:price="{ item }">
-        <v-chip color="primary" @click="$router.push('/settings/plans')" v-if="item.price">
-          <v-avatar left size="md">
-            <v-img :src="item.price.plan.photo" v-if="item.price.plan.photo"></v-img>
-            <v-icon v-else>mdi-card-account-details-star</v-icon>
-          </v-avatar>
-          <span>{{ item.price.plan.name }}</span>
-          <span class="text-caption ml-2">({{ item.price | computePlanPrice }})</span>
-        </v-chip>
-
-      </template>
-
-      <template v-slot:action="{ item }">
-        <div>
-          <v-tooltip v-if="item.status == 1" left>
-            <template v-slot:activator="{ on }">
-              <v-btn icon color="error" small @click="deleteRecord(item)" v-on="on">
-                <v-icon>mdi-clock-remove-outline</v-icon>
-              </v-btn>
-            </template>
-            <span>Annuler</span>
-          </v-tooltip>
-
-          <v-tooltip v-else left>
-            <template v-slot:activator="{ on }">
-              <v-btn icon color="secondary" small @click="restoreRecord(item)" v-on="on">
-                <v-icon>mdi-delete-restore</v-icon>
-              </v-btn>
-            </template>
-            <span>Restaurer</span>
-          </v-tooltip>
-          <v-tooltip  left v-if="item.plan_id == 1 && item.status == 1">
-            <template v-slot:activator="{ on }">
-              <v-btn icon color="green" small @click.stop="updatePlan(item)" v-on="on">
-                <v-icon>mdi-arrow-up-bold-circle-outline</v-icon>
-              </v-btn>
-            </template>
-            <span>Upgrade</span>
-          </v-tooltip>
-        </div>
-      </template>
-
-    </data-table>
+    <div v-show="loading">
+      <data-table
+        :options="options"
+        :currentUrl="url"
+        :title="title"
+        :headers="headers"
+        :data="data"
+        :sort-desc.sync="isDescending"
+        class="custom-table"
+        @addRecord="drawer = true"
+        @deleteRecord="deleteRecord($event)"
+        @reloadtable="initialize()"
+        @FilterBy="filterBy($event)"
+        @updatePagenum="updatePagenum($event)"
+      >
+        <template v-slot:status="{ item }">
+          <v-chip outlined label :color="statuses[item.status].color" v-if="statuses[item.status]">
+            <v-icon left>mdi-{{ statuses[item.status].icon }}</v-icon>
+            {{ statuses[item.status].label }}
+          </v-chip>
+        </template>
+        <template v-slot:client="{ item }">
+          <v-chip color="primary" @click="$router.push({ path: `/client/${item.client.id}/coaching/global` })">
+            <v-avatar left size="md">
+              <v-img :src="item.client.logo" v-if="item.client.logo != null"></v-img>
+              <v-icon v-else>mdi-account-circle</v-icon>
+            </v-avatar>
+            {{ item.client.full_name }}
+          </v-chip>
+        </template>
+        <template v-slot:coach="{ item }">
+          <v-chip color="primary" @click="$router.push({ path: `/settings/coaches/${item.coach.id}/profile` })">
+            <v-avatar left size="md">
+              <v-img :src="item.coach.logo" v-if="item.coach.logo != null"></v-img>
+              <v-icon v-else>mdi-account-circle</v-icon>
+            </v-avatar>
+            {{ item.coach.full_name }}
+          </v-chip>
+        </template>
+        <template v-slot:price="{ item }">
+          <v-chip color="primary" @click="$router.push('/settings/plans')" v-if="item.price">
+            <v-avatar left size="md">
+              <v-img :src="item.price.plan.photo" v-if="item.price.plan.photo"></v-img>
+              <v-icon v-else>mdi-card-account-details-star</v-icon>
+            </v-avatar>
+            <span>{{ item.price.plan.name }}</span>
+            <span class="text-caption ml-2">({{ item.price | computePlanPrice }})</span>
+          </v-chip>
+        </template>
+        <template v-slot:action="{ item }">
+          <div>
+            <v-tooltip v-if="item.status == 1" left>
+              <template v-slot:activator="{ on }">
+                <v-btn icon color="error" small @click="deleteRecord(item)" v-on="on">
+                  <v-icon>mdi-clock-remove-outline</v-icon>
+                </v-btn>
+              </template>
+              <span>Annuler</span>
+            </v-tooltip>
+            <v-tooltip v-else left>
+              <template v-slot:activator="{ on }">
+                <v-btn icon color="secondary" small @click="restoreRecord(item)" v-on="on">
+                  <v-icon>mdi-delete-restore</v-icon>
+                </v-btn>
+              </template>
+              <span>Restaurer</span>
+            </v-tooltip>
+            <v-tooltip  left v-if="item.plan_id == 1 && item.status == 1">
+              <template v-slot:activator="{ on }">
+                <v-btn icon color="green" small @click.stop="updatePlan(item)" v-on="on">
+                  <v-icon>mdi-arrow-up-bold-circle-outline</v-icon>
+                </v-btn>
+              </template>
+              <span>Upgrade</span>
+            </v-tooltip>
+          </div>
+        </template>
+      </data-table>
+    </div>
+    <div v-show="!loading" style="position: relative; height: 90vh;">
+      <loader-page></loader-page>
+    </div>
   </v-container>
 </template>
 <script>
@@ -132,13 +128,15 @@ import dataTable from "~/components/ui/dataTable.vue";
 import tableHelper from "~/mixins/tableHelper.vue";
 import subscriptionForm from "~/components/subscription/form.vue"
 import priceHelperVue from '~/mixins/priceHelper.vue';
+import loaderPage from "~/components/loader/default_loader.vue";
 export default {
   name: "index",
-  components: { dataTable, subscriptionForm },
+  components: { dataTable, subscriptionForm, loaderPage },
   mixins: [tableHelper, priceHelperVue],
   data() {
     return {
       options: {},
+      loading:true,
       title: this.$t('global.subscription')+'s',
       headers: [
         {
@@ -269,6 +267,8 @@ methods: {
     this.drawer=true
   },
   updatePlan(payload) {
+      this.loading=false
+
     console.log(payload,"update")
       this.$axios
         .put(`${this.$subscriptions}/${payload.id}/updatePlan`, payload)
@@ -289,6 +289,7 @@ methods: {
     this.$axios.post(`${this.$subscriptions}/upgradePlan`, data).then(({ data }) => {
       this.successNotification(payload.client,"create","subscription","subscriptions","full_name");
       this.initialize()
+      this.loading=true
     });
   },
   deleteRecord(items) {

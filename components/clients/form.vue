@@ -157,49 +157,6 @@
                   </ValidationProvider>
                 </v-flex>
                 <v-flex xs12>
-                  <p class="subtitle-1 font-weight-medium">{{ $t('clients.loginCredential') }}</p>
-                </v-flex>
-                <v-flex xs6>
-                  <ValidationProvider slim>
-                    <div class="mb-1">
-                      <p class="subtitle-2 font-weight-regular mb-2">
-                        {{ $t('clients.email') }}/{{ $t('clients.username') }}
-                      </p>
-                      <v-text-field
-                        flat
-                        dense
-                        filled
-                        type="text"
-                        name="email_2"
-                        hide-details="auto"
-                        v-model="payload.email"
-                        :disabled="!enableEdit"
-                        :placeholder="$t('clients.typeEmailOrUsername')"
-                      ></v-text-field>
-                    </div>
-                  </ValidationProvider>
-                </v-flex>
-                <v-flex xs6>
-                  <ValidationProvider slim>
-                    <div class="mb-1">
-                      <p class="subtitle-2 font-weight-regular mb-2">Password</p>
-                      <v-text-field
-                        flat
-                        dense
-                        filled
-                        name="password"
-                        hide-details="auto"
-                        v-model="payload.password"
-                        @click:append="viewPassword = !viewPassword"
-                        :disabled="!enableEdit"
-                        :type="viewPassword ? 'text' : 'password'"
-                        :placeholder="$t('clients.typeYourPassword')"
-                        :append-icon="viewPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
-                      ></v-text-field>
-                    </div>
-                  </ValidationProvider>
-                </v-flex>
-                <v-flex xs12>
                   <p class="subtitle-1 font-weight-medium">{{ $t('clients.address') }}</p>
                 </v-flex>
                 <v-flex xs12>
@@ -405,6 +362,49 @@
                         :items="statusOptions"
                         :disabled="!enableEdit"
                       ></v-select>
+                    </div>
+                  </ValidationProvider>
+                </v-flex>
+                <v-flex xs12>
+                  <p class="subtitle-1 font-weight-medium">{{ $t('clients.loginCredential') }}</p>
+                </v-flex>
+                <v-flex xs6>
+                  <ValidationProvider slim>
+                    <div class="mb-1">
+                      <p class="subtitle-2 font-weight-regular mb-2">
+                        {{ $t('clients.email') }}/{{ $t('clients.username') }}
+                      </p>
+                      <v-text-field
+                        flat
+                        dense
+                        filled
+                        type="text"
+                        name="email_2"
+                        hide-details="auto"
+                        v-model="payload.email"
+                        :disabled="!enableEdit"
+                        :placeholder="$t('clients.typeEmailOrUsername')"
+                      ></v-text-field>
+                    </div>
+                  </ValidationProvider>
+                </v-flex>
+                <v-flex xs6>
+                  <ValidationProvider slim>
+                    <div class="mb-1">
+                      <p class="subtitle-2 font-weight-regular mb-2">Password</p>
+                      <v-text-field
+                        flat
+                        dense
+                        filled
+                        name="password"
+                        hide-details="auto"
+                        v-model="payload.password"
+                        @click:append="viewPassword = !viewPassword"
+                        :disabled="!enableEdit"
+                        :type="viewPassword ? 'text' : 'password'"
+                        :placeholder="$t('clients.typeYourPassword')"
+                        :append-icon="viewPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
+                      ></v-text-field>
                     </div>
                   </ValidationProvider>
                 </v-flex>
