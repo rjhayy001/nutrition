@@ -32,7 +32,6 @@
             >
               <v-icon left>mdi-plus</v-icon>
               Définir des macros
-
             </v-btn>
           </div>
         </v-flex>
@@ -55,26 +54,75 @@
                       width="150px"
                       class="mx-2"
                     >
-
-                      <v-text-field
-                        placeholder="from"
-                        outlined
-                        hide-details="auto"
-                        dense
-                        append-icon="mdi-calendar-outline"
-                      ></v-text-field>
+                      <v-menu
+                        ref="menu"
+                        v-model="menu"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="auto"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="payload.from"
+                            placeholder="from"
+                            readonly
+                            hide-details="auto"
+                            outlined
+                            dense
+                            append-icon="mdi-calendar-outline"
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          @change="requestForm"
+                          color="primary"
+                          v-model="payload.from"
+                          no-title
+                          scrollable
+                          @input="menu = false"
+                        >
+                        </v-date-picker>
+                      </v-menu>
                     </div>
                     <div
                       width="150px"
                       class="mx-2 mr-6"
                     >
-                      <v-text-field
-                        placeholder="to"
-                        outlined
-                        hide-details="auto"
-                        dense
-                        append-icon="mdi-calendar-outline"
-                      ></v-text-field>
+                      <v-menu
+                        ref="menu"
+                        v-model="menu2"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="auto"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="payload.to"
+                            placeholder="from"
+                            readonly
+                            hide-details="auto"
+                            outlined
+                            dense
+                            append-icon="mdi-calendar-outline"
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          color="primary"
+                          v-model="payload.to"
+                          @change="requestForm"
+                          no-title
+                          scrollable
+                          @input="menu2 = false"
+                        >
+                        </v-date-picker>
+                      </v-menu>
                     </div>
                     <span class="overline">graph</span>
                     <v-switch
@@ -85,64 +133,8 @@
                       inset
                     ></v-switch>
                     <span class="overline">table</span>
-                    <!-- <v-menu
-                      ref="menu"
-                      v-model="menu"
-                      :close-on-content-click="false"
-                      :return-value.sync="dates"
-                      transition="scale-transition"
-                      offset-y
-                      left
-                      min-width="auto"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <div
-                          class="mb-1"
-                          style="width:230px;"
-                        >
-                          <v-text-field
-                            outlined
-                            dense
-                            v-model="textDateValue"
-                            placeholder="Choose Date..."
-                            type="text"
-                            hide-details="auto"
-                            readonly
-                            prepend-inner-icon="mdi-calendar"
-                            v-bind="attrs"
-                            v-on="on"
-                          ></v-text-field>
-                        </div>
-                      </template>
-                      <v-date-picker
-                        v-model="dates"
-                        range
-                        color="primary"
-                        scrollable
-                      >
-                        <v-spacer></v-spacer>
-                        <v-btn
-                          text
-                          color="primary"
-                          @click="menu = false"
-                        >
-                          Cancel
-                        </v-btn>
-                        <v-btn
-                          text
-                          color="primary"
-                          @click="$refs.menu.save(dates)"
-                        >
-                          OK
-                        </v-btn>
-                      </v-date-picker>
-                    </v-menu> -->
                   </v-toolbar>
-                  <!-- <v-divider class="my-4"></v-divider> -->
-                  <line-chart
-                    :height="360"
-                    :chartData="chart_data"
-                  ></line-chart>
+                  <chart-table :dataChart="measures" :is_graph="is_graph"></chart-table>
                 </v-card>
               </v-flex>
             </v-row>
@@ -153,13 +145,17 @@
   </v-expansion-panel>
 </template>
 <script>
+import moment from "moment";
 import statisticsComponent from "@/components/common/statisticComponent.vue";
 import lineChart from "@/components/common/charts/lineChart.vue";
+import chartTable from '@/components/clients/coaching/tracking/chartTable.vue';
+import ChartTable from './chartTable.vue';
 // import barChart from "@/components/common/charts/barChart.vue";
 export default {
   components: {
     statisticsComponent,
     lineChart,
+    chartTable
     // barChart
   },
   data () {
@@ -168,55 +164,14 @@ export default {
       dates: [],
       is_graph:false,
       menu: false,
-      chart_data: {
-        labels: [
-          'Monday',
-          'Tuesday',
-          'Wednesday',
-          'Thursday',
-          'Friday',
-          'Saturday',
-          'Sunday'
-        ],
-        datasets: [
-          {
-            label: 'Protein',
-            fill: true,
-            backgroundColor: "rgba(183, 192, 223, 0.5)",
-            borderColor: '#4860B1',
-            pointRadius: 4,
-            data: [30, 39, 66, 60, 69, 90, 50],
-            tension: 0.5
-          },
-          {
-            label: 'Lipides',
-            fill: true,
-            borderColor: 'red',
-            pointRadius: 4,
-            backgroundColor: "rgba(253, 222, 170, 0.6)",
-            data: [40, 39, 16, 40, 49, 80, 80],
-            tension: 0.5
-          },
-          {
-            label: 'Glucides',
-            fill: true,
-            pointRadius: 4,
-            borderColor: 'green',
-            backgroundColor: "rgba(206, 249, 206, 0.6)",
-            data: [70, 19, 21, 67, 59, 70, 90],
-            tension: 0.5
-          },
-          {
-            label: 'Legumes',
-            backgroundColor: "rgba(240, 202, 243, 0.5)",
-            fill: true,
-            borderColor: '#C83FD3',
-            pointRadius: 4,
-            data: [64, 57, 32, 45, 81, 76, 39],
-            tension: 0.5
-          },
-        ]
+      menu2: false,
+      modal: false,
+      payload: {
+        from: moment().subtract(1,'week').format('YYYY-MM-DD'),
+        to: moment().format('YYYY-MM-DD'),
       },
+      measures: [],
+      subs:[],
     }
   },
   props: {
@@ -229,7 +184,7 @@ export default {
   computed: {
     textDateValue () {
       return this.dates.join(' ~ ')
-    },
+  },
     formattedStatistics () {
       return [
         {
@@ -255,6 +210,62 @@ export default {
       ]
     }
   },
+    watch: {
+    is_graph: {
+      handler(val) {
+        this.requestForm()
+      }
+    }
+  },
+  mounted () {
+    this.clientData()
+  },
+  methods: {
+    initialize() {
+      this.requestForm()
+    },
+    async getRecords(item) {
+      await this.$axios.post(`${this.$macros}/${item.request_view}`, item).then(({data}) => {
+        console.log(data,"dataMacro")
+        this.measures=data
+      })
+    },
+
+    async clientData () {
+      await this.$axios
+        .get(
+          `${this.$clients}/${this.$route.params.id}/edit?relations=activeSubscription`
+        )
+        .then(({ data }) => {
+          this.subs = data.active_subscription ? data.active_subscription[0] : {}
+          console.log(this.subs,"subs")
+          this.requestForm()
+        });
+    },
+    requestForm() {
+      if(!this.is_graph) {
+        let item= {
+          request_view: 'graph',
+          subs_id:this.subs.id,
+          week_request: {
+            start: this.payload.from,
+            end :  this.payload.to,
+          },
+        };
+        this.getRecords(item)
+      } else {
+        let item= {
+          request_view: 'table',
+          subs_id:this.subs.id,
+          week_request: {
+            start: this.payload.from,
+            end :  this.payload.to,
+          },
+        };
+        this.getRecords(item)
+      }
+    }
+  }
 }
 </script>
 <style scoped>

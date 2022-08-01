@@ -68,7 +68,11 @@
           min-height="220"
           flat
         >
-
+          <v-toolbar flat style="position:sticky; top: 0px; z-index: 999">
+            <v-toolbar-title class="overline" >
+              appointment
+            </v-toolbar-title>
+          </v-toolbar>
           <v-data-table
             :items="items"
             :headers="headers"
@@ -100,10 +104,11 @@
               </v-tooltip>
             </template>
           </v-data-table>
+          <!-- <empty-data v-else></empty-data> -->
         </v-card>
       </v-card>
     </div>
-   
+
        <v-dialog
           v-model="confirmDelete"
           max-width="500px"
@@ -180,7 +185,7 @@ export default {
       // ],
     }
   },
- 
+
   watch: {
     picker (newval,oldval) {
       console.log(newval, oldval, 'date');
