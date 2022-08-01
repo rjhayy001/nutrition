@@ -7,17 +7,22 @@
       <v-toolbar-title class="font-weight-medium text-capitalize">ses mesures (cm)</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
-    <line-chart
-      v-if="!is_graph"
-      :height="360"
-      :chartData="cm_chart_data"
-    ></line-chart>
-    <v-data-table
-      v-else
-      :headers="headers"
-      :items="table_data"
-      class="elevation-1 custom-table"
-    ></v-data-table>
+    <template v-if="!loading">
+      <line-chart
+        v-if="!is_graph"
+        :height="360"
+        :chartData="cm_chart_data"
+      ></line-chart>
+      <v-data-table
+        v-else
+        :headers="headers"
+        :items="table_data"
+        class="elevation-1 custom-table"
+      ></v-data-table>
+    </template>
+    <v-card v-else height="360" flat>
+    <loader ></loader>
+    </v-card>
   </v-card>
 </template>
 <script>
@@ -28,6 +33,10 @@ export default {
   },
   props: {
     is_graph: {
+      type: Boolean,
+      default: () => false,
+    },
+    loading: {
       type: Boolean,
       default: () => false,
     },
