@@ -100,7 +100,7 @@
                 </v-dialog>
               </v-list>
             </v-menu>
-            <v-icon class="mx-2" @click="newPhoto">mdi-plus</v-icon>
+            <!-- <v-icon class="mx-2" @click="newPhoto">mdi-plus</v-icon> -->
             <!-- <pinned-messages/> -->
           </v-toolbar>
         </div>
