@@ -28,8 +28,25 @@
             <v-toolbar-title class="font-weight-medium">Tous les points hebdomadaires</v-toolbar-title>
           </v-toolbar>
           <v-card style="overflow:auto" height="450" class="pa-3">
-            <v-data-table :headers="headers" hide-default-footer hide-default-header :items-per-page="-1"
-              class="elevation-1 stripe-table"></v-data-table>
+            <v-data-table :headers="headers" hide-default-footer hide-default-header :items="items" :items-per-page="-1"
+              class="elevation-1 stripe-table">
+              
+                <template v-slot:item.date="{ item }">
+                  <template>
+                      {{item.coach_schedule.date}}
+                  </template>
+                </template>
+                <template v-slot:item.day="{ item }">
+                  <template>
+                      {{getDay(item.coach_schedule.date)}}
+                  </template>
+                </template>
+                <template v-slot:item.time="{ item }">
+                  <template>
+                      {{item.time}}
+                  </template>
+                </template>
+              </v-data-table>
           </v-card>
         </v-flex>
       </v-row>
@@ -44,6 +61,8 @@ import subscriptionInfo from "~/components/clients/coaching/global/subscription_
 import callsFeedback from "~/components/clients/coaching/global/calls_feedback.vue"
 import feedBackForm from "~/components/clients/coaching/feedback/form.vue"
 import history from "~/components/clients/coaching/global/history.vue"
+import moment from 'moment'
+
 export default {
   name: 'Global',
   components: {
@@ -69,14 +88,17 @@ export default {
         }
       },
       headers: [
-        { text: 'Action', value: 'logs' },
-        { text: 'Date', value: 'created_at' },
+        { text: 'Action', value: 'date' },
+        { text: 'day', value: 'day' },
+        { text: 'Date', value: 'time' },
       ],
       histories: [],
+      items: [],
     }
   },
   mounted() {
     this.initialize();
+    this.getAppointment();
   },
   methods: {
     initialize() {
@@ -100,6 +122,42 @@ export default {
           this.histories = data
           console.log(data, 'data')
         });
+    },
+    cancelCall(item){
+        this.confirmDelete = true;
+        this.datas = item;
+    },
+    confirmDeletecall(){
+        this.confirmDelete = false;
+        this.$axios
+        .delete(
+          `coachappointment/`+this.datas.id
+        )
+        .then(({ data }) => {
+          this.successDeleteCall('Call successfully deleted')
+          this.getAppointment();
+        });
+    },
+    getAppointment(){
+        this.loader = true;
+        this.items = [];
+        this.$axios
+        .get(
+          `coachappointment/`+`${this.$route.params.id}`
+        )
+        .then(({ data }) => {
+          console.log(data);
+          // return;
+          this.items = data;
+          // this.loader = false;
+        });
+    },
+    getDateAppoint(){
+       this.getAppointment();
+    },
+    getDay(date){
+      var weekDayName =  moment(date).format('dddd');
+      return weekDayName;
     },
   }
 }
