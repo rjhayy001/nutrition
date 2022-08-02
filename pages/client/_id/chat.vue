@@ -41,7 +41,7 @@
       </v-flex>
 
       <v-flex xs12>
-        <div class="scrollable-element" id="scrollable-element" ref="chat" v-if="chatList!=''">
+        <div class="scrollable-element" id="scrollable-element" ref="chat" v-if="chatList!=''" @scroll="scrollManager">
           <!-- <div v-for="item in chatList"  :key="item.id"> -->
           <div v-for="(item, index) in chatList" :key="item.id">
             <div class="date-divider ">
@@ -287,6 +287,9 @@
         sdata:[],
         ddata:'',
         hoverInd :'',
+        paginate:15,
+        scrolled:false,
+        stopSroll:false,
       }
     },
     created(){
@@ -298,16 +301,20 @@
           thiss.sendMessage();
         }
         if (event.keyCode === 27) {
-           thiss.is_pinned = null;
+          thiss.is_pinned = null;
         }
       });
       window.addEventListener('click', function(event) {
-           thiss.is_pinned = null;
+        thiss.is_pinned = null;
       });
+
+   
+      // this.getChatPaginate();
       this.activateNotification()
       this.getChats();
       this.getPinnedMessage();
     },
+   
 
     watch: {
         chatList: function(value) {
@@ -324,11 +331,27 @@
         document.getElementById("chats"+key).focus();
         }, 200, this);
       },
+      scrollManager(){
+       var objDiv = document.getElementById("scrollable-element");
+        if(this.stopSroll == false){
+          if(objDiv.scrollTop == 0){
+            this.paginate += 10;
+            this.getChats();
+            // this.getChatPaginate();
+          }
+        }
+      },
       scrollInto(){
+        const thiss = this;
         setTimeout(function() {
-         if(document.getElementById("scrollable-element")){
+         if(document.getElementById("scrollable-element") && thiss.scrolled == false){
             var objDiv = document.getElementById("scrollable-element");
             objDiv.scrollTop = objDiv.scrollHeight;
+            thiss.scrolled = true;
+          }
+         if(document.getElementById("scrollable-element")&& thiss.scrolled == true){
+            var objDiv = document.getElementById("scrollable-element");
+            objDiv.scrollTop = objDiv.scrollHeight / 4;
           }
         }, 700, this);
         // var intVal = setInterval(function() {
@@ -442,12 +465,29 @@
           this.deletedialog = false;
         });
       },
-      getChats(){
+      //the real get chat
+      // getChats(){
+      //   this.$axios
+      //   .get(`chat/getChat/`+`${this.$route.params.id}`
+      //    )
+      //   .then(({ data }) => {
+      //     this.chatList = data.data;
+      //     this.client_name = data.name;
+      //     this.loads = true;
+      //   });
+      // },
+
+      //the dummy
+      getChats (){
         this.$axios
-        .get(`chat/getChat/`+`${this.$route.params.id}`
+        .get(`chat/getChatPaginate/`+`${this.$route.params.id}`+`?paginate=`+this.paginate
          )
         .then(({ data }) => {
-
+          // console.log(data.data);
+          // console.log(data.page.last_page);
+          if(data.page.last_page == 1){
+            this.stopSroll = true;
+          }
           this.chatList = data.data;
           this.client_name = data.name;
           this.loads = true;
