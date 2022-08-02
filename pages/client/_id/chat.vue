@@ -337,31 +337,53 @@
           if(objDiv.scrollTop == 0){
             this.paginate += 10;
             this.getChats();
+            this.scrollPagination();
             // this.getChatPaginate();
           }
         }
       },
       scrollInto(){
         const thiss = this;
-        setTimeout(function() {
+        const myTimeout = setTimeout(function() {
          if(document.getElementById("scrollable-element") && thiss.scrolled == false){
             var objDiv = document.getElementById("scrollable-element");
             objDiv.scrollTop = objDiv.scrollHeight;
             thiss.scrolled = true;
+            return clearTimeout(myTimeout);
           }
-         if(document.getElementById("scrollable-element")&& thiss.scrolled == true){
+
+        //  if(document.getElementById("scrollable-element")&& thiss.scrolled == true){
+        //     var objDiv = document.getElementById("scrollable-element");
+        //     objDiv.scrollTop = objDiv.scrollHeight / 4;
+        //     return clearTimeout(myTimeout);
+        //   }
+        }, 100, this);
+      
+      },
+
+      sendScroll(){
+        setTimeout(function() {
+            var objDiv = document.getElementById("scrollable-element");
+            objDiv.scrollTop = objDiv.scrollHeight;
+        }, 500, this);
+      },
+      sendScroll2(){
+        setTimeout(function() {
+            var objDiv = document.getElementById("scrollable-element");
+            objDiv.scrollTop = objDiv.scrollHeight;
+        }, 1000, this);
+      },
+      scrollPagination(){
+       const myTimeout = setTimeout(function() {
+         if(document.getElementById("scrollable-element")){
             var objDiv = document.getElementById("scrollable-element");
             objDiv.scrollTop = objDiv.scrollHeight / 4;
+            return clearTimeout(myTimeout);
           }
-        }, 700, this);
-        // var intVal = setInterval(function() {
-        //   if(document.getElementById("scrollable-element")){
-        //     var objDiv = document.getElementById("scrollable-element");
-        //     objDiv.scrollTop = objDiv.scrollHeight + 20;
-        //     clearInterval(intVal);
-        //   }
-        // }, 500);
+        }, 1000, this);
       },
+
+      
       send(data){
         this.$axios
           .post(`chat/addChatDocuments/`,{
@@ -374,7 +396,6 @@
               }
           )
           .then(({ data }) => {
-
             this.sdata = data;
             this.getPinnedMessage();
             this.message ='';
@@ -414,6 +435,7 @@
             this.message ='';
             this.getPinnedMessage();
             this.getChats();
+            this.sendScroll();
             this.image_selecteds = [];
           });
         }
@@ -429,13 +451,16 @@
               }
           )
           .then(({ data }) => {
+            this.image_selecteds = [];
+            this.scrolled = false;
             // this.chatList = data.data;
             this.getPinnedMessage();
             this.message ='';
             this.getChats();
-            this.image_selecteds = [];
+            // this.sendScroll2();
           });
         }
+
       },
       pinMessage(item){
         const thiss = this;
