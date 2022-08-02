@@ -348,7 +348,7 @@
          if(document.getElementById("scrollable-element") && thiss.scrolled == false){
             var objDiv = document.getElementById("scrollable-element");
             objDiv.scrollTop = objDiv.scrollHeight;
-            thiss.scrolled = true;
+            this.scrolled = true;
             return clearTimeout(myTimeout);
           }
 
@@ -451,12 +451,12 @@
               }
           )
           .then(({ data }) => {
-            this.image_selecteds = [];
             this.scrolled = false;
             // this.chatList = data.data;
             this.getPinnedMessage();
             this.message ='';
             this.getChats();
+            this.image_selecteds = [];
             // this.sendScroll2();
           });
         }
@@ -508,7 +508,7 @@
         .get(`chat/getChatPaginate/`+`${this.$route.params.id}`+`?paginate=`+this.paginate
          )
         .then(({ data }) => {
-          // console.log(data.data);
+          console.log(data.data);
           // console.log(data.page.last_page);
           if(data.page.last_page == 1){
             this.stopSroll = true;
