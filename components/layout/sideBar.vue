@@ -6,7 +6,7 @@
     app
     class="left-sidebar"
   >
-    <div :style="{ backgroundImage: `url(/images/profile_back_image.png)` }" class="profile-logo">
+    <div :style="{ backgroundImage: `url(/images/profile_back_image_3.png)` }" class="profile-logo">
       <div class="profile-content">
         <img src="https://randomuser.me/api/portraits/women/85.jpg"/>
         <p>{{$auth.user.full_name}}</p>

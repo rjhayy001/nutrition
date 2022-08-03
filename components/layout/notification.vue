@@ -41,7 +41,7 @@
 
             <template v-for="(item, index) in items">
               <v-list-item
-                :style="item.is_read == 0 ? 'background-color:#7c94de; color:white;': ''"
+                :style="item.is_read == 0 ? 'background-color:#77c0d5; color:white;': ''"
                 :key="index+'test'"
                 @click="readNotification(item)"
               >

@@ -130,7 +130,7 @@ export default {
       loaded: 0,
       isFiltered: false,
       filterStatusChanged: false,
-      items_per_page: 50,
+      items_per_page: 5,
       searchKeyword: "",
       sortData: [],
       columnName: [],

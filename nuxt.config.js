@@ -30,7 +30,7 @@ export default {
     '~assets/scss/imports.scss',
   ],
   plugins: [
-    { src: '~mixins/globalHelper/index', ssr: false },
+    { src: '~mixins/globalHelper/index', ssr: false  },
     { src: '~plugins/vee-validate', ssr: false },
     { src: '~plugins/i18n', ssr: false },
     { src: '~plugins/components/vue-notification', ssr: true },
@@ -105,12 +105,12 @@ export default {
           success: colors.green.accent3
         },
         light: {
-          primary: '#7c94de',
+          primary: '#77c0d5',
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
+          error:  '#eb5d6f',
           success: '#2cbc76'
         }
       }

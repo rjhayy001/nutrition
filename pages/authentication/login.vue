@@ -32,7 +32,7 @@
                         <span>Password</span>
                         <span>
                           <p text @click="goTo('forgot_password')" color="primary"
-                            style="cursor:pointer; color:#7c94de;" dense>Forgot Password ?</p>
+                            style="cursor:pointer; color:#77c0d5;" dense>Forgot Password ?</p>
                         </span>
                       </p>
                       <v-text-field id="password" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"

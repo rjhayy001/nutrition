@@ -41,7 +41,7 @@
       </v-flex>
 
       <v-flex xs12>
-        <div class="scrollable-element" id="scrollable-element" ref="chat" v-if="chatList!=''">
+        <div class="scrollable-element" id="scrollable-element" ref="chat" v-if="chatList!=''" @scroll="scrollManager">
           <!-- <div v-for="item in chatList"  :key="item.id"> -->
           <div v-for="(item, index) in chatList" :key="item.id">
             <div class="date-divider ">
@@ -158,7 +158,7 @@
               <v-divider vertical class="mx-2"></v-divider>
             </template>
             <template v-slot:append>
-              <v-icon color="#7c94de" @click="sendMessage">mdi-send</v-icon>
+              <v-icon color="primary" @click="sendMessage">mdi-send</v-icon>
             </template>
           </v-text-field>
         </div>
@@ -287,6 +287,9 @@
         sdata:[],
         ddata:'',
         hoverInd :'',
+        paginate:15,
+        scrolled:false,
+        stopSroll:false,
       }
     },
     created(){
@@ -298,16 +301,20 @@
           thiss.sendMessage();
         }
         if (event.keyCode === 27) {
-           thiss.is_pinned = null;
+          thiss.is_pinned = null;
         }
       });
       window.addEventListener('click', function(event) {
-           thiss.is_pinned = null;
+        thiss.is_pinned = null;
       });
+
+
+      // this.getChatPaginate();
       this.activateNotification()
       this.getChats();
       this.getPinnedMessage();
     },
+
 
     watch: {
         chatList: function(value) {
@@ -324,21 +331,59 @@
         document.getElementById("chats"+key).focus();
         }, 200, this);
       },
+      scrollManager(){
+       var objDiv = document.getElementById("scrollable-element");
+        if(this.stopSroll == false){
+          if(objDiv.scrollTop == 0){
+            this.paginate += 10;
+            this.getChats();
+            this.scrollPagination();
+            // this.getChatPaginate();
+          }
+        }
+      },
       scrollInto(){
-        setTimeout(function() {
-         if(document.getElementById("scrollable-element")){
+        const thiss = this;
+        const myTimeout = setTimeout(function() {
+         if(document.getElementById("scrollable-element") && thiss.scrolled == false){
             var objDiv = document.getElementById("scrollable-element");
             objDiv.scrollTop = objDiv.scrollHeight;
+            thiss.scrolled = true;
+            return clearTimeout(myTimeout);
           }
-        }, 700, this);
-        // var intVal = setInterval(function() {
-        //   if(document.getElementById("scrollable-element")){
+
+        //  if(document.getElementById("scrollable-element")&& thiss.scrolled == true){
         //     var objDiv = document.getElementById("scrollable-element");
-        //     objDiv.scrollTop = objDiv.scrollHeight + 20;
-        //     clearInterval(intVal);
+        //     objDiv.scrollTop = objDiv.scrollHeight / 4;
+        //     return clearTimeout(myTimeout);
         //   }
-        // }, 500);
+        }, 100, this);
+      
       },
+
+      sendScroll(){
+        setTimeout(function() {
+            var objDiv = document.getElementById("scrollable-element");
+            objDiv.scrollTop = objDiv.scrollHeight;
+        }, 500, this);
+      },
+      sendScroll2(){
+        setTimeout(function() {
+            var objDiv = document.getElementById("scrollable-element");
+            objDiv.scrollTop = objDiv.scrollHeight;
+        }, 1000, this);
+      },
+      scrollPagination(){
+       const myTimeout = setTimeout(function() {
+         if(document.getElementById("scrollable-element")){
+            var objDiv = document.getElementById("scrollable-element");
+            objDiv.scrollTop = objDiv.scrollHeight / 4;
+            return clearTimeout(myTimeout);
+          }
+        }, 1000, this);
+      },
+
+      
       send(data){
         this.$axios
           .post(`chat/addChatDocuments/`,{
@@ -351,7 +396,6 @@
               }
           )
           .then(({ data }) => {
-
             this.sdata = data;
             this.getPinnedMessage();
             this.message ='';
@@ -391,6 +435,7 @@
             this.message ='';
             this.getPinnedMessage();
             this.getChats();
+            this.sendScroll();
             this.image_selecteds = [];
           });
         }
@@ -406,13 +451,16 @@
               }
           )
           .then(({ data }) => {
+            this.scrolled = false;
             // this.chatList = data.data;
             this.getPinnedMessage();
             this.message ='';
             this.getChats();
             this.image_selecteds = [];
+            // this.sendScroll2();
           });
         }
+
       },
       pinMessage(item){
         const thiss = this;
@@ -442,12 +490,29 @@
           this.deletedialog = false;
         });
       },
-      getChats(){
+      //the real get chat
+      // getChats(){
+      //   this.$axios
+      //   .get(`chat/getChat/`+`${this.$route.params.id}`
+      //    )
+      //   .then(({ data }) => {
+      //     this.chatList = data.data;
+      //     this.client_name = data.name;
+      //     this.loads = true;
+      //   });
+      // },
+
+      //the dummy
+      getChats (){
         this.$axios
-        .get(`chat/getChat/`+`${this.$route.params.id}`
+        .get(`chat/getChatPaginate/`+`${this.$route.params.id}`+`?paginate=`+this.paginate
          )
         .then(({ data }) => {
-
+          console.log(data.data);
+          // console.log(data.page.last_page);
+          if(data.page.last_page == 1){
+            this.stopSroll = true;
+          }
           this.chatList = data.data;
           this.client_name = data.name;
           this.loads = true;
