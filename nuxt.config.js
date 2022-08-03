@@ -30,7 +30,7 @@ export default {
     '~assets/scss/imports.scss',
   ],
   plugins: [
-    { src: '~mixins/globalHelper/index', ssr: false },
+    { src: '~mixins/globalHelper/index', ssr: false  },
     { src: '~plugins/vee-validate', ssr: false },
     { src: '~plugins/i18n', ssr: false },
     { src: '~plugins/components/vue-notification', ssr: true },
