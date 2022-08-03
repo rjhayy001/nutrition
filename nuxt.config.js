@@ -2,12 +2,12 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   ssr: false,
-  target: 'static',
-  // target: 'server',
-  // server: {
-  //   port: 9696,
-  //   host: "0.0.0.0" // default: 3000,
-  // },
+  // target: 'static',
+  target: 'server',
+  server: {
+    port: 9696,
+    host: "0.0.0.0" // default: 3000,
+  },
   head: {
     titleTemplate: '',
     title: 'Nutrition',
@@ -105,12 +105,12 @@ export default {
           success: colors.green.accent3
         },
         light: {
-          primary: '#7c94de',
+          primary: '#77c0d5',
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
+          error:  '#eb5d6f',
           success: '#2cbc76'
         }
       }

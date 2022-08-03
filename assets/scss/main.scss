@@ -2,7 +2,7 @@
 @import "~vue-awesome-notifications/dist/styles/style.scss";
 
 :root {
-  --blue: #7c94de;
+  --blue: #77c0d5;
   --lightGray: #7c7a7a;
 }
 
@@ -61,7 +61,8 @@ button {
       position: absolute;
       box-sizing: border-box;
       height: 833px;
-      background-color: #7c94de;
+      background-color: #0389a6;
+      // background-color: #77c0d5;
       z-index: 99;
       bottom: 0;
       -webkit-clip-path: ellipse(78% 100% at 22% 100%);
@@ -73,7 +74,8 @@ button {
       position: absolute;
       box-sizing: border-box;
       height: 1200px;
-      background-color: #9aaadb;
+      background-color: #77c0d5;
+      // background-color: #0389a6;
       bottom: 0;
       -webkit-clip-path: ellipse(78% 100% at 22% 100%);
       clip-path: ellipse(150% 100% at -50% 100%);
@@ -120,7 +122,7 @@ button {
       position: absolute;
       box-sizing: border-box;
       height: 833px;
-      background-color: #7c94de;
+      background-color: #0389a6;
       z-index: 99;
       bottom: 0;
       -webkit-clip-path: ellipse(78% 100% at 22% 100%);
@@ -132,7 +134,7 @@ button {
       position: absolute;
       box-sizing: border-box;
       height: 1200px;
-      background-color: #9aaadb;
+      background-color: #77c0d5;
       bottom: 0;
       -webkit-clip-path: ellipse(78% 100% at 22% 100%);
       clip-path: ellipse(150% 100% at -50% 100%);

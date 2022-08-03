@@ -158,7 +158,7 @@
               <v-divider vertical class="mx-2"></v-divider>
             </template>
             <template v-slot:append>
-              <v-icon color="#7c94de" @click="sendMessage">mdi-send</v-icon>
+              <v-icon color="primary" @click="sendMessage">mdi-send</v-icon>
             </template>
           </v-text-field>
         </div>
@@ -308,13 +308,13 @@
         thiss.is_pinned = null;
       });
 
-   
+
       // this.getChatPaginate();
       this.activateNotification()
       this.getChats();
       this.getPinnedMessage();
     },
-   
+
 
     watch: {
         chatList: function(value) {
