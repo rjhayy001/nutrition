@@ -348,7 +348,7 @@
          if(document.getElementById("scrollable-element") && thiss.scrolled == false){
             var objDiv = document.getElementById("scrollable-element");
             objDiv.scrollTop = objDiv.scrollHeight;
-            this.scrolled = true;
+            thiss.scrolled = true;
             return clearTimeout(myTimeout);
           }
 
