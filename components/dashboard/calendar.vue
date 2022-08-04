@@ -60,6 +60,7 @@
           elevation="8"
           :min="mindate"
           :picker-date.sync="pickerDate"
+          :events="arrayEvents"
           @change="getDateAppoint"
         ></v-date-picker>
         <v-card
@@ -155,6 +156,7 @@ export default {
       pickerDate: null,
       loader: false,
       datas: [],
+      arrayEvents: [],
       confirmDelete: false,
       headers: [
         {
@@ -196,6 +198,7 @@ export default {
      this.picker = moment().format('YYYY-MM-DD')
      this.mindate = moment().format('YYYY-MM-DD')
      this.getAppointment();
+    //  this.getSchedule();
   },
   methods:{
     cancelCall(item){
@@ -221,13 +224,26 @@ export default {
           `coachappointment/getSchedule/`+this.picker
         )
         .then(({ data }) => {
-          this.items = data;
+          console.log(data);
+          // return;
+          this.items = data.data;
+          this.arrayEvents = data.dateSched;
           this.loader = false;
         });
     },
     getDateAppoint(){
        this.getAppointment();
-    }
+    },
+    // getSchedule(){
+    // this.$axios
+    // .get(`coachshedule/`+`${this.$route.params.id}`)
+    // .then(({ data }) => {
+    //   console.log(data);
+    //   // this.scheduleList = data.data;
+    //   // this.disableDates = data.disableData;
+    //   // this.loads=true;
+    // });
+    // },
   }
 }
 </script>

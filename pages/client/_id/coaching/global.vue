@@ -33,12 +33,12 @@
               
                 <template v-slot:item.date="{ item }">
                   <template>
-                      {{item.coach_schedule.date}}
+                      {{item.client_appointment.date}}
                   </template>
                 </template>
                 <template v-slot:item.day="{ item }">
                   <template>
-                      {{getDay(item.coach_schedule.date)}}
+                      {{getDay(item.client_appointment.date)}}
                   </template>
                 </template>
                 <template v-slot:item.time="{ item }">
@@ -139,7 +139,6 @@ export default {
         });
     },
     getAppointment(){
-        this.loader = true;
         this.items = [];
         this.$axios
         .get(
@@ -149,9 +148,9 @@ export default {
           console.log(data);
           // return;
           this.items = data;
-          // this.loader = false;
         });
     },
+   
     getDateAppoint(){
        this.getAppointment();
     },
