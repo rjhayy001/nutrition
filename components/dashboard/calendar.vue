@@ -61,6 +61,7 @@
           :min="mindate"
           :picker-date.sync="pickerDate"
           :events="arrayEvents"
+          event-color="error"
           @change="getDateAppoint"
         ></v-date-picker>
         <v-card
