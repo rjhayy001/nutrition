@@ -5,8 +5,10 @@ const messages = {
 
   //general
   "global": {
+    "hello": "Hello",
     "summary": "Summary",
     "save": "Save",
+    "submit": "Submit",
     "update": "Update",
     "cancel": "Cancel",
     "create": "Create",
@@ -33,7 +35,12 @@ const messages = {
 
   //header
   "header": {
-    "search":  "Search items by name, age ...",
+    "search": "Search items by name, age ...",
+    "headerSearch": "Search items by name or title ...",
+    "switchToAdminView": "Switch to admin view",
+    "switchToCoachView": "Switch to coach view",
+    "markAsRead": "Mark as read",
+    "profile": "Profile",
   },
 
   //sidebar
@@ -81,6 +88,12 @@ const messages = {
     "alert_select_client": "Veuillez selectionner un client à exporter."
   },
 
+  //dashboard
+  "dashboard": {
+    "subscribersTracking": "Subscribers Tracking",
+    "newSubscribers": "New Subscribers",
+  },
+
   //Clients
   "clients": {
     "totalClients": "Total Clients",
@@ -93,7 +106,9 @@ const messages = {
     "lastName": "Last Name",
     "fullName": "Full Name",
     "birthday": "Birthday",
+    "dateOfBirth": "Date Of Birth",
     "email": "Email",
+    "password": "Password",
     "phone": "Phone",
     "address": "Address",
     "status": "Status",
@@ -133,6 +148,102 @@ const messages = {
     "typeTitle": "Type Title",
     "shareable": "Shareable",
     "typeDescription": "Type or Paste Description",
+
+    //global
+    "feedbackOfTheWeek": "FEEDBACK OF THE WEEK",
+    "registeredSince": "registered since",
+    "subscribedSince": "subscribed since",
+    "activeSubscription": "active subscription",
+    "nextCall": "Next Calls",
+    "weekly": "Weekly",
+    "lastFeedback7DaysAgo": "Last feedback 7 days ago",
+    "allWeeklyPoints": "All weekly points",
+    //formula
+    "singleMan": "Single Man",
+    "noChildren": "No Children",
+    "weight": "Weight",
+    "start": "Start",
+    "current": "Current",
+    "objective": "Objective",
+    "height": "Height",
+    "food": "Food",
+    "pastHistory": "Past History",
+    "sleep": "Sleep",
+
+    "notSpecified": "NOT SPECIFIED",
+    //food questionaire
+    "foodPreference": "FOOD PREFERENCE",
+    "mealsPerDay": "MEALS PER DAY",
+    "followDrasticDiet": "FOLLOW DRASTIC DIET",
+    "caloriesToday": "CALORIES TODAY",
+    "foodIntolerances": "FOOD INTOLERANCES",
+    "culturalAdaptationDiet": "CULTURAL ADAPTATIONS DIET",
+    "waterPerDay": "WATER PER DAY",
+    "drinksOtherThanWater": "DRINKS OTHER THAN WATER",
+    "coffeePerDay": "COFFE PER DAY",
+    "alcoholPerWeek": "ALCOHOL PER WEEK",
+    "foodSupplement": "FOOD SUPPLEMENT",
+    //standard day
+    "standardDay": "Standard Day",
+    "breakfast": "BREAKFAST",
+    "morningSnack": "MORNING SNACK",
+    "lunch": "LUNCH",
+    "afternoonSnack": "AFTERNOON SNACK",
+    "dinner": "DINNER",
+    //past history questionaire
+    "medicalHistory": "MEDICAL HISTORY",
+    "medicalTreatment": "MEDICAL TREATMENT",
+    "familyMedicalHistory": "FAMILY MEDICAL HISTORY",
+    "eatingDisorder": "EATING DISORDER",
+    "eatingDisorderAge": "EATING DISORDER AGE",
+    "eatingDisorderRemedy": "EATING DISORDER REMEDY",
+    //for women only
+    "forWomenOnly": "FOR WOMEN ONLY",
+    "premenstrualSendrome": "PREMENSTRUAL SYNDROME",
+    "gynaecologicalCondition": "GYNAECOLOGICAL CONDITION",
+    "observeMenstrualCycle": "OBSERVE MENSTRUAL CYCLE",
+    "regularCycle": "REGULAR CYCLE",
+    "cycleAverage": "CYCLE AVERAGE",
+    //objectives questionaire
+    "desireWeight": "DESIRED WEIGHT",
+    "dateToReachTheGoal": "DATE TO REACH THE GOAL",
+    "goalImportance": "GOAL IMPORTANCE",
+    //goal hindrances
+    "goalHindrances": "GOAL HINDRANCES",
+    "whatToEat": "what to eat",
+    "howMuchToEat": "how much to eat",
+    "planMeals": "plan meals",
+    "timeToCook": "time to cook",
+    "drinkAlcohol": "drink alcohol",
+    "cravings": "cravings",
+    "emotionalVoid": "emotional void",
+    "eatWhenNotHungry": "eat when not hungry",
+    "alwaysHungry": "always hungry",
+    "notHungry": "not hungry",
+    "guiltyToEat": "guilty to eat",
+    "accessToHealthyFood": "access to healthy food",
+    //sparts questionaire
+    "practiceSports": "PRACTICE SPORTS",
+    "sportingActivityLevel": "sporting activity level",
+    "activityOutsideSportLevel": "activity outside sport level",
+    "trainingRecovery": "training recovery",
+    "NumberOfTrainingDays": "number of training day",
+    "pain": "pain",
+    "confidentOnAthleticAbility": "confident on athletic ability",
+    "comfortablePlace": "comfortable place",
+    "placeToPractice": "place to practice",
+    "energyToPractice": "energy to practice",
+    "time": "time",
+    "sportHindrances": "Sport Hindrances",
+    "sportsTypes": "Sports Types",
+    //stress questionaire
+    "jobOrStudy": "JOB OR STUDY",
+    "stressMeter": "STRESS METER",
+    "fulfillingMeter": "FULFILLING METER",
+    "homeStressed": "HOME STRESSED",
+    "manageStress": "MANAGE STRESS",
+    "planYourDay": "PLAN YOUR DAY",
+    "timeOutsidePerDay": "TIME OUTSIDE PER DAY",
 
   },
 

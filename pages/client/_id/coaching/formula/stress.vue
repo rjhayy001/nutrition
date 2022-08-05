@@ -12,7 +12,7 @@
                   {{list.text}} :
                 </div>
                 <div class="font-weight-bold overline type-value">
-                 {{ stresses ? stresses[list.value] : 'not specified'}}
+                 {{ stresses ? stresses[list.value] : $t('clients.notSpecified')}}
                 </div>
               </div>
           </v-card>

@@ -22,7 +22,7 @@
                 {{list.text}} :
               </div>
               <div class="font-weight-bold overline type-value">
-                {{ goal ? goal[list.value] : 'not specified'}}
+                {{ goal ? goal[list.value] : $t('clients.notSpecified')}}
               </div>
             </div>
           </v-card>
@@ -39,7 +39,7 @@
               <v-toolbar-title
                 class="text-uppercase font-weight-medium"
                 style="font-size:17px;"
-              >Goal hindrances</v-toolbar-title>
+              >{{ $t('clients.goalHindrances') }}</v-toolbar-title>
             </v-toolbar>
             <v-divider></v-divider>
               <template v-if="goal && goal.goal_hindrances">
@@ -98,65 +98,65 @@ export default {
           value: 'goal'
         },
         {
-          text: 'desired weight',
+          text: this.$t('clients.desireWeight'),
           value: 'desired_weight'
         },
         {
-          text: 'date to reach the goal',
+          text: this.$t('clients.dateToReachTheGoal'),
           value: 'date_to_reach_goal'
         },
         {
-          text: 'goal importance',
+          text: this.$t('clients.goalImportance'),
           value: 'goal_importance'
         },
       ],
       hindrances: [
         {
-          text: 'what to eat',
+          text: this.$t('clients.whatToEat'),
           value: 'what_to_eat'
         },
         {
-          text: 'how much to eat',
+          text: this.$t('clients.howMuchToEat'),
           value: 'how_much_to_eat'
         },
         {
-          text: 'plan meals',
+          text: this.$t('clients.planMeals'),
           value: 'plan_meals'
         },
         {
-          text: 'time to cook',
+          text: this.$t('clients.timeToCook'),
           value: 'time_to_cook'
         },
         {
-          text: 'drink alcohol',
+          text: this.$t('clients.drinkAlcohol'),
           value: 'drink_alcohol'
         },
         {
-          text: 'cravings',
+          text: this.$t('clients.cravings'),
           value: 'cravings'
         },
         {
-          text: 'emotional void',
+          text: this.$t('clients.emotionalVoid'),
           value: 'emotional_void'
         },
         {
-          text: 'eat when not hungry',
+          text: this.$t('clients.eatWhenNotHungry'),
           value: 'eat_when_not_hungry'
         },
         {
-          text: 'always hungry',
+          text: this.$t('clients.alwaysHungry'),
           value: 'always_hungry'
         },
         {
-          text: 'not hungry',
+          text: this.$t('clients.notHungry'),
           value: 'not_hungry'
         },
         {
-          text: 'guilty to eat',
+          text: this.$t('clients.guiltyToEat'),
           value: 'guilty_to_eat'
         },
         {
-          text: 'access to healthy food',
+          text: this.$t('clients.accessToHealthyFood'),
           value: 'access_to_healthy_food'
         },
 

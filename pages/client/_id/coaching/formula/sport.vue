@@ -53,7 +53,7 @@
                 <v-toolbar-title
                   class="text-uppercase font-weight-medium"
                   style="font-size:17px;"
-                >Sport hindrances</v-toolbar-title>
+                >{{ $t('clients.sportHindrances') }}</v-toolbar-title>
               </v-toolbar>
               <div class="px-4 pt-2 pb-3 overline">
                 1 : It was never an obstacle<br />
@@ -90,7 +90,7 @@
                 <v-toolbar-title
                   class="text-uppercase font-weight-medium"
                   style="font-size:17px;"
-                >Sports Types</v-toolbar-title>
+                >{{ $t('clients.sportsTypes') }}</v-toolbar-title>
               </v-toolbar>
               <v-divider></v-divider>
               <div class="px-4 pb-5 pt-2">
@@ -140,45 +140,45 @@ export default {
       sports: {},
       lists: [
         {
-          text: 'sporting activity level',
+          text: this.$t('clients.sportingActivityLevel'),
           value: 'sporting_activity_level'
         },
         {
-          text: 'activity outside sport level',
+          text: this.$t('clients.activityOutsideSportLevel'),
           value: 'activity_outside_sport_level'
         },
         {
-          text: 'training recovery',
+          text: this.$t('clients.trainingRecovery'),
           value: 'training_recovery'
         },
         {
-          text: 'no. of training day',
+          text: this.$t('clients.NumberOfTrainingDays'),
           value: 'no_training_day'
         },
         {
-          text: 'pain',
+          text: this.$t('clients.pain'),
           value: 'pain'
         },
       ],
       no_sports: [
         {
-          text: 'confident on athletic ability',
+          text: this.$t('clients.confidentOnAthleticAbility'),
           value: 'confident_on_athletic_ability'
         },
         {
-          text: 'comfortable place',
+          text: this.$t('clients.comfortablePlace'),
           value: 'comfortable_place'
         },
         {
-          text: 'place to practice',
+          text: this.$t('clients.placeToPractice'),
           value: 'place_to_practice'
         },
         {
-          text: 'energy to practice',
+          text: this.$t('clients.energyToPractice'),
           value: 'energy_to_practice'
         },
         {
-          text: 'time',
+          text: this.$t('clients.time'),
           value: 'time'
         },
         {

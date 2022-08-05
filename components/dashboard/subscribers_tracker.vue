@@ -10,7 +10,7 @@
         class="pt-2"
       >
         <v-toolbar-title class="font-weight-bold text-capitalize">
-          Subscribers Tracking
+          {{ this.$t('dashboard.subscribersTracking') }}
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-select

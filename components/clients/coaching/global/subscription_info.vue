@@ -10,15 +10,15 @@
         <!-- v-if="active_subscription.coaching_started === 1" -->
         <div >
           <div class="caption">
-            registered since
+            {{ $t('clients.registeredSince') }}
             <span class="font-weight-bold">{{frFormat(client.created_at)}}</span>
           </div>
           <div class="caption">
-            subscribed since
+            {{ $t('clients.subscribedSince') }}
             <span class="font-weight-bold">{{active_subscription ? frFormat(active_subscription.start_date) : 'none'}}</span>
           </div>
           <div class="caption">
-            active_subscription
+            {{ $t('clients.activeSubscription') }}
             <span class="font-weight-bold"> {{ active_subscription ?  computePlanPrice2(active_subscription.price) : 'none'}}</span>
           </div>
         </div>

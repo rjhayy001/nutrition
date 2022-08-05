@@ -33,7 +33,7 @@
         <template v-slot:header="{ props }">
           <thead class="v-data-table-header">
             <tr>
-              <th role="columnheader" scope="col" v-for="head in props.headers" style="width:200px">
+              <th role="columnheader" scope="col" v-for="head in props.headers" style="width:200px" :key="head.name">
                 <span class="d-flex justify-space-between block" v-if="head.value != 'data-table-select'">
                   {{ head.text }}
                   <div v-if="head.filterable">
@@ -108,9 +108,18 @@
         </template>
       </v-data-table>
     </div>
-    <div class="text-center" v-if="loaded == 2">
+    <!-- <div class="text-center" v-if="loaded == 2">
       <v-pagination v-model="currentoptions.page" :length="currentoptions.length" circle :total-visible="10" class="custom-pagination"
         @input="changePagenumber"></v-pagination>
+    </div> -->
+    <div class="text-center" v-if="loaded == 2">
+      <v-pagination
+      v-model="options.page"
+      :length="options.length"
+      circle :total-visible="10"
+      class="custom-pagination"
+      @input="changePagenumber">
+      </v-pagination>
     </div>
   </fragment>
 </template>
@@ -241,45 +250,72 @@ export default {
         head.sortType = null;
         var sortInt = null;
       }
-      console.log(head, "head");
-      // this.$emit("sortTable", head);
-
       //multi sort
-      let toSort = '';
+      let toSort = ''
+      // let queries = this.$route.query
+      // this.$router.replace({ query: queries });
+      // if(queries.sort){
+      //   toSort = queries.sort;
+      // }else{
+      //   toSort = '';
+      // }
       let tableColumn = head.value
       if(this.columnName.includes(tableColumn)){
         this.sortData.forEach((element, index) => {
-          let type = element.split("/")
+          let type = element.split("~")
           if(type[0]==tableColumn){
             if(sortInt==null){
-              if(element==tableColumn+'/desc'){
+              if(element==tableColumn+'~desc'){
                 this.sortData.splice(this.sortData.indexOf(element),1)
                 this.columnName.splice(index,1)
               }
             }else{
-              this.sortData[index] = type[0] + '/' + sortInt
+              this.sortData[index] = type[0] + String('~') + sortInt
             }
           }
         });
       }else{
-        this.columnName.push(tableColumn)
-        this.sortData.push(tableColumn + '/' + sortInt)
+        if(sortInt!=null){
+          this.columnName.push(tableColumn)
+          this.sortData.push(tableColumn + String('~') + sortInt)
+        }
       }
       toSort = this.sortData.join()
+      console.log(head)
       if(!this.columnName || this.columnName.length == 0){
-        this.$axios
-          .get(`${this.realUrl}`)
-          .then(({ data }) => {
-            this.currentdata = data.data;
-            this.currentoptions = data.options;
-          });
+        let queries = JSON.parse(JSON.stringify(this.$route.query));
+        delete queries.sort
+        this.$router.replace({ query: queries });
+        setTimeout(()=> {
+          this.$emit("reloadtable");
+        }, 100)
+        // this.$axios
+        //   .get(`${this.realUrl}`)
+        //   .then(({ data }) => {
+        //     console.log(data,'afsfssa')
+        //     this.currentdata = data.data;
+        //     this.currentoptions = data.options;
+        //   });
       }else{
-        this.$axios
-          .get(`${this.realUrl}&sort=${toSort}`)
-          .then(({ data }) => {
-            this.currentdata = data.data;
-            this.currentoptions = data.options;
-          });
+        let queries = JSON.parse(JSON.stringify(this.$route.query));
+        queries.sort = toSort
+        this.$router.replace({ query: queries }).catch(() => {});
+        setTimeout(()=> {
+          this.$emit("reloadtable");
+        }, 100)
+        // if(queries.sort){
+        //   queries.sort = toSort
+        //   this.$router.replace({ query: queries });
+        //   this.initialize()
+        // }else{
+        //   // this.$router.replace({ query: queries });
+        //   // this.$axios
+        //   // .get(`${this.realUrl}&sort=${toSort}`)
+        //   // .then(({ data }) => {
+        //   //   this.currentdata = data.data;
+        //   //   this.currentoptions = data.options;
+        //   // });
+        // }
       }
     },
     toggleMultipleItems() {
@@ -313,6 +349,9 @@ export default {
     selectedItems(val) {
       console.log(val, "res");
     },
+    options(val){
+      console.log(val, 'options')
+    },
     currentUrl: {
       handler(val) {
         this.realUrl = val
@@ -323,11 +362,13 @@ export default {
     data: {
       handler(val) {
         this.currentdata=val
+        console.log(val, '123')
         if (val.length > -1 && this.loaded == 0) {
           setTimeout(() => {
             this.loaded = 2;
           }, 1500);
         }
+        console.log(this.loaded, 'loaded')
         this.selectedItems = [];
       },
       immediate: true,

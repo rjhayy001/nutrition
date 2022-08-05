@@ -27,7 +27,7 @@
           <v-icon v-on="on">mdi-account-switch-outline</v-icon>
         </template>
         <span>
-          switch to {{$view() == 'coach' ? 'Admin' : 'Coach'}} view
+          {{$view() == 'coach' ? $t('header.switchToAdminView') : $t('switchToCoachView') }}
         </span>
       </v-tooltip>
     </v-btn>
@@ -105,7 +105,7 @@ export default {
       clipped: false,
       accountLinks: [
         {
-          title: 'Profile',
+          title: this.$t('header.profile'),
           icon:'mdi-account',
           route: 'profile-change_password'
         },
@@ -168,7 +168,7 @@ export default {
     },
     changeLanguage (code) {
 
-      this.$i18n.setLocale(code);
+      this.$i18n.setLocale(code)
       location.reload();
     }
   }

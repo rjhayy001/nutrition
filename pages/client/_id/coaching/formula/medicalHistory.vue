@@ -22,7 +22,7 @@
                 {{list.text}} :
               </div>
               <div class="font-weight-bold overline type-value">
-                {{ medical_history ? medical_history[list.value] : 'not specified'}}
+                {{ medical_history ? medical_history[list.value] : $t('clients.notSpecified')}}
               </div>
             </div>
           </v-card>
@@ -39,7 +39,7 @@
               <v-toolbar-title
                 class="text-uppercase font-weight-medium"
                 style="font-size:17px;"
-              >for women only</v-toolbar-title>
+              >{{ $t('clients.forWomenOnly') }}</v-toolbar-title>
             </v-toolbar>
             <v-divider></v-divider>
             <div class="px-4 pb-5 pt-2">
@@ -52,7 +52,7 @@
                   {{women_list.text}} :
                 </div>
                 <div class="font-weight-bold overline type-value">
-                  {{ medical_history ? medical_history[women_list.value] : 'not specified'}}
+                  {{ medical_history ? medical_history[women_list.value] : $t('clients.notSpecified')}}
                 </div>
               </div>
             </div>
@@ -79,27 +79,27 @@ export default {
       medical_history: {},
       lists: [
         {
-          text: 'medical history',
+          text: this.$t('clients.medicalHistory'),
           value: 'medical_history'
         },
         {
-          text: 'medical treatment',
+          text: this.$t('clients.medicalTreatment'),
           value: 'medical_treatment'
         },
         {
-          text: 'family medical history',
+          text: this.$t('clients.familyMedicalHistory'),
           value: 'family_medical_history'
         },
         {
-          text: 'eating disorder',
+          text: this.$t('clients.eatingDisorder'),
           value: 'eating_disorder'
         },
         {
-          text: 'eating disorder age',
+          text: this.$t('clients.eatingDisorderAge'),
           value: 'eating_disorder_age'
         },
         {
-          text: 'eating disorder remedy',
+          text: this.$t('clients.eatingDisorderRemedy'),
           value: 'eating_disorder_remedy'
         },
         {
@@ -113,23 +113,23 @@ export default {
           value: 'contraception'
         },
         {
-          text: 'premenstrual syndrome',
+          text: this.$t('clients.premenstrualSendrome'),
           value: 'premenstrual_syndrome'
         },
         {
-          text: 'gynaecological condition',
+          text: this.$t('clients.gynaecologicalCondition'),
           value: 'gynaecological_condition'
         },
         {
-          text: 'observe menstrual cycle',
+          text: this.$t('clients.observeMenstrualCycle'),
           value: 'observe_menstrual_cycle'
         },
         {
-          text: 'regular cycle',
+          text: this.$t('clients.regularCycle'),
           value: 'regular_cycle'
         },
         {
-          text: 'cycle average',
+          text: this.$t('clients.cycleAverage'),
           value: 'cycle_average'
         },
         {

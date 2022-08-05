@@ -40,15 +40,15 @@ export default {
       tab: null,
       items: [
         {
-          title: 'Alimentation',
+          title: this.$t('clients.food'),
           to: 'client-id-coaching-formula-food'
         },
         {
-          title: 'Antecedents',
+          title: this.$t('clients.pastHistory'),
           to: 'client-id-coaching-formula-medicalHistory'
         },
         {
-          title: 'Objectifs',
+          title: this.$t('clients.objective')+'s',
           to: 'client-id-coaching-formula-goal'
         },
         {
@@ -60,7 +60,7 @@ export default {
           to: 'client-id-coaching-formula-stress'
         },
         {
-          title: 'Sommeil',
+          title: this.$t('clients.sleep'),
           to: 'client-id-coaching-formula-sleep'
         },
       ],

@@ -36,7 +36,7 @@
           <v-icon @click="hideForm(false)">mdi-chevron-down </v-icon>
         </div>
         <div class="text-overline mb-4">
-          Feedback de la semaine
+          {{ $t('clients.feedbackOfTheWeek') }}
         </div>
         <v-textarea solo v-model="payload.feedbackscol" @input="saveInput"></v-textarea>
         <div class="text-right">
@@ -46,7 +46,7 @@
             @click="submit"
             :disabled="!payload.feedbackscol"
             >
-            submit
+            {{ $t('global.submit') }}
           </v-btn>
         </div>
       </v-card>

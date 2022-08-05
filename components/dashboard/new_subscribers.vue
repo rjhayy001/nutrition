@@ -11,7 +11,7 @@
         class="pt-2"
       >
         <v-toolbar-title class="font-weight-bold text-capitalize">
-          New Subscribers
+          {{ this.$t('dashboard.newSubscribers') }}
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-select

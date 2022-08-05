@@ -33,8 +33,8 @@
           <v-toolbar-title class="font-weight-medium">Notifications</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn small color="primary" text @click="markAllAsRead" >
-                mark as read
-             </v-btn>
+            <!-- {{ this.$t('header.markAsRead ') }} --> mark as read
+          </v-btn>
         </v-toolbar>
         <v-divider></v-divider>
         <v-list two-line>

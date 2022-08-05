@@ -8,7 +8,9 @@
       >
         <v-card height="100">
           <div class="text-center pt-5">
-            <p class="font-weight-medium text-capitalize formula-text">next calls</p>
+            <p class="font-weight-medium text-capitalize formula-text">
+              {{ $t('clients.nextCall') }}
+            </p>
             <div class="font-weight-bold">
               {{frFormat(client.created_at)}}
             </div>
@@ -40,7 +42,9 @@
       >
         <v-card height="100">
           <div class="center-number">51</div>
-          <div class="center-desc">Hebdomadaires</div>
+          <div class="center-desc">
+            {{ $t('clients.weekly') }}
+          </div>
         </v-card>
       </v-flex>
     </v-row>
