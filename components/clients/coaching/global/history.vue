@@ -4,7 +4,9 @@
       flat
       dense
     >
-      <v-toolbar-title class="font-weight-medium">Dernier feedback il y a 7 jours</v-toolbar-title>
+      <v-toolbar-title class="font-weight-medium">
+        {{ $t('clients.lastFeedback7DaysAgo') }}
+      </v-toolbar-title>
     </v-toolbar>
     <v-card
       style="overflow:auto"

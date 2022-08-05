@@ -9,11 +9,11 @@
     hide-no-data
     hide-details="auto"
     dense
-    placeholder="Search item by name or title ...">
+    :placeholder="this.$t('header.headerSearch')">
       <template v-slot:no-data>
         <v-list-item-content>
           <v-list-item-title>
-            <p class="pl-4">Search items by name or title ...</p>
+            <p class="pl-4">{{ $t('header.headerSearch') }}</p>
           </v-list-item-title>
         </v-list-item-content>
       </template>

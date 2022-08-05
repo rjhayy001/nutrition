@@ -5,7 +5,7 @@
       class="pl-3 pt-3"
     >
       <p class="subtitle-2 font-weight-regular">
-        <span>* Date of Birth</span>
+        <span>* {{ $t('clients.dateOfBirth') }}</span>
       </p>
     </v-flex>
     <v-flex

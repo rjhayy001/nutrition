@@ -21,7 +21,7 @@
         v-if="!hide_status"
       >
         <v-card class="custom-card text-center mr-auto ml-auto">
-          homme celibataire <br>pas d'enfants
+          {{ $t('clients.singleMan') }} <br> {{ $t('noChildren') }}
         </v-card>
       </v-flex>
       <v-flex
@@ -45,7 +45,7 @@
         class="mb-2"
       >
         <v-card class="custom-card text-center">
-          <div style="font-size: smaller;">poids (kg)</div>
+          <div style="font-size: smaller;">{{ $t('clients.weight') }} (kg)</div>
           <v-layout
             row
             wrap
@@ -61,7 +61,7 @@
                 {{basic_info ? basic_info.weight : 0}}
               </div>
               <div style="font-size: smaller; font-weight: 200;">
-                Debut
+                {{ $t('clients.start') }}
               </div>
             </v-flex>
             <v-flex
@@ -75,7 +75,7 @@
                 {{basic_info ? basic_info.weight : 0}}
               </div>
               <div style="font-size: smaller; font-weight: 200;">
-                Actuelan
+                {{ $t('clients.current') }}
               </div>
             </v-flex>
             <v-flex
@@ -89,7 +89,7 @@
                 {{basic_info ? basic_info.target_weight : 0}}
               </div>
               <div style="font-size: smaller; font-weight: 200;">
-                Objectif
+                {{ $t('clients.objective') }}
               </div>
             </v-flex>
           </v-layout>
@@ -100,7 +100,7 @@
         class="mb-2"
       >
         <v-card class="custom-card text-center">
-          <div style="font-size: smaller;">talle</div>
+          <div style="font-size: smaller;">{{ $t('clients.height') }}</div>
           <div
             class="font-weight-bold"
             style="font-size: x-large;"

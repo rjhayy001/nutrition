@@ -25,7 +25,7 @@
         </v-flex>
         <v-flex xs6 class="mt-4 px-2">
           <v-toolbar flat dense>
-            <v-toolbar-title class="font-weight-medium">Tous les points hebdomadaires</v-toolbar-title>
+            <v-toolbar-title class="font-weight-medium">{{ $t('clients.allWeeklyPoints') }}</v-toolbar-title>
           </v-toolbar>
           <v-card style="overflow:auto" height="450" class="pa-3">
             <v-data-table :headers="headers" hide-default-footer hide-default-header :items="items" :items-per-page="-1"

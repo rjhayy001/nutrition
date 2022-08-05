@@ -5,8 +5,10 @@ const messages = {
 
   //general
   "global": {
+    "hello": "Bonjour",
     "summary": "Résumé",
     "save": "Sauvez",
+    "submit": "Soumettre",
     "update": "Mettre à jour",
     "cancel": "Annuler",
     "create": "Create",
@@ -33,7 +35,12 @@ const messages = {
 
   //header
   "header": {
-    "search":  "Recherche d'articles par nom, âge ...",
+    "search": "Recherche d'articles par nom, âge ...",
+    "headerSearch": "Recherche d'articles par nom ou par titre ...",
+    "switchToAdminView": "Passer à la vue admin",
+    "switchToCoachView": "Passez à la vue de l'entraîneur",
+    "markAsRead": "Marquer comme lu",
+    "profile": "Profil",
   },
 
   //sidebar
@@ -81,6 +88,12 @@ const messages = {
     "alert_select_client": "Veuillez selectionner un client à exporter."
   },
 
+  //dashboard
+  "dashboard": {
+    "subscribersTracking": "Suivi des Abonnés",
+    "newSubscribers": "Nouveaux abonnés",
+  },
+
   //Clients datatable
   "clients": {
     "totalClients": "Total des clients",
@@ -93,7 +106,9 @@ const messages = {
     "lastName": "Nom de famille",
     "fullName": "Prénom Nom",
     "birthday": "Anniversaire",
+    "dateOfBirth": "Date de naissance",
     "email": "E-mail",
+    "password": "Mot de passe",
     "phone": "Téléphone",
     "address": "Adresse",
     "status": "Statut",
@@ -133,6 +148,102 @@ const messages = {
     "typeTitle": "Titre du type",
     "shareable": "Partageable",
     "typeDescription": "Tapez ou collez la description",
+
+    //global
+    "feedbackOfTheWeek": "FEEDBACK DE LA SEMAINE",
+    "registeredSince": "enregistré depuis",
+    "subscribedSince": "souscrit depuis",
+    "activeSubscription": "abonnement actif",
+    "nextCall": "Appels suivants",
+    "weekly": "Hebdomadaires",
+    "lastFeedback7DaysAgo": "Dernier feedback il y a 7 jours",
+    "allWeeklyPoints": "Tous les points hebdomadaires",
+    //formula
+    "singleMan": "Homme Celibataire",
+    "noChildren": "Pas D'enfants",
+    "weight": "Poids",
+    "start": "Debut",
+    "current": "Actuel",
+    "objective": "Objectif",
+    "height": "Taille",
+    "food": "Alimentation",
+    "pastHistory": "Antécédents",
+    "sleep": "Sommeil",
+
+    "notSpecified": "NON SPÉCIFIÉ",
+    //food questionaire
+    "foodPreference": "PRÉFÉRENCE ALIMENTAIRE",
+    "mealsPerDay": "REPAS PAR JOUR",
+    "followDrasticDiet": "SUIVRE UN RÉGIME DRASTIQUE",
+    "caloriesToday": "CALORIES AUJOURD'HUI",
+    "foodIntolerances": "INTOLÉRANCES ALIMENTAIRES",
+    "culturalAdaptationDiet": "ADAPTATIONS CULTURELLES RÉGIME ALIMENTAIRE",
+    "waterPerDay": "EAU PAR JOUR",
+    "drinksOtherThanWater": "DES BOISSONS AUTRES QUE L'EAU",
+    "coffeePerDay": "CAFÉ PAR JOUR",
+    "alcoholPerWeek": "ALCOOL PAR SEMAINE",
+    "foodSupplement": "COMPLÉMENT ALIMENTAIRE",
+    //standard day
+    "standardDay": "Une journee type",
+    "breakfast": "PETIT-DÉJEUNER",
+    "morningSnack": "CASSE-CROÛTE DU MATIN",
+    "lunch": "DÉJEUNER",
+    "afternoonSnack": "COLLATION EN APRÈS-MIDI",
+    "dinner": "DINER",
+    //past history questionaire
+    "medicalHistory": "HISTORIQUE MÉDICAL",
+    "medicalTreatment": "TRAITEMENT MÉDICAL",
+    "familyMedicalHistory": "ANTÉCÉDENTS MÉDICAUX FAMILIAUX",
+    "eatingDisorder": "TROUBLE ALIMENTAIRE",
+    "eatingDisorderAge": "TROUBLE ALIMENTAIRE ÂGE",
+    "eatingDisorderRemedy": "REMÈDE AUX TROUBLES ALIMENTAIRES",
+    //for women only
+    "forWomenOnly": "POUR LES FEMMES SEULEMENT",
+    "premenstrualSendrome": "LE SYNDROME PRÉMENSTRUEL",
+    "gynaecologicalCondition": "CONDITION GYNÉCOLOGIQUE",
+    "observeMenstrualCycle": "OBSERVER LE CYCLE MENSTRUEL",
+    "regularCycle": "CYCLE RÉGULIER",
+    "cycleAverage": "MOYENNE DU CYCLE",
+    //objectives questionaire
+    "desireWeight": "POIDS SOUHAITÉ",
+    "dateToReachTheGoal": "DATE POUR ATTEINDRE L'OBJECTIF",
+    "goalImportance": "IMPORTANCE DES OBJECTIFS",
+    //goal hindrances
+    "goalHindrances": "OBSTACLES AUX OBJECTIFS",
+    "whatToEat": "quoi manger",
+    "howMuchToEat": "quelle quantité manger",
+    "planMeals": "planifier les repas",
+    "timeToCook": "temps de cuisson",
+    "drinkAlcohol": "boire de l'alcool",
+    "cravings": "fringales",
+    "emotionalVoid": "vide affectif",
+    "eatWhenNotHungry": "manger quand on n'a pas faim",
+    "alwaysHungry": "toujours affamé",
+    "notHungry": "pas faim",
+    "guiltyToEat": "coupable de manger",
+    "accessToHealthyFood": "l'accès à une alimentation saine",
+    //sparts questionaire
+    "practiceSports": "PRATIQUER DES SPORTS",
+    "sportingActivityLevel": "le niveau d'activité sportive",
+    "activityOutsideSportLevel": "activité en dehors du niveau sportif",
+    "trainingRecovery": "reprise de la formation",
+    "NumberOfTrainingDays": "Nombre de jours de formation",
+    "pain": "douleur",
+    "confidentOnAthleticAbility": "confiant dans les capacités athlétiques",
+    "comfortablePlace": "endroit confortable",
+    "placeToPractice": "lieu de pratique",
+    "energyToPractice": "l'énergie pour pratiquer",
+    "time": "temps",
+    "sportHindrances": "Entraves au sport",
+    "sportsTypes": "Types de sports",
+    //stress questionaire
+    "jobOrStudy": "EMPLOI OU ÉTUDES",
+    "stressMeter": "COMPTEUR DE STRESS",
+    "fulfillingMeter": "COMPTEUR DE REMPLISSAGE",
+    "homeStressed": "MAISON STRESSÉE",
+    "manageStress": "GÉRER LE STRESS",
+    "planYourDay": "PLANIFIEZ VOTRE JOURNÉE",
+    "timeOutsidePerDay": "TEMPS PASSÉ DEHORS PAR JOUR",
 
   },
 

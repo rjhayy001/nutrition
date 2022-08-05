@@ -12,7 +12,7 @@
                   {{list.text}} :
                 </div>
                 <div class="font-weight-bold overline type-value">
-                 {{ food_preference ? food_preference[list.value] : 'not specified'}}
+                 {{ food_preference ? food_preference[list.value] : $t('clients.notSpecified')}}
                 </div>
               </div>
           </v-card>
@@ -29,7 +29,7 @@
               <v-toolbar-title
                 class="text-uppercase font-weight-medium"
                 style="font-size:17px;"
-              >une journee type</v-toolbar-title>
+              >{{ $t('clients.standardDay') }}</v-toolbar-title>
             </v-toolbar>
             <v-divider></v-divider>
              <div
@@ -37,42 +37,42 @@
             >
               <div class="d-flex mb-2" style="    justify-content: space-between;">
                 <div class="type-title mr-5 overline">
-                  Breakfast:
+                  {{ $t('clients.breakfast') }}:
                 </div>
                 <div class="font-weight-bold overline type-value">
-                 {{ food_preference ? food_preference.typical_day_food.breakfast : 'not specified'}}
+                 {{ food_preference ? food_preference.typical_day_food.breakfast : this.$t('clients.notSpecified') }}
                 </div>
               </div>
               <div class="d-flex mb-2" style="    justify-content: space-between;">
                 <div class="type-title mr-5 overline">
-                  Morning snack :
+                  {{ $t('clients.morningSnack') }}:
                 </div>
                 <div class="font-weight-bold overline type-value">
-                  {{ food_preference ? food_preference.typical_day_food.morning_snack : 'not specified'}}
+                  {{ food_preference ? food_preference.typical_day_food.morning_snack : this.$t('clients.notSpecified') }}
                 </div>
               </div>
               <div class="d-flex mb-2" style="    justify-content: space-between;">
                 <div class="type-title mr-5 overline">
-                  Lunch :
+                  {{ $t('clients.lunch') }}:
                 </div>
                 <div class="font-weight-bold overline type-value">
-                    {{ food_preference ? food_preference.typical_day_food.lunch : 'not specified'}}
+                    {{ food_preference ? food_preference.typical_day_food.lunch : this.$t('clients.notSpecified') }}
                 </div>
               </div>
               <div class="d-flex mb-2" style="    justify-content: space-between;">
                 <div class="type-title mr-5 overline">
-                  Afternoon snack:
+                  {{ $t('clients.afternoonSnack') }}:
                 </div>
                 <div class="font-weight-bold overline type-value">
-                    {{ food_preference ? food_preference.typical_day_food.afternoon_snack : 'not specified'}}
+                    {{ food_preference ? food_preference.typical_day_food.afternoon_snack : this.$t('clients.notSpecified') }}
                 </div>
               </div>
               <div class="d-flex mb-2" style="    justify-content: space-between;">
                 <div class="type-title mr-5 overline">
-                  Dinner :
+                  {{ $t('clients.dinner') }}:
                 </div>
                 <div class="font-weight-bold overline type-value">
-                    {{ food_preference ? food_preference.typical_day_food.dinner  : 'not specified'}}
+                    {{ food_preference ? food_preference.typical_day_food.dinner  : this.$t('clients.notSpecified') }}
                 </div>
               </div>
             </div>
@@ -98,19 +98,19 @@ export default {
       food_preference:{},
       lists:[
         {
-          text: 'food preference',
+          text: this.$t('clients.foodPreference'),
           value: 'food_preference'
         },
         {
-          text: 'meals per day',
+          text: this.$t('clients.mealsPerDay'),
           value: 'meals_per_day'
         },
         {
-          text: 'follow drastic diet',
+          text: this.$t('clients.followDrasticDiet'),
           value: 'follow_drastic_diet'
         },
         {
-          text: 'calories today',
+          text: this.$t('clients.caloriesToday'),
           value: 'calories_today'
         },
         {
@@ -118,31 +118,31 @@ export default {
           value: 'allergies'
         },
         {
-          text: 'food intolerances',
+          text: this.$t('clients.foodIntolerances'),
           value: 'intolerances'
         },
         {
-          text: 'cultural adaptations diet',
+          text: this.$t('clients.culturalAdaptationDiet'),
           value: 'cultural_adaptations_diet'
         },
         {
-          text: 'water per day',
+          text: this.$t('clients.waterPerDay'),
           value: 'water_per_day'
         },
         {
-          text: 'drinks other than water',
+          text: this.$t('clients.drinksOtherThanWater'),
           value: 'drink_other_than_water'
         },
         {
-          text: 'coffe per day',
+          text: this.$t('clients.coffeePerDay'),
           value: 'coffee_per_day'
         },
         {
-          text: 'alcohol per week',
+          text: this.$t('clients.alcoholPerWeek'),
           value: 'alcohol_per_week'
         },
         {
-          text: 'food supplement',
+          text: this.$t('clients.foodSupplement'),
           value: 'food_supplement'
         },
       ]
