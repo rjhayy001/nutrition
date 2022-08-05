@@ -61,10 +61,10 @@
                 <v-list-item-subtitle v-else class="pt-1" style="font-size:13px;">
                 <div class="imagemesssage">
                   <div v-for="(image, key) in decodeMessage(listChat.message)" :key="image.id" id="file-holder">
-                      <img :src="image.file" style="height:auto; width:120px; margin:auto;" v-if="checkFile(image.file) == 'data:image'"/>
-                      <video id="video-preview" v-else-if="checkFile(image.file) == 'data:video'" controls :src="image.file" style="height:auto; width:150px;"/>
+                      <img :src="image.file" style="height:auto; width:120px; margin:auto;" v-if="checkFile(image.file_type) == 'image'"/>
+                      <video id="video-preview" v-else-if="checkFile(image.file_type) == 'video'" controls :src="image.file" style="height:auto; width:150px;"/>
                       <v-img v-else
-                        :src="iconSelector(image.file)" contain id="imgfile"
+                        :src="iconSelector(image.file_type)" contain id="imgfile"
                         style="height:auto; width:120px;"
                       >
                         <v-tooltip bottom>
@@ -79,7 +79,7 @@
                           <span>Download</span>
                         </v-tooltip>
                        </v-img>
-                       <p v-if="image.file.length > 0 && checkFile(image.file) =='data:application'" class="text-center mt-1">{{image.file_name}}</p>
+                       <p v-if="image.file.length > 0 && checkFile(image.file_type) =='application'" class="text-center mt-1">{{image.file_name}}</p>
                   </div>
                 </div>
                 </v-list-item-subtitle>
@@ -271,6 +271,7 @@
         default_profile,
         client_name :'',
         msg :'',
+        fileRequire :['video','image','application'],
         image_selected : {
           name:'',
           file:'',
@@ -357,7 +358,7 @@
         //     objDiv.scrollTop = objDiv.scrollHeight / 4;
         //     return clearTimeout(myTimeout);
         //   }
-        }, 100, this);
+        }, 1000, this);
       
       },
 
@@ -384,7 +385,7 @@
       },
 
       
-      send(data){
+      send(data){ 
         this.$axios
           .post(`chat/addChatDocuments/`,{
               client_id : `${this.$route.params.id}`,
@@ -392,15 +393,19 @@
               sender_id : this.$auth.user.id,
               sender_type : 'coach',
               selected : 'coach',
-              type : 'files'
+              type : 'files',
+              coach_id : this.$auth.user.id
               }
           )
           .then(({ data }) => {
+
             this.sdata = data;
             this.getPinnedMessage();
             this.message ='';
             this.getChats();
             this.confirm_photos_dialog = false;
+            this.sendScroll();
+            this.image_selecteds = [];
           });
       },
       confirmPhotos(photos){
@@ -431,7 +436,6 @@
               }
           )
           .then(({ data }) => {
-
             this.message ='';
             this.getPinnedMessage();
             this.getChats();
@@ -524,13 +528,21 @@
       },
       iconSelector(item){
         var gettype = item.split(';')[0].split('/');
-
         let srcIcon = this.types.find(type => type.type == gettype[1])
         if(item.type =='image'){
           return item.data
         }
         return srcIcon ? srcIcon.icon : this.unverifyIcon
       },
+      // iconSelector(item){
+      //   var gettype = item.split(';')[0].split('/');
+      //   console.log(item)
+      //   let srcIcon = this.types.find(type => type.type == gettype[1])
+      //   if(item.type =='image'){
+      //     return item.data
+      //   }
+      //   return srcIcon ? srcIcon.icon : this.unverifyIcon
+      // },
       ChangeDateformat(date){
        var currentDate = new Date();
 
@@ -561,8 +573,20 @@
         var files = e.target.files || e.dataTransfer.files;
 
         for(var i=0;i<files.length;i++){
-          this.createImg(files[i],i);
-
+          var split = files[i]['type'].split("/");
+           if(this.fileRequire.includes(split[0])){
+              if(files[i]['size'] <=5000000)
+              {
+              this.createImg(files[i],i);
+              }
+              else{
+                this.ErrorFileTooBigNotification(files[i]['name'])
+              }
+           }
+           else{
+             this.ErrorCoachSchedNotification('Unsupported format files, only <strong> Video, application, image </strong> are allowed')
+           }
+           
         }
       },
       createImg(file,index) {
@@ -572,6 +596,7 @@
           var image = e.target.result;
           this.image_selected ={
             name:file['name'],
+            type:file['type'],
             file: image
           }
            this.image_selecteds.push(this.image_selected);
