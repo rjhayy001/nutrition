@@ -14,7 +14,7 @@
           <div @drop="dragFile" id="drag_drops" @click="SelecteFile"> 
               <ul class="list">
                   <li class="top:card small:left:card bottom:margin-2" v-for="(item, index) in File" :key="index">
-                      <v-card class="card-figure pa-1 ">
+                    <v-card class="card-figure pa-1 ">
                         <v-icon class="mx-2" id="check" v-if="value[index] == false">mdi-check-circle</v-icon>
                           <img :src="item.file" v-if="checkFile(item.type) == 'image'">
                           <video id="video-preview" v-else-if="checkFile(item.type) == 'video'" controls :src="item.file"/>
@@ -119,6 +119,7 @@ import iconHelper from '@/mixins/iconHelper'
             value: [],
             newname:'',
             editindex:'',
+            fileRequire :['video','image','application'],
             items: [
               { id:1,title: 'Edit' },
               { id:2, title: 'Delete' },
@@ -155,19 +156,31 @@ import iconHelper from '@/mixins/iconHelper'
             var input = e.dataTransfer;
             if (input.files) {
               for(var i=0;i<input.files.length;i++){
-                   var data = {
-                      type : input.files[i]['type'],
-                      size : input.files[i]['size'],
-                      name : input.files[i]['name'],
-                    }
-                   var val = true;
-                  var reader = new FileReader();
-                  reader.onload = (e) => {
-                    data['image'] = e.target.result,
-                    this.value.push(val);
-                    this.File.push(data);
-                  };
-                  reader.readAsDataURL(input.files[i]);
+                var split = input.files[i]['type'].split("/");
+                if(this.fileRequire.includes(split[0])){
+                  if(input.files[i]['size'] <=5000000)
+                  {
+                      var data = {
+                        type : input.files[i]['type'],
+                        size : input.files[i]['size'],
+                        name : input.files[i]['name'],
+                      }
+                      var val = true;
+                    var reader = new FileReader();
+                    reader.onload = (e) => {
+                      data['image'] = e.target.result,
+                      this.value.push(val);
+                      this.File.push(data);
+                    };
+                    reader.readAsDataURL(input.files[i]);
+                  }
+                  else{
+                    this.ErrorFileTooBigNotification(input.files[i]['name'])
+                  }
+                }
+                else{
+                  this.ErrorCoachSchedNotification('Unsupported format files, only <strong> Video, application, image </strong> are allowed')
+                }
               }
             }
         },
@@ -200,20 +213,32 @@ import iconHelper from '@/mixins/iconHelper'
             var input = event.target;
             if (input.files) {
               for(var i=0;i<input.files.length;i++){
-                   var data = {
-                      type : input.files[i]['type'],
-                      size : input.files[i]['size'],
-                      name : input.files[i]['name'],
-                    }
-                   var val = true;
-                  var reader = new FileReader();
-                  reader.onload = (e) => {
-                    data['file'] = e.target.result,
-                    this.value.push(val);
-                    this.File.push(data);
-                    // this.submit(data);
-                  };
-                  reader.readAsDataURL(input.files[i]);
+                var split = input.files[i]['type'].split("/");
+                if(this.fileRequire.includes(split[0])){
+                  if(input.files[i]['size'] <=5000000)
+                  {
+                    var data = {
+                        type : input.files[i]['type'],
+                        size : input.files[i]['size'],
+                        name : input.files[i]['name'],
+                      }
+                    var val = true;
+                    var reader = new FileReader();
+                    reader.onload = (e) => {
+                      data['file'] = e.target.result,
+                      this.value.push(val);
+                      this.File.push(data);
+                      // this.submit(data);
+                    };
+                    reader.readAsDataURL(input.files[i]);
+                  }
+                  else{
+                    this.ErrorFileTooBigNotification(input.files[i]['name'])
+                  }
+                }
+                else{
+                  this.ErrorCoachSchedNotification('Unsupported format files, only <strong> Video, application, image </strong> are allowed')
+                }
               }
           }
         },
