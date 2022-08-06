@@ -37,6 +37,10 @@ Vue.mixin({
             this.$awn.warning(` ${message} `)
         },
 
+        ErrorFileTooBigNotification(filename) {
+            this.$awn.warning(`This file  <strong> ${filename} </strong> is greater than 5mb`)
+        },
+
         successDeleteCall(message = '') {
             this.$awn.success(`${message} `)
         },
