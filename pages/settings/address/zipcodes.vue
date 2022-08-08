@@ -59,13 +59,13 @@ export default {
   data() {
     return {
       options: {},
-      title: "Zipcodes",
+      title: this.$t('address.zipcodes'),
       headers: [
         { text: "#", value: "id", width:'2%'},
         { text: "Code", value: "code"},
-        { text: "Cities", value: "cities" },
-        { text: "Created at", value: "created_at"},
-        { text: "Updated at", value: "updated_at"},
+        { text: this.$t('address.city'), value: "cities" },
+        { text: this.$t('global.createdAt'), value: "created_at"},
+        { text: this.$t('global.updatedAt'), value: "updated_at"},
         { text: "Action", value: "action"},
       ],
       data: [],

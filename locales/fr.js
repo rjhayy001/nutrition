@@ -31,6 +31,15 @@ const messages = {
     "no": "Non",
     "edit": "Modifier",
     "coach": "Entraîneur",
+    "subscriber": "Abonné",
+    "nonSubscriber": "Non-abonné",
+    "link": "Lien",
+    "video": "Vidéo",
+
+    //dables
+    "title": "Titre",
+    "createdAt": "Créé le",
+    "updatedAt": "Mis à jour le"
   },
 
   //header
@@ -245,6 +254,10 @@ const messages = {
     "planYourDay": "PLANIFIEZ VOTRE JOURNÉE",
     "timeOutsidePerDay": "TEMPS PASSÉ DEHORS PAR JOUR",
 
+    //documents
+    "sharedResources": "Ressources partagées",
+    "allResources": "Toutes les ressources",
+
   },
 
   //coaches
@@ -332,6 +345,25 @@ const messages = {
     "send": "Envoyer",
     "addNewNotification": "Ajouter une nouvelle notification",
   },
+
+  //statistic
+  "statistic": {
+    "range": "Gamme",
+    "yearly": "Annuel",
+    "weekly": "Hebdomadaire",
+    "totalPayments": "Total des paiements",
+  },
+
+  //Address
+  "address": {
+    "country": "Pays",
+    "shortName": "Nom court",
+    "longName": "Nom long",
+    "default": "Défaut",
+    "city": "Villes",
+    "name": "Nom",
+    "zipcodes": "Codes postaux",
+  }
 };
 
 export default messages;

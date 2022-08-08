@@ -21,7 +21,7 @@
         <div class="_container"  id="dragover" >
           <v-card color="grey lighten-4" flat tile >
               <v-toolbar dense id="header_toolbar">
-                <v-toolbar-title>Shared resources</v-toolbar-title>
+                <v-toolbar-title>{{ $t('clients.sharedResources') }}</v-toolbar-title>
                 <v-spacer></v-spacer>
                   <div style="width: 180px;">
                 <v-text-field
@@ -29,7 +29,7 @@
                   filled
                   rounded
                   hide-details=""
-                  placeholder="Search"
+                  :placeholder="this.$t('global.search')"
                   dense
                   v-model="shrdr.search1"
                   append-icon="mdi-magnify"
@@ -41,6 +41,8 @@
                     clearable
                     rounded
                     :items="type"
+                    item-text="label"
+                    item-value="key"
                     label="type"
                     dense
                     outlined
@@ -86,7 +88,7 @@
         <div class="_container">
             <v-card color="grey lighten-4" flat tile >
               <v-toolbar dense id="header_toolbar">
-                <v-toolbar-title>All resources</v-toolbar-title>
+                <v-toolbar-title>{{ $t('clients.allResources') }}</v-toolbar-title>
                 <v-spacer></v-spacer>
                   <div style="width: 150px;">
                 <v-text-field
@@ -94,7 +96,7 @@
                   filled
                   rounded
                   hide-details=""
-                  placeholder="Search"
+                  :placeholder="this.$t('global.search')"
                   dense
                   v-model="allr.search2"
                   @input="searchList('allrfield')"
@@ -107,6 +109,8 @@
                     clearable
                     rounded
                     :items="type"
+                    item-text="label"
+                    item-value="key"
                     label="type"
                     dense
                     v-model="allr.all_rtype"
@@ -246,7 +250,13 @@ export default {
         all_rtype:'',
         search2:'',
       },
-      type: ['all','image', 'video', 'link', 'application'],
+      // type: ['all','image', 'video', 'link', 'application'],
+      type: [
+        {key: 'image', label: 'Image'},
+        {key: 'video', label: this.$t('global.video')},
+        {key: 'link', label: this.$t('global.link')},
+        {key: 'application', label: 'Application'},
+      ],
       is_shared: [
         {id:'1',status:'shared'},
         {id:'0',status:'not shared'},

@@ -55,15 +55,15 @@ export default {
   data() {
     return {
       options: {},
-      title: "Links",
+      title: this.$t('global.link')+'s',
       headers: [
         { text: "#", value: "id", width:'2%'},
-        { text: "title", value: "title", filterable:true, sortType:null, filterValue:''},
+        { text: this.$t('global.title'), value: "title", filterable:true, sortType:null, filterValue:''},
         { text: "Description", value: "description", filterable:true, sortType:null, filterValue:'' },
-        { text: "Link", value: "link", filterable:true, sortType:null, filterValue:'' },
-        { text: "Status", value: "status" },
-        { text: "Created at", value: "created_at", filterable:true, sortType:null, filterValue:'' },
-        { text: "Updated at", value: "updated_at", filterable:true, sortType:null, filterValue:'' },
+        { text: this.$t('global.link'), value: "link", filterable:true, sortType:null, filterValue:'' },
+        { text: this.$t('global.status'), value: "status" },
+        { text: this.$t('global.createdAt'), value: "created_at", filterable:true, sortType:null, filterValue:'' },
+        { text: this.$t('global.updatedAt'), value: "updated_at", filterable:true, sortType:null, filterValue:'' },
         { text: "Action", value: "action"},
       ],
       data: [],
