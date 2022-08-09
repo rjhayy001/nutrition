@@ -5,7 +5,7 @@
       <v-flex xs12 class="mb-4">
         <div class="d-flex align-center py-2 data-table-cus">
           <p class="title mr-1">
-            Documents
+            {{ this.$t('coaches.documents') }}
           </p>
           <v-spacer></v-spacer>
           <div style="width: 400px;">
@@ -16,7 +16,7 @@
             rounded
             hide-details=""
             outlined
-            placeholder="Search"
+            :placeholder="this.$t('coaches.search')"
             dense
             v-model="param.search"
             append-icon="mdi-magnify"
@@ -27,8 +27,8 @@
               @change="getSelectedFilter"
               rounded
               :items="type"
-              label="type"
-              item-text="type"
+              :label="this.$t('coaches.types')"
+              item-text="text"
               item-value="id"
               clearable
               dense
@@ -102,7 +102,15 @@ export default {
       default_view:false,
       showUploadForm:false,
       showAddurl:false,
-      type: [ 'image','video', 'link','application'],
+      // type: [ this.$t('coaches.image'),this.$t('coaches.video'), this.$t('coaches.link'),this.$t('coaches.application')],
+      type: [
+        {id:0 , text: this.$t('coaches.image')},
+        {id:1 , text: this.$t('coaches.video')},
+        {id:2 , text: this.$t('coaches.link')},
+        {id:3 , text: this.$t('coaches.application')},
+      ],
+      forFilter: [ 'image','video', 'link','application'],
+
       param:{
         search:'',
         idfilter:'',
@@ -176,7 +184,10 @@ export default {
       this.getDocuments();
     },
     searchFilter(){
-
+      // console.log(this.param.search)
+      // console.log(this.param.idfilter)
+      // console.log(this.forFilter[this.param.idfilter]);
+      // return
       if(this.param.search == null && this.param.idfilter == ''){
         this.getDocuments();
         return;
@@ -184,7 +195,8 @@ export default {
       this.$axios
         .post(`documents/searchFilter/`,{
             search : this.param.search,
-            type : this.param.idfilter,
+            type : this.forFilter[this.param.idfilter],
+            // type : this.param.idfilter,
             client_id:`${this.$route.params.id}`,
             coach_id:this.$auth.user.id,
           }

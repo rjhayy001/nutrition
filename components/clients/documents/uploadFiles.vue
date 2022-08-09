@@ -7,7 +7,7 @@
     >   
       <v-card>
       <v-toolbar class="text-h5 grey lighten-2 mb-5" flat dense>
-        <v-btn small  @click="dialog(false)">back</v-btn>
+        <v-btn small  @click="dialog(false)">{{this.$t('coaches.back')}}</v-btn>
       </v-toolbar>
       <v-card-text class="pa-0">
         <v-container @dragover.prevent @drop.prevent id="drag_drop">
@@ -54,22 +54,22 @@
                   </li>
               </ul>
               <div id="tips" v-if="File.length==0">
-                  <span><strong>Drop Files</strong></span>
-                  <span>or click to upload</span>
+                  <span><strong>{{this.$t('coaches.Dropfiles')}}</strong></span>
+                  <span>{{this.$t('coaches.orclick')}}</span>
               </div>
               <input type="file" multiple ref="file_input" class="d-none" accept="image/*, video/*, application/pdf" @change="getFiles">
           </div>
         </v-container>
       </v-card-text>
       <v-toolbar class="text-h5 grey lighten-2 text-end d-flex justify-end" flat dense>
-        <v-btn small  @click="submit" :disabled="saveDoc">save</v-btn>
+        <v-btn small  @click="submit" :disabled="saveDoc">{{this.$t('coaches.save')}}</v-btn>
       </v-toolbar>
       </v-card>
     </v-dialog>
      <v-dialog width="400" v-model="editFile" persistent>
         <v-card>
           <v-toolbar class="text-h5 grey lighten-2" flat dense>
-            <v-btn small @click="editFile=false, newname=''">cancel</v-btn>
+            <v-btn small @click="editFile=false, newname=''">{{this.$t('coaches.cancel')}}</v-btn>
             <v-spacer></v-spacer>
             <v-spacer></v-spacer>
             <span class="subtitle-1  font-weight-normal">Edit name</span>
@@ -87,7 +87,7 @@
             </v-form>
           </v-card-text>
            <v-toolbar class="text-h5 grey lighten-2 d-flex justify-end" flat dense>
-              <v-btn small @click="saveNewName()" >Save</v-btn>
+              <v-btn small @click="saveNewName()" >{{this.$t('coaches.save')}}</v-btn>
           </v-toolbar>
           <!-- <v-card-actions class="justify-end">
               <v-btn small @click="save()">Save</v-btn>
@@ -121,8 +121,8 @@ import iconHelper from '@/mixins/iconHelper'
             editindex:'',
             fileRequire :['video','image','application'],
             items: [
-              { id:1,title: 'Edit' },
-              { id:2, title: 'Delete' },
+              { id:1,title: this.$t('coaches.edit') },
+              { id:2, title: this.$t('coaches.delete') },
             ],
             closeOnContentClick: true,
             nameRules: [

@@ -12,12 +12,12 @@
         <v-list-item
           @click="$emit('addDocuments')"
         >
-          <v-list-item-title class="text-capitalize">add documents</v-list-item-title>
+          <v-list-item-title class="text-capitalize">{{this.$t('coaches.add_documents')}}</v-list-item-title>
         </v-list-item>
         <v-list-item
             @click="$emit('addUrl')"
         >
-          <v-list-item-title class="text-capitalize">add link</v-list-item-title>
+          <v-list-item-title class="text-capitalize">{{this.$t('coaches.Add_link_here')}}</v-list-item-title>
         </v-list-item>
         <!-- <v-list-item
            @click="showCreateFolder=true"
