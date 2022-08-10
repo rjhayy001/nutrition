@@ -284,6 +284,11 @@ const messages = {
         'no': "non",
         'yes': "oui",
         'delete_sharedoc': "Are you sure to remove this shared documents?",
+        'file': "Fichier",
+        'file_name': "Nom de fichier",
+        'file_type': "Type de fichier",
+        'file_size': "Taille de fichier",
+        'actions': "Actions",
     },
 
     //subscriptions
