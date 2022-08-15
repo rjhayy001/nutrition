@@ -3,13 +3,13 @@
     <v-layout row wrap v-if="loads==true">
       <v-flex xs12 class="mb-4">
           <v-card-title>
-            Coach Schedule
+            {{this.$t('coaches.coach_schedule')}}
             <v-spacer></v-spacer>
             <div  style="width: 400px;">
                 <v-text-field
                     v-model="search"
                     append-icon="mdi-magnify"
-                    label="Search"
+                    :label="this.$t('coaches.search')"
                     hide-details
                     clearable
                     outlined
@@ -26,7 +26,7 @@
             color="success"
             class="ml-2 white--text"
             @click="timePicker = true">
-            Add
+            {{this.$t('coaches.add')}}
             <v-icon right   dark>
               mdi-plus
             </v-icon>
@@ -35,7 +35,7 @@
             color="error"
             class="ml-2  white--text"
             @click="deleteSelected">
-            Delete
+            {{this.$t('coaches.delete')}}
             <v-icon right   dark>
               mdi-delete
             </v-icon>
@@ -141,10 +141,10 @@
               text
               @click="CancelNew"
             >
-              Cancel
+              {{this.$t('coaches.cancel')}}
             </v-btn>
             <v-btn color="white" text @click="saveSched">
-              Save
+              {{this.$t('coaches.save')}}
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -235,11 +235,11 @@ import moment from 'moment'
         switch1: true,
         dateNow:'',
         headers: [
-          { text: 'Date', value: 'date' },
-          { text: 'Day', value: 'day' },
-          { text: 'Time', value: 'selected_time' },
-          { text: 'Status', value: 'status' },
-          { text: 'Action', value: 'action' },
+          { text: this.$t('coaches.date'), value: 'date' },
+          { text: this.$t('coaches.day'), value: 'day' },
+          { text: this.$t('coaches.time'), value: 'selected_time' },
+          { text: this.$t('coaches.status'), value: 'status' },
+          { text: this.$t('coaches.actions'), value: 'action' },
         ],
         time: null,
         modal2: false,
