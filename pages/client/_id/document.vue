@@ -21,7 +21,11 @@
         <div class="_container"  id="dragover" >
           <v-card color="grey lighten-4" flat tile >
               <v-toolbar dense id="header_toolbar">
+<<<<<<< HEAD
+                <v-toolbar-title>{{ this.$t('coaches.shared_resources') }}</v-toolbar-title>
+=======
                 <v-toolbar-title>{{ $t('clients.sharedResources') }}</v-toolbar-title>
+>>>>>>> 6c5d7959b388caba0845ac2c89b3a53815c48a79
                 <v-spacer></v-spacer>
                   <div style="width: 180px;">
                 <v-text-field
@@ -29,7 +33,11 @@
                   filled
                   rounded
                   hide-details=""
+<<<<<<< HEAD
+                  :placeholder="this.$t('coaches.search')"
+=======
                   :placeholder="this.$t('global.search')"
+>>>>>>> 6c5d7959b388caba0845ac2c89b3a53815c48a79
                   dense
                   v-model="shrdr.search1"
                   append-icon="mdi-magnify"
@@ -41,9 +49,15 @@
                     clearable
                     rounded
                     :items="type"
+<<<<<<< HEAD
+                    :label="this.$t('coaches.types')"
+                    item-text="text"
+                    item-value="id"
+=======
                     item-text="label"
                     item-value="key"
                     label="type"
+>>>>>>> 6c5d7959b388caba0845ac2c89b3a53815c48a79
                     dense
                     outlined
                     v-model="shrdr.shared_rtype"
@@ -88,7 +102,11 @@
         <div class="_container">
             <v-card color="grey lighten-4" flat tile >
               <v-toolbar dense id="header_toolbar">
+<<<<<<< HEAD
+                <v-toolbar-title>{{ this.$t('coaches.all_resource') }}</v-toolbar-title>
+=======
                 <v-toolbar-title>{{ $t('clients.allResources') }}</v-toolbar-title>
+>>>>>>> 6c5d7959b388caba0845ac2c89b3a53815c48a79
                 <v-spacer></v-spacer>
                   <div style="width: 150px;">
                 <v-text-field
@@ -96,7 +114,11 @@
                   filled
                   rounded
                   hide-details=""
+<<<<<<< HEAD
+                  :placeholder="this.$t('coaches.search')"
+=======
                   :placeholder="this.$t('global.search')"
+>>>>>>> 6c5d7959b388caba0845ac2c89b3a53815c48a79
                   dense
                   v-model="allr.search2"
                   @input="searchList('allrfield')"
@@ -109,9 +131,15 @@
                     clearable
                     rounded
                     :items="type"
+<<<<<<< HEAD
+                    item-text="text"
+                    item-value="id"
+                    :label="this.$t('coaches.types')"
+=======
                     item-text="label"
                     item-value="key"
                     label="type"
+>>>>>>> 6c5d7959b388caba0845ac2c89b3a53815c48a79
                     dense
                     v-model="allr.all_rtype"
                     outlined
@@ -151,12 +179,12 @@
         <v-dialog v-model="deletedialog" max-width="500px">
           <v-card>
             <v-card-title class="font-weight-light">
-              Delete Confirmation
+             {{this.$t('coaches.delete_confirm')}}
             </v-card-title>
             <v-card-text>
               <div class="my-5">
                 <p class="font-weight-light" style="color:#000;font-size: 17px;">
-                  Are you sure to delete this shared documents?
+                    {{this.$t('coaches.delete_sharedoc')}}
                 </p>
               </div>
             </v-card-text>
@@ -166,14 +194,14 @@
                 text
                 @click="deletedialog = false"
               >
-                Close
+                {{this.$t('coaches.no')}}
               </v-btn>
               <v-btn
                 color="red"
                 text
                 @click="confirmDelete()"
               >
-                Yes
+                {{this.$t('coaches.yes')}}
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -252,11 +280,20 @@ export default {
       },
       // type: ['all','image', 'video', 'link', 'application'],
       type: [
+<<<<<<< HEAD
+        {id:0 , text: this.$t('coaches.image')},
+        {id:1 , text: this.$t('coaches.video')},
+        {id:2 , text: this.$t('coaches.link')},
+        {id:3 , text: this.$t('coaches.application')},
+      ],
+      forFilter: [ 'image','video', 'link','application'],
+=======
         {key: 'image', label: 'Image'},
         {key: 'video', label: this.$t('global.video')},
         {key: 'link', label: this.$t('global.link')},
         {key: 'application', label: 'Application'},
       ],
+>>>>>>> 6c5d7959b388caba0845ac2c89b3a53815c48a79
       is_shared: [
         {id:'1',status:'shared'},
         {id:'0',status:'not shared'},
@@ -390,7 +427,8 @@ export default {
           this.$axios
             .post(`documents/searchFilter/`,{
                 search : this.allr.search2,
-                type : this.allr.all_rtype,
+                type : this.forFilter[this.allr.all_rtype],
+                // type : this.allr.all_rtype,
                 client_id:`${this.$route.params.id}`,
                 coach_id:this.$auth.user.id,
               }
@@ -407,7 +445,8 @@ export default {
           this.$axios
             .post(`documents/searchSharedFilter/`,{
                 search : this.shrdr.search1,
-                type : this.shrdr.shared_rtype,
+                // type : this.shrdr.shared_rtype,
+                type : this.forFilter[this.shrdr.shared_rtype],
                 id_client : `${this.$route.params.id}`
               }
             )

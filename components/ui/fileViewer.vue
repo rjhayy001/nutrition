@@ -83,7 +83,7 @@
       <v-dialog width="400" v-model="editFile" persistent>
           <v-card>
             <v-toolbar class="text-h5 grey lighten-2" flat dense>
-              <v-btn small @click="editFile=false, newname=''">cancel</v-btn>
+              <v-btn small @click="editFile=false, newname=''">{{this.$t('coaches.cancel')}}</v-btn>
               <v-spacer></v-spacer>
               <v-spacer></v-spacer>
               <span class="subtitle-1  font-weight-normal">Edit name</span>
@@ -101,7 +101,7 @@
                 </v-form>
             </v-card-text>
             <v-toolbar class="text-h5 grey lighten-2 d-flex justify-end" flat dense>
-                <v-btn small @click="saveNewName()">Save</v-btn>
+                <v-btn small @click="saveNewName()">{{this.$t('coaches.save')}}</v-btn>
             </v-toolbar>
           </v-card>
         </v-dialog>
@@ -116,12 +116,12 @@
       >
         <v-card>
           <v-card-title class="font-weight-light">
-            Delete Confirmation
+            {{this.$t('coaches.delete_confirm')}}
           </v-card-title>
           <v-card-text>
             <div class="my-5">
               <p class="font-weight-light" style="color:#000;font-size: 17px;">
-                Are you sure to delete this documents?
+                 {{this.$t('coaches.delete_doc')}}
               </p>
             </div>
           </v-card-text>
@@ -131,14 +131,14 @@
               text
               @click="deletedialog = false"
             >
-              Close
+              {{this.$t('coaches.no')}}
             </v-btn>
             <v-btn
               color="red"
               text
               @click="confirmDelete()"
             >
-              Yes
+              {{this.$t('coaches.yes')}}
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -177,8 +177,8 @@ export default {
       newname:'',
       closeOnContentClick: true,
       items: [
-        { id:1, title: 'Edit', icon:'mdi-pencil' },
-        { id:2, title: 'Delete',icon:'mdi-delete' },
+         { id:1,title: this.$t('coaches.edit') },
+         { id:2, title: this.$t('coaches.delete') },
       ],
       menu_options:{
         x:0,

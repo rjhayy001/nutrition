@@ -175,31 +175,31 @@ import iconHelper from '@/mixins/iconHelper'
          dialogdata:[],
          headers: [
         {
-          text: "File",
+          text: this.$t('coaches.file'),
           align: "start",
           sortable: false,
           value: "id",
         },
         {
-          text: "File Name",
+          text: this.$t('coaches.file_name'),
           align: "start",
           sortable: false,
           value: "file_name",
         },
         {
-          text: "File type",
+          text: this.$t('coaches.file_type'),
           align: "start",
           sortable: false,
           value: "file_type",
         },
         {
-          text: "File size",
+          text: this.$t('coaches.file_size'),
           align: "start",
           sortable: false,
           value: "size",
         },
         {
-          text: "Actions",
+          text: this.$t('coaches.actions'),
           align: "center",
           sortable: false,
           value: "actions",

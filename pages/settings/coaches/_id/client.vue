@@ -3,13 +3,13 @@
     <v-layout row wrap v-if="loads==true">
       <v-flex xs12 class="mb-4">
           <v-card-title>
-            Coach Client
+            {{this.$t('coaches.coach_client')}}
             <v-spacer></v-spacer>
             <div  style="width: 400px;">
                 <v-text-field
                     v-model="search"
                     append-icon="mdi-magnify"
-                    label="Search"
+                    :label="this.$t('coaches.search')"
                     hide-details
                     clearable
                     outlined
@@ -80,12 +80,12 @@ import loading from '@/components/loader/default_loader.vue'
         loads:false,
         switch1: true,
         headers: [
-          { text: 'Full Name', value: 'client.full_name' },
-          { text: 'Email', value: 'client.email' },
-          { text: 'Phone', value: 'phone_1' },
-          { text: 'Address', value: 'address_1' },
-          { text: 'Status', value: 'status' },
-          { text: 'Action', value: 'action' },
+          { text: this.$t('coaches.full_name'), value: 'client.full_name' },
+          { text: this.$t('coaches.email'), value: 'client.email' },
+          { text: this.$t('coaches.phone'), value: 'phone_1' },
+          { text: this.$t('coaches.address'), value: 'address_1' },
+          { text: this.$t('coaches.status'), value: 'status' },
+          { text: this.$t('coaches.actions'), value: 'action' },
         ],
       }
     },

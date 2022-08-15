@@ -5,7 +5,7 @@
       <v-flex xs12 class="mb-4">
         <div class="d-flex align-center py-2 data-table-cus">
           <p class="title mr-1">
-            Documents
+            {{ this.$t('coaches.documents') }}
           </p>
           <v-spacer></v-spacer>
           <div style="width: 400px;">
@@ -16,7 +16,11 @@
             rounded
             hide-details=""
             outlined
+<<<<<<< HEAD
+            :placeholder="this.$t('coaches.search')"
+=======
             :placeholder="this.$t('global.search')"
+>>>>>>> 6c5d7959b388caba0845ac2c89b3a53815c48a79
             dense
             v-model="param.search"
             append-icon="mdi-magnify"
@@ -27,9 +31,15 @@
               @change="getSelectedFilter"
               rounded
               :items="type"
+<<<<<<< HEAD
+              :label="this.$t('coaches.types')"
+              item-text="text"
+              item-value="id"
+=======
               label="type"
               item-text="label"
               item-value="key"
+>>>>>>> 6c5d7959b388caba0845ac2c89b3a53815c48a79
               clearable
               dense
               outlined
@@ -102,6 +112,17 @@ export default {
       default_view:false,
       showUploadForm:false,
       showAddurl:false,
+<<<<<<< HEAD
+      // type: [ this.$t('coaches.image'),this.$t('coaches.video'), this.$t('coaches.link'),this.$t('coaches.application')],
+      type: [
+        {id:0 , text: this.$t('coaches.image')},
+        {id:1 , text: this.$t('coaches.video')},
+        {id:2 , text: this.$t('coaches.link')},
+        {id:3 , text: this.$t('coaches.application')},
+      ],
+      forFilter: [ 'image','video', 'link','application'],
+
+=======
       // type: [ 'image','video', 'link','application'],
       type: [
         {key: 'image', label: 'Image'},
@@ -109,6 +130,7 @@ export default {
         {key: 'link', label: this.$t('global.link')},
         {key: 'application', label: 'Application'},
       ],
+>>>>>>> 6c5d7959b388caba0845ac2c89b3a53815c48a79
       param:{
         search:'',
         idfilter:'',
@@ -182,7 +204,10 @@ export default {
       this.getDocuments();
     },
     searchFilter(){
-
+      // console.log(this.param.search)
+      // console.log(this.param.idfilter)
+      // console.log(this.forFilter[this.param.idfilter]);
+      // return
       if(this.param.search == null && this.param.idfilter == ''){
         this.getDocuments();
         return;
@@ -190,7 +215,8 @@ export default {
       this.$axios
         .post(`documents/searchFilter/`,{
             search : this.param.search,
-            type : this.param.idfilter,
+            type : this.forFilter[this.param.idfilter],
+            // type : this.param.idfilter,
             client_id:`${this.$route.params.id}`,
             coach_id:this.$auth.user.id,
           }

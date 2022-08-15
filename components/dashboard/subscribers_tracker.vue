@@ -49,7 +49,7 @@
                 >
                   <div>
                     <v-avatar
-                    class="pointer px-1"
+                      class="pointer px-1"
                       tile
                       size="50"
                       color="#f8f8f8"
@@ -76,9 +76,7 @@
                     style="font-size:10px !important; color:#7c94de !important;"
                   >{{subscription.client.full_name}} </span>
                   <div>
-                    <v-icon
-                      small
-                    >mdi-heart</v-icon>
+                    <v-icon small>mdi-heart</v-icon>
                     <v-icon small>mdi-pencil</v-icon>
                     <v-icon small>mdi-file-image</v-icon>
                     <v-icon small>mdi-tape-measure</v-icon>
@@ -89,8 +87,20 @@
                   style="width: 30% !important; display:grid;"
                   class="mt-2 pr-3"
                 >
-                  <div class="text-right" style="height: 50px">
-                    <v-icon @click.stop="goTo('client-id-chat', {id: subscription.client_id})">mdi-message-text-outline</v-icon>
+                  <div
+                    class="text-right"
+                    style="height: 50px"
+                  >
+                    <v-badge
+                      color="primary"
+                      :content="subscription.client_chat.length"
+                      :value="subscription.client_chat.length"
+                      @click.stop="goTo('client-id-chat', {id: subscription.client_id})"
+                      overlap
+                    >
+                      <v-icon @click.stop="goTo('client-id-chat', {id: subscription.client_id})" :color="subscription.client_chat.length ? 'primary' : ''">mdi-message-text-outline</v-icon>
+                    </v-badge>
+
                   </div>
                   <span
                     class="font-weight-bold  overline"
@@ -101,13 +111,13 @@
             </v-flex>
           </template>
           <template v-else>
-          <v-flex
-            xs12
-            class="px-3 py-2"
-          >
-            <empty-data/>
-          </v-flex>
-        </template>
+            <v-flex
+              xs12
+              class="px-3 py-2"
+            >
+              <empty-data />
+            </v-flex>
+          </template>
         </v-row>
       </v-container>
     </v-card>
@@ -127,6 +137,7 @@ export default {
     }
   },
   mounted () {
+    this.activateNotification()
     this.initialize()
   },
   computed: {
@@ -134,7 +145,7 @@ export default {
       return this.$store.getters.trackingFlag
     }
   },
-   watch: {
+  watch: {
     flag (val) {
       if (val) {
         this.initialize();
@@ -148,8 +159,8 @@ export default {
       this.getPlans()
     },
     getSubscriptions () {
-      this.$axios.get(`${this.$subscriptions}?relations=price.plan,client,coach&plan_id=${this.type}&coaching_status=1`).then(({ data }) => {
-        console.log(data, 'tessts')
+      this.$axios.get(`${this.$subscriptions}?relations=price.plan,client,coach,clientChat&plan_id=${this.type}&coaching_status=1`).then(({ data }) => {
+        console.log(data, 'subs track')
         this.subscriptions = data.data
       })
     },
@@ -161,11 +172,11 @@ export default {
           this.plans = data.data
         });
     },
-    editRecord(item) {
+    editRecord (item) {
       this.goTo("client-id-profile", { id: item.id });
     },
-    toFormula(item){
-      this.goTo("client-id-coaching-formula-food", {id: item.client_id})
+    toFormula (item) {
+      this.goTo("client-id-coaching-formula-food", { id: item.client_id })
     }
   }
 }

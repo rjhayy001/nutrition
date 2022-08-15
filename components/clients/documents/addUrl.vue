@@ -6,17 +6,17 @@
   >
     <v-card>
       <v-toolbar class="text-h5 grey lighten-2" flat dense>
-        <v-btn small @click="close">cancel</v-btn>
+        <v-btn small @click="close">{{this.$t('coaches.cancel')}}</v-btn>
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
-        <span class="subtitle-1  font-weight-bold">Add link</span>
+        <span class="subtitle-1  font-weight-bold">{{this.$t('coaches.Add_link+')}}</span>
       </v-toolbar>
       <v-card-text class="">
         <div>
           <v-text-field
           type="text"
           v-model="url_name"
-          label="Tittle"
+          :label="this.$t('coaches.tittle')"
         
           hide-details ="false"
           ></v-text-field>
@@ -25,14 +25,14 @@
           <v-text-field
           type="text"
           v-model="input_url"
-          label="Add link here"
+          :label="this.$t('coaches.Add_link_here')"
         
           hide-details ="false"
           ></v-text-field>
         </div>
       </v-card-text>
        <v-toolbar class="text-h5 grey lighten-2 d-flex justify-end" flat dense>
-             <v-btn small @click="save()">Save</v-btn>
+             <v-btn small @click="save()">{{this.$t('coaches.save')}}</v-btn>
         </v-toolbar>
     
     </v-card>
