@@ -54,14 +54,14 @@ export default {
   data() {
     return {
       options: {},
-      title: "Cities",
+      title: this.$t('address.city'),
       headers: [
         { text: "#", value: "id", width:'2%'},
-        { text: "Name", value: "name"},
-        { text: "Country", value: "country" },
-        { text: "Zipcodes", value: "zipcodes" },
-        { text: "Created at", value: "created_at"},
-        { text: "Updated at", value: "updated_at"},
+        { text: this.$t('address.name'), value: "name"},
+        { text: this.$t('address.country'), value: "country" },
+        { text: this.$t('address.zipcodes'), value: "zipcodes" },
+        { text: this.$t('global.createdAt'), value: "created_at"},
+        { text: this.$t('global.updatedAt'), value: "updated_at"},
         { text: "Action", value: "action"},
       ],
       data: [],

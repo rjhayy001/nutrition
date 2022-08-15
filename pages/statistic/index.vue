@@ -105,6 +105,7 @@ export default {
   data() {
     return {
       showMonth:'week',
+      // current_year: this.$i18n.loadedLanguages[0]=='en' ? moment().format('YYYY') : moment().format('YYYY'),
       current_year: moment().format('YYYY'),
       current_date : moment().format('YYYY-MM-DD'),
       start_week: moment(this.current_date).startOf('week').format('MMMM-DD-YYYY'),
@@ -112,8 +113,8 @@ export default {
       
       subscription_chart: {
         labels: [
-          'Subscriber',
-          'Non Subscriber',
+          this.$t('global.subscriber'),
+          this.$t('global.nonSubscriber')
         ],
         datasets: [
           {
@@ -140,7 +141,7 @@ export default {
         labels: [
           'Macro Solo',
           '100% Accompagne',
-          'Total Payments'
+          this.$t('statistic.totalPayments  ')
         ],
         datasets: [
           {
@@ -200,9 +201,11 @@ export default {
   },
   mounted() {
     this.initialize()
+    // console.log(this.current_date.locale('fr'))
   },
   methods: {
     initialize() {
+      console.log(this.$i18n.loadedLanguages[0],'safsafs')
       this.calendar('week')
     },
     checkSubscription(item) {
