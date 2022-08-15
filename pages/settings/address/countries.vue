@@ -52,15 +52,15 @@ export default {
   data() {
     return {
       options: {},
-      title: "Countries",
+      title: this.$t('address.country'),
       headers: [
         { text: "#", value: "id", width:'2%'},
-        { text: "Short name", value: "short_name", filterable: true, sortType: null, filterValue: ""},
-        { text: "Long name", value: "long_name", filterable: true, sortType: null, filterValue: ""},
+        { text: this.$t('address.shortName'), value: "short_name", filterable: true, sortType: null, filterValue: ""},
+        { text: this.$t('address.longName'), value: "long_name", filterable: true, sortType: null, filterValue: ""},
         { text: "Code", value: "country_numcode", filterable: true, sortType: null, filterValue: ""},
-        { text: "Default", value: "is_default" },
-        { text: "Created at", value: "created_at", filterable: true, sortType: null, filterValue: ""},
-        { text: "Updated at", value: "updated_at", filterable: true, sortType: null, filterValue: ""},
+        { text: this.$t('address.default'), value: "is_default" },
+        { text: this.$t('global.createdAt'), value: "created_at", filterable: true, sortType: null, filterValue: ""},
+        { text: this.$t('global.updatedAt'), value: "updated_at", filterable: true, sortType: null, filterValue: ""},
         { text: "Action", value: "action"},
       ],
       data: [],

@@ -16,7 +16,7 @@
             rounded
             hide-details=""
             outlined
-            placeholder="Search"
+            :placeholder="this.$t('global.search')"
             dense
             v-model="param.search"
             append-icon="mdi-magnify"
@@ -28,8 +28,8 @@
               rounded
               :items="type"
               label="type"
-              item-text="type"
-              item-value="id"
+              item-text="label"
+              item-value="key"
               clearable
               dense
               outlined
@@ -102,7 +102,13 @@ export default {
       default_view:false,
       showUploadForm:false,
       showAddurl:false,
-      type: [ 'image','video', 'link','application'],
+      // type: [ 'image','video', 'link','application'],
+      type: [
+        {key: 'image', label: 'Image'},
+        {key: 'video', label: this.$t('global.video')},
+        {key: 'link', label: this.$t('global.link')},
+        {key: 'application', label: 'Application'},
+      ],
       param:{
         search:'',
         idfilter:'',

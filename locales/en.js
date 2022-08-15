@@ -31,6 +31,15 @@ const messages = {
     "no": "No",
     "edit": "Edit",
     "coach": "Coach",
+    "subscriber": "Abonné",
+    "nonSubscriber": "Non-abonné",
+    "link": "Link",
+    "video": "Video",
+
+    //dables
+    "title": "Title",
+    "createdAt": "Created at",
+    "updatedAt": "Updated at"
   },
 
   //header
@@ -245,6 +254,10 @@ const messages = {
     "planYourDay": "PLAN YOUR DAY",
     "timeOutsidePerDay": "TIME OUTSIDE PER DAY",
 
+    //documents
+    "sharedResources": "Shared resources",
+    "allResources": "All resources",
+
   },
 
   //coaches
@@ -331,6 +344,25 @@ const messages = {
     "send": "Send",
     "addNewNotification": "Add New Notification"
   },
+
+  //statistic
+  "statistic": {
+    "range": "Range",
+    "yearly": "Yearly",
+    "weekly": "Weekly",
+    "totalPayments": "Total Payments",
+  },
+
+  //Address
+  "address": {
+    "country": "Countries",
+    "shortName": "Short Name",
+    "longName": "Long Name",
+    "default": "Default",
+    "city": "Cities",
+    "name": "Name",
+    "zipcodes": "Zipcodes",
+  }
 };
 
 export default messages;
