@@ -291,9 +291,13 @@
         paginate:15,
         scrolled:false,
         stopSroll:false,
+        client_id: this.$route.params.id
       }
     },
     created(){
+    },
+    beforeDestroy(){
+      this.readAllMessage()
     },
     mounted(){
       const thiss = this;
@@ -323,6 +327,13 @@
         }
     },
     methods:{
+      readAllMessage(){
+         this.$axios
+        .get(`chat/read_message/${this.client_id}`)
+        .then(({ data }) => {
+          console.log(data, 'readddd')
+        });
+      },
       initialize(){
         console.log(this.$route.params.id)
         this.getChats()
@@ -359,7 +370,7 @@
         //     return clearTimeout(myTimeout);
         //   }
         }, 1000, this);
-      
+
       },
 
       sendScroll(){
@@ -384,8 +395,8 @@
         }, 1000, this);
       },
 
-      
-      send(data){ 
+
+      send(data){
         this.$axios
           .post(`chat/addChatDocuments/`,{
               client_id : `${this.$route.params.id}`,
@@ -586,7 +597,7 @@
            else{
              this.ErrorCoachSchedNotification('Unsupported format files, only <strong> Video, application, image </strong> are allowed')
            }
-           
+
         }
       },
       createImg(file,index) {

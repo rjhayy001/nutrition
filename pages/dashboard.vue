@@ -11,7 +11,7 @@
               </v-toolbar-title>
               <v-spacer></v-spacer>
               <div style="width:200px;">
-              <v-select
+              <!-- <v-select
                 :items="items"
                 label="Solo field"
                 dense
@@ -19,7 +19,7 @@
                 v-model="item"
                 class="pt-7"
                 solo
-              ></v-select>
+              ></v-select> -->
               </div>
             </v-toolbar>
           </div>
@@ -27,8 +27,8 @@
       </v-row>
       <!--  Body for Dashboard -->
       <v-row>
-        <v-flex 
-          xs4 
+        <v-flex
+          xs4
           class="px-2"
         >
           <calendar></calendar>

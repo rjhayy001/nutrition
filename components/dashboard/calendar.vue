@@ -58,7 +58,6 @@
           v-model="picker"
           color="primary"
           elevation="8"
-          :min="mindate"
           :picker-date.sync="pickerDate"
           :events="arrayEvents"
           event-color="error"
@@ -70,7 +69,7 @@
           min-height="220"
           flat
         >
-          <v-toolbar flat style="position:sticky; top: 0px; z-index: 999">
+          <v-toolbar flat style="position:sticky; top: 0px; z-index: 9">
             <v-toolbar-title class="overline" >
               appointment
             </v-toolbar-title>
