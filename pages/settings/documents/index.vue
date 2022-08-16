@@ -16,11 +16,7 @@
             rounded
             hide-details=""
             outlined
-<<<<<<< HEAD
             :placeholder="this.$t('coaches.search')"
-=======
-            :placeholder="this.$t('global.search')"
->>>>>>> 6c5d7959b388caba0845ac2c89b3a53815c48a79
             dense
             v-model="param.search"
             append-icon="mdi-magnify"
@@ -31,22 +27,16 @@
               @change="getSelectedFilter"
               rounded
               :items="type"
-<<<<<<< HEAD
               :label="this.$t('coaches.types')"
               item-text="text"
               item-value="id"
-=======
-              label="type"
-              item-text="label"
-              item-value="key"
->>>>>>> 6c5d7959b388caba0845ac2c89b3a53815c48a79
               clearable
               dense
               outlined
               hide-details ="true"
               v-model="param.idfilter"
             ></v-select>
-            
+
           </div>
            <v-icon
               class="mx-2"
@@ -81,8 +71,8 @@
       @showDocument ="showDocument"
     />
    </v-container>
-   
-   
+
+
 </template>
 <script>
 import fileViewer from '@/components/ui/fileViewer.vue'
@@ -112,7 +102,6 @@ export default {
       default_view:false,
       showUploadForm:false,
       showAddurl:false,
-<<<<<<< HEAD
       // type: [ this.$t('coaches.image'),this.$t('coaches.video'), this.$t('coaches.link'),this.$t('coaches.application')],
       type: [
         {id:0 , text: this.$t('coaches.image')},
@@ -122,15 +111,6 @@ export default {
       ],
       forFilter: [ 'image','video', 'link','application'],
 
-=======
-      // type: [ 'image','video', 'link','application'],
-      type: [
-        {key: 'image', label: 'Image'},
-        {key: 'video', label: this.$t('global.video')},
-        {key: 'link', label: this.$t('global.link')},
-        {key: 'application', label: 'Application'},
-      ],
->>>>>>> 6c5d7959b388caba0845ac2c89b3a53815c48a79
       param:{
         search:'',
         idfilter:'',
@@ -191,7 +171,7 @@ export default {
     },
     hideForm() {
       this.showUploadForm = false;
-      
+
       this.getDocuments();
     },
     defaultView() {
